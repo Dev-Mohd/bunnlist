@@ -10,7 +10,7 @@ export default function Home() {
       <div className="absolute inset-x-0 top-0 -z-10 h-px bg-gradient-to-l from-transparent via-crema/55 to-transparent" />
 
       <section className="mx-auto flex min-h-[78vh] w-full max-w-6xl flex-col items-center justify-center px-5 pb-14 pt-8 text-center sm:min-h-[82vh] sm:pt-10">
-        <nav className="mb-16 flex w-full items-center justify-between gap-4 text-sm text-oat/68 sm:mb-20">
+        <nav className="mb-16 flex w-full items-center justify-center gap-4 text-sm text-oat/68 sm:mb-20">
           <Link
             className="group inline-flex items-center gap-3 text-left font-semibold tracking-[0.18em] text-porcelain"
             href="/"
@@ -19,9 +19,6 @@ export default function Home() {
             <span className="h-2.5 w-2.5 rounded-full bg-crema shadow-[0_0_22px_rgba(201,164,93,0.8)] transition group-hover:scale-125" />
             <span dir="ltr">BunnList</span>
           </Link>
-          <span className="hidden rounded-full border border-white/10 bg-white/[0.06] px-4 py-2 text-xs sm:inline-flex">
-            إطلاق قريب في السعودية والخليج
-          </span>
         </nav>
 
         <div className="max-w-4xl animate-rise">
@@ -45,7 +42,6 @@ export default function Home() {
             >
               انضم لقائمة الانتظار
             </a>
-            <span className="text-sm text-oat/56">إطلاق قريب في السعودية والخليج</span>
           </div>
         </div>
       </section>
