@@ -62,7 +62,6 @@ export default function Home() {
             نسجل اهتمامك الآن، ونرسل لك تحديث الإطلاق لما تكون BunnList جاهزة.
           </p>
           <WaitlistForm />
-          <p className="mt-4 hidden text-xs text-oat/58 sm:block">بدون إزعاج. فقط تحديثات الإطلاق.</p>
         </div>
       </section>
 
