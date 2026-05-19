@@ -1,74 +1,90 @@
-import { FeatureGrid } from "@/components/FeatureGrid";
-import { WaitlistForm } from "@/components/WaitlistForm";
 import Link from "next/link";
+import { Suspense } from "react";
+import { ArrowLeft } from "lucide-react";
+import { getCoffeeLots } from "@/actions/coffees";
+import { CoffeeGrid } from "@/components/coffees/coffee-grid";
+import { CoffeeSearchBar } from "@/components/coffees/coffee-search-bar";
+import { SiteFooter } from "@/components/ui/site-footer";
+import { SiteHeader } from "@/components/ui/site-header";
+
+async function CoffeeSection({
+  title,
+  description,
+  sort,
+}: {
+  title: string;
+  description: string;
+  sort: "latest" | "top-rated";
+}) {
+  const coffees = await getCoffeeLots({ sort, perPage: 6 });
+
+  return (
+    <section className="space-y-5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h2 className="text-2xl font-black text-stone-950">{title}</h2>
+          <p className="mt-2 text-sm leading-7 text-stone-600">{description}</p>
+        </div>
+        <Link href={`/coffees?sort=${sort}`} className="inline-flex items-center gap-2 text-sm font-bold text-amber-800 hover:text-amber-900">
+          عرض الكل
+          <ArrowLeft className="h-4 w-4" />
+        </Link>
+      </div>
+      <CoffeeGrid coffees={coffees.items} />
+    </section>
+  );
+}
+
+function SectionSkeleton() {
+  return (
+    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {Array.from({ length: 6 }).map((_, index) => (
+        <div key={index} className="h-80 animate-pulse rounded-lg bg-stone-200" />
+      ))}
+    </div>
+  );
+}
 
 export default function Home() {
   return (
-    <main className="relative isolate min-h-screen overflow-hidden bg-espresso">
-      <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_50%_-10%,rgba(201,164,93,0.22),transparent_34%),linear-gradient(145deg,#140d09_0%,#25150e_46%,#0b0705_100%)]" />
-      <div className="bean-pattern absolute inset-0 -z-10 opacity-[0.28]" />
-      <div className="absolute inset-x-0 top-0 -z-10 h-px bg-gradient-to-l from-transparent via-crema/55 to-transparent" />
-
-      <section className="mx-auto flex min-h-[78vh] w-full max-w-6xl flex-col items-center justify-center px-5 pb-14 pt-8 text-center sm:min-h-[82vh] sm:pt-10">
-        <nav className="mb-16 flex w-full items-center justify-center gap-4 text-sm text-oat/68 sm:mb-20">
-          <Link
-            className="group inline-flex items-center gap-3 text-left font-semibold tracking-[0.18em] text-porcelain"
-            href="/"
-            aria-label="BunnList"
-          >
-            <span className="h-2.5 w-2.5 rounded-full bg-crema shadow-[0_0_22px_rgba(201,164,93,0.8)] transition group-hover:scale-125" />
-            <span dir="ltr">BunnList</span>
-          </Link>
-        </nav>
-
-        <div className="max-w-4xl animate-rise">
-          <p className="mx-auto mb-5 w-fit rounded-full border border-crema/25 bg-crema/10 px-4 py-2 text-xs font-medium text-crema">
-            منصة تقييم محاصيل القهوة المختصة
-          </p>
-          <h1 className="text-balance text-4xl font-semibold leading-[1.18] tracking-normal text-porcelain sm:text-6xl lg:text-7xl">
-            قريبًا... دليلك لاختيار محصول القهوة المناسب
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg leading-8 text-oat/78 sm:text-xl" dir="ltr">
-            Discover, rate, and brew better coffee crops.
-          </p>
-          <p className="mx-auto mt-5 max-w-2xl text-pretty text-base leading-8 text-oat/68 sm:text-lg">
-            منصة تشاركية تساعدك تعرف وش تشتري، كيف تحضّر، وأي محصول يناسب ذوقك.
-          </p>
-
-          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <a
-              href="#waitlist"
-              className="inline-flex min-h-14 w-full items-center justify-center rounded-full bg-porcelain px-7 text-sm font-semibold text-espresso shadow-[0_18px_50px_rgba(255,250,242,0.16)] transition hover:-translate-y-0.5 hover:bg-oat focus:outline-none focus:ring-2 focus:ring-porcelain/80 focus:ring-offset-2 focus:ring-offset-espresso sm:w-auto"
-            >
-              انضم لقائمة الانتظار
-            </a>
+    <main className="min-h-screen bg-stone-50">
+      <SiteHeader />
+      <section className="border-b border-stone-200 bg-[radial-gradient(circle_at_top_left,rgba(180,83,9,0.16),transparent_34%),linear-gradient(180deg,#fff7ed_0%,#fafaf9_76%)]">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+          <div className="max-w-3xl">
+            <p className="mb-4 inline-flex rounded-full bg-amber-100 px-3 py-1 text-sm font-bold text-amber-900">
+              دليلك قبل شراء المحصول القادم
+            </p>
+            <h1 className="text-4xl font-black leading-tight text-stone-950 sm:text-5xl lg:text-6xl">
+              BunnList — منصة تقييم محاصيل القهوة المختصة
+            </h1>
+            <p className="mt-5 max-w-2xl text-lg leading-9 text-stone-700">
+              اكتشف محاصيل القهوة، اقرأ تجارب الناس، واعرف طريقة التحضير الأنسب لكل محصول قبل ما تشتري.
+            </p>
+            <div className="mt-8 max-w-2xl">
+              <CoffeeSearchBar targetPath="/coffees" />
+            </div>
           </div>
         </div>
       </section>
 
-      <FeatureGrid />
-
-      <section
-        id="waitlist"
-        className="mx-auto w-full max-w-4xl px-5 pb-16 text-center sm:pb-20"
-        aria-labelledby="waitlist-title"
-      >
-        <div className="rounded-[8px] border border-white/10 bg-porcelain/[0.055] px-5 py-10 shadow-[0_24px_90px_rgba(0,0,0,0.24)] backdrop-blur sm:px-10">
-          <p className="text-sm font-medium text-crema">Early access</p>
-          <h2 id="waitlist-title" className="mt-3 text-3xl font-semibold text-porcelain sm:text-4xl">
-            كن من أوائل المهتمين
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-oat/64 sm:text-base">
-            نسجل اهتمامك الآن، ونرسل لك تحديث الإطلاق لما تكون BunnList جاهزة.
-          </p>
-          <WaitlistForm />
-        </div>
-      </section>
-
-      <footer className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-3 border-t border-white/10 px-5 py-8 text-sm text-oat/52 sm:flex-row">
-        <p dir="ltr">BunnList © 2026</p>
-        <p dir="ltr">Built for specialty coffee lovers</p>
-      </footer>
+      <div className="mx-auto max-w-7xl space-y-14 px-4 py-12 sm:px-6 lg:px-8">
+        <Suspense fallback={<SectionSkeleton />}>
+          <CoffeeSection
+            title="أحدث المحاصيل"
+            description="محاصيل مضافة حديثاً من محامص سعودية وقهوة من مناطق مختلفة."
+            sort="latest"
+          />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <CoffeeSection
+            title="الأعلى تقييماً"
+            description="محاصيل لديها تقييمات فعلية من المستخدمين، مرتبة حسب المتوسط."
+            sort="top-rated"
+          />
+        </Suspense>
+      </div>
+      <SiteFooter />
     </main>
   );
 }

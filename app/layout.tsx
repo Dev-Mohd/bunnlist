@@ -1,13 +1,19 @@
 import type { Metadata } from "next";
+import { Cairo } from "next/font/google";
 import "./globals.css";
 
+const cairo = Cairo({
+  subsets: ["arabic", "latin"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "BunnList | Coming Soon",
+  title: "BunnList — تقييم محاصيل القهوة المختصة",
   description:
-    "BunnList is a bilingual specialty coffee crop review platform for discovering, rating, and brewing better coffee crops.",
+    "BunnList منصة عربية لاكتشاف وتقييم محاصيل القهوة المختصة ومعرفة أفضل طرق التحضير.",
   metadataBase: new URL("https://bunnlist.com"),
   openGraph: {
-    title: "BunnList | قريبًا",
+    title: "BunnList — تقييم محاصيل القهوة المختصة",
     description:
       "دليلك لاختيار محصول القهوة المناسب. Discover, rate, and brew better coffee crops.",
     siteName: "BunnList",
@@ -16,8 +22,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "BunnList | Coming Soon",
-    description: "Discover, rate, and brew better coffee crops.",
+    title: "BunnList — تقييم محاصيل القهوة المختصة",
+    description: "اكتشف محاصيل القهوة المختصة واعرف أفضل طرق تحضيرها.",
   },
 };
 
@@ -28,7 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar" dir="rtl">
-      <body>{children}</body>
+      <body className={cairo.className}>{children}</body>
     </html>
   );
 }

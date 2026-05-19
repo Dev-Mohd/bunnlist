@@ -1,0 +1,218 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum BrewMethod {
+  ESPRESSO
+  V60
+  CHEMEX
+  AEROPRESS
+  FRENCH_PRESS
+  COLD_BREW
+  OTHER
+}
+
+enum ReviewStatus {
+  PUBLISHED
+  HIDDEN
+  FLAGGED
+}
+
+enum CoffeeProcess {
+  NATURAL
+  WASHED
+  HONEY
+  ANAEROBIC
+  CARBONIC_MACERATION
+  EXPERIMENTAL
+  OTHER
+}
+
+enum RateLimitAction {
+  CREATE_REVIEW
+  UPDATE_REVIEW
+  CREATE_COFFEE_LOT
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  role          Role      @default(USER)
+  locale        String    @default("ar")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts          Account[]
+  sessions          Session[]
+  reviews           Review[]
+  createdCoffeeLots CoffeeLot[]      @relation("CreatedCoffeeLots")
+  rateLimitEvents   RateLimitEvent[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Roaster {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  country   String?
+  website   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  coffeeLots CoffeeLot[]
+
+  @@index([name])
+}
+
+model OriginCountry {
+  id        String   @id @default(cuid())
+  nameAr    String
+  nameEn    String?
+  isoCode   String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  coffeeLots CoffeeLot[]
+
+  @@index([nameAr])
+}
+
+model CoffeeLot {
+  id                     String          @id @default(cuid())
+  slug                   String          @unique
+  name                   String
+  roasterId              String
+  originCountryId        String
+  region                 String?
+  farm                   String?
+  producer               String?
+  variety                String?
+  process                CoffeeProcess
+  processLabel           String?
+  roastLevel             String?
+  altitudeMeters         Int?
+  flavorNotes            String[]
+  recommendedBrewMethods BrewMethod[]
+  imagePath              String?
+  description            String?         @db.Text
+  averageRating          Decimal         @default(0) @db.Decimal(3, 2)
+  reviewCount            Int             @default(0)
+  publishedAt            DateTime?
+  createdAt              DateTime        @default(now())
+  updatedAt              DateTime        @updatedAt
+  createdById            String?
+
+  roaster       Roaster       @relation(fields: [roasterId], references: [id], onDelete: Restrict)
+  originCountry OriginCountry @relation(fields: [originCountryId], references: [id], onDelete: Restrict)
+  createdBy     User?         @relation("CreatedCoffeeLots", fields: [createdById], references: [id], onDelete: SetNull)
+  reviews       Review[]
+  brewStats     CoffeeLotBrewStat[]
+
+  @@index([roasterId])
+  @@index([originCountryId])
+  @@index([process])
+  @@index([averageRating])
+  @@index([reviewCount])
+  @@index([createdAt])
+}
+
+model CoffeeLotBrewStat {
+  id            String     @id @default(cuid())
+  coffeeLotId   String
+  brewMethod    BrewMethod
+  averageRating Decimal    @default(0) @db.Decimal(3, 2)
+  reviewCount   Int        @default(0)
+  wouldBuyAgain Int        @default(0)
+  updatedAt     DateTime   @updatedAt
+
+  coffeeLot CoffeeLot @relation(fields: [coffeeLotId], references: [id], onDelete: Cascade)
+
+  @@unique([coffeeLotId, brewMethod])
+  @@index([brewMethod])
+  @@index([averageRating])
+}
+
+model Review {
+  id            String       @id @default(cuid())
+  coffeeLotId   String
+  userId        String
+  rating        Int
+  brewMethod    BrewMethod
+  wouldBuyAgain Boolean
+  body          String?      @db.Text
+  status        ReviewStatus @default(PUBLISHED)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  coffeeLot CoffeeLot @relation(fields: [coffeeLotId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([coffeeLotId, userId])
+  @@index([coffeeLotId, status])
+  @@index([userId])
+  @@index([brewMethod])
+  @@index([rating])
+  @@index([createdAt])
+}
+
+model RateLimitEvent {
+  id        String          @id @default(cuid())
+  action    RateLimitAction
+  userId    String?
+  ipHash    String?
+  targetId  String?
+  createdAt DateTime        @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([action, userId, createdAt])
+  @@index([action, ipHash, createdAt])
+  @@index([targetId])
+}
