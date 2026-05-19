@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "BunnList — تقييم محاصيل القهوة المختصة",
     description:
-      "دليلك لاختيار محصول القهوة المناسب. Discover, rate, and brew better coffee crops.",
+      "دليلك لاختيار محصول القهوة المناسب وقراءة تجارب التحضير قبل الشراء.",
     siteName: "BunnList",
     locale: "ar_SA",
     type: "website",

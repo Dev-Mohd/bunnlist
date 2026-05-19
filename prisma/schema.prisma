@@ -100,6 +100,7 @@ model VerificationToken {
 model Roaster {
   id        String   @id @default(cuid())
   name      String
+  nameAr    String?
   slug      String   @unique
   country   String?
   website   String?
@@ -128,9 +129,11 @@ model CoffeeLot {
   id                     String          @id @default(cuid())
   slug                   String          @unique
   name                   String
+  nameAr                 String?
   roasterId              String
   originCountryId        String
   region                 String?
+  regionAr               String?
   farm                   String?
   producer               String?
   variety                String?

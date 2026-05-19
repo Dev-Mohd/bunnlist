@@ -40,6 +40,10 @@ export function CoffeeFilters({ options }: CoffeeFiltersProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const hasActiveFilters = Boolean(
+    searchParams.get("q") ||
+      filterKeys.some((key) => getValues(searchParams, key).length > 0),
+  );
 
   function updateValue(key: string, value: string, checked: boolean) {
     const params = new URLSearchParams(searchParams.toString());
@@ -71,10 +75,14 @@ export function CoffeeFilters({ options }: CoffeeFiltersProps) {
 
   const content = (
     <div className="space-y-6">
-      <Button variant="outline" className="w-full" onClick={clearFilters}>
-        مسح الفلاتر
-      </Button>
-      <Separator />
+      {hasActiveFilters ? (
+        <>
+          <Button variant="outline" className="w-full" onClick={clearFilters}>
+            مسح الفلاتر
+          </Button>
+          <Separator />
+        </>
+      ) : null}
       <FilterSection title="المحمصة">
         {options.roasters.map((roaster) => (
           <label key={roaster.id} className="flex cursor-pointer items-center gap-3 text-sm text-stone-700">
@@ -82,7 +90,7 @@ export function CoffeeFilters({ options }: CoffeeFiltersProps) {
               checked={getValues(searchParams, "roasterIds").includes(roaster.id)}
               onChange={(event) => updateValue("roasterIds", roaster.id, event.target.checked)}
             />
-            {roaster.name}
+            {roaster.nameAr || roaster.name}
           </label>
         ))}
       </FilterSection>

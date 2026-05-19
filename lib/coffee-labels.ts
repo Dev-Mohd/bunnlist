@@ -11,7 +11,7 @@ export const brewMethodLabels: Record<BrewMethod, string> = {
 };
 
 export const processLabels: Record<CoffeeProcess, string> = {
-  NATURAL: "مجففة",
+  NATURAL: "طبيعية",
   WASHED: "مغسولة",
   HONEY: "عسلية",
   ANAEROBIC: "لاهوائية",
@@ -25,5 +25,5 @@ export function formatBrewMethod(method: BrewMethod) {
 }
 
 export function formatProcess(process: CoffeeProcess, fallback?: string | null) {
-  return fallback || processLabels[process] || process;
+  return processLabels[process] || fallback || process;
 }
