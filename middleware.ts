@@ -5,18 +5,26 @@ import authConfig from "@/auth.config";
 const { auth } = NextAuth(authConfig);
 
 export default auth((request) => {
-  const isAdminRoute = request.nextUrl.pathname.startsWith("/admin");
+  const { pathname } = request.nextUrl;
+  const session = request.auth;
 
-  if (!isAdminRoute || request.auth?.user?.role === "ADMIN") {
-    return NextResponse.next();
+  if (pathname.startsWith("/admin")) {
+    if (session?.user?.role === "ADMIN") return NextResponse.next();
+    const loginUrl = new URL("/login", request.nextUrl.origin);
+    loginUrl.searchParams.set("callbackUrl", request.nextUrl.href);
+    return NextResponse.redirect(loginUrl);
   }
 
-  const signInUrl = new URL("/api/auth/signin", request.nextUrl.origin);
-  signInUrl.searchParams.set("callbackUrl", request.nextUrl.href);
+  if (pathname.match(/^\/coffees\/[^/]+\/review/)) {
+    if (session?.user) return NextResponse.next();
+    const loginUrl = new URL("/login", request.nextUrl.origin);
+    loginUrl.searchParams.set("callbackUrl", request.nextUrl.href);
+    return NextResponse.redirect(loginUrl);
+  }
 
-  return NextResponse.redirect(signInUrl);
+  return NextResponse.next();
 });
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/coffees/:slug/review"],
 };

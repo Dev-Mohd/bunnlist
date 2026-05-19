@@ -10,7 +10,7 @@ export default {
     }),
   ],
   pages: {
-    signIn: "/api/auth/signin",
+    signIn: "/login",
   },
   session: {
     strategy: "jwt",
