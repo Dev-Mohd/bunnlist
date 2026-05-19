@@ -10,7 +10,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Separator } from "@/components/ui/separator";
 import { SiteFooter } from "@/components/ui/site-footer";
 import { SiteHeader } from "@/components/ui/site-header";
-import { formatBrewMethod, formatProcess } from "@/lib/coffee-labels";
+import { formatBrewMethod, formatProcess, formatVariety } from "@/lib/coffee-labels";
 import { getCoffeeImageUrl } from "@/lib/storage";
 
 type PageProps = {
@@ -69,12 +69,9 @@ export async function generateMetadata({ params }: PageProps) {
     return { title: "محصول غير موجود | BunnList" };
   }
 
-  const coffeeName = coffee.nameAr || coffee.name;
-  const roasterName = coffee.roaster.nameAr || coffee.roaster.name;
-
   return {
-    title: `${coffeeName} | BunnList`,
-    description: `تقييمات وتجارب تحضير ${coffeeName} من ${roasterName}.`,
+    title: `${coffee.nameAr} | BunnList`,
+    description: `تقييمات وتجارب تحضير ${coffee.nameAr} من ${coffee.roaster.nameAr}.`,
   };
 }
 
@@ -86,9 +83,8 @@ export default async function CoffeeDetailsPage({ params }: PageProps) {
     notFound();
   }
 
-  const coffeeName = coffee.nameAr || coffee.name;
-  const roasterName = coffee.roaster.nameAr || coffee.roaster.name;
-  const regionName = coffee.regionAr || coffee.region;
+  const regionName = coffee.regionAr;
+  const varietyName = formatVariety(coffee.variety);
 
   return (
     <main className="min-h-screen bg-stone-50">
@@ -98,7 +94,7 @@ export default async function CoffeeDetailsPage({ params }: PageProps) {
           <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-stone-100 shadow-sm">
             <CoffeeImage
               src={getCoffeeImageUrl(coffee.imagePath)}
-              alt={`صورة ${coffeeName}`}
+              alt={`صورة ${coffee.nameAr}`}
               priority
               sizes="(min-width: 1024px) 45vw, 100vw"
               className="object-cover"
@@ -109,15 +105,11 @@ export default async function CoffeeDetailsPage({ params }: PageProps) {
               <Badge variant="gold">{formatProcess(coffee.process, coffee.processLabel)}</Badge>
               <Badge variant="outline">{coffee.originCountry.nameAr}</Badge>
             </div>
-            <h1 className="mt-4 text-4xl font-black leading-tight text-stone-950 sm:text-5xl">{coffeeName}</h1>
-            {coffee.nameAr ? <p className="mt-2 text-lg font-semibold text-stone-500">{coffee.name}</p> : null}
+            <h1 className="mt-4 text-4xl font-black leading-tight text-stone-950 sm:text-5xl">{coffee.nameAr}</h1>
             <div className="mt-4 flex flex-wrap items-center gap-4 text-sm font-semibold text-stone-600">
               <span className="inline-flex items-center gap-2">
                 <Coffee className="h-4 w-4 text-amber-800" />
-                <span className="inline-flex flex-col">
-                  <span>{roasterName}</span>
-                  {coffee.roaster.nameAr ? <span className="text-xs font-medium text-stone-400">{coffee.roaster.name}</span> : null}
-                </span>
+                <span>{coffee.roaster.nameAr}</span>
               </span>
               {regionName ? (
                 <span className="inline-flex items-center gap-2">
@@ -147,7 +139,7 @@ export default async function CoffeeDetailsPage({ params }: PageProps) {
               <DetailRow label="الدولة" value={coffee.originCountry.nameAr} />
               <DetailRow label="المنطقة" value={regionName} />
               <DetailRow label="المعالجة" value={formatProcess(coffee.process, coffee.processLabel)} />
-              <DetailRow label="السلالة" value={coffee.variety} />
+              <DetailRow label="السلالة" value={varietyName} />
               <DetailRow label="الارتفاع" value={coffee.altitudeMeters ? `${coffee.altitudeMeters} متر` : null} />
               <DetailRow
                 label="طرق التحضير المقترحة"
@@ -156,11 +148,11 @@ export default async function CoffeeDetailsPage({ params }: PageProps) {
             </dl>
           </section>
 
-          {coffee.description ? (
+          {coffee.descriptionAr ? (
             <section>
               <h2 className="text-2xl font-black text-stone-950">الوصف</h2>
               <p className="mt-4 rounded-lg border border-stone-200 bg-white p-5 leading-8 text-stone-700">
-                {coffee.description}
+                {coffee.descriptionAr}
               </p>
             </section>
           ) : null}
@@ -203,7 +195,7 @@ export default async function CoffeeDetailsPage({ params }: PageProps) {
           <Card className="p-5">
             <h2 className="text-lg font-black text-stone-950">ملخص سريع</h2>
             <div className="mt-4 space-y-3 text-sm text-stone-700">
-              <p>المحمصة: {roasterName}</p>
+              <p>المحمصة: {coffee.roaster.nameAr}</p>
               <p>المنشأ: {coffee.originCountry.nameAr}</p>
               <p>المعالجة: {formatProcess(coffee.process, coffee.processLabel)}</p>
               <p>عدد التقييمات: {coffee.reviewCount}</p>

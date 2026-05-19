@@ -90,7 +90,7 @@ export function CoffeeFilters({ options }: CoffeeFiltersProps) {
               checked={getValues(searchParams, "roasterIds").includes(roaster.id)}
               onChange={(event) => updateValue("roasterIds", roaster.id, event.target.checked)}
             />
-            {roaster.nameAr || roaster.name}
+            {roaster.nameAr}
           </label>
         ))}
       </FilterSection>

@@ -50,12 +50,12 @@ export default function Home() {
     <main className="min-h-screen bg-stone-50">
       <SiteHeader />
       <section className="border-b border-stone-200 bg-[radial-gradient(circle_at_top_left,rgba(180,83,9,0.16),transparent_34%),linear-gradient(180deg,#fff7ed_0%,#fafaf9_76%)]">
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
           <div className="max-w-3xl">
             <p className="mb-4 inline-flex rounded-full bg-amber-100 px-3 py-1 text-sm font-bold text-amber-900">
               دليلك قبل شراء المحصول القادم
             </p>
-            <h1 className="text-4xl font-black leading-tight text-stone-950 sm:text-5xl lg:text-6xl">
+            <h1 className="text-5xl font-black leading-[1.15] text-stone-950 md:text-6xl">
               BunnList — منصة تقييم محاصيل القهوة المختصة
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-9 text-stone-700">

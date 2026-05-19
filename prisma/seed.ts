@@ -24,9 +24,9 @@ const prisma = new PrismaClient({
 });
 
 const roasters = [
-  { name: "Camel Step Roasters", nameAr: "كامل ستيب", slug: "camel-step-roasters", country: "السعودية", city: "الرياض" },
-  { name: "Half Million", nameAr: "هاف ميليون", slug: "half-million", country: "السعودية", city: "الرياض" },
-  { name: "Mokhabz", nameAr: "مخابز", slug: "mokhabz", country: "السعودية", city: "الرياض" },
+  { name: "Camel Step Roasters", nameAr: "كامل ستيب", slug: "camel-step-roasters", country: "السعودية", cityAr: "الرياض" },
+  { name: "Half Million", nameAr: "هاف ميليون", slug: "half-million", country: "السعودية", cityAr: "الرياض" },
+  { name: "Mokhabz", nameAr: "مخابز", slug: "mokhabz", country: "السعودية", cityAr: "الرياض" },
 ];
 
 const countries = [
@@ -53,6 +53,7 @@ const coffeeLots = [
     flavorNotes: ["فراولة", "ياسمين", "توت"],
     recommendedBrewMethods: [BrewMethod.V60, BrewMethod.CHEMEX],
     imagePath: null,
+    descriptionAr: "محصول إثيوبي مميز بنكهات الفواكه الاستوائية والورد، مناسب للترشيح لمن يحب الكوب العطري الواضح.",
   },
   {
     name: "Sidamo Washed",
@@ -67,6 +68,7 @@ const coffeeLots = [
     flavorNotes: ["حمضيات", "شاي أسود", "زهور"],
     recommendedBrewMethods: [BrewMethod.V60, BrewMethod.AEROPRESS],
     imagePath: null,
+    descriptionAr: "محصول إثيوبي مغسول بطابع نظيف وحموضة حمضية خفيفة، يعطي كوباً متوازناً ومشرقاً.",
   },
   {
     name: "Huila Pink Bourbon",
@@ -82,6 +84,7 @@ const coffeeLots = [
     flavorNotes: ["سكر بني", "كرز", "برتقال"],
     recommendedBrewMethods: [BrewMethod.V60, BrewMethod.ESPRESSO],
     imagePath: null,
+    descriptionAr: "محصول كولومبي بسلالة بينك بوربون، يجمع بين الحلاوة العالية ولمسات الفاكهة الحمراء.",
   },
   {
     name: "Narino Washed",
@@ -96,6 +99,7 @@ const coffeeLots = [
     flavorNotes: ["تفاح", "كراميل", "حمضيات"],
     recommendedBrewMethods: [BrewMethod.CHEMEX, BrewMethod.V60],
     imagePath: null,
+    descriptionAr: "محصول كولومبي مغسول من نارينيو، يتميز بنظافة عالية وحلاوة قريبة من الكراميل.",
   },
   {
     name: "Cerrado Mineiro Natural",
@@ -110,6 +114,7 @@ const coffeeLots = [
     flavorNotes: ["شوكولاتة", "مكسرات", "عسل"],
     recommendedBrewMethods: [BrewMethod.ESPRESSO, BrewMethod.FRENCH_PRESS],
     imagePath: null,
+    descriptionAr: "محصول برازيلي طبيعي بطابع كلاسيكي غني، مناسب للإسبريسو ومحبي الشوكولاتة والمكسرات.",
   },
   {
     name: "Nyeri AA Washed",
@@ -124,6 +129,7 @@ const coffeeLots = [
     flavorNotes: ["كشمش أسود", "غريب فروت", "سكر قصب"],
     recommendedBrewMethods: [BrewMethod.V60, BrewMethod.AEROPRESS],
     imagePath: null,
+    descriptionAr: "محصول كيني مغسول بحموضة لامعة وقوام واضح، يبرز مع وصفات الترشيح السريعة.",
   },
   {
     name: "Haraz Natural",
@@ -138,6 +144,7 @@ const coffeeLots = [
     flavorNotes: ["تمر", "بهارات", "كاكاو"],
     recommendedBrewMethods: [BrewMethod.FRENCH_PRESS, BrewMethod.V60],
     imagePath: null,
+    descriptionAr: "محصول يمني طبيعي بطابع دافئ، تظهر فيه نكهات التمر والبهارات مع قوام ممتلئ.",
   },
   {
     name: "Bani Matar Anaerobic",
@@ -152,6 +159,7 @@ const coffeeLots = [
     flavorNotes: ["رمان", "قرفة", "عنب أحمر"],
     recommendedBrewMethods: [BrewMethod.V60, BrewMethod.COLD_BREW],
     imagePath: null,
+    descriptionAr: "محصول يمني بمعالجة لاهوائية ونكهات فاكهية عميقة، مناسب لمن يبحث عن تجربة مختلفة.",
   },
   {
     name: "Geisha Washed",
@@ -168,6 +176,7 @@ const coffeeLots = [
     recommendedBrewMethods: [BrewMethod.V60, BrewMethod.CHEMEX],
     imagePath: null,
     description: "محصول مميز بسعر عال ونكهات زهرية واضحة.",
+    descriptionAr: "محصول نادر بسعر مرتفع، يتميز بنكهات زهرية واضحة وحموضة راقية.",
   },
   {
     name: "Nyamasheke Washed",
@@ -182,6 +191,7 @@ const coffeeLots = [
     flavorNotes: ["شاي", "ليمون", "عسل"],
     recommendedBrewMethods: [BrewMethod.AEROPRESS, BrewMethod.V60],
     imagePath: null,
+    descriptionAr: "محصول رواندي مغسول بطابع شبيه بالشاي، يجمع بين الليمون والحلاوة الخفيفة.",
   },
 ];
 
@@ -337,13 +347,15 @@ async function main() {
       update: {
         name: roaster.name,
         nameAr: roaster.nameAr,
-        country: `${roaster.country} - ${roaster.city}`,
+        cityAr: roaster.cityAr,
+        country: `${roaster.country} - ${roaster.cityAr}`,
       },
       create: {
         name: roaster.name,
         nameAr: roaster.nameAr,
         slug: roaster.slug,
-        country: `${roaster.country} - ${roaster.city}`,
+        cityAr: roaster.cityAr,
+        country: `${roaster.country} - ${roaster.cityAr}`,
       },
     });
   }
@@ -380,6 +392,7 @@ async function main() {
         recommendedBrewMethods: lot.recommendedBrewMethods,
         imagePath: lot.imagePath,
         description: "description" in lot ? lot.description : null,
+        descriptionAr: lot.descriptionAr,
         publishedAt: new Date(),
       },
       create: {
@@ -397,6 +410,7 @@ async function main() {
         recommendedBrewMethods: lot.recommendedBrewMethods,
         imagePath: lot.imagePath,
         description: "description" in lot ? lot.description : null,
+        descriptionAr: lot.descriptionAr,
         publishedAt: new Date(),
         createdById: admin?.id,
       },

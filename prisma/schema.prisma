@@ -32,6 +32,7 @@ enum CoffeeProcess {
   WASHED
   HONEY
   ANAEROBIC
+  WET_HULLED
   CARBONIC_MACERATION
   EXPERIMENTAL
   OTHER
@@ -100,9 +101,10 @@ model VerificationToken {
 model Roaster {
   id        String   @id @default(cuid())
   name      String
-  nameAr    String?
+  nameAr    String
   slug      String   @unique
   country   String?
+  cityAr    String?
   website   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -129,7 +131,7 @@ model CoffeeLot {
   id                     String          @id @default(cuid())
   slug                   String          @unique
   name                   String
-  nameAr                 String?
+  nameAr                 String
   roasterId              String
   originCountryId        String
   region                 String?
@@ -145,6 +147,7 @@ model CoffeeLot {
   recommendedBrewMethods BrewMethod[]
   imagePath              String?
   description            String?         @db.Text
+  descriptionAr          String?         @db.Text
   averageRating          Decimal         @default(0) @db.Decimal(3, 2)
   reviewCount            Int             @default(0)
   publishedAt            DateTime?

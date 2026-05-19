@@ -22,7 +22,7 @@ export type CoffeeListItem = {
   id: string;
   slug: string;
   name: string;
-  nameAr: string | null;
+  nameAr: string;
   region: string | null;
   regionAr: string | null;
   process: CoffeeProcess;
@@ -36,7 +36,8 @@ export type CoffeeListItem = {
   roaster: {
     id: string;
     name: string;
-    nameAr: string | null;
+    nameAr: string;
+    cityAr: string | null;
   };
   originCountry: {
     id: string;
@@ -73,6 +74,7 @@ export type CoffeeLotDetails = CoffeeListItem & {
   roastLevel: string | null;
   altitudeMeters: number | null;
   description: string | null;
+  descriptionAr: string | null;
   brewStats: {
     brewMethod: BrewMethod;
     averageRating: number;
@@ -83,7 +85,7 @@ export type CoffeeLotDetails = CoffeeListItem & {
 };
 
 export type CoffeeFilterOptions = {
-  roasters: { id: string; name: string; nameAr: string | null }[];
+  roasters: { id: string; name: string; nameAr: string; cityAr: string | null }[];
   originCountries: { id: string; nameAr: string; isoCode: string }[];
   processingMethods: CoffeeProcess[];
   flavorNotes: { name: string; count: number }[];
@@ -101,7 +103,7 @@ function toListItem(lot: {
   id: string;
   slug: string;
   name: string;
-  nameAr: string | null;
+  nameAr: string;
   region: string | null;
   regionAr: string | null;
   process: CoffeeProcess;
@@ -112,7 +114,7 @@ function toListItem(lot: {
   averageRating: unknown;
   reviewCount: number;
   createdAt: Date;
-  roaster: { id: string; name: string; nameAr: string | null };
+  roaster: { id: string; name: string; nameAr: string; cityAr: string | null };
   originCountry: { id: string; nameAr: string; isoCode: string };
 }): CoffeeListItem {
   return {
@@ -172,7 +174,7 @@ export async function getCoffeeLots(input: CoffeeLotQuery = {}): Promise<Paginat
       skip: (page - 1) * perPage,
       take: perPage,
       include: {
-        roaster: { select: { id: true, name: true, nameAr: true } },
+        roaster: { select: { id: true, name: true, nameAr: true, cityAr: true } },
         originCountry: { select: { id: true, nameAr: true, isoCode: true } },
       },
     }),
@@ -194,7 +196,7 @@ export async function getCoffeeLotBySlug(slug: string): Promise<CoffeeLotDetails
       publishedAt: { not: null },
     },
     include: {
-      roaster: { select: { id: true, name: true, nameAr: true } },
+      roaster: { select: { id: true, name: true, nameAr: true, cityAr: true } },
       originCountry: { select: { id: true, nameAr: true, isoCode: true } },
       brewStats: {
         orderBy: [{ averageRating: "desc" }, { reviewCount: "desc" }],
@@ -239,6 +241,7 @@ export async function getCoffeeLotBySlug(slug: string): Promise<CoffeeLotDetails
     roastLevel: lot.roastLevel,
     altitudeMeters: lot.altitudeMeters,
     description: lot.description,
+    descriptionAr: lot.descriptionAr,
     brewStats: lot.brewStats.map((stat) => ({
       ...stat,
       averageRating: Number(stat.averageRating),
@@ -251,7 +254,7 @@ export async function getCoffeeFilters(): Promise<CoffeeFilterOptions> {
   const [roasters, originCountries, processingRows, lotsForNotes, brewRows] = await Promise.all([
     prisma.roaster.findMany({
       orderBy: [{ nameAr: "asc" }, { name: "asc" }],
-      select: { id: true, name: true, nameAr: true },
+      select: { id: true, name: true, nameAr: true, cityAr: true },
     }),
     prisma.originCountry.findMany({
       orderBy: { nameAr: "asc" },
