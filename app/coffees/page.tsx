@@ -136,6 +136,8 @@ function ListSkeleton() {
   );
 }
 
+export const metadata = { title: "تصفح المحاصيل" };
+
 export default async function CoffeesPage({ searchParams }: PageProps) {
   const rawSearchParams = await searchParams;
   const query = parseQuery(rawSearchParams);

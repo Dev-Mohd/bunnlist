@@ -1,8 +1,7 @@
 import Link from "next/link";
-import Image from "next/image";
-import { Coffee, LogIn, LogOut, ShieldCheck } from "lucide-react";
-import { auth, signOut } from "@/auth";
-import { Button } from "@/components/ui/button";
+import { Coffee, LogIn } from "lucide-react";
+import { auth } from "@/auth";
+import { UserMenu } from "@/components/ui/user-menu";
 
 export async function SiteHeader() {
   const session = await auth();
@@ -28,46 +27,8 @@ export async function SiteHeader() {
             المحاصيل
           </Link>
 
-          {user?.role === "ADMIN" && (
-            <Link
-              href="/admin"
-              className="flex items-center gap-1 rounded-md px-3 py-2 text-sm font-semibold text-amber-700 hover:bg-amber-50"
-            >
-              <ShieldCheck className="h-4 w-4" />
-              الإدارة
-            </Link>
-          )}
-
           {user ? (
-            <div className="flex items-center gap-2">
-              {user.image ? (
-                <Image
-                  src={user.image}
-                  alt={user.name ?? "صورة المستخدم"}
-                  width={32}
-                  height={32}
-                  className="h-8 w-8 rounded-full object-cover ring-2 ring-stone-200"
-                />
-              ) : (
-                <span className="grid h-8 w-8 place-items-center rounded-full bg-amber-100 text-xs font-bold text-amber-700">
-                  {(user.name ?? "م").charAt(0)}
-                </span>
-              )}
-              <span className="hidden text-sm font-semibold text-stone-700 sm:block">
-                {user.name}
-              </span>
-              <form
-                action={async () => {
-                  "use server";
-                  await signOut({ redirectTo: "/" });
-                }}
-              >
-                <Button type="submit" variant="ghost" size="sm" className="text-stone-500 hover:text-stone-800">
-                  <LogOut className="h-4 w-4" />
-                  <span className="hidden sm:inline">خروج</span>
-                </Button>
-              </form>
-            </div>
+            <UserMenu name={user.name} image={user.image} role={user.role} />
           ) : (
             <Link
               href="/login"

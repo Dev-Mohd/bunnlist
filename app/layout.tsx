@@ -8,21 +8,25 @@ const cairo = Cairo({
 });
 
 export const metadata: Metadata = {
-  title: "BunnList — تقييم محاصيل القهوة المختصة",
+  title: {
+    default: "BunnList — منصة تقييم محاصيل القهوة المختصة",
+    template: "%s | BunnList",
+  },
   description:
-    "BunnList منصة عربية لاكتشاف وتقييم محاصيل القهوة المختصة ومعرفة أفضل طرق التحضير.",
+    "اكتشف محاصيل القهوة المختصة، اقرأ تجارب الناس، واعرف أفضل طريقة تحضير قبل ما تشتري.",
+  keywords: ["قهوة", "قهوة مختصة", "تقييم قهوة", "محاصيل قهوة", "specialty coffee"],
   metadataBase: new URL("https://bunnlist.com"),
   openGraph: {
-    title: "BunnList — تقييم محاصيل القهوة المختصة",
+    title: "BunnList — منصة تقييم محاصيل القهوة المختصة",
     description:
-      "دليلك لاختيار محصول القهوة المناسب وقراءة تجارب التحضير قبل الشراء.",
+      "اكتشف محاصيل القهوة المختصة، اقرأ تجارب الناس، واعرف أفضل طريقة تحضير قبل ما تشتري.",
     siteName: "BunnList",
     locale: "ar_SA",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "BunnList — تقييم محاصيل القهوة المختصة",
+    title: "BunnList — منصة تقييم محاصيل القهوة المختصة",
     description: "اكتشف محاصيل القهوة المختصة واعرف أفضل طرق تحضيرها.",
   },
 };

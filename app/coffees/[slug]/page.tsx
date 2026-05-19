@@ -270,6 +270,34 @@ export default async function CoffeeDetailsPage({ params, searchParams }: PagePr
                 {userReview ? "عدّل تقييمك" : "أضف تقييمك"}
               </Link>
             </div>
+
+            {userReview ? (
+              <div className="mb-4 rounded-xl border-2 border-amber-200 bg-amber-50/40 p-4">
+                <div className="mb-3 flex items-center gap-2">
+                  <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-black text-amber-800">
+                    تقييمك
+                  </span>
+                </div>
+                <div className="flex flex-wrap items-center gap-3 text-sm">
+                  <span className="font-black text-stone-900">
+                    {"★".repeat(userReview.rating)}{"☆".repeat(5 - userReview.rating)}
+                    <span className="mr-1 text-stone-500">{userReview.rating}/5</span>
+                  </span>
+                  <span className="rounded-full bg-stone-100 px-2.5 py-1 text-xs font-semibold text-stone-600">
+                    {userReview.brewMethod.replace(/_/g, " ")}
+                  </span>
+                  {userReview.wouldBuyAgain ? (
+                    <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
+                      يشتريها مرة ثانية
+                    </span>
+                  ) : null}
+                </div>
+                {userReview.body ? (
+                  <p className="mt-3 text-sm leading-7 text-stone-700">{userReview.body}</p>
+                ) : null}
+              </div>
+            ) : null}
+
             <Suspense fallback={<ReviewsSkeleton />}>
               <ReviewsList
                 reviewsPromise={reviewsPromise}

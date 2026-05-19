@@ -294,6 +294,49 @@ export async function getReviewsByCoffeeLot(coffeeLotId: string, page = 1): Prom
   };
 }
 
+export type MyReview = {
+  id: string;
+  rating: number;
+  brewMethod: BrewMethod;
+  wouldBuyAgain: boolean;
+  body: string | null;
+  createdAt: Date;
+  coffeeLot: {
+    id: string;
+    slug: string;
+    nameAr: string;
+    imagePath: string | null;
+    roaster: { nameAr: string };
+  };
+};
+
+export async function getMyReviews(): Promise<MyReview[]> {
+  const session = await auth();
+  if (!session?.user?.id) return [];
+
+  return prisma.review.findMany({
+    where: { userId: session.user.id, status: ReviewStatus.PUBLISHED },
+    orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      rating: true,
+      brewMethod: true,
+      wouldBuyAgain: true,
+      body: true,
+      createdAt: true,
+      coffeeLot: {
+        select: {
+          id: true,
+          slug: true,
+          nameAr: true,
+          imagePath: true,
+          roaster: { select: { nameAr: true } },
+        },
+      },
+    },
+  });
+}
+
 export async function getUserReviewForCoffeeLot(coffeeLotId: string): Promise<UserReviewForCoffeeLot | null> {
   const session = await auth();
   if (!session?.user?.id) {
