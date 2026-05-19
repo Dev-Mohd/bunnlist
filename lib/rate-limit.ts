@@ -1,4 +1,4 @@
-import { RateLimitAction } from "@prisma/client";
+import { Prisma, RateLimitAction } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
 const TEN_MINUTES_MS = 10 * 60 * 1000;
@@ -23,8 +23,14 @@ type CheckRateLimitInput = {
   targetId?: string | null;
 };
 
-export async function checkRateLimit(input: CheckRateLimitInput) {
+type RateLimitClient = Prisma.TransactionClient | typeof prisma;
+
+export async function checkRateLimit(
+  input: CheckRateLimitInput,
+  client: RateLimitClient = prisma,
+): Promise<{ allowed: boolean; retryAfter?: number }> {
   const config = LIMITS[input.action];
+  const now = Date.now();
   const windowStart = new Date(Date.now() - config.windowMs);
 
   if (!input.userId && !input.ipHash) {
@@ -35,26 +41,32 @@ export async function checkRateLimit(input: CheckRateLimitInput) {
     ? { userId: input.userId }
     : { ipHash: input.ipHash };
 
-  return prisma.$transaction(async (tx) => {
-    const attempts = await tx.rateLimitEvent.count({
-      where: {
-        action: input.action,
-        createdAt: { gte: windowStart },
-        ...identityWhere,
-      },
-    });
-
-    if (attempts >= config.limit) {
-      throw new RateLimitExceededError();
-    }
-
-    return tx.rateLimitEvent.create({
-      data: {
-        action: input.action,
-        userId: input.userId ?? null,
-        ipHash: input.ipHash ?? null,
-        targetId: input.targetId ?? null,
-      },
-    });
+  const attempts = await client.rateLimitEvent.findMany({
+    where: {
+      action: input.action,
+      createdAt: { gte: windowStart },
+      ...identityWhere,
+    },
+    select: { createdAt: true },
+    orderBy: { createdAt: "asc" },
   });
+
+  if (attempts.length >= config.limit) {
+    const oldestAttempt = attempts[0]?.createdAt.getTime() ?? now;
+    return {
+      allowed: false,
+      retryAfter: Math.max(1, Math.ceil((oldestAttempt + config.windowMs - now) / 1000)),
+    };
+  }
+
+  await client.rateLimitEvent.create({
+    data: {
+      action: input.action,
+      userId: input.userId ?? null,
+      ipHash: input.ipHash ?? null,
+      targetId: input.targetId ?? null,
+    },
+  });
+
+  return { allowed: true };
 }

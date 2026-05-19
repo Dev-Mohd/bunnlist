@@ -1,13 +1,16 @@
 import { notFound } from "next/navigation";
-import { Check, Coffee, MapPin } from "lucide-react";
+import Link from "next/link";
+import { Suspense } from "react";
+import { Coffee, MapPin, Pencil, Plus } from "lucide-react";
+import { auth } from "@/auth";
 import { getCoffeeLotBySlug } from "@/actions/coffees";
+import { getReviewsByCoffeeLot, getUserReviewForCoffeeLot } from "@/actions/reviews";
 import { CoffeeImage } from "@/components/coffees/coffee-image";
 import { FlavorChips } from "@/components/coffees/flavor-chips";
 import { RatingDisplay } from "@/components/coffees/rating-display";
+import { ReviewsList } from "@/components/reviews/reviews-list";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { EmptyState } from "@/components/ui/empty-state";
-import { Separator } from "@/components/ui/separator";
 import { SiteFooter } from "@/components/ui/site-footer";
 import { SiteHeader } from "@/components/ui/site-header";
 import { formatBrewMethod, formatProcess, formatVariety } from "@/lib/coffee-labels";
@@ -15,6 +18,7 @@ import { getCoffeeImageUrl } from "@/lib/storage";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
+  searchParams?: Promise<{ reviewsPage?: string }>;
 };
 
 function DetailRow({ label, value }: { label: string; value?: string | number | null }) {
@@ -75,16 +79,32 @@ export async function generateMetadata({ params }: PageProps) {
   };
 }
 
-export default async function CoffeeDetailsPage({ params }: PageProps) {
+function ReviewsSkeleton() {
+  return (
+    <div className="space-y-4">
+      {Array.from({ length: 2 }).map((_, index) => (
+        <div key={index} className="h-40 animate-pulse rounded-lg bg-stone-200" />
+      ))}
+    </div>
+  );
+}
+
+export default async function CoffeeDetailsPage({ params, searchParams }: PageProps) {
   const { slug } = await params;
+  const reviewPage = Number((await searchParams)?.reviewsPage ?? "1") || 1;
   const coffee = await getCoffeeLotBySlug(slug);
 
   if (!coffee) {
     notFound();
   }
 
+  const session = await auth();
+  const userReview = await getUserReviewForCoffeeLot(coffee.id);
+  const reviewsPromise = getReviewsByCoffeeLot(coffee.id, reviewPage);
   const regionName = coffee.regionAr;
   const varietyName = formatVariety(coffee.variety);
+  const reviewHref = `/coffees/${coffee.slug}/review`;
+  const loginHref = `/login?callbackUrl=${encodeURIComponent(reviewHref)}`;
 
   return (
     <main className="min-h-screen bg-stone-50">
@@ -159,35 +179,25 @@ export default async function CoffeeDetailsPage({ params }: PageProps) {
 
           <section>
             <div className="mb-5 flex items-center justify-between">
-              <h2 className="text-2xl font-black text-stone-950">تقييمات المستخدمين</h2>
-              {coffee.reviewCount ? <span className="text-sm font-semibold text-stone-500">{coffee.reviewCount} تقييم</span> : null}
-            </div>
-            {coffee.reviews.length ? (
-              <div className="space-y-4">
-                {coffee.reviews.map((review) => (
-                  <Card key={review.id} className="p-5">
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                      <div>
-                        <p className="font-bold text-stone-950">{review.user.name ?? "مستخدم BunnList"}</p>
-                        <p className="mt-1 text-sm text-stone-500">{formatBrewMethod(review.brewMethod)}</p>
-                      </div>
-                      <RatingDisplay rating={review.rating} count={1} compact />
-                    </div>
-                    {review.body ? <p className="mt-4 leading-8 text-stone-700">{review.body}</p> : null}
-                    <Separator className="my-4" />
-                    <p className="flex items-center gap-2 text-sm font-semibold text-stone-600">
-                      <Check className="h-4 w-4 text-emerald-600" />
-                      {review.wouldBuyAgain ? "سيشتريه مرة أخرى" : "لا يفضّل شراءه مرة أخرى"}
-                    </p>
-                  </Card>
-                ))}
+              <div>
+                <h2 className="text-2xl font-black text-stone-950">تقييمات المستخدمين</h2>
+                {coffee.reviewCount ? <span className="mt-1 block text-sm font-semibold text-stone-500">{coffee.reviewCount} تقييم</span> : null}
               </div>
-            ) : (
-              <EmptyState
-                title="كن أول من يقيّم هذا المحصول"
-                description="إضافة التقييمات ستتوفر في دفعة لاحقة بعد تفعيل تسجيل الدخول."
+              <Link
+                href={session?.user ? reviewHref : loginHref}
+                className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-amber-700 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-800"
+              >
+                {userReview ? <Pencil className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+                {userReview ? "عدّل تقييمك" : "أضف تقييمك"}
+              </Link>
+            </div>
+            <Suspense fallback={<ReviewsSkeleton />}>
+              <ReviewsList
+                reviewsPromise={reviewsPromise}
+                currentUserId={session?.user?.id}
+                basePath={`/coffees/${coffee.slug}`}
               />
-            )}
+            </Suspense>
           </section>
         </div>
 
