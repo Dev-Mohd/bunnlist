@@ -23,9 +23,14 @@ export function CoffeeSortSelect({ value }: { value: CoffeeSort }) {
   }
 
   return (
-    <label className="flex items-center gap-2 text-sm font-semibold text-stone-700">
-      الترتيب
-      <Select value={value} onChange={(event) => updateSort(event.target.value)} aria-label="ترتيب المحاصيل">
+    <label className="flex w-full flex-col gap-2 text-sm font-semibold text-stone-700 sm:w-auto sm:flex-row sm:items-center">
+      <span className="text-xs font-bold text-stone-500">ترتيب النتائج</span>
+      <Select
+        value={value}
+        onChange={(event) => updateSort(event.target.value)}
+        aria-label="ترتيب المحاصيل"
+        className="w-full min-w-44 border-stone-300 bg-stone-50 font-bold text-stone-900 sm:w-auto"
+      >
         {Object.entries(sortLabels).map(([sort, label]) => (
           <option key={sort} value={sort}>
             {label}

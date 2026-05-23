@@ -146,6 +146,7 @@ model CoffeeLot {
   flavorNotes            String[]
   recommendedBrewMethods BrewMethod[]
   imagePath              String?
+  imageUrl               String?         @db.Text
   description            String?         @db.Text
   descriptionAr          String?         @db.Text
   averageRating          Decimal         @default(0) @db.Decimal(3, 2)

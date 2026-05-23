@@ -67,6 +67,16 @@ export type CoffeeReview = {
   };
 };
 
+export type LatestCoffeeReview = CoffeeReview & {
+  coffeeLot: {
+    slug: string;
+    name: string;
+    roaster: {
+      name: string;
+    };
+  };
+};
+
 export type CoffeeLotDetails = CoffeeListItem & {
   farm: string | null;
   producer: string | null;
@@ -111,6 +121,7 @@ function toListItem(lot: {
   flavorNotes: string[];
   recommendedBrewMethods: BrewMethod[];
   imagePath: string | null;
+  imageUrl: string | null;
   averageRating: unknown;
   reviewCount: number;
   createdAt: Date;
@@ -119,6 +130,13 @@ function toListItem(lot: {
 }): CoffeeListItem {
   return {
     ...lot,
+    name: lot.nameAr ?? lot.name,
+    region: lot.regionAr ?? lot.region,
+    imagePath: lot.imageUrl ?? lot.imagePath,
+    roaster: {
+      ...lot.roaster,
+      name: lot.roaster.nameAr ?? lot.roaster.name,
+    },
     averageRating: Number(lot.averageRating),
   };
 }
@@ -248,6 +266,42 @@ export async function getCoffeeLotBySlug(slug: string): Promise<CoffeeLotDetails
     })),
     reviews: lot.reviews,
   };
+}
+
+export async function getLatestCoffeeReviews(limit = 3): Promise<LatestCoffeeReview[]> {
+  return prisma.review.findMany({
+    where: {
+      status: ReviewStatus.PUBLISHED,
+      coffeeLot: { publishedAt: { not: null } },
+    },
+    orderBy: { createdAt: "desc" },
+    take: limit,
+    select: {
+      id: true,
+      rating: true,
+      brewMethod: true,
+      wouldBuyAgain: true,
+      body: true,
+      createdAt: true,
+      user: {
+        select: {
+          name: true,
+          image: true,
+        },
+      },
+      coffeeLot: {
+        select: {
+          slug: true,
+          name: true,
+          roaster: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
 }
 
 export async function getCoffeeFilters(): Promise<CoffeeFilterOptions> {

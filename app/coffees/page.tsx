@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import { BrewMethod, CoffeeProcess } from "@prisma/client";
 import { getCoffeeFilters, getCoffeeLots, type CoffeeLotQuery, type CoffeeSort } from "@/actions/coffees";
 import { CoffeeGrid } from "@/components/coffees/coffee-grid";
@@ -44,6 +45,22 @@ function parseQuery(searchParams: Record<string, string | string[] | undefined>)
   };
 }
 
+function getActiveFilterText(query: CoffeeLotQuery) {
+  const count =
+    (query.roasterIds?.length ?? 0) +
+    (query.originCountryIds?.length ?? 0) +
+    (query.processingMethods?.length ?? 0) +
+    (query.flavorNotes?.length ?? 0) +
+    (query.brewMethods?.length ?? 0) +
+    (query.query ? 1 : 0);
+
+  if (!count) {
+    return "بدون فلاتر نشطة";
+  }
+
+  return `${count} فلتر نشط`;
+}
+
 async function CoffeeListContent({
   query,
   rawSearchParams,
@@ -65,17 +82,37 @@ async function CoffeeListContent({
     <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
       <CoffeeFilters options={filters} />
       <div className="space-y-5">
-        <div className="flex flex-col gap-4 rounded-lg border border-stone-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm font-semibold text-stone-600">
-            {result.total} محصول
-          </p>
-          <CoffeeSortSelect value={query.sort ?? "latest"} />
+        <div className="rounded-lg border border-stone-200 bg-white p-4 shadow-sm">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-lg font-black text-stone-950">
+                {result.total.toLocaleString("ar-SA")} محصول
+              </p>
+              <p className="mt-1 text-sm text-stone-500">
+                {query.query ? `نتائج البحث عن "${query.query}"` : getActiveFilterText(query)}
+              </p>
+            </div>
+            {hasFilters ? (
+              <Link
+                href="/coffees"
+                className="inline-flex h-10 items-center justify-center rounded-md border border-stone-300 bg-white px-3 text-sm font-bold text-stone-700 transition hover:border-amber-300 hover:text-amber-900 sm:mr-auto"
+              >
+                مسح البحث والفلاتر
+              </Link>
+            ) : null}
+            <CoffeeSortSelect value={query.sort ?? "latest"} />
+          </div>
         </div>
         <CoffeeGrid
           coffees={result.items}
-          emptyTitle={hasFilters ? "لا توجد محاصيل تطابق الفلاتر" : "لا توجد محاصيل حالياً"}
-          emptyDescription={hasFilters ? "جرّب توسيع البحث أو إزالة بعض الفلاتر." : undefined}
+          emptyTitle={hasFilters ? "ما لقينا محاصيل تطابق اختيارك" : "لا توجد محاصيل حالياً"}
+          emptyDescription={
+            hasFilters
+              ? "جرّب إزالة بعض الفلاتر أو البحث باسم المحمصة/المحصول بطريقة أبسط."
+              : "عند إضافة محاصيل منشورة ستظهر هنا مباشرة."
+          }
           clearHref={hasFilters ? "/coffees" : undefined}
+          clearLabel="مسح البحث والفلاتر"
         />
         <CoffeePagination page={result.page} totalPages={result.totalPages} searchParams={rawSearchParams} />
       </div>
@@ -88,10 +125,10 @@ function ListSkeleton() {
     <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
       <div className="hidden h-[720px] animate-pulse rounded-lg bg-stone-200 lg:block" />
       <div className="space-y-5">
-        <div className="h-20 animate-pulse rounded-lg bg-stone-200" />
+        <div className="h-28 animate-pulse rounded-lg bg-stone-200 sm:h-20" />
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 9 }).map((_, index) => (
-            <div key={index} className="h-80 animate-pulse rounded-lg bg-stone-200" />
+            <div key={index} className="h-[430px] animate-pulse rounded-lg bg-stone-200" />
           ))}
         </div>
       </div>
@@ -107,15 +144,21 @@ export default async function CoffeesPage({ searchParams }: PageProps) {
     <main className="min-h-screen bg-stone-50">
       <SiteHeader />
       <section className="border-b border-stone-200 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <h1 className="text-3xl font-black text-stone-950 sm:text-4xl">محاصيل القهوة</h1>
-            <p className="mt-3 text-base leading-8 text-stone-600">
-              ابحث وفلتر حسب المحمصة، الدولة، المعالجة، النكهات، وطريقة التحضير.
-            </p>
-          </div>
-          <div className="mt-6 max-w-3xl">
-            <CoffeeSearchBar />
+        <div className="mx-auto max-w-7xl px-4 py-9 sm:px-6 lg:px-8">
+          <div className="grid gap-6 lg:grid-cols-[1fr_420px] lg:items-end">
+            <div className="max-w-3xl">
+              <p className="mb-3 inline-flex rounded-full bg-amber-100 px-3 py-1 text-sm font-bold text-amber-900">
+                دليل شراء سريع
+              </p>
+              <h1 className="text-3xl font-black text-stone-950 sm:text-4xl">اكتشف محاصيل القهوة</h1>
+              <p className="mt-3 text-base leading-8 text-stone-600">
+                ابحث باسم المحصول أو المحمصة، ثم فلتر حسب طريقة التحضير والنكهات والمعالجة حتى تصل للخيار الأنسب.
+              </p>
+            </div>
+            <div className="rounded-lg border border-stone-200 bg-stone-50 p-3 shadow-sm">
+              <p className="mb-2 text-sm font-bold text-stone-700">عندك محصول في بالك؟</p>
+              <CoffeeSearchBar placeholder="ابحث باسم المحصول أو المحمصة..." />
+            </div>
           </div>
         </div>
       </section>

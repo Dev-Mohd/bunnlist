@@ -9,9 +9,11 @@ import { Input } from "@/components/ui/input";
 export function CoffeeSearchBar({
   placeholder = "ابحث باسم المحصول أو المحمصة",
   targetPath,
+  className,
 }: {
   placeholder?: string;
   targetPath?: string;
+  className?: string;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -34,18 +36,21 @@ export function CoffeeSearchBar({
   }
 
   return (
-    <form onSubmit={submit} className="flex w-full flex-col gap-3 sm:flex-row">
+    <form onSubmit={submit} className={className ?? "flex w-full flex-col gap-3 sm:flex-row"}>
       <div className="relative flex-1">
         <Search className="pointer-events-none absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-stone-400" />
         <Input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder={placeholder}
-          className="pr-10"
+          className="h-12 border-stone-300 bg-white pr-10 text-base shadow-sm"
           aria-label="بحث"
         />
       </div>
-      <Button type="submit">بحث</Button>
+      <Button type="submit" className="h-12 px-5 text-base">
+        <Search className="h-4 w-4" />
+        بحث
+      </Button>
     </form>
   );
 }

@@ -27,6 +27,10 @@ function getSupabaseServiceRoleKey() {
 export function getCoffeeImageUrl(path: string | null): string {
   const supabaseUrl = getSupabaseUrl();
 
+  if (path?.startsWith("http://") || path?.startsWith("https://")) {
+    return path;
+  }
+
   if (!path || !supabaseUrl) {
     return PLACEHOLDER_COFFEE_IMAGE;
   }
