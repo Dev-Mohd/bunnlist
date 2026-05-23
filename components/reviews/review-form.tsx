@@ -65,7 +65,7 @@ export function ReviewForm({ coffeeLotId, coffeeSlug, initialReview, brewMethods
 
       setSubmitState({
         type: "success",
-        message: isEditing ? "تم تعديل تقييمك بنجاح ✓" : "تمت إضافة تقييمك بنجاح ✓",
+        message: isEditing ? "تم تعديل تقييمك بنجاح." : "تمت إضافة تقييمك بنجاح.",
       });
 
       window.setTimeout(() => {
@@ -87,7 +87,7 @@ export function ReviewForm({ coffeeLotId, coffeeSlug, initialReview, brewMethods
 
   return (
     <form
-      className="space-y-7 rounded-xl border border-stone-200 bg-white p-5 shadow-sm"
+      className="space-y-7 rounded-lg border border-stone-200 bg-white p-5 shadow-sm"
       onSubmit={(event) => {
         event.preventDefault();
         handleSubmit();
@@ -197,17 +197,17 @@ export function ReviewForm({ coffeeLotId, coffeeSlug, initialReview, brewMethods
       {/* ── 4. ملاحظاتك (اختياري) ── */}
       <div className="space-y-2">
         <label htmlFor="body" className="block text-sm font-bold text-stone-950">
-          ملاحظاتك{" "}
+          نص التجربة{" "}
           <span className="text-xs font-normal text-stone-400">(اختياري)</span>
         </label>
         <textarea
           id="body"
           value={body}
           onChange={(event) => setBody(event.target.value)}
-          rows={4}
-          placeholder="النكهات التي لاحظتها، طريقة التحضير، هل تنصح به؟..."
+          rows={5}
+          placeholder="اكتب ملاحظاتك عن النكهة، الوصفة، أو هل يناسب الشراء مرة أخرى..."
           className={cn(
-            "w-full rounded-lg border bg-white px-4 py-3 text-sm leading-7 text-stone-900 shadow-sm outline-none transition placeholder:text-stone-400 focus:ring-2",
+            "w-full rounded-md border bg-white px-4 py-3 text-sm leading-7 text-stone-900 shadow-sm outline-none transition placeholder:text-stone-400 focus:ring-2",
             isBodyTooLong
               ? "border-red-400 focus:border-red-500 focus:ring-red-500/20"
               : "border-stone-300 focus:border-amber-700 focus:ring-amber-700/20",
@@ -219,7 +219,7 @@ export function ReviewForm({ coffeeLotId, coffeeSlug, initialReview, brewMethods
             isBodyTooLong ? "text-red-600" : "text-stone-400",
           )}
         >
-          {body.length} / {BODY_MAX_LENGTH}
+          {body.length} / {BODY_MAX_LENGTH} حرف
         </p>
       </div>
 
@@ -228,7 +228,7 @@ export function ReviewForm({ coffeeLotId, coffeeSlug, initialReview, brewMethods
         <div
           role={submitState.type === "error" ? "alert" : "status"}
           className={cn(
-            "rounded-lg px-4 py-3 text-sm font-semibold",
+            "rounded-md px-4 py-3 text-sm font-semibold",
             submitState.type === "success"
               ? "bg-emerald-50 text-emerald-800"
               : "bg-red-50 text-red-700",
