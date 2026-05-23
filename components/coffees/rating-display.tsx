@@ -9,18 +9,32 @@ type RatingDisplayProps = {
   className?: string;
 };
 
-export function RatingDisplay({ rating, count, compact = false, className }: RatingDisplayProps) {
-  if (count === 0 || rating <= 0) {
-    return <span className={cn("text-sm font-medium text-stone-500", className)}>لم يُقيّم بعد</span>;
+function formatReviewCount(count: number) {
+  if (count === 1) {
+    return "تقييم واحد";
   }
 
-  // نص عدد التقييمات — يظهر فقط إذا مُرِّر count صراحةً
-  const countLabel =
-    count == null
-      ? null
-      : count === 1
-        ? "· تجربة واحدة"
-        : `(${count})`;
+  if (count === 2) {
+    return "تقييمان";
+  }
+
+  if (count <= 10) {
+    return `${count.toLocaleString("ar-SA")} تقييمات`;
+  }
+
+  return `${count.toLocaleString("ar-SA")} تقييم`;
+}
+
+export function RatingDisplay({ rating, count, compact = false, hideCount = false, className }: RatingDisplayProps) {
+  if (count === 0 || rating <= 0) {
+    return (
+      <span className={cn("text-sm font-medium text-stone-500", className)}>
+        {compact ? "بدون تقييمات" : "لم يحصل على تقييمات بعد"}
+      </span>
+    );
+  }
+
+  const countLabel = count == null || hideCount ? null : formatReviewCount(count);
 
   return (
     <div className={cn("flex items-center gap-2 text-stone-800", className)}>
