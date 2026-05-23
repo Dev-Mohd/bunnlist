@@ -191,7 +191,7 @@ function HomeQuickRecommendation() {
   return (
     <section className="border-y border-[#EDE3D6] bg-[#EDE3D6]/45 py-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="rounded-xl border border-white/70 bg-white/65 p-5 shadow-sm sm:p-6">
           <div>
             <p className="text-sm font-black" style={{ color: B.olive }}>
               توصية سريعة
@@ -203,26 +203,28 @@ function HomeQuickRecommendation() {
               اختر طريقة التحضير والنكهة، ونوصلك لمحاصيل أقرب لذوقك.
             </p>
           </div>
-          <Link
-            href="/coffees"
-            className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg px-6 text-sm font-black text-white shadow-sm transition hover:opacity-90"
-            style={{ background: B.caramel }}
-          >
-            <Sparkles className="h-4 w-4" />
-            اعرض الترشيحات
-          </Link>
-        </div>
-        <div className="mt-6 flex flex-wrap gap-2.5">
-          {RECOMMENDATION_CHIPS.map((chip) => (
+          <div className="mt-5 flex flex-wrap gap-2.5">
+            {RECOMMENDATION_CHIPS.map((chip) => (
+              <Link
+                key={chip.label}
+                href={chip.href}
+                className="rounded-full border bg-white px-4 py-2 text-sm font-bold text-[#4A3428] shadow-sm transition hover:border-[#B97945] hover:text-[#B97945]"
+                style={{ borderColor: "#d6c9b8" }}
+              >
+                {chip.label}
+              </Link>
+            ))}
+          </div>
+          <div className="mt-4 flex justify-start">
             <Link
-              key={chip.label}
-              href={chip.href}
-              className="rounded-full border bg-white px-4 py-2 text-sm font-bold text-[#4A3428] shadow-sm transition hover:border-[#B97945] hover:text-[#B97945]"
-              style={{ borderColor: "#d6c9b8" }}
+              href="/coffees"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-lg px-6 text-sm font-black text-white shadow-sm transition hover:opacity-90"
+              style={{ background: B.caramel }}
             >
-              {chip.label}
+              <Sparkles className="h-4 w-4" />
+              اعرض الترشيحات
             </Link>
-          ))}
+          </div>
         </div>
       </div>
     </section>
