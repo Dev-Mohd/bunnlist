@@ -7,10 +7,11 @@ export const metadata = { title: "لوحة الإدارة — BunnList" };
 export default async function AdminPage() {
   const session = await requireAdmin();
 
-  const [userCount, coffeeCount, reviewCount] = await Promise.all([
+  const [userCount, coffeeCount, reviewCount, needsImageWork] = await Promise.all([
     prisma.user.count(),
     prisma.coffeeLot.count(),
     prisma.review.count(),
+    prisma.coffeeLot.count({ where: { imagePermissionStatus: { not: "APPROVED" } } }),
   ]);
 
   return (
@@ -36,6 +37,17 @@ export default async function AdminPage() {
             className="rounded-lg border border-stone-200 px-4 py-2 text-sm font-semibold text-stone-700 hover:bg-stone-50"
           >
             إدارة المحاصيل
+          </Link>
+          <Link
+            href="/admin/missing-images"
+            className="inline-flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800 hover:bg-amber-100"
+          >
+            محاصيل تحتاج صور
+            {needsImageWork > 0 && (
+              <span className="inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-amber-600 px-1.5 text-xs font-bold text-white">
+                {needsImageWork}
+              </span>
+            )}
           </Link>
           <Link
             href="/coffees"
