@@ -29,6 +29,16 @@ type ActionResult<T = unknown> =
   | { ok: true; data: T }
   | { ok: false; error: string };
 
+// ---- التحقق من أن الرابط مطلق وصالح (http أو https) ----
+function isValidAbsoluteUrl(url: string): boolean {
+  try {
+    const u = new URL(url);
+    return u.protocol === "http:" || u.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 // ---- تحويل نص إلى slug صالح للـ URL ----
 function slugify(text: string): string {
   return text
@@ -65,6 +75,7 @@ function mapProcess(raw: string | null): CoffeeProcess {
 // ---- تعيين مصفوفة نصوص إلى BrewMethod[] enum ----
 function mapBrewMethods(raw: string[]): BrewMethod[] {
   const map: Record<string, BrewMethod> = {
+    // English
     espresso: "ESPRESSO",
     v60: "V60",
     "v-60": "V60",
@@ -76,6 +87,21 @@ function mapBrewMethods(raw: string[]): BrewMethod[] {
     "cold brew": "COLD_BREW",
     coldbrew: "COLD_BREW",
     "cold-brew": "COLD_BREW",
+    // Arabic — Gemini may extract these from Arabic coffee pages
+    "إسبريسو": "ESPRESSO",
+    "اسبريسو": "ESPRESSO",
+    "إسبرسو": "ESPRESSO",
+    "في 60": "V60",
+    "في60": "V60",
+    "كيمكس": "CHEMEX",
+    "إيروبريس": "AEROPRESS",
+    "ايروبريس": "AEROPRESS",
+    "إيرو بريس": "AEROPRESS",
+    "فرنش بريس": "FRENCH_PRESS",
+    "فرنش برس": "FRENCH_PRESS",
+    "فرنش-بريس": "FRENCH_PRESS",
+    "كولد برو": "COLD_BREW",
+    "كولد-برو": "COLD_BREW",
   };
   const result: BrewMethod[] = [];
   for (const item of raw) {
@@ -262,21 +288,28 @@ export async function saveImportedCoffee(
   }
 
   // ---- ابحث عن المحمصة في الجدول (مطلوبة) ----
+  // يبحث في nameAr (الاسم العربي) وname (الاسم الإنجليزي) معاً لتغطية ما يستخرجه الذكاء الاصطناعي
   let roasterId: string | null = null;
   if (imported.roasteryName) {
     const roaster = await prisma.roaster.findFirst({
-      where: { nameAr: { equals: imported.roasteryName, mode: "insensitive" } },
+      where: {
+        OR: [
+          { nameAr: { equals: imported.roasteryName, mode: "insensitive" } },
+          { name:   { equals: imported.roasteryName, mode: "insensitive" } },
+        ],
+      },
     });
     roasterId = roaster?.id ?? null;
   }
   if (!roasterId) {
     return {
       ok: false,
-      error: `لم يُعثر على محمصة بالاسم "${imported.roasteryName ?? "غير محدد"}" في قاعدة البيانات. أنشئها أولاً من صفحة المحامص ثم أعد المحاولة.`,
+      error: `لم يُعثر على محمصة بالاسم "${imported.roasteryName ?? "غير محدد"}" في قاعدة البيانات (تم البحث في الاسم العربي والإنجليزي). أنشئها أولاً من صفحة المحامص ثم أعد المحاولة.`,
     };
   }
 
   // ---- ابحث عن دولة المنشأ في الجدول (مطلوبة) ----
+  // يبحث في nameAr وnameEn معاً — الاستخراج قد يعيد اسم الدولة بأي لغة
   let originCountryId: string | null = null;
   if (imported.originCountry) {
     const country = await prisma.originCountry.findFirst({
@@ -292,14 +325,23 @@ export async function saveImportedCoffee(
   if (!originCountryId) {
     return {
       ok: false,
-      error: `لم يُعثر على دولة منشأ بالاسم "${imported.originCountry ?? "غير محدد"}" في قاعدة البيانات. تأكد من وجودها أولاً.`,
+      error: `لم يُعثر على دولة منشأ بالاسم "${imported.originCountry ?? "غير محدد"}" في قاعدة البيانات (تم البحث في الاسم العربي والإنجليزي). تأكد من وجودها أولاً.`,
     };
   }
 
   // ---- تعيين حقول enum ----
   const coffeeProcess = mapProcess(imported.process);
   const brewMethods = mapBrewMethods(imported.brewMethods);
-  const importedImageUrl = imported.imageUrl?.trim() || null;
+  // تحقق من أن رابط الصورة مطلق وصالح — إذا كان الرابط موجوداً لكن غير صالح، أوقف الحفظ
+  // حتى لا يُخزَّن رابط خاطئ أو يُفقَد إعداد الإذن الذي اختاره الأدمن بصمت.
+  const rawImageUrl = imported.imageUrl?.trim() || null;
+  if (rawImageUrl && !isValidAbsoluteUrl(rawImageUrl)) {
+    return {
+      ok: false,
+      error: "رابط الصورة غير صالح. يجب أن يبدأ بـ http:// أو https:// أو احذفه قبل الحفظ.",
+    };
+  }
+  const importedImageUrl = rawImageUrl;
   const hasImportedImage = Boolean(importedImageUrl);
   const imagePermissionStatus = hasImportedImage
     ? (opts.imagePermissionStatus ?? "PENDING")
@@ -355,8 +397,17 @@ export async function saveImportedCoffee(
     revalidatePath("/admin/import");
     revalidatePath("/admin/coffees");
     return { ok: true, data: { coffeeLotId: result.id } };
-  } catch {
-    return { ok: false, error: "فشل حفظ المحصول. راجع الـ logs وتأكد من صحة البيانات." };
+  } catch (err) {
+    console.error("[saveImportedCoffee] transaction failed:", err);
+    if (err instanceof Error) {
+      if (err.message.includes("Unique constraint") && err.message.includes("slug")) {
+        return { ok: false, error: "فشل الحفظ: الـ slug مكرر في قاعدة البيانات. أعد المحاولة." };
+      }
+      if (err.message.includes("Foreign key constraint")) {
+        return { ok: false, error: "فشل الحفظ: مرجع غير صالح في قاعدة البيانات. تأكد من وجود المحمصة والدولة." };
+      }
+    }
+    return { ok: false, error: "فشل حفظ المحصول. تحقق من الـ logs للتفاصيل." };
   }
 }
 

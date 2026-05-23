@@ -25,6 +25,18 @@ export default async function ImportCoffeePage() {
     take: 30,
   });
 
+  // كشف الأسماء المكررة داخل الدُفعة الحالية — بدون استعلامات إضافية
+  const nameOccurrences = new Map<string, number>();
+  for (const item of pending) {
+    const key = item.coffeeName?.trim().toLowerCase() ?? "";
+    if (key) nameOccurrences.set(key, (nameOccurrences.get(key) ?? 0) + 1);
+  }
+  const batchDuplicateNames = new Set(
+    [...nameOccurrences.entries()]
+      .filter(([, count]) => count > 1)
+      .map(([name]) => name),
+  );
+
   return (
     <main className="mx-auto max-w-3xl px-4 py-8" dir="rtl">
       <h1 className="text-2xl font-bold text-stone-800">استيراد القهوة</h1>
@@ -56,6 +68,9 @@ export default async function ImportCoffeePage() {
               <ImportReviewCard
                 key={item.id}
                 imported={JSON.parse(JSON.stringify(item))}
+                isBatchDuplicate={batchDuplicateNames.has(
+                  item.coffeeName?.trim().toLowerCase() ?? "",
+                )}
               />
             ))}
           </div>
