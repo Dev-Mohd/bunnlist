@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Plus, Pencil, ImageOff } from "lucide-react";
 import { getAllCoffeeLotsAdmin } from "@/actions/admin";
 import { getCoffeeImageUrl, getPublicCoffeeImageUrl } from "@/lib/storage";
@@ -117,14 +116,15 @@ export default async function AdminCoffeesPage({ searchParams }: PageProps) {
                     {/* ── المحصول: صورة + اسم + slug + آخر تحديث ── */}
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-stone-100">
+                        <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-stone-100">
                           {hasVisibleImage ? (
-                            <Image
+                            // plain <img> — avoids next/image hostname validation crash
+                            // for external roastery URLs not in remotePatterns
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
                               src={imageUrl}
                               alt={lot.nameAr}
-                              fill
-                              className="object-cover"
-                              sizes="56px"
+                              className="h-full w-full object-cover"
                             />
                           ) : (
                             <div className="flex h-full w-full flex-col items-center justify-center gap-0.5 text-stone-300">
