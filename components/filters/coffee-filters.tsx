@@ -246,7 +246,7 @@ export function CoffeeFilters({ options }: CoffeeFiltersProps) {
 
   return (
     <>
-      {/* ── Mobile: Sheet (زر الفلاتر يفتح panel) ── */}
+      {/* ── Mobile: Sheet ── */}
       <div className="lg:hidden">
         <Sheet
           title="فلترة المحاصيل"

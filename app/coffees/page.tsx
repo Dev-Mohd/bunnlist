@@ -61,6 +61,7 @@ function getActiveFilterText(query: CoffeeLotQuery) {
     (query.processingMethods?.length ?? 0) +
     (query.flavorNotes?.length ?? 0) +
     (query.brewMethods?.length ?? 0) +
+    (query.minRating ? 1 : 0) +
     (query.query ? 1 : 0);
 
   if (!count) {
