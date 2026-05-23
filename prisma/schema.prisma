@@ -44,6 +44,35 @@ enum RateLimitAction {
   CREATE_COFFEE_LOT
 }
 
+enum ImportStatus {
+  PENDING
+  REVIEWED
+  SAVED
+  REJECTED
+}
+
+enum CoffeeImageType {
+  OFFICIAL
+  PLACEHOLDER
+  USER_UPLOADED
+  NONE
+}
+
+enum ImagePermissionStatus {
+  APPROVED
+  PENDING
+  REJECTED
+  PLACEHOLDER_ONLY
+}
+
+enum CoffeeImageSource {
+  ROASTERY_WEBSITE
+  ROASTERY_PROVIDED
+  INSTAGRAM
+  USER_UPLOAD
+  PLACEHOLDER
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -60,6 +89,7 @@ model User {
   reviews           Review[]
   createdCoffeeLots CoffeeLot[]      @relation("CreatedCoffeeLots")
   rateLimitEvents   RateLimitEvent[]
+  importJobs        ImportJob[]
 }
 
 model Account {
@@ -128,8 +158,8 @@ model OriginCountry {
 }
 
 model CoffeeLot {
-  id                     String          @id @default(cuid())
-  slug                   String          @unique
+  id                     String        @id @default(cuid())
+  slug                   String        @unique
   name                   String
   nameAr                 String
   roasterId              String
@@ -146,21 +176,33 @@ model CoffeeLot {
   flavorNotes            String[]
   recommendedBrewMethods BrewMethod[]
   imagePath              String?
-  imageUrl               String?         @db.Text
-  description            String?         @db.Text
-  descriptionAr          String?         @db.Text
-  averageRating          Decimal         @default(0) @db.Decimal(3, 2)
-  reviewCount            Int             @default(0)
+  imageUrl               String?                 @db.Text
+  imageType              CoffeeImageType         @default(NONE)
+  imagePermissionStatus  ImagePermissionStatus   @default(PLACEHOLDER_ONLY)
+  imageSource            CoffeeImageSource       @default(PLACEHOLDER)
+  imageCredit            String?
+  imageSourceUrl         String?                 @db.Text
+  imagePermissionNote    String?                 @db.Text
+  imageApprovedAt        DateTime?
+  originalImageUrl       String?                 @db.Text
+  storedImageUrl         String?                 @db.Text
+  imageStorageProvider   String?
+  imageStoredAt          DateTime?
+  description            String?       @db.Text
+  descriptionAr          String?       @db.Text
+  averageRating          Decimal       @default(0) @db.Decimal(3, 2)
+  reviewCount            Int           @default(0)
   publishedAt            DateTime?
-  createdAt              DateTime        @default(now())
-  updatedAt              DateTime        @updatedAt
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
   createdById            String?
 
-  roaster       Roaster       @relation(fields: [roasterId], references: [id], onDelete: Restrict)
-  originCountry OriginCountry @relation(fields: [originCountryId], references: [id], onDelete: Restrict)
-  createdBy     User?         @relation("CreatedCoffeeLots", fields: [createdById], references: [id], onDelete: SetNull)
+  roaster       Roaster             @relation(fields: [roasterId], references: [id], onDelete: Restrict)
+  originCountry OriginCountry       @relation(fields: [originCountryId], references: [id], onDelete: Restrict)
+  createdBy     User?               @relation("CreatedCoffeeLots", fields: [createdById], references: [id], onDelete: SetNull)
   reviews       Review[]
   brewStats     CoffeeLotBrewStat[]
+  importedFrom  ImportedCoffee[]
 
   @@index([roasterId])
   @@index([originCountryId])
@@ -168,6 +210,63 @@ model CoffeeLot {
   @@index([averageRating])
   @@index([reviewCount])
   @@index([createdAt])
+}
+
+model ImportJob {
+  id            String       @id @default(cuid())
+  sourceUrl     String       @db.Text
+  normalizedUrl String
+  status        ImportStatus @default(PENDING)
+  httpStatus    Int?
+  rawHtmlSize   Int?
+  rawText       String?      @db.Text
+  errorMessage  String?      @db.Text
+  createdById   String
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  createdBy      User            @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  importedCoffee ImportedCoffee?
+
+  @@index([normalizedUrl])
+  @@index([status])
+  @@index([createdAt])
+  @@index([createdById])
+}
+
+model ImportedCoffee {
+  id                 String       @id @default(cuid())
+  importJobId        String       @unique
+  status             ImportStatus @default(PENDING)
+  coffeeName         String?
+  roasteryName       String?
+  originCountry      String?
+  region             String?
+  farmName           String?
+  producerName       String?
+  process            String?
+  variety            String?
+  tastingNotes       String[]
+  roastLevel         String?
+  brewMethods        String[]
+  price              Decimal?     @db.Decimal(10, 2)
+  currency           String?
+  weightGrams        Int?
+  productUrl         String?      @db.Text
+  imageUrl           String?      @db.Text
+  availability       String?
+  descriptionSummary String?      @db.Text
+  confidence         Json?
+  savedCoffeeLotId   String?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  importJob      ImportJob  @relation(fields: [importJobId], references: [id], onDelete: Cascade)
+  savedCoffeeLot CoffeeLot? @relation(fields: [savedCoffeeLotId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([createdAt])
+  @@index([savedCoffeeLotId])
 }
 
 model CoffeeLotBrewStat {

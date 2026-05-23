@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { Coffee, LayoutDashboard, ArrowRight } from "lucide-react";
+import { Coffee, ImageOff, LayoutDashboard, ArrowRight } from "lucide-react";
 
 const navLinks = [
   { href: "/admin", label: "لوحة الإدارة", icon: LayoutDashboard },
   { href: "/admin/coffees", label: "المحاصيل", icon: Coffee },
+  { href: "/admin/missing-images", label: "الصور الناقصة", icon: ImageOff },
 ];
 
 export function AdminSidebar() {

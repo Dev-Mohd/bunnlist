@@ -38,6 +38,18 @@ export function getCoffeeImageUrl(path: string | null): string {
   return `${supabaseUrl.replace(/\/$/, "")}/storage/v1/object/public/${COFFEE_IMAGES_BUCKET}/${path.replace(/^\//, "")}`;
 }
 
+export function getPublicCoffeeImageUrl(image: {
+  imageUrl?: string | null;
+  imageType?: string | null;
+  imagePermissionStatus?: string | null;
+}): string {
+  if (image.imageUrl && image.imagePermissionStatus === "APPROVED") {
+    return image.imageUrl;
+  }
+
+  return PLACEHOLDER_COFFEE_IMAGE;
+}
+
 function getFileExtension(file: File) {
   const nameExtension = file.name.split(".").pop()?.toLowerCase();
 

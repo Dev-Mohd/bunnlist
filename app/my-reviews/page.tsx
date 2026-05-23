@@ -1,12 +1,12 @@
 import Link from "next/link";
-import Image from "next/image";
 import { ChevronRight, Pencil, Star } from "lucide-react";
 import { requireAuth } from "@/lib/auth-helpers";
 import { getMyReviews } from "@/actions/reviews";
-import { getCoffeeImageUrl } from "@/lib/storage";
+import { CoffeeImage } from "@/components/coffees/coffee-image";
 import { SiteHeader } from "@/components/ui/site-header";
 import { SiteFooter } from "@/components/ui/site-footer";
 import { formatBrewMethod } from "@/lib/coffee-labels";
+import { formatReviewDate } from "@/lib/date-format";
 
 export const metadata = { title: "تقييماتي | BunnList" };
 
@@ -66,28 +66,22 @@ export default async function MyReviewsPage() {
         ) : (
           <div className="space-y-4">
             {reviews.map((review) => {
-              const imageUrl = getCoffeeImageUrl(review.coffeeLot.imagePath);
               return (
                 <div
                   key={review.id}
                   className="overflow-hidden rounded-2xl border border-stone-200 bg-white"
                 >
                   <div className="flex gap-4 p-5">
-                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-stone-100">
-                      {review.coffeeLot.imagePath ? (
-                        <Image
-                          src={imageUrl}
-                          alt={review.coffeeLot.nameAr}
-                          fill
-                          className="object-cover"
-                          sizes="80px"
-                        />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center text-2xl">
-                          ☕
-                        </div>
-                      )}
-                    </div>
+                    <CoffeeImage
+                      variant="card"
+                      imagePath={review.coffeeLot.imagePath}
+                      imageUrl={review.coffeeLot.imageUrl}
+                      imagePermissionStatus={review.coffeeLot.imagePermissionStatus}
+                      coffeeName={review.coffeeLot.nameAr}
+                      roasteryName={review.coffeeLot.roaster.nameAr}
+                      sizes="80px"
+                      className="h-20 w-20 shrink-0 rounded-xl"
+                    />
 
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -122,6 +116,9 @@ export default async function MyReviewsPage() {
                           </span>
                         ) : null}
                       </div>
+                      <p className="mt-1.5 text-xs text-stone-400">
+                        {formatReviewDate(review.createdAt)}
+                      </p>
 
                       {review.body ? (
                         <p className="mt-3 line-clamp-2 text-sm leading-7 text-stone-600">

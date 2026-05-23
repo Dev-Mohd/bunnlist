@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
 import { DeleteConfirmDialog } from "@/components/admin/delete-confirm-dialog";
 
-type Props = { coffeeId: string; nameAr: string };
+type Props = { coffeeId: string; nameAr: string; reviewCount: number };
 
-export function CoffeeListActions({ coffeeId, nameAr }: Props) {
+export function CoffeeListActions({ coffeeId, nameAr, reviewCount }: Props) {
   const router = useRouter();
   const [showDialog, setShowDialog] = React.useState(false);
 
@@ -26,6 +26,7 @@ export function CoffeeListActions({ coffeeId, nameAr }: Props) {
         <DeleteConfirmDialog
           coffeeId={coffeeId}
           nameAr={nameAr}
+          reviewCount={reviewCount}
           onSuccess={() => {
             setShowDialog(false);
             router.refresh();

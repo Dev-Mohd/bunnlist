@@ -1,6 +1,12 @@
 "use server";
 
-import type { BrewMethod, CoffeeProcess } from "@prisma/client";
+import type {
+  BrewMethod,
+  CoffeeImageSource,
+  CoffeeImageType,
+  CoffeeProcess,
+  ImagePermissionStatus,
+} from "@prisma/client";
 import { ReviewStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
@@ -16,6 +22,8 @@ export type CoffeeLotQuery = {
   flavorNotes?: string[];
   brewMethods?: BrewMethod[];
   sort?: CoffeeSort;
+  /** الحد الأدنى لتقييم المحصول (1–5) */
+  minRating?: number;
 };
 
 export type CoffeeListItem = {
@@ -30,6 +38,12 @@ export type CoffeeListItem = {
   flavorNotes: string[];
   recommendedBrewMethods: BrewMethod[];
   imagePath: string | null;
+  imageUrl: string | null;
+  imageType: CoffeeImageType;
+  imagePermissionStatus: ImagePermissionStatus;
+  imageSource: CoffeeImageSource;
+  imageCredit: string | null;
+  imageSourceUrl: string | null;
   averageRating: number;
   reviewCount: number;
   createdAt: Date;
@@ -56,6 +70,7 @@ export type PaginatedCoffeeLots = {
 
 export type CoffeeReview = {
   id: string;
+  userId: string;
   rating: number;
   brewMethod: BrewMethod;
   wouldBuyAgain: boolean;
@@ -104,9 +119,32 @@ export type CoffeeFilterOptions = {
 
 const DEFAULT_PER_PAGE = 12;
 const MAX_PER_PAGE = 24;
+const RAW_IMPORT_DESCRIPTION_FALLBACK = "لا يوجد وصف مختصر لهذا المحصول بعد.";
+const RAW_IMPORT_DESCRIPTION_MARKERS = [
+  "رابط المنتج",
+  "مصدر الدفعة",
+  "ثقة الاستخراج",
+  "bunnlist_batch",
+  ".json",
+  "unknown",
+  "http://",
+  "https://",
+  "الاستيراد",
+];
 
 function normalizeList<T extends string>(values?: T[]) {
   return values?.filter(Boolean) ?? [];
+}
+
+function getPublicDescription(description: string | null) {
+  if (!description) return null;
+
+  const normalized = description.toLowerCase();
+  if (RAW_IMPORT_DESCRIPTION_MARKERS.some((marker) => normalized.includes(marker.toLowerCase()))) {
+    return RAW_IMPORT_DESCRIPTION_FALLBACK;
+  }
+
+  return description;
 }
 
 function toListItem(lot: {
@@ -122,6 +160,11 @@ function toListItem(lot: {
   recommendedBrewMethods: BrewMethod[];
   imagePath: string | null;
   imageUrl: string | null;
+  imageType: CoffeeImageType;
+  imagePermissionStatus: ImagePermissionStatus;
+  imageSource: CoffeeImageSource;
+  imageCredit: string | null;
+  imageSourceUrl: string | null;
   averageRating: unknown;
   reviewCount: number;
   createdAt: Date;
@@ -153,6 +196,46 @@ function getOrderBy(sort: CoffeeSort) {
   return [{ createdAt: "desc" as const }];
 }
 
+function average(values: number[]) {
+  if (values.length === 0) return 0;
+
+  return Number((values.reduce((sum, value) => sum + value, 0) / values.length).toFixed(2));
+}
+
+function getLatestUniqueReviews<T extends { userId: string; createdAt: Date }>(reviews: T[]) {
+  const byUser = new Map<string, T>();
+
+  for (const review of reviews) {
+    if (!byUser.has(review.userId)) {
+      byUser.set(review.userId, review);
+    }
+  }
+
+  return Array.from(byUser.values());
+}
+
+function buildUniqueBrewStats(
+  reviews: { rating: number; brewMethod: BrewMethod; wouldBuyAgain: boolean }[],
+) {
+  const byMethod = new Map<BrewMethod, { ratings: number[]; wouldBuyAgain: number }>();
+
+  for (const review of reviews) {
+    const current = byMethod.get(review.brewMethod) ?? { ratings: [], wouldBuyAgain: 0 };
+    current.ratings.push(review.rating);
+    if (review.wouldBuyAgain) current.wouldBuyAgain += 1;
+    byMethod.set(review.brewMethod, current);
+  }
+
+  return Array.from(byMethod.entries())
+    .map(([brewMethod, stat]) => ({
+      brewMethod,
+      averageRating: average(stat.ratings),
+      reviewCount: stat.ratings.length,
+      wouldBuyAgain: stat.wouldBuyAgain,
+    }))
+    .sort((a, b) => b.averageRating - a.averageRating || b.reviewCount - a.reviewCount);
+}
+
 export async function getCoffeeLots(input: CoffeeLotQuery = {}): Promise<PaginatedCoffeeLots> {
   const page = Math.max(1, input.page ?? 1);
   const perPage = Math.min(MAX_PER_PAGE, Math.max(1, input.perPage ?? DEFAULT_PER_PAGE));
@@ -163,6 +246,9 @@ export async function getCoffeeLots(input: CoffeeLotQuery = {}): Promise<Paginat
   const processingMethods = normalizeList(input.processingMethods);
   const flavorNotes = normalizeList(input.flavorNotes);
   const brewMethods = normalizeList(input.brewMethods);
+  const minRating = input.minRating && input.minRating >= 1 && input.minRating <= 5
+    ? input.minRating
+    : undefined;
 
   const where = {
     publishedAt: { not: null },
@@ -182,6 +268,7 @@ export async function getCoffeeLots(input: CoffeeLotQuery = {}): Promise<Paginat
     ...(processingMethods.length ? { process: { in: processingMethods } } : {}),
     ...(flavorNotes.length ? { flavorNotes: { hasSome: flavorNotes } } : {}),
     ...(brewMethods.length ? { recommendedBrewMethods: { hasSome: brewMethods } } : {}),
+    ...(minRating ? { reviewCount: { gt: 0 }, averageRating: { gte: minRating } } : {}),
   };
 
   const [total, lots] = await Promise.all([
@@ -216,21 +303,12 @@ export async function getCoffeeLotBySlug(slug: string): Promise<CoffeeLotDetails
     include: {
       roaster: { select: { id: true, name: true, nameAr: true, cityAr: true } },
       originCountry: { select: { id: true, nameAr: true, isoCode: true } },
-      brewStats: {
-        orderBy: [{ averageRating: "desc" }, { reviewCount: "desc" }],
-        select: {
-          brewMethod: true,
-          averageRating: true,
-          reviewCount: true,
-          wouldBuyAgain: true,
-        },
-      },
       reviews: {
         where: { status: ReviewStatus.PUBLISHED },
         orderBy: { createdAt: "desc" },
-        take: 10,
         select: {
           id: true,
+          userId: true,
           rating: true,
           brewMethod: true,
           wouldBuyAgain: true,
@@ -251,20 +329,24 @@ export async function getCoffeeLotBySlug(slug: string): Promise<CoffeeLotDetails
     return null;
   }
 
+  const uniqueReviews = getLatestUniqueReviews(lot.reviews);
+  const uniqueAverageRating = average(uniqueReviews.map((review) => review.rating));
+  const uniqueReviewCount = uniqueReviews.length;
+  const uniqueBrewStats = buildUniqueBrewStats(uniqueReviews);
+
   return {
     ...toListItem(lot),
+    averageRating: uniqueAverageRating,
+    reviewCount: uniqueReviewCount,
     farm: lot.farm,
     producer: lot.producer,
     variety: lot.variety,
     roastLevel: lot.roastLevel,
     altitudeMeters: lot.altitudeMeters,
-    description: lot.description,
-    descriptionAr: lot.descriptionAr,
-    brewStats: lot.brewStats.map((stat) => ({
-      ...stat,
-      averageRating: Number(stat.averageRating),
-    })),
-    reviews: lot.reviews,
+    description: getPublicDescription(lot.description),
+    descriptionAr: getPublicDescription(lot.descriptionAr),
+    brewStats: uniqueBrewStats,
+    reviews: uniqueReviews.slice(0, 10),
   };
 }
 
@@ -278,6 +360,7 @@ export async function getLatestCoffeeReviews(limit = 3): Promise<LatestCoffeeRev
     take: limit,
     select: {
       id: true,
+      userId: true,
       rating: true,
       brewMethod: true,
       wouldBuyAgain: true,
@@ -305,7 +388,7 @@ export async function getLatestCoffeeReviews(limit = 3): Promise<LatestCoffeeRev
 }
 
 export async function getCoffeeFilters(): Promise<CoffeeFilterOptions> {
-  const [roasters, originCountries, processingRows, lotsForNotes, brewRows] = await Promise.all([
+  const [roasters, originCountries, processingRows, lotsForFilters] = await Promise.all([
     prisma.roaster.findMany({
       orderBy: [{ nameAr: "asc" }, { name: "asc" }],
       select: { id: true, name: true, nameAr: true, cityAr: true },
@@ -322,23 +405,19 @@ export async function getCoffeeFilters(): Promise<CoffeeFilterOptions> {
     }),
     prisma.coffeeLot.findMany({
       where: { publishedAt: { not: null } },
-      select: { flavorNotes: true },
-    }),
-    prisma.coffeeLot.findMany({
-      where: { publishedAt: { not: null } },
-      select: { recommendedBrewMethods: true },
+      select: { flavorNotes: true, recommendedBrewMethods: true },
     }),
   ]);
 
   const noteCounts = new Map<string, number>();
-  for (const lot of lotsForNotes) {
+  for (const lot of lotsForFilters) {
     for (const note of lot.flavorNotes) {
       noteCounts.set(note, (noteCounts.get(note) ?? 0) + 1);
     }
   }
 
   const brewMethods = Array.from(
-    new Set(brewRows.flatMap((lot) => lot.recommendedBrewMethods)),
+    new Set(lotsForFilters.flatMap((lot) => lot.recommendedBrewMethods)),
   ).sort();
 
   return {

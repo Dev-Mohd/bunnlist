@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { getCoffeeLotForEdit } from "@/actions/admin";
-import { getCoffeeImageUrl } from "@/lib/storage";
+import { getCoffeeImageUrl, getPublicCoffeeImageUrl } from "@/lib/storage";
 import { CoffeeForm } from "@/components/admin/coffee-form";
 
 export const metadata = { title: "تعديل المحصول — BunnList" };
@@ -29,7 +29,12 @@ export default async function EditCoffeePage({ params }: Props) {
 
   if (!lot) notFound();
 
-  const initialImageUrl = lot.imagePath ? getCoffeeImageUrl(lot.imagePath) : undefined;
+  const initialImageUrl =
+    lot.imageUrl && lot.imagePermissionStatus === "APPROVED" && lot.imageType === "OFFICIAL"
+      ? getPublicCoffeeImageUrl(lot)
+      : lot.imagePath
+        ? getCoffeeImageUrl(lot.imagePath)
+        : undefined;
 
   return (
     <div className="mx-auto max-w-3xl">

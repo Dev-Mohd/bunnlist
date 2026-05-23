@@ -3,7 +3,15 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, X, Plus, CheckCircle } from "lucide-react";
-import type { BrewMethod, CoffeeProcess, Roaster, OriginCountry } from "@prisma/client";
+import {
+  CoffeeImageSource,
+  CoffeeImageType,
+  ImagePermissionStatus,
+  type BrewMethod,
+  type CoffeeProcess,
+  type OriginCountry,
+  type Roaster,
+} from "@prisma/client";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -23,6 +31,25 @@ type Props = {
 
 const BREW_METHODS = Object.keys(brewMethodLabels) as BrewMethod[];
 const PROCESS_OPTIONS = Object.keys(processLabels) as CoffeeProcess[];
+const IMAGE_TYPE_LABELS: Record<CoffeeImageType, string> = {
+  OFFICIAL: "رسمية",
+  PLACEHOLDER: "صورة بديلة",
+  USER_UPLOADED: "مرفوعة من مستخدم",
+  NONE: "بدون صورة",
+};
+const IMAGE_PERMISSION_LABELS: Record<ImagePermissionStatus, string> = {
+  APPROVED: "موافق عليها",
+  PENDING: "بانتظار الموافقة",
+  REJECTED: "مرفوضة",
+  PLACEHOLDER_ONLY: "استخدم الصورة البديلة فقط",
+};
+const IMAGE_SOURCE_LABELS: Record<CoffeeImageSource, string> = {
+  ROASTERY_WEBSITE: "موقع المحمصة",
+  ROASTERY_PROVIDED: "مرسلة من المحمصة",
+  INSTAGRAM: "إنستغرام",
+  USER_UPLOAD: "رفع مستخدم",
+  PLACEHOLDER: "صورة بديلة",
+};
 
 type FormErrors = Partial<Record<keyof CoffeeFormValues | "root", string>>;
 
@@ -56,6 +83,27 @@ export function CoffeeForm({ initialData, roasters, countries, mode, initialImag
     initialData?.descriptionAr ?? "",
   );
   const [imagePath, setImagePath] = React.useState(initialData?.imagePath ?? "");
+  const [imageUrl, setImageUrl] = React.useState(initialData?.imageUrl ?? "");
+  const [imageType, setImageType] = React.useState<CoffeeImageType>(
+    initialData?.imageType ?? CoffeeImageType.NONE,
+  );
+  const [imagePermissionStatus, setImagePermissionStatus] =
+    React.useState<ImagePermissionStatus>(
+      initialData?.imagePermissionStatus ?? ImagePermissionStatus.PLACEHOLDER_ONLY,
+    );
+  const [imageSource, setImageSource] = React.useState<CoffeeImageSource>(
+    initialData?.imageSource ?? CoffeeImageSource.PLACEHOLDER,
+  );
+  const [imageCredit, setImageCredit] = React.useState(initialData?.imageCredit ?? "");
+  const [imageSourceUrl, setImageSourceUrl] = React.useState(
+    initialData?.imageSourceUrl ?? "",
+  );
+  const [imagePermissionNote, setImagePermissionNote] = React.useState(
+    initialData?.imagePermissionNote ?? "",
+  );
+  const [published, setPublished] = React.useState(
+    initialData ? initialData.publishedAt !== null : true,
+  );
 
   const [errors, setErrors] = React.useState<FormErrors>({});
   const [pending, setPending] = React.useState(false);
@@ -119,6 +167,15 @@ export function CoffeeForm({ initialData, roasters, countries, mode, initialImag
       description: description.trim() || undefined,
       descriptionAr: descriptionAr.trim() || undefined,
       imagePath: imagePath || undefined,
+      imageUrl: imageUrl.trim() || undefined,
+      imageType,
+      imagePermissionStatus,
+      imageSource,
+      imageCredit: imageCredit.trim() || undefined,
+      imageSourceUrl: imageSourceUrl.trim() || undefined,
+      imagePermissionNote: imagePermissionNote.trim() || undefined,
+      imageApprovedAt: initialData?.imageApprovedAt ?? null,
+      published,
     };
 
     const result =
@@ -206,6 +263,33 @@ export function CoffeeForm({ initialData, roasters, countries, mode, initialImag
               ))}
             </Select>
           </Field>
+        </div>
+
+        {/* ── حالة النشر ── */}
+        <div className="mt-5 border-t border-stone-100 pt-4">
+          <label className="flex cursor-pointer items-center gap-3">
+            <Checkbox
+              checked={published}
+              onChange={(e) => setPublished(e.target.checked)}
+            />
+            <div>
+              <span className="text-sm font-bold text-stone-950">منشور</span>
+              <p className="text-xs text-stone-400">
+                {published
+                  ? "يظهر للزوار في صفحة المحاصيل"
+                  : "مسودة — لا يظهر للزوار"}
+              </p>
+            </div>
+            {published ? (
+              <span className="mr-auto rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-semibold text-emerald-700">
+                منشور
+              </span>
+            ) : (
+              <span className="mr-auto rounded-full bg-stone-100 px-2.5 py-0.5 text-xs font-semibold text-stone-500">
+                مسودة
+              </span>
+            )}
+          </label>
         </div>
       </section>
 
@@ -371,6 +455,95 @@ export function CoffeeForm({ initialData, roasters, countries, mode, initialImag
       {/* ── الصورة ── */}
       <section className="rounded-2xl border border-stone-200 bg-white p-6">
         <h2 className="mb-5 text-base font-black text-stone-950">الصورة</h2>
+
+        <div className="mb-6 grid gap-5 sm:grid-cols-2">
+          <Field label="رابط الصورة الرسمي" error={errors.imageUrl}>
+            <Input
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+              placeholder="https://example.com/coffee.jpg"
+              dir="ltr"
+            />
+          </Field>
+          <Field label="نوع الصورة">
+            <Select
+              value={imageType}
+              onChange={(e) => setImageType(e.target.value as CoffeeImageType)}
+              className="w-full"
+            >
+              {Object.values(CoffeeImageType).map((value) => (
+                <option key={value} value={value}>
+                  {IMAGE_TYPE_LABELS[value]}
+                </option>
+              ))}
+            </Select>
+          </Field>
+          <Field label="حالة الإذن">
+            <Select
+              value={imagePermissionStatus}
+              onChange={(e) =>
+                setImagePermissionStatus(e.target.value as ImagePermissionStatus)
+              }
+              className="w-full"
+            >
+              {Object.values(ImagePermissionStatus).map((value) => (
+                <option key={value} value={value}>
+                  {IMAGE_PERMISSION_LABELS[value]}
+                </option>
+              ))}
+            </Select>
+          </Field>
+          <Field label="مصدر الصورة">
+            <Select
+              value={imageSource}
+              onChange={(e) => setImageSource(e.target.value as CoffeeImageSource)}
+              className="w-full"
+            >
+              {Object.values(CoffeeImageSource).map((value) => (
+                <option key={value} value={value}>
+                  {IMAGE_SOURCE_LABELS[value]}
+                </option>
+              ))}
+            </Select>
+          </Field>
+          <Field label="نسبة الصورة / الكريديت">
+            <Input
+              value={imageCredit}
+              onChange={(e) => setImageCredit(e.target.value)}
+              placeholder="مثال: محمصة كامل ستيب"
+            />
+          </Field>
+          <Field label="رابط مصدر الصورة" error={errors.imageSourceUrl}>
+            <Input
+              value={imageSourceUrl}
+              onChange={(e) => setImageSourceUrl(e.target.value)}
+              placeholder="https://..."
+              dir="ltr"
+            />
+          </Field>
+          <div className="sm:col-span-2">
+            <Field label="ملاحظة الإذن">
+              <textarea
+                value={imagePermissionNote}
+                onChange={(e) => setImagePermissionNote(e.target.value)}
+                rows={3}
+                maxLength={1000}
+                placeholder="مثال: تم الحصول على موافقة استخدام صور المنتجات عبر البريد."
+                className="w-full rounded-md border border-stone-300 bg-white px-4 py-3 text-sm text-stone-900 shadow-sm outline-none transition placeholder:text-stone-400 focus:border-amber-700 focus:ring-2 focus:ring-amber-700/20"
+              />
+            </Field>
+          </div>
+        </div>
+
+        {imageUrl && imageType === "OFFICIAL" && imagePermissionStatus === "APPROVED" ? (
+          <p className="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-700">
+            هذه الصورة ستظهر للزوار لأنها رسمية وموافق عليها.
+          </p>
+        ) : (
+          <p className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-800">
+            لن تظهر الصورة للزوار حتى يكون النوع “رسمية” وحالة الإذن “موافق عليها”.
+          </p>
+        )}
 
         {initialImageUrl && !imagePath.startsWith("lots/") && (
           <div className="mb-4 rounded-lg border border-stone-200 bg-stone-50 p-3">

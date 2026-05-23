@@ -1,34 +1,27 @@
 import type { NextConfig } from "next";
 
+const approvedImageHosts = [
+  {
+    protocol: "https" as const,
+    hostname: "lh3.googleusercontent.com",
+    pathname: "/**",
+  },
+  {
+    protocol: "https" as const,
+    hostname: "bwrtmemjuxhqwyquvkmf.supabase.co",
+    pathname: "/storage/v1/object/public/coffee-images/**",
+  },
+  {
+    protocol: "https" as const,
+    hostname: "media.zid.store",
+    pathname: "/**",
+  },
+];
+
 const nextConfig: NextConfig = {
   outputFileTracingRoot: process.cwd(),
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "**",
-      },
-      {
-        protocol: "https",
-        hostname: "bwrtmemjuxhqwyquvkmf.supabase.co",
-        pathname: "/storage/v1/object/public/coffee-images/**",
-      },
-      {
-        protocol: "https",
-        hostname: "roastinghouse.sa",
-        pathname: "/media/catalog/product/**",
-      },
-      {
-        protocol: "https",
-        hostname: "camelstep.com",
-        pathname: "/backend/rails/active_storage/blobs/redirect/**",
-      },
-      {
-        protocol: "https",
-        hostname: "cdn.salla.sa",
-        pathname: "/**",
-      },
-    ],
+    remotePatterns: approvedImageHosts,
   },
 };
 

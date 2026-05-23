@@ -9,30 +9,18 @@ type RatingDisplayProps = {
   className?: string;
 };
 
-function formatReviewCount(count: number) {
-  if (count === 1) {
-    return "تقييم واحد";
+export function RatingDisplay({ rating, count, compact = false, className }: RatingDisplayProps) {
+  if (count === 0 || rating <= 0) {
+    return <span className={cn("text-sm font-medium text-stone-500", className)}>لم يُقيّم بعد</span>;
   }
 
-  if (count === 2) {
-    return "تقييمان";
-  }
-
-  if (count <= 10) {
-    return `${count.toLocaleString("ar-SA")} تقييمات`;
-  }
-
-  return `${count.toLocaleString("ar-SA")} تقييم`;
-}
-
-export function RatingDisplay({ rating, count, compact = false, hideCount = false, className }: RatingDisplayProps) {
-  if (!count || rating <= 0) {
-    return (
-      <span className={cn("text-sm font-medium text-stone-500", className)}>
-        {compact ? "بدون تقييمات" : "لم يحصل على تقييمات بعد"}
-      </span>
-    );
-  }
+  // نص عدد التقييمات — يظهر فقط إذا مُرِّر count صراحةً
+  const countLabel =
+    count == null
+      ? null
+      : count === 1
+        ? "· تجربة واحدة"
+        : `(${count})`;
 
   return (
     <div className={cn("flex items-center gap-2 text-stone-800", className)}>
@@ -45,7 +33,7 @@ export function RatingDisplay({ rating, count, compact = false, hideCount = fals
         ))}
       </div>
       <span className={cn("font-bold", compact ? "text-sm" : "text-base")}>{rating.toFixed(1)}</span>
-      {!hideCount ? <span className="text-sm text-stone-500">{formatReviewCount(count)}</span> : null}
+      {countLabel ? <span className="text-sm text-stone-500">{countLabel}</span> : null}
     </div>
   );
 }

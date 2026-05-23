@@ -1,6 +1,7 @@
 "use server";
 
 import { z } from "zod";
+import { requireAdmin } from "@/lib/auth-helpers";
 import { getCoffeeImageUrl, uploadCoffeeImage } from "@/lib/storage";
 
 const imageFileSchema = z
@@ -11,6 +12,8 @@ const imageFileSchema = z
 export async function uploadCoffeeImageAction(
   formData: FormData,
 ): Promise<{ path: string; url: string } | { error: string }> {
+  await requireAdmin();
+
   const parsed = imageFileSchema.safeParse(formData.get("file"));
 
   if (!parsed.success) {

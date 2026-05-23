@@ -1,7 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import type { BrewMethod, CoffeeProcess } from "@prisma/client";
+import { ImagePermissionStatus } from "@prisma/client";
+import type {
+  BrewMethod,
+  CoffeeImageSource,
+  CoffeeImageType,
+  CoffeeProcess,
+  Prisma,
+} from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth-helpers";
 import { coffeeFormSchema, type CoffeeFormValues } from "@/lib/validations/coffee";
@@ -31,16 +38,31 @@ export type CoffeeLotFull = {
   description: string | null;
   descriptionAr: string | null;
   imagePath: string | null;
+  imageUrl: string | null;
+  imageType: CoffeeImageType;
+  imagePermissionStatus: ImagePermissionStatus;
+  imageSource: CoffeeImageSource;
+  imageCredit: string | null;
+  imageSourceUrl: string | null;
+  imagePermissionNote: string | null;
+  imageApprovedAt: Date | null;
   publishedAt: Date | null;
 };
+
+export type AdminCoffeeFilter = "no-image" | "no-reviews" | "low-rating" | "";
 
 export type CoffeeLotAdminListItem = {
   id: string;
   slug: string;
   nameAr: string;
   imagePath: string | null;
+  imageUrl: string | null;
+  imageType: CoffeeImageType;
+  imagePermissionStatus: ImagePermissionStatus;
   reviewCount: number;
   averageRating: number;
+  publishedAt: Date | null;
+  updatedAt: Date;
   roaster: { nameAr: string };
 };
 
@@ -98,7 +120,16 @@ export async function createCoffeeLot(input: CoffeeFormValues): Promise<AdminAct
         description: d.description || null,
         descriptionAr: d.descriptionAr || null,
         imagePath: d.imagePath || null,
-        publishedAt: new Date(),
+        imageUrl: d.imageUrl || null,
+        imageType: d.imageType,
+        imagePermissionStatus: d.imagePermissionStatus,
+        imageSource: d.imageSource,
+        imageCredit: d.imageCredit || null,
+        imageSourceUrl: d.imageSourceUrl || null,
+        imagePermissionNote: d.imagePermissionNote || null,
+        imageApprovedAt:
+          d.imagePermissionStatus === "APPROVED" ? (d.imageApprovedAt ?? new Date()) : null,
+        publishedAt: d.published ? new Date() : null,
       },
     });
 
@@ -128,7 +159,7 @@ export async function updateCoffeeLot(
   try {
     const current = await prisma.coffeeLot.findUnique({
       where: { id },
-      select: { id: true, slug: true, name: true },
+      select: { id: true, slug: true, name: true, publishedAt: true },
     });
 
     if (!current) {
@@ -158,6 +189,16 @@ export async function updateCoffeeLot(
         description: d.description || null,
         descriptionAr: d.descriptionAr || null,
         imagePath: d.imagePath || null,
+        imageUrl: d.imageUrl || null,
+        imageType: d.imageType,
+        imagePermissionStatus: d.imagePermissionStatus,
+        imageSource: d.imageSource,
+        imageCredit: d.imageCredit || null,
+        imageSourceUrl: d.imageSourceUrl || null,
+        imagePermissionNote: d.imagePermissionNote || null,
+        imageApprovedAt:
+          d.imagePermissionStatus === "APPROVED" ? (d.imageApprovedAt ?? new Date()) : null,
+        publishedAt: d.published ? (current.publishedAt ?? new Date()) : null,
       },
     });
 
@@ -223,23 +264,57 @@ export async function getCoffeeLotForEdit(id: string): Promise<CoffeeLotFull | n
       description: true,
       descriptionAr: true,
       imagePath: true,
+      imageUrl: true,
+      imageType: true,
+      imagePermissionStatus: true,
+      imageSource: true,
+      imageCredit: true,
+      imageSourceUrl: true,
+      imagePermissionNote: true,
+      imageApprovedAt: true,
       publishedAt: true,
     },
   });
 }
 
-export async function getAllCoffeeLotsAdmin(): Promise<CoffeeLotAdminListItem[]> {
+export async function getAllCoffeeLotsAdmin(
+  options: { filter?: string } = {},
+): Promise<CoffeeLotAdminListItem[]> {
   await requireAdmin();
 
+  const { filter } = options;
+
+  const where: Prisma.CoffeeLotWhereInput =
+    filter === "no-image"
+      ? {
+          OR: [
+            { imageUrl: null },
+            { imagePermissionStatus: { not: ImagePermissionStatus.APPROVED } },
+          ],
+        }
+      : filter === "no-reviews"
+        ? { reviewCount: 0 }
+        : filter === "low-rating"
+          ? { reviewCount: { gt: 0 }, averageRating: { lt: 3 } }
+          : filter === "drafts"
+            ? { publishedAt: null }
+            : {};
+
   const lots = await prisma.coffeeLot.findMany({
+    where,
     orderBy: { createdAt: "desc" },
     select: {
       id: true,
       slug: true,
       nameAr: true,
       imagePath: true,
+      imageUrl: true,
+      imageType: true,
+      imagePermissionStatus: true,
       reviewCount: true,
       averageRating: true,
+      publishedAt: true,
+      updatedAt: true,
       roaster: { select: { nameAr: true } },
     },
   });

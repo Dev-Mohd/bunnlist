@@ -8,7 +8,7 @@ import { auth } from "@/auth";
 import { requireAuth } from "@/lib/auth-helpers";
 import { checkRateLimit } from "@/lib/rate-limit";
 
-const REVIEW_BODY_MAX_LENGTH = 1000;
+const REVIEW_BODY_MAX_LENGTH = 500;
 const REVIEWS_PER_PAGE = 10;
 
 const brewMethodValues = Object.values(BrewMethod) as [BrewMethod, ...BrewMethod[]];
@@ -18,7 +18,7 @@ const reviewInputSchema = z.object({
   rating: z.number().int().min(1, "اختر التقييم.").max(5, "التقييم غير صحيح."),
   brewMethod: z.enum(brewMethodValues, { error: "اختر طريقة التحضير." }),
   wouldBuyAgain: z.boolean({ error: "اختر هل تشتريه مرة ثانية." }),
-  body: z.string().max(REVIEW_BODY_MAX_LENGTH, "نص التجربة يجب ألا يتجاوز 1000 حرف.").optional(),
+  body: z.string().max(REVIEW_BODY_MAX_LENGTH, "نص التجربة يجب ألا يتجاوز 500 حرف.").optional(),
 });
 
 const coffeeLotIdSchema = z.string().min(1);
@@ -61,6 +61,18 @@ function average(values: number[]) {
   }
 
   return Number((values.reduce((sum, value) => sum + value, 0) / values.length).toFixed(2));
+}
+
+function getLatestUniqueReviews<T extends { userId: string; createdAt: Date }>(reviews: T[]) {
+  const byUser = new Map<string, T>();
+
+  for (const review of reviews) {
+    if (!byUser.has(review.userId)) {
+      byUser.set(review.userId, review);
+    }
+  }
+
+  return Array.from(byUser.values());
 }
 
 async function refreshReviewStats(coffeeLotId: string, tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0]) {
@@ -197,7 +209,8 @@ export async function createOrUpdateReview(input: {
           brewMethod: parsed.data.brewMethod,
           wouldBuyAgain: parsed.data.wouldBuyAgain,
           body: parsed.data.body ?? null,
-          status: ReviewStatus.PUBLISHED,
+          // Do NOT reset status here — preserve any HIDDEN/FLAGGED decision made by an admin.
+          // status is only set on create (below).
         },
         create: {
           coffeeLotId: coffeeLot.id,
@@ -251,45 +264,41 @@ export async function getReviewsByCoffeeLot(coffeeLotId: string, page = 1): Prom
 
   const currentPage = pageSchema.catch(1).parse(page);
 
-  const [totalReviews, reviews] = await Promise.all([
-    prisma.review.count({
-      where: {
-        coffeeLotId: parsedCoffeeLotId.data,
-        status: ReviewStatus.PUBLISHED,
-      },
-    }),
-    prisma.review.findMany({
-      where: {
-        coffeeLotId: parsedCoffeeLotId.data,
-        status: ReviewStatus.PUBLISHED,
-      },
-      orderBy: { createdAt: "desc" },
-      skip: (currentPage - 1) * REVIEWS_PER_PAGE,
-      take: REVIEWS_PER_PAGE,
-      select: {
-        id: true,
-        coffeeLotId: true,
-        userId: true,
-        rating: true,
-        brewMethod: true,
-        wouldBuyAgain: true,
-        body: true,
-        createdAt: true,
-        updatedAt: true,
-        user: {
-          select: {
-            id: true,
-            name: true,
-            image: true,
-          },
+  const reviews = await prisma.review.findMany({
+    where: {
+      coffeeLotId: parsedCoffeeLotId.data,
+      status: ReviewStatus.PUBLISHED,
+    },
+    orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      coffeeLotId: true,
+      userId: true,
+      rating: true,
+      brewMethod: true,
+      wouldBuyAgain: true,
+      body: true,
+      createdAt: true,
+      updatedAt: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          image: true,
         },
       },
-    }),
-  ]);
+    },
+  });
+
+  const uniqueReviews = getLatestUniqueReviews(reviews);
+  const paginatedReviews = uniqueReviews.slice(
+    (currentPage - 1) * REVIEWS_PER_PAGE,
+    currentPage * REVIEWS_PER_PAGE,
+  );
 
   return {
-    reviews,
-    totalPages: Math.max(1, Math.ceil(totalReviews / REVIEWS_PER_PAGE)),
+    reviews: paginatedReviews,
+    totalPages: Math.max(1, Math.ceil(uniqueReviews.length / REVIEWS_PER_PAGE)),
     currentPage,
   };
 }
@@ -301,13 +310,16 @@ export type MyReview = {
   wouldBuyAgain: boolean;
   body: string | null;
   createdAt: Date;
-  coffeeLot: {
-    id: string;
-    slug: string;
-    nameAr: string;
-    imagePath: string | null;
-    roaster: { nameAr: string };
-  };
+    coffeeLot: {
+      id: string;
+      slug: string;
+      nameAr: string;
+      imagePath: string | null;
+      imageUrl: string | null;
+      imageType: string;
+      imagePermissionStatus: string;
+      roaster: { nameAr: string };
+    };
 };
 
 export async function getMyReviews(): Promise<MyReview[]> {
@@ -330,6 +342,9 @@ export async function getMyReviews(): Promise<MyReview[]> {
           slug: true,
           nameAr: true,
           imagePath: true,
+          imageUrl: true,
+          imageType: true,
+          imagePermissionStatus: true,
           roaster: { select: { nameAr: true } },
         },
       },
@@ -348,13 +363,13 @@ export async function getUserReviewForCoffeeLot(coffeeLotId: string): Promise<Us
     return null;
   }
 
-  return prisma.review.findUnique({
+  return prisma.review.findFirst({
     where: {
-      coffeeLotId_userId: {
-        coffeeLotId: parsedCoffeeLotId.data,
-        userId: session.user.id,
-      },
+      coffeeLotId: parsedCoffeeLotId.data,
+      userId: session.user.id,
+      status: ReviewStatus.PUBLISHED,
     },
+    orderBy: { updatedAt: "desc" },
     select: {
       id: true,
       coffeeLotId: true,

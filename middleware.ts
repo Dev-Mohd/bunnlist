@@ -11,14 +11,18 @@ export default auth((request) => {
   if (pathname.startsWith("/admin")) {
     if (session?.user?.role === "ADMIN") return NextResponse.next();
     const loginUrl = new URL("/login", request.nextUrl.origin);
-    loginUrl.searchParams.set("callbackUrl", request.nextUrl.href);
+    // Use a relative callbackUrl so the login page's safeCallbackUrl guard
+    // (which requires the path to start with "/") can accept it.
+    const relativeCallback = request.nextUrl.pathname + (request.nextUrl.search || "");
+    loginUrl.searchParams.set("callbackUrl", relativeCallback);
     return NextResponse.redirect(loginUrl);
   }
 
   if (pathname.match(/^\/coffees\/[^/]+\/review/)) {
     if (session?.user) return NextResponse.next();
     const loginUrl = new URL("/login", request.nextUrl.origin);
-    loginUrl.searchParams.set("callbackUrl", request.nextUrl.href);
+    const relativeCallback = request.nextUrl.pathname + (request.nextUrl.search || "");
+    loginUrl.searchParams.set("callbackUrl", relativeCallback);
     return NextResponse.redirect(loginUrl);
   }
 

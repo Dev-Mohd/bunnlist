@@ -1,8 +1,23 @@
 import { z } from "zod";
-import { BrewMethod, CoffeeProcess } from "@prisma/client";
+import {
+  BrewMethod,
+  CoffeeImageSource,
+  CoffeeImageType,
+  CoffeeProcess,
+  ImagePermissionStatus,
+} from "@prisma/client";
 
 const brewMethodValues = Object.values(BrewMethod) as [BrewMethod, ...BrewMethod[]];
 const processValues = Object.values(CoffeeProcess) as [CoffeeProcess, ...CoffeeProcess[]];
+const imageTypeValues = Object.values(CoffeeImageType) as [CoffeeImageType, ...CoffeeImageType[]];
+const imagePermissionStatusValues = Object.values(ImagePermissionStatus) as [
+  ImagePermissionStatus,
+  ...ImagePermissionStatus[],
+];
+const imageSourceValues = Object.values(CoffeeImageSource) as [
+  CoffeeImageSource,
+  ...CoffeeImageSource[],
+];
 
 export const coffeeFormSchema = z.object({
   name: z.string().min(2, "الاسم الإنجليزي يجب أن يكون حرفين على الأقل").max(100),
@@ -21,6 +36,17 @@ export const coffeeFormSchema = z.object({
   description: z.string().max(2000).optional(),
   descriptionAr: z.string().max(2000).optional(),
   imagePath: z.string().optional(),
+  imageUrl: z.string().url("رابط الصورة غير صحيح").or(z.literal("")).optional(),
+  imageType: z.enum(imageTypeValues).default(CoffeeImageType.NONE),
+  imagePermissionStatus: z
+    .enum(imagePermissionStatusValues)
+    .default(ImagePermissionStatus.PLACEHOLDER_ONLY),
+  imageSource: z.enum(imageSourceValues).default(CoffeeImageSource.PLACEHOLDER),
+  imageCredit: z.string().max(200).optional(),
+  imageSourceUrl: z.string().url("رابط مصدر الصورة غير صحيح").or(z.literal("")).optional(),
+  imagePermissionNote: z.string().max(1000).optional(),
+  imageApprovedAt: z.date().optional().nullable(),
+  published: z.boolean().default(true),
 });
 
 export type CoffeeFormValues = z.infer<typeof coffeeFormSchema>;

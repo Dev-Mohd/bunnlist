@@ -10,7 +10,6 @@ import { Card } from "@/components/ui/card";
 import { SiteFooter } from "@/components/ui/site-footer";
 import { SiteHeader } from "@/components/ui/site-header";
 import { requireAuth } from "@/lib/auth-helpers";
-import { getCoffeeImageUrl } from "@/lib/storage";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -55,14 +54,15 @@ export default async function CoffeeReviewPage({ params }: PageProps) {
 
         <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
           <Card className="overflow-hidden">
-            <div className="relative aspect-[4/3] overflow-hidden bg-stone-100">
-              <CoffeeImage
-                src={getCoffeeImageUrl(coffee.imagePath)}
-                alt={`صورة ${coffee.nameAr}`}
-                sizes="(min-width: 1024px) 280px, 100vw"
-                className="object-cover"
-              />
-            </div>
+            <CoffeeImage
+              variant="card"
+              imagePath={coffee.imagePath}
+              imageUrl={coffee.imageUrl}
+              imagePermissionStatus={coffee.imagePermissionStatus}
+              coffeeName={coffee.nameAr}
+              roasteryName={coffee.roaster.nameAr}
+              sizes="(min-width: 1024px) 280px, 100vw"
+            />
             <div className="p-5">
               <h1 className="text-2xl font-black text-stone-950">{coffee.nameAr}</h1>
               <p className="mt-2 text-sm font-semibold text-amber-800">{coffee.roaster.nameAr}</p>

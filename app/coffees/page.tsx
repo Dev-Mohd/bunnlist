@@ -10,6 +10,8 @@ import { CoffeeFilters } from "@/components/filters/coffee-filters";
 import { SiteFooter } from "@/components/ui/site-footer";
 import { SiteHeader } from "@/components/ui/site-header";
 
+export const dynamic = "force-dynamic";
+
 type PageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
@@ -33,6 +35,12 @@ function parseQuery(searchParams: Record<string, string | string[] | undefined>)
   const sort: CoffeeSort =
     sortParam === "top-rated" || sortParam === "most-reviewed" || sortParam === "latest" ? sortParam : "latest";
 
+  const minRatingRaw = Number(getString(searchParams.minRating) ?? "");
+  const minRating =
+    Number.isFinite(minRatingRaw) && minRatingRaw >= 1 && minRatingRaw <= 5
+      ? minRatingRaw
+      : undefined;
+
   return {
     page: Number(getString(searchParams.page) ?? "1") || 1,
     query: getString(searchParams.q),
@@ -42,6 +50,7 @@ function parseQuery(searchParams: Record<string, string | string[] | undefined>)
     flavorNotes: getList(searchParams.flavorNotes),
     brewMethods: getEnumList(searchParams.brewMethods, Object.values(BrewMethod)),
     sort,
+    minRating,
   };
 }
 
@@ -75,7 +84,8 @@ async function CoffeeListContent({
       query.originCountryIds?.length ||
       query.processingMethods?.length ||
       query.flavorNotes?.length ||
-      query.brewMethods?.length,
+      query.brewMethods?.length ||
+      query.minRating,
   );
 
   return (
@@ -136,7 +146,18 @@ function ListSkeleton() {
   );
 }
 
-export const metadata = { title: "تصفح المحاصيل" };
+const META_DESCRIPTION =
+  "اكتشف محاصيل القهوة المختارة من أبرز المحامص. فلتر حسب الدولة، المعالجة، النكهات، وطريقة التحضير.";
+
+export const metadata = {
+  title: "تصفح محاصيل القهوة | BunnList",
+  description: META_DESCRIPTION,
+  openGraph: {
+    title: "تصفح محاصيل القهوة | BunnList",
+    description: META_DESCRIPTION,
+    type: "website",
+  },
+};
 
 export default async function CoffeesPage({ searchParams }: PageProps) {
   const rawSearchParams = await searchParams;
