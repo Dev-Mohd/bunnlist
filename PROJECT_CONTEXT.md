@@ -199,7 +199,29 @@ After editing:
 - Report files changed, commands run, assumptions, and issues.
 
 Current task:
-Make only one small homepage adjustment:
-In app/page.tsx, make the "محتار وش تختار؟" quick recommendation section feel like one coherent decision tool. The CTA "اعرض الترشيحات" should be close to the chips, preferably below them inside the same visual block.
+Image normalization workflow is complete and committed.
 
-Do not touch other files except PROJECT_CONTEXT.md and app/page.tsx.
+What is done:
+- scripts/normalize-coffee-image.ts added (supports source-card and packshot modes).
+- scripts/list-coffee-images-for-normalization.ts added.
+- lib/background-removal.ts added.
+- storedImageUrl is now preferred over imageUrl for rendering.
+- CoffeeImage supports imageStorageProvider.
+
+Source-card mode:
+- Works without any external provider.
+- Trims outer space only, preserves artwork, saves to storedImageUrl.
+- Safe to test on selected individual products.
+- Run with: ALLOW_IMAGE_NORMALIZATION=true npx tsx scripts/normalize-coffee-image.ts <slug> --mode source-card
+
+Packshot mode:
+- Requires a background removal provider (Replicate).
+- Replicate currently returns 402 Payment Required (insufficient credits).
+- Do not run packshot mode until provider credits are confirmed available.
+- Run with: ALLOW_IMAGE_NORMALIZATION=true npx tsx scripts/normalize-coffee-image.ts <slug> --mode packshot
+
+Next steps:
+- Test source-card normalization on a small set of individually selected products.
+- Test packshot mode only after Replicate credits are confirmed.
+- Do not batch process products without explicit approval.
+- Do not modify imageUrl or imagePath on any product.
