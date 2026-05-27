@@ -75,6 +75,8 @@ export default async function MyReviewsPage() {
                     <CoffeeImage
                       variant="card"
                       imagePath={review.coffeeLot.imagePath}
+                      storedImageUrl={review.coffeeLot.storedImageUrl}
+                      imageStorageProvider={review.coffeeLot.imageStorageProvider}
                       imageUrl={review.coffeeLot.imageUrl}
                       imagePermissionStatus={review.coffeeLot.imagePermissionStatus}
                       coffeeName={review.coffeeLot.nameAr}

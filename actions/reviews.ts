@@ -316,6 +316,8 @@ export type MyReview = {
       nameAr: string;
       imagePath: string | null;
       imageUrl: string | null;
+      storedImageUrl: string | null;
+      imageStorageProvider: string | null;
       imageType: string;
       imagePermissionStatus: string;
       roaster: { nameAr: string };
@@ -343,6 +345,8 @@ export async function getMyReviews(): Promise<MyReview[]> {
           nameAr: true,
           imagePath: true,
           imageUrl: true,
+          storedImageUrl: true,
+          imageStorageProvider: true,
           imageType: true,
           imagePermissionStatus: true,
           roaster: { select: { nameAr: true } },

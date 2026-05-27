@@ -19,6 +19,8 @@ export function CoffeeCard({ coffee }: { coffee: CoffeeListItem }) {
         <CoffeeImage
           variant="card"
           imagePath={coffee.imagePath}
+          storedImageUrl={coffee.storedImageUrl}
+          imageStorageProvider={coffee.imageStorageProvider}
           imageUrl={coffee.imageUrl}
           imagePermissionStatus={coffee.imagePermissionStatus}
           coffeeName={coffee.nameAr}

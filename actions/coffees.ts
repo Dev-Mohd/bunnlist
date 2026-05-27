@@ -39,6 +39,8 @@ export type CoffeeListItem = {
   recommendedBrewMethods: BrewMethod[];
   imagePath: string | null;
   imageUrl: string | null;
+  storedImageUrl: string | null;
+  imageStorageProvider: string | null;
   imageType: CoffeeImageType;
   imagePermissionStatus: ImagePermissionStatus;
   imageSource: CoffeeImageSource;
@@ -160,6 +162,8 @@ function toListItem(lot: {
   recommendedBrewMethods: BrewMethod[];
   imagePath: string | null;
   imageUrl: string | null;
+  storedImageUrl: string | null;
+  imageStorageProvider: string | null;
   imageType: CoffeeImageType;
   imagePermissionStatus: ImagePermissionStatus;
   imageSource: CoffeeImageSource;
@@ -175,7 +179,7 @@ function toListItem(lot: {
     ...lot,
     name: lot.nameAr ?? lot.name,
     region: lot.regionAr ?? lot.region,
-    imagePath: lot.imageUrl ?? lot.imagePath,
+    imagePath: lot.imagePath,
     roaster: {
       ...lot.roaster,
       name: lot.roaster.nameAr ?? lot.roaster.name,

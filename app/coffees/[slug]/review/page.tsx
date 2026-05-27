@@ -57,6 +57,8 @@ export default async function CoffeeReviewPage({ params }: PageProps) {
             <CoffeeImage
               variant="card"
               imagePath={coffee.imagePath}
+              storedImageUrl={coffee.storedImageUrl}
+              imageStorageProvider={coffee.imageStorageProvider}
               imageUrl={coffee.imageUrl}
               imagePermissionStatus={coffee.imagePermissionStatus}
               coffeeName={coffee.nameAr}

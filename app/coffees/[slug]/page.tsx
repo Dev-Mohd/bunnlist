@@ -258,8 +258,8 @@ export async function generateMetadata({ params }: PageProps) {
   const description = `تقييمات وتجارب تحضير ${coffee.nameAr} من ${coffee.roaster.nameAr}${coffee.originCountry?.nameAr ? ` · ${coffee.originCountry.nameAr}` : ""}.`;
 
   const ogImages =
-    coffee.imageUrl && coffee.imagePermissionStatus === "APPROVED"
-      ? [{ url: coffee.imageUrl, alt: coffee.nameAr }]
+    coffee.storedImageUrl || (coffee.imageUrl && coffee.imagePermissionStatus === "APPROVED")
+      ? [{ url: coffee.storedImageUrl ?? coffee.imageUrl!, alt: coffee.nameAr }]
       : undefined;
 
   return {
@@ -309,6 +309,8 @@ export default async function CoffeeDetailsPage({ params, searchParams }: PagePr
           <CoffeeImage
             variant="detail"
             imagePath={coffee.imagePath}
+            storedImageUrl={coffee.storedImageUrl}
+            imageStorageProvider={coffee.imageStorageProvider}
             imageUrl={coffee.imageUrl}
             imagePermissionStatus={coffee.imagePermissionStatus}
             imageCredit={coffee.imageCredit}
