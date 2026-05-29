@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { CoffeeForm } from "@/components/admin/coffee-form";
 
 export const metadata = { title: "إضافة محصول — BunnList" };
+export const dynamic = "force-dynamic";
 
 export default async function NewCoffeePage() {
   const [roasters, countries] = await Promise.all([

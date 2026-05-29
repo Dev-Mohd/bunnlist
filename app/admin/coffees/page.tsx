@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { CoffeeListActions } from "./coffee-list-actions";
 
 export const metadata = { title: "إدارة المحاصيل — BunnList" };
+export const dynamic = "force-dynamic";
 
 type PageProps = {
   searchParams?: Promise<{ filter?: string }>;

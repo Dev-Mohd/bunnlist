@@ -7,6 +7,7 @@ import { getCoffeeImageUrl, getPublicCoffeeImageUrl } from "@/lib/storage";
 import { CoffeeForm } from "@/components/admin/coffee-form";
 
 export const metadata = { title: "تعديل المحصول — BunnList" };
+export const dynamic = "force-dynamic";
 
 interface Props {
   params: Promise<{ id: string }>;

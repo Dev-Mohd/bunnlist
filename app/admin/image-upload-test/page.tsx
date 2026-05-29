@@ -3,6 +3,7 @@ import { ImageUpload } from "@/components/ui/image-upload";
 import { requireAdmin } from "@/lib/auth-helpers";
 
 export const metadata = { title: "اختبار رفع الصور — BunnList" };
+export const dynamic = "force-dynamic";
 
 export default async function ImageUploadTestPage() {
   await requireAdmin();

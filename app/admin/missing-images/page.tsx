@@ -14,6 +14,7 @@ import { Select } from "@/components/ui/select";
 import { formatProcess } from "@/lib/coffee-labels";
 
 export const metadata = { title: "الصور الناقصة — BunnList" };
+export const dynamic = "force-dynamic";
 
 type PageProps = {
   searchParams?: Promise<{
