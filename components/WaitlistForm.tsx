@@ -7,7 +7,7 @@ type SubmitState = "idle" | "submitting" | "success" | "error";
 export function WaitlistForm() {
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
-  const [message, setMessage] = useState("بدون إزعاج. فقط تحديثات الإطلاق.");
+  const [message, setMessage] = useState("بدون إزعاج. فقط تحديثات الإطلاق والدخول المبكر.");
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -54,7 +54,7 @@ export function WaitlistForm() {
           type="email"
           inputMode="email"
           autoComplete="email"
-          placeholder="you@example.com"
+          placeholder="اكتب بريدك الإلكتروني"
           required
           value={email}
           onChange={(event) => setEmail(event.target.value)}
