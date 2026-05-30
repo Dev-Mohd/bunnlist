@@ -1,6 +1,7 @@
 import { FeatureGrid } from "@/components/FeatureGrid";
 import { HeroRatingCard } from "@/components/HeroRatingCard";
 import { HowItWorks } from "@/components/HowItWorks";
+import { BunnListLogo } from "@/components/Logo";
 import { SocialLinks } from "@/components/SocialLinks";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import Link from "next/link";
@@ -21,14 +22,11 @@ export default function Home() {
           <div>
             <nav className="mb-14 flex items-center gap-3">
               <Link
-                className="inline-flex items-center gap-3 text-left font-black tracking-[0.16em] text-[#171411]"
+                className="inline-flex items-center transition hover:opacity-80"
                 href="/"
                 aria-label="BunnList"
               >
-                <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#171411] text-lg font-black text-[#EDE3D6] shadow-sm">
-                  B
-                </span>
-                <span dir="ltr">BunnList</span>
+                <BunnListLogo />
               </Link>
             </nav>
 
