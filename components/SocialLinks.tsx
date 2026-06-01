@@ -18,13 +18,13 @@ const socialLinks = [
 
 export function SocialLinks() {
   return (
-    <section id="social" className="mx-auto w-full max-w-6xl px-5 py-16 text-center sm:px-6 lg:px-8" aria-labelledby="social-title">
+    <section id="social" className="mx-auto w-full max-w-6xl px-5 py-11 text-center sm:px-6 lg:px-8" aria-labelledby="social-title">
       <div className="rounded-[8px] border border-[#4A3428]/10 bg-white/45 px-5 py-8 shadow-[0_18px_48px_rgba(74,52,40,0.08)] sm:px-8">
         <h2 id="social-title" className="text-2xl font-black text-[#171411]">
           تابع رحلة BunnList
         </h2>
         <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-[#4A3428]/70">
-          بنشارك التحديثات، المحاصيل، وتجارب المجتمع على حساباتنا الرسمية.
+          بنشارك تحديثات الإطلاق، المحاصيل، وتجارب المجتمع على حساباتنا الرسمية.
         </p>
         <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
           {socialLinks.map((link) => {
@@ -63,7 +63,7 @@ function XIcon() {
 
 function InstagramIcon() {
   return (
-    <svg className="h-4.5 w-4.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <rect x="4" y="4" width="16" height="16" rx="5" stroke="currentColor" strokeWidth="2" />
       <circle cx="12" cy="12" r="3.5" stroke="currentColor" strokeWidth="2" />
       <circle cx="17" cy="7" r="1.2" fill="currentColor" />
@@ -73,7 +73,7 @@ function InstagramIcon() {
 
 function TikTokIcon() {
   return (
-    <svg className="h-4.5 w-4.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path
         d="M14 4v10.2a4.2 4.2 0 1 1-3.9-4.18"
         stroke="currentColor"

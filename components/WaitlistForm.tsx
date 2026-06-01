@@ -7,7 +7,7 @@ type SubmitState = "idle" | "submitting" | "success" | "error";
 export function WaitlistForm() {
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
-  const [message, setMessage] = useState("بدون إزعاج. فقط تحديثات الإطلاق والدخول المبكر.");
+  const [message, setMessage] = useState("بدون إزعاج، فقط تحديثات الإطلاق ورابط المنصة.");
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -31,7 +31,7 @@ export function WaitlistForm() {
 
       setSubmitState("success");
       setEmail("");
-      setMessage("تم تسجيلك بنجاح. بنرسل لك تحديثات الإطلاق قريبًا.");
+      setMessage("تم تسجيلك بنجاح. بنرسل لك رابط الإطلاق قريبًا.");
     } catch (error) {
       setSubmitState("error");
       setMessage(error instanceof Error ? error.message : "تعذر التسجيل الآن.");
@@ -78,7 +78,7 @@ export function WaitlistForm() {
           disabled={submitState === "submitting"}
           className="min-h-14 rounded-3xl bg-[#171411] px-6 text-sm font-bold text-[#EDE3D6] transition hover:-translate-y-0.5 hover:bg-[#4A3428] focus:outline-none focus:ring-2 focus:ring-[#D6A84F]/80 focus:ring-offset-2 focus:ring-offset-white disabled:cursor-not-allowed disabled:opacity-70"
         >
-          {submitState === "submitting" ? "جاري الإرسال..." : "أبلغني عند الإطلاق"}
+          {submitState === "submitting" ? "جاري الإرسال..." : "أرسل لي رابط الإطلاق"}
         </button>
       </div>
       <p

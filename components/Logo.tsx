@@ -5,10 +5,10 @@ type BunnListLogoProps = {
 
 export function BunnListLogo({ showWordmark = true, className = "" }: BunnListLogoProps) {
   return (
-    <span className={`inline-flex items-center gap-3 ${className}`}>
+    <span className={`inline-flex items-center gap-3.5 ${className}`}>
       <LayeredBMark />
       {showWordmark ? (
-        <span className="text-2xl font-black leading-none tracking-normal text-[#171411]" dir="ltr">
+        <span className="text-[1.7rem] font-black leading-none tracking-normal text-[#171411]" dir="ltr">
           BunnList
         </span>
       ) : null}
@@ -19,7 +19,7 @@ export function BunnListLogo({ showWordmark = true, className = "" }: BunnListLo
 export function LayeredBMark() {
   return (
     <svg
-      className="h-10 w-10 shrink-0"
+      className="h-11 w-11 shrink-0"
       viewBox="0 0 48 48"
       fill="none"
       role="img"
