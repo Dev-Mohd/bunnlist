@@ -340,6 +340,19 @@ model MobileSession {
   @@index([accountId])
 }
 
+/// One active email login code per address. The code is stored hashed (bound to
+/// the email); the plaintext is emailed and never persisted. Attempt- and
+/// resend-limited by the app logic.
+model MobileEmailOtp {
+  email      String   @id
+  codeHash   String
+  expiresAt  DateTime
+  attempts   Int      @default(0)
+  lastSentAt DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
 /// Server idempotency record keyed by (owner, operation, device clientId).
 model MobileIdempotency {
   ownerId     String

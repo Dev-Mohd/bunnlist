@@ -3,7 +3,10 @@ import { prisma } from "@/lib/prisma";
 import { createProviderVerifier } from "./verifier";
 import { createPrismaIdentityResolver } from "./resolver";
 import { createPrismaSessionStore } from "./sessionStore";
+import { createPrismaOtpStore } from "./otpStore";
+import { createResendMailer } from "./mailer";
 import type { AuthDeps } from "./ports";
+import type { EmailDeps } from "./emailService";
 
 // Assembles the real (Prisma- and provider-backed) AuthDeps from environment
 // configuration. Called per request by the route handlers. The access-token
@@ -41,5 +44,15 @@ export function buildAuthDeps(): AuthDeps {
     accessSecret,
     newId: () => randomUUID(),
     newSecret: () => randomBytes(32).toString("base64url"),
+  };
+}
+
+// Assembles the email-login dependencies. Reuses the full AuthDeps so a verified
+// code issues tokens through the same exchange path as Apple/Google.
+export function buildEmailDeps(): EmailDeps {
+  return {
+    otp: createPrismaOtpStore(prisma),
+    mailer: createResendMailer(),
+    auth: buildAuthDeps(),
   };
 }
