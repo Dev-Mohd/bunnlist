@@ -5,8 +5,11 @@ import { createPrismaIdentityResolver } from "./resolver";
 import { createPrismaSessionStore } from "./sessionStore";
 import { createPrismaOtpStore } from "./otpStore";
 import { createResendMailer } from "./mailer";
+import { createPrismaAccountDeletionStore } from "./accountStore";
+import { createAppleRevoker } from "./appleRevoke";
 import type { AuthDeps } from "./ports";
 import type { EmailDeps } from "./emailService";
+import type { AccountDeps } from "./accountService";
 
 // Assembles the real (Prisma- and provider-backed) AuthDeps from environment
 // configuration. Called per request by the route handlers. The access-token
@@ -26,11 +29,16 @@ function splitAudience(value: string | undefined): string[] {
     .filter((s) => s.length > 0);
 }
 
-export function buildAuthDeps(): AuthDeps {
+export function requireAccessSecret(): string {
   const accessSecret = process.env.MOBILE_JWT_SECRET;
   if (!accessSecret || accessSecret.length < 32) {
     throw new Error("MOBILE_JWT_SECRET must be set to at least 32 characters.");
   }
+  return accessSecret;
+}
+
+export function buildAuthDeps(): AuthDeps {
+  const accessSecret = requireAccessSecret();
 
   const verifier = createProviderVerifier({
     apple: { issuer: APPLE_ISSUER, audience: splitAudience(process.env.MOBILE_APPLE_AUDIENCE), jwks: APPLE_JWKS },
@@ -54,5 +62,14 @@ export function buildEmailDeps(): EmailDeps {
     otp: createPrismaOtpStore(prisma),
     mailer: createResendMailer(),
     auth: buildAuthDeps(),
+  };
+}
+
+// Assembles the account-deletion dependencies (data purge + best-effort Apple
+// token revocation).
+export function buildAccountDeps(): AccountDeps {
+  return {
+    store: createPrismaAccountDeletionStore(prisma),
+    appleRevoker: createAppleRevoker(),
   };
 }
