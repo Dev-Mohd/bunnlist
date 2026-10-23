@@ -69,6 +69,8 @@ export interface CollectionListItem extends CollectionFlags {
   slug: string;
   nameAr: string;
   roasterNameAr: string;
+  originNameAr: string | null;
+  originCode: string | null;
 }
 
 export async function listEntries(prisma: PrismaClient, accountId: string): Promise<CollectionListItem[]> {
@@ -80,14 +82,24 @@ export async function listEntries(prisma: PrismaClient, accountId: string): Prom
 
   const lots = await prisma.coffeeLot.findMany({
     where: { id: { in: rows.map((r) => r.lotId) }, publishedAt: { not: null } },
-    select: { id: true, slug: true, nameAr: true, roaster: { select: { nameAr: true } } },
+    select: {
+      id: true, slug: true, nameAr: true,
+      roaster: { select: { nameAr: true } },
+      originCountry: { select: { nameAr: true, isoCode: true } },
+    },
   });
   const byId = new Map(lots.map((l) => [l.id, l]));
 
   return rows.flatMap((r) => {
     const lot = byId.get(r.lotId);
     if (!lot) return [];
-    return [{ lotId: r.lotId, slug: lot.slug, nameAr: lot.nameAr, roasterNameAr: lot.roaster?.nameAr ?? "", ...pickFlags(r) }];
+    return [{
+      lotId: r.lotId, slug: lot.slug, nameAr: lot.nameAr,
+      roasterNameAr: lot.roaster?.nameAr ?? "",
+      originNameAr: lot.originCountry?.nameAr ?? null,
+      originCode: lot.originCountry?.isoCode ?? null,
+      ...pickFlags(r),
+    }];
   });
 }
 
