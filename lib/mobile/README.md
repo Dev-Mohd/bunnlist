@@ -22,30 +22,34 @@ round-trip/tamper, idempotency, schema validation, and the end-to-end
 exchange→refresh→reuse flow with in-memory fakes. No database or network is
 touched here.
 
-## What you must wire to go live (needs DB + secrets; cannot run in CI sandbox)
+## Wired and live (Apple + Google)
 
-1. **Env secret** `MOBILE_JWT_SECRET` (≥32 bytes) for access-token signing. Set it
-   as an environment secret, never in the repo.
-2. **Prisma models** (additive migration, reviewed before applying — see the
-   proposed schema in `docs/mobile-schema.prisma` of the app repo / below):
-   - `MobileSession { id, accountId, deviceId, currentHash, issuedAt, consumedHashes String[], revoked, createdAt, updatedAt }`
-   - `MobileIdempotency { ownerId, operation, clientId, payloadHash, state, resourceId?, response?, completedAt?, @@id([ownerId, operation, clientId]) }`
-   - Reuse the existing `User`/`Account` tables for identity resolution.
-3. **Port implementations** under `lib/mobile/`:
-   - `CredentialVerifier`: verify Apple/Google identity JWTs against their JWKS
-     (jose `createRemoteJWKSet`), and treat a pre-verified email OTP as `email`.
-   - `IdentityResolver`: upsert `User` + `Account` by `(provider, providerAccountId)`;
-     never match by email alone; never equate Apple private-relay to a Google email.
-   - `SessionStore`: back `MobileSession` with Prisma.
-4. **Route handlers** (App Router), each: parse with the zod schema (422 on fail),
-   call the service, map `ApiError.status`/`toBody()` to the response:
-   - `POST /api/v1/auth/exchange` → `exchange()`
-   - `POST /api/v1/auth/refresh` → `refresh()`
-   - `POST /api/v1/auth/email/request` and `/verify` → email OTP then exchange
-   - `POST /api/v1/account/delete` → revoke sessions + `DeviceToken`, and for Apple
-     call the token-revocation endpoint (Guideline 5.1.1)
-5. **Account deletion & Apple token revocation**, **DeviceToken** storage, and the
-   **product/lot migration** (see `docs/c03-contract.md`) are the remaining gated work.
+| File | Role |
+|---|---|
+| `verifier.ts` | `CredentialVerifier` — verifies Apple/Google ID tokens (RS256) against each provider's JWKS, checks issuer + audience, flags Apple private-relay; a pre-verified email becomes an `email` identity with no crypto |
+| `resolver.ts` | `IdentityResolver` — resolves/creates an account by `(provider, subject)` only via the existing `User`/`Account` tables; never merges by email, never writes a relay address |
+| `sessionStore.ts` | `SessionStore` — backs `MobileSession` with Prisma (pure row↔family mappers are unit-tested) |
+| `deps.ts` | assembles the real `AuthDeps` from env + Prisma per request |
+| `respond.ts` | route plumbing: JSON parse, zod → 422, `ApiError` → status, opaque 500 |
 
-The web homepage, existing NextAuth routes, admin, and the current schema are
+Routes (App Router, Node runtime):
+- `POST /api/v1/auth/exchange` → `exchange()` — **live**
+- `POST /api/v1/auth/refresh` → `refresh()` — **live**
+
+### Required environment variables
+Set these as environment secrets (never in the repo):
+- `MOBILE_JWT_SECRET` — ≥32 chars, signs the access tokens. **Required by every endpoint.**
+- `MOBILE_APPLE_AUDIENCE` — the iOS app's Apple client id / bundle id (comma-separate to allow several). Required only for Apple exchange; an unset provider fails closed with `provider_not_configured`.
+- `MOBILE_GOOGLE_AUDIENCE` — the iOS OAuth client id. Required only for Google exchange.
+
+## Still to wire (next sub-steps)
+
+1. **Email OTP** — `POST /api/v1/auth/email/request` + `/verify`. Needs a code store
+   (own table) and a mailer (e.g. Resend); the verify step then calls `exchange()` with
+   provider `email`. The schemas (`EmailRequest`, `EmailVerifyRequest`) are already defined and tested.
+2. **Account deletion & Apple token revocation** — `POST /api/v1/account/delete`: revoke
+   sessions + `DeviceToken`, and call Apple's token-revocation endpoint (Guideline 5.1.1).
+3. **DeviceToken** storage and the **product/lot migration** (see `docs/c03-contract.md`).
+
+The web homepage, existing NextAuth routes, admin, and the current schema remain
 untouched by this slice.
