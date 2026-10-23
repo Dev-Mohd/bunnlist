@@ -97,6 +97,53 @@ export async function submitReview(
   });
 }
 
+export interface ReviewRow {
+  id: string;
+  rating: number;
+  brewMethod: string;
+  wouldBuyAgain: boolean;
+  body: string | null;
+  createdAt: Date;
+  user: { name: string | null } | null;
+}
+
+export interface MobileReviewListItem {
+  id: string;
+  rating: number;
+  brewMethod: string;
+  wouldBuyAgain: boolean;
+  body: string | null;
+  authorName: string;
+  createdAt: string;
+}
+
+export function mapReview(row: ReviewRow): MobileReviewListItem {
+  return {
+    id: row.id,
+    rating: row.rating,
+    brewMethod: row.brewMethod,
+    wouldBuyAgain: row.wouldBuyAgain,
+    body: row.body,
+    authorName: row.user?.name?.trim() || "مستخدم",
+    createdAt: row.createdAt.toISOString(),
+  };
+}
+
+const REVIEWS_PAGE_SIZE = 20;
+
+export async function listReviews(prisma: PrismaClient, slug: string, limit = REVIEWS_PAGE_SIZE): Promise<MobileReviewListItem[]> {
+  const rows = await prisma.review.findMany({
+    where: { coffeeLot: { slug, publishedAt: { not: null } }, status: ReviewStatus.PUBLISHED },
+    orderBy: { createdAt: "desc" },
+    take: Math.min(Math.max(limit, 1), REVIEWS_PAGE_SIZE),
+    select: {
+      id: true, rating: true, brewMethod: true, wouldBuyAgain: true, body: true, createdAt: true,
+      user: { select: { name: true } },
+    },
+  });
+  return rows.map((r) => mapReview(r as unknown as ReviewRow));
+}
+
 export async function getMyReview(prisma: PrismaClient, accountId: string, slug: string): Promise<MobileReview | null> {
   const review = await prisma.review.findFirst({
     where: { coffeeLot: { slug }, userId: accountId, status: ReviewStatus.PUBLISHED },
