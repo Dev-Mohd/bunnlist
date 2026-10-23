@@ -353,6 +353,22 @@ model MobileEmailOtp {
   updatedAt  DateTime @updatedAt
 }
 
+/// One account's saved state for a lot (the mobile "collection"): owned / favorite
+/// / want-to-try / tried. Keyed by (account, lot), synced from the app.
+model MobileCollectionEntry {
+  accountId  String
+  lotId      String
+  owned      Boolean  @default(false)
+  favorite   Boolean  @default(false)
+  wantsToTry Boolean  @default(false)
+  tried      Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@id([accountId, lotId])
+  @@index([accountId])
+}
+
 /// Server idempotency record keyed by (owner, operation, device clientId).
 model MobileIdempotency {
   ownerId     String
