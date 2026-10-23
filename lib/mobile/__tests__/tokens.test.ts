@@ -14,7 +14,7 @@ const t0 = 1_800_000_000_000;
 
 describe("refresh rotation", () => {
   it("issues a new token and consumes the presented one", () => {
-    let fam = createRefreshFamily("t0", t0);
+    const fam = createRefreshFamily("t0", t0);
     const r1 = rotateRefresh(fam, "t0", t0 + 10, () => "t1");
     expect(r1.newToken).toBe("t1");
     expect(r1.state.currentHash).toBe(hashToken("t1"));
