@@ -32,24 +32,32 @@ touched here.
 | `deps.ts` | assembles the real `AuthDeps` from env + Prisma per request |
 | `respond.ts` | route plumbing: JSON parse, zod → 422, `ApiError` → status, opaque 500 |
 
-Routes (App Router, Node runtime):
-- `POST /api/v1/auth/exchange` → `exchange()` — **live**
-- `POST /api/v1/auth/refresh` → `refresh()` — **live**
+Also wired: `emailOtp.ts`/`emailService.ts`/`otpStore.ts`/`mailer.ts` (email login),
+and `authGuard.ts`/`accountService.ts`/`accountStore.ts`/`appleRevoke.ts` (account deletion).
+
+Routes (App Router, Node runtime) — all **live**:
+- `POST /api/v1/auth/exchange` → `exchange()` (Apple/Google)
+- `POST /api/v1/auth/refresh` → `refresh()` (rotation + reuse revocation)
+- `POST /api/v1/auth/email/request` → neutral OTP send
+- `POST /api/v1/auth/email/verify` → verify code, then issue tokens
+- `POST /api/v1/account/delete` → authenticated; purge data + best-effort Apple revoke
 
 ### Required environment variables
 Set these as environment secrets (never in the repo):
-- `MOBILE_JWT_SECRET` — ≥32 chars, signs the access tokens. **Required by every endpoint.**
+- `MOBILE_JWT_SECRET` — ≥32 chars, signs the access tokens. **Required by every endpoint.** ✅ set
+- `RESEND_API_KEY` — enables the email OTP mailer. ✅ set (sends from `onboarding@resend.dev` until a domain is verified)
+- `MOBILE_MAIL_FROM` — optional, overrides the default from-address once a domain is verified.
 - `MOBILE_APPLE_AUDIENCE` — the iOS app's Apple client id / bundle id (comma-separate to allow several). Required only for Apple exchange; an unset provider fails closed with `provider_not_configured`.
 - `MOBILE_GOOGLE_AUDIENCE` — the iOS OAuth client id. Required only for Google exchange.
+- `APPLE_TEAM_ID` / `APPLE_KEY_ID` / `APPLE_PRIVATE_KEY` — enable real Apple token revocation on delete. Until set, deletion still purges all data and skips the revoke call.
 
-## Still to wire (next sub-steps)
+## Still to wire (later phases)
 
-1. **Email OTP** — `POST /api/v1/auth/email/request` + `/verify`. Needs a code store
-   (own table) and a mailer (e.g. Resend); the verify step then calls `exchange()` with
-   provider `email`. The schemas (`EmailRequest`, `EmailVerifyRequest`) are already defined and tested.
-2. **Account deletion & Apple token revocation** — `POST /api/v1/account/delete`: revoke
-   sessions + `DeviceToken`, and call Apple's token-revocation endpoint (Guideline 5.1.1).
-3. **DeviceToken** storage and the **product/lot migration** (see `docs/c03-contract.md`).
+1. **Apple/Google go-live** — set the audiences (needs the iOS app's identifiers from an
+   Apple Developer account + Google Cloud OAuth client). For Apple token revocation on delete,
+   also capture the Apple auth code and store its refresh token.
+2. **DeviceToken** storage (push) and the **product/lot read API** for the app
+   (see `docs/c03-contract.md`).
 
 The web homepage, existing NextAuth routes, admin, and the current schema remain
 untouched by this slice.
