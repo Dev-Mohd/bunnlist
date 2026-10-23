@@ -106,17 +106,38 @@ export function mapLotDetail(row: CoffeeLotDetailRow): MobileLotDetail {
 
 export const CATALOG_PAGE_SIZE = 50;
 
+const LOT_LIST_SELECT = {
+  id: true, slug: true, name: true, nameAr: true, process: true, processLabel: true,
+  flavorNotes: true, roastLevel: true, averageRating: true, reviewCount: true, imageUrl: true,
+  roaster: { select: { nameAr: true, name: true } },
+  originCountry: { select: { nameAr: true, isoCode: true } },
+} as const;
+
 export async function listPublishedLots(prisma: PrismaClient, limit: number = CATALOG_PAGE_SIZE): Promise<MobileLot[]> {
   const rows = await prisma.coffeeLot.findMany({
     where: { publishedAt: { not: null } },
     orderBy: [{ reviewCount: "desc" }, { createdAt: "desc" }],
     take: Math.min(Math.max(limit, 1), CATALOG_PAGE_SIZE),
-    select: {
-      id: true, slug: true, name: true, nameAr: true, process: true, processLabel: true,
-      flavorNotes: true, roastLevel: true, averageRating: true, reviewCount: true, imageUrl: true,
-      roaster: { select: { nameAr: true, name: true } },
-      originCountry: { select: { nameAr: true, isoCode: true } },
+    select: LOT_LIST_SELECT,
+  });
+  return rows.map((r) => mapLot(r as unknown as CoffeeLotRow));
+}
+
+export async function searchLots(prisma: PrismaClient, query: string, limit: number = 20): Promise<MobileLot[]> {
+  const q = query.trim();
+  if (q.length < 2) return [];
+  const rows = await prisma.coffeeLot.findMany({
+    where: {
+      publishedAt: { not: null },
+      OR: [
+        { nameAr: { contains: q, mode: "insensitive" } },
+        { name: { contains: q, mode: "insensitive" } },
+        { roaster: { nameAr: { contains: q, mode: "insensitive" } } },
+      ],
     },
+    orderBy: [{ reviewCount: "desc" }, { createdAt: "desc" }],
+    take: Math.min(Math.max(limit, 1), CATALOG_PAGE_SIZE),
+    select: LOT_LIST_SELECT,
   });
   return rows.map((r) => mapLot(r as unknown as CoffeeLotRow));
 }
