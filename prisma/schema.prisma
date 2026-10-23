@@ -369,6 +369,21 @@ model MobileCollectionEntry {
   @@index([accountId])
 }
 
+/// A user-submitted coffee suggestion from the app (pending review).
+model MobileCoffeeSubmission {
+  id          String   @id @default(cuid())
+  accountId   String
+  name        String
+  roasterName String
+  originName  String?
+  note        String?  @db.Text
+  status      String   @default("PENDING")
+  createdAt   DateTime @default(now())
+
+  @@index([accountId])
+  @@index([status])
+}
+
 /// Server idempotency record keyed by (owner, operation, device clientId).
 model MobileIdempotency {
   ownerId     String
