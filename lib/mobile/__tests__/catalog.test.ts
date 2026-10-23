@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { mapLot, type CoffeeLotRow } from "../catalog";
+import { mapLot, mapLotDetail, type CoffeeLotRow, type CoffeeLotDetailRow } from "../catalog";
 
 const row: CoffeeLotRow = {
   id: "lot-1",
@@ -51,5 +51,29 @@ describe("mapLot", () => {
     expect(mapped.originNameAr).toBeNull();
     expect(mapped.originCode).toBeNull();
     expect(mapped.imageUrl).toBeNull();
+  });
+});
+
+describe("mapLotDetail", () => {
+  const detailRow: CoffeeLotDetailRow = {
+    ...row,
+    descriptionAr: "وصف عربي",
+    regionAr: "يرجاتشيف",
+    variety: "Heirloom",
+    recommendedBrewMethods: ["V60", "CHEMEX"],
+    brewStats: [
+      { brewMethod: "V60", averageRating: "4.8", reviewCount: 5, wouldBuyAgain: 4 },
+      { brewMethod: "ESPRESSO", averageRating: 4, reviewCount: 9, wouldBuyAgain: 7 },
+    ],
+  };
+
+  it("includes detail fields and sorts brew stats by review count", () => {
+    const d = mapLotDetail(detailRow);
+    expect(d.nameAr).toBe("يرجاتشيف طبيعي"); // base fields preserved
+    expect(d.descriptionAr).toBe("وصف عربي");
+    expect(d.regionAr).toBe("يرجاتشيف");
+    expect(d.recommendedBrewMethods).toEqual(["V60", "CHEMEX"]);
+    expect(d.brewStats.map((s) => s.method)).toEqual(["ESPRESSO", "V60"]); // 9 then 5
+    expect(d.brewStats[1].averageRating).toBe(4.8);
   });
 });

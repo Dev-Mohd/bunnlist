@@ -56,6 +56,54 @@ export function mapLot(row: CoffeeLotRow): MobileLot {
   };
 }
 
+export interface BrewStatRow {
+  brewMethod: string;
+  averageRating: unknown;
+  reviewCount: number;
+  wouldBuyAgain: number;
+}
+
+export interface CoffeeLotDetailRow extends CoffeeLotRow {
+  descriptionAr: string | null;
+  regionAr: string | null;
+  variety: string | null;
+  recommendedBrewMethods: string[];
+  brewStats: BrewStatRow[];
+}
+
+export interface MobileBrewStat {
+  method: string;
+  averageRating: number;
+  reviewCount: number;
+  wouldBuyAgain: number;
+}
+
+export interface MobileLotDetail extends MobileLot {
+  descriptionAr: string | null;
+  regionAr: string | null;
+  variety: string | null;
+  recommendedBrewMethods: string[];
+  brewStats: MobileBrewStat[];
+}
+
+export function mapLotDetail(row: CoffeeLotDetailRow): MobileLotDetail {
+  return {
+    ...mapLot(row),
+    descriptionAr: row.descriptionAr,
+    regionAr: row.regionAr,
+    variety: row.variety,
+    recommendedBrewMethods: row.recommendedBrewMethods,
+    brewStats: row.brewStats
+      .map((s) => ({
+        method: s.brewMethod,
+        averageRating: Number(s.averageRating ?? 0),
+        reviewCount: s.reviewCount,
+        wouldBuyAgain: s.wouldBuyAgain,
+      }))
+      .sort((a, b) => b.reviewCount - a.reviewCount),
+  };
+}
+
 export const CATALOG_PAGE_SIZE = 50;
 
 export async function listPublishedLots(prisma: PrismaClient, limit: number = CATALOG_PAGE_SIZE): Promise<MobileLot[]> {
@@ -71,4 +119,19 @@ export async function listPublishedLots(prisma: PrismaClient, limit: number = CA
     },
   });
   return rows.map((r) => mapLot(r as unknown as CoffeeLotRow));
+}
+
+export async function getPublishedLot(prisma: PrismaClient, slug: string): Promise<MobileLotDetail | null> {
+  const row = await prisma.coffeeLot.findFirst({
+    where: { slug, publishedAt: { not: null } },
+    select: {
+      id: true, slug: true, name: true, nameAr: true, process: true, processLabel: true,
+      flavorNotes: true, roastLevel: true, averageRating: true, reviewCount: true, imageUrl: true,
+      descriptionAr: true, regionAr: true, variety: true, recommendedBrewMethods: true,
+      roaster: { select: { nameAr: true, name: true } },
+      originCountry: { select: { nameAr: true, isoCode: true } },
+      brewStats: { select: { brewMethod: true, averageRating: true, reviewCount: true, wouldBuyAgain: true } },
+    },
+  });
+  return row ? mapLotDetail(row as unknown as CoffeeLotDetailRow) : null;
 }
