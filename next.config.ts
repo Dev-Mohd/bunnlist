@@ -20,6 +20,9 @@ const approvedImageHosts = [
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: process.cwd(),
+  // Lint runs in dev/CI (npm run lint), not as a deploy gate. Vitest test files in
+  // particular must never block a production build.
+  eslint: { ignoreDuringBuilds: true },
   images: {
     remotePatterns: approvedImageHosts,
   },
