@@ -1,3 +1,4 @@
+import { DELETED_ACCOUNT } from "./submissions";
 import type { PrismaClient } from "@prisma/client";
 import type { AccountDeletionStore } from "./accountService";
 
@@ -29,7 +30,9 @@ export function createPrismaAccountDeletionStore(prisma: PrismaClient): AccountD
         await tx.mobileRecipe.deleteMany({ where: { accountId } });
         await tx.mobileAiScan.deleteMany({ where: { accountId } });
         await tx.mobileCollectionEntry.deleteMany({ where: { accountId } });
-        await tx.mobileCoffeeSubmission.deleteMany({ where: { accountId } });
+        // Suggestions describe a product, not the person: keep them (and their product
+        // photos) for review, but detach them from the account.
+        await tx.mobileCoffeeSubmission.updateMany({ where: { accountId }, data: { accountId: DELETED_ACCOUNT } });
         if (user?.email) {
           await tx.mobileEmailOtp.deleteMany({ where: { email: user.email } });
         }

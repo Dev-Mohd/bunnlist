@@ -381,6 +381,8 @@ model MobileCoffeeSubmission {
   process     String?
   roastLevel  String?
   flavorNotes String[] @default([])
+  /// Object path in the private "suggestion-images" bucket (a background-removed product photo).
+  photoPath   String?
   note        String?  @db.Text
   status      String   @default("PENDING")
   createdAt   DateTime @default(now())
