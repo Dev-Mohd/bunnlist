@@ -64,6 +64,18 @@ describe("RecipeUpsert", () => {
     expect(RecipeUpsert.safeParse({ clientId: "c", methodCode: "V60", restDays: -1 }).success).toBe(false);
   });
 
+  it("accepts water, result and milk fields within sane bounds", () => {
+    const r = RecipeUpsert.parse({
+      clientId: "c", methodCode: "ESPRESSO", waterType: "mineralRecipe", waterTdsPpm: 90, beverageTds: 9.5,
+      milkDrink: "flatWhite", milkType: "oat", milkGrams: 120,
+    });
+    expect(r.milkDrink).toBe("flatWhite");
+    expect(r.waterBrand).toBe("");
+    expect(RecipeUpsert.safeParse({ clientId: "c", methodCode: "V60", waterTdsPpm: -5 }).success).toBe(false);
+    expect(RecipeUpsert.safeParse({ clientId: "c", methodCode: "V60", milkDrink: "mocha" }).success).toBe(false);
+    expect(RecipeUpsert.safeParse({ clientId: "c", methodCode: "V60", beverageTds: 0 }).success).toBe(false);
+  });
+
   it("rejects bad methods, step kinds, temperatures and too many steps", () => {
     expect(RecipeUpsert.safeParse({ clientId: "c", methodCode: "MOKA" }).success).toBe(false);
     expect(RecipeUpsert.safeParse({ clientId: "c", methodCode: "V60", steps: [{ kind: "drip" }] }).success).toBe(false);
@@ -88,6 +100,7 @@ describe("mapRecipe", () => {
       id: "r1", accountId: "a1", clientId: "c1", lotId: null, title: "t", methodCode: "V60", temperature: "iced",
       doseGrams: 15, hotWaterGrams: 150, iceGrams: 100, yieldGrams: null, waterTempC: 94, grinder: "", grindSetting: "",
       grinderModel: null, grindLevel: "medium", grindMicrons: null, brewer: "", filterType: null, roastLevel: "light", restDays: 10,
+      waterType: "bottled", waterBrand: "نوفا", waterTdsPpm: 110, beverageTds: 1.35, milkDrink: null, milkType: null, milkGrams: null,
       notes: "", steps: [], sourceId: null, sourceVersion: null, version: 2, state: "published",
       publishedAt: new Date("2026-10-24T00:00:00Z"), updatedAt: new Date("2026-10-24T01:00:00Z"),
     };
