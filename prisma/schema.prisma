@@ -433,6 +433,13 @@ model MobileRecipe {
   filterType     String?
   roastLevel     String?
   restDays       Int?
+  waterType      String?
+  waterBrand     String   @default("")
+  waterTdsPpm    Int?
+  beverageTds    Float?
+  milkDrink      String?
+  milkType       String?
+  milkGrams      Float?
   notes          String   @default("") @db.Text
   steps          Json     @default("[]")
   sourceId       String?

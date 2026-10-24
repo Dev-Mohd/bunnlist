@@ -22,6 +22,9 @@ export const GRIND_LEVELS = [
 ] as const;
 export const FILTER_TYPES = ["paperWhite", "paperBrown", "abaca", "cloth", "metal"] as const;
 export const ROAST_LEVELS = ["light", "medium", "dark"] as const;
+export const WATER_TYPES = ["bottled", "filtered", "mineralRecipe", "tap"] as const;
+export const MILK_DRINKS = ["macchiato", "cortado", "flatWhite", "cappuccino", "latte"] as const;
+export const MILK_TYPES = ["whole", "skim", "lactoseFree", "oat", "almond", "soy"] as const;
 
 const grams = z.number().positive().max(10000).nullable().optional();
 
@@ -55,6 +58,13 @@ export const RecipeUpsert = z.object({
   filterType: z.enum(FILTER_TYPES).nullable().optional(),
   roastLevel: z.enum(ROAST_LEVELS).nullable().optional(),
   restDays: z.number().int().min(0).max(365).nullable().optional(),
+  waterType: z.enum(WATER_TYPES).nullable().optional(),
+  waterBrand: z.string().max(40).default(""),
+  waterTdsPpm: z.number().int().min(0).max(1000).nullable().optional(),
+  beverageTds: z.number().min(0.1).max(20).nullable().optional(),
+  milkDrink: z.enum(MILK_DRINKS).nullable().optional(),
+  milkType: z.enum(MILK_TYPES).nullable().optional(),
+  milkGrams: z.number().positive().max(1000).nullable().optional(),
   notes: z.string().max(2000).default(""),
   steps: z.array(RecipeStepInput).max(20).default([]),
   sourceId: z.string().min(1).max(100).nullable().optional(),
@@ -154,6 +164,13 @@ export interface MobileRecipe {
   filterType: string | null;
   roastLevel: string | null;
   restDays: number | null;
+  waterType: string | null;
+  waterBrand: string;
+  waterTdsPpm: number | null;
+  beverageTds: number | null;
+  milkDrink: string | null;
+  milkType: string | null;
+  milkGrams: number | null;
   notes: string;
   steps: MobileRecipeStep[];
   sourceId: string | null;
@@ -172,6 +189,8 @@ type RecipeRow = {
   yieldGrams: number | null; waterTempC: number | null; grinder: string; grindSetting: string; notes: string;
   grinderModel: string | null; grindLevel: string | null; grindMicrons: number | null; brewer: string;
   filterType: string | null; roastLevel: string | null; restDays: number | null;
+  waterType: string | null; waterBrand: string; waterTdsPpm: number | null; beverageTds: number | null;
+  milkDrink: string | null; milkType: string | null; milkGrams: number | null;
   steps: unknown; sourceId: string | null; sourceVersion: number | null; version: number; state: string;
   publishedAt: Date | null; updatedAt: Date;
 };
@@ -213,6 +232,13 @@ export function mapRecipe(
     filterType: row.filterType,
     roastLevel: row.roastLevel,
     restDays: row.restDays,
+    waterType: row.waterType,
+    waterBrand: row.waterBrand,
+    waterTdsPpm: row.waterTdsPpm,
+    beverageTds: row.beverageTds,
+    milkDrink: row.milkDrink,
+    milkType: row.milkType,
+    milkGrams: row.milkGrams,
     notes: row.notes,
     steps: normalizeSteps(row.steps),
     sourceId: row.sourceId,
@@ -301,6 +327,14 @@ export async function saveRecipe(prisma: PrismaClient, accountId: string, input:
     filterType: input.filterType ?? null,
     roastLevel: input.roastLevel ?? null,
     restDays: input.restDays ?? null,
+    waterType: input.waterType ?? null,
+    waterBrand: input.waterBrand.trim(),
+    waterTdsPpm: input.waterTdsPpm ?? null,
+    beverageTds: input.beverageTds ?? null,
+    // Milk only makes sense on espresso drinks.
+    milkDrink: input.methodCode === "ESPRESSO" ? input.milkDrink ?? null : null,
+    milkType: input.methodCode === "ESPRESSO" && input.milkDrink ? input.milkType ?? null : null,
+    milkGrams: input.methodCode === "ESPRESSO" && input.milkDrink ? input.milkGrams ?? null : null,
     notes: input.notes.trim(),
     steps,
   };
