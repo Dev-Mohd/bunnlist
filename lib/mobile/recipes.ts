@@ -11,9 +11,17 @@ import { BREW_METHOD_CODES, canTransition, EXPERIENCE_STATES, type ExperienceSta
 export type RecipeState = ExperienceState;
 export const RECIPE_STATES = EXPERIENCE_STATES;
 
-export const STEP_KINDS = ["bloom", "pour", "wait", "swirl", "serve"] as const;
+export const STEP_KINDS = ["bloom", "pour", "wait", "swirl", "stir", "press", "serve"] as const;
 export type StepKind = (typeof STEP_KINDS)[number];
 const addsWater = (kind: StepKind) => kind === "bloom" || kind === "pour";
+
+export const POUR_STYLES = ["center", "circular", "spiral"] as const;
+export const POUR_SPEEDS = ["slow", "medium", "fast"] as const;
+export const GRIND_LEVELS = [
+  "extraFine", "fine", "mediumFine", "medium", "mediumCoarse", "coarse", "extraCoarse",
+] as const;
+export const FILTER_TYPES = ["paperWhite", "paperBrown", "abaca", "cloth", "metal"] as const;
+export const ROAST_LEVELS = ["light", "medium", "dark"] as const;
 
 const grams = z.number().positive().max(10000).nullable().optional();
 
@@ -22,6 +30,8 @@ export const RecipeStepInput = z.object({
   addedWaterGrams: z.number().max(10000).nullable().optional(),
   seconds: z.number().int().min(0).max(36000).nullable().optional(),
   note: z.string().max(300).default(""),
+  pourStyle: z.enum(POUR_STYLES).nullable().optional(),
+  pourSpeed: z.enum(POUR_SPEEDS).nullable().optional(),
 });
 export type RecipeStepInput = z.infer<typeof RecipeStepInput>;
 
@@ -38,6 +48,13 @@ export const RecipeUpsert = z.object({
   waterTempC: z.number().min(0).max(100).nullable().optional(),
   grinder: z.string().max(60).default(""),
   grindSetting: z.string().max(60).default(""),
+  grinderModel: z.string().max(40).nullable().optional(),
+  grindLevel: z.enum(GRIND_LEVELS).nullable().optional(),
+  grindMicrons: z.number().int().min(50).max(2000).nullable().optional(),
+  brewer: z.string().max(40).default(""),
+  filterType: z.enum(FILTER_TYPES).nullable().optional(),
+  roastLevel: z.enum(ROAST_LEVELS).nullable().optional(),
+  restDays: z.number().int().min(0).max(365).nullable().optional(),
   notes: z.string().max(2000).default(""),
   steps: z.array(RecipeStepInput).max(20).default([]),
   sourceId: z.string().min(1).max(100).nullable().optional(),
@@ -54,7 +71,9 @@ export type RecipeProblem =
   | "negativeOrZeroWater"
   | "missingEspressoDose"
   | "missingEspressoYield"
-  | "waterOnNonPourStep";
+  | "waterOnNonPourStep"
+  | "missingGrind"
+  | "missingSteps";
 
 export interface RecipeFields {
   title: string;
@@ -62,6 +81,8 @@ export interface RecipeFields {
   doseGrams?: number | null;
   hotWaterGrams?: number | null;
   yieldGrams?: number | null;
+  grindSetting?: string;
+  grindLevel?: string | null;
   steps: { kind: StepKind; addedWaterGrams?: number | null }[];
 }
 
@@ -81,12 +102,20 @@ export function validateRecipe(r: RecipeFields): RecipeProblem[] {
   } else {
     if (!(r.hotWaterGrams && r.hotWaterGrams > 0)) {
       problems.push("missingHotWater");
-      return problems;
+      return [...problems, ...standardProblems(r)];
     }
     const poured = pours.reduce((a, b) => a + b, 0);
     if (Math.abs(poured - r.hotWaterGrams) > MATCH_TOLERANCE_GRAMS) problems.push("pourSumDoesNotMatchHotWater");
   }
-  return problems;
+  return [...problems, ...standardProblems(r)];
+}
+
+/** The publish standard: anyone must be able to repeat it — a grind and, unless espresso, steps. */
+function standardProblems(r: RecipeFields): RecipeProblem[] {
+  const out: RecipeProblem[] = [];
+  if (!r.grindLevel && !(r.grindSetting ?? "").trim()) out.push("missingGrind");
+  if (r.methodCode !== "ESPRESSO" && r.steps.length === 0) out.push("missingSteps");
+  return out;
 }
 
 function notPublishable(problems: RecipeProblem[]): ApiError {
@@ -94,6 +123,15 @@ function notPublishable(problems: RecipeProblem[]): ApiError {
 }
 
 export interface MobileRecipeLot { slug: string; nameAr: string; roasterNameAr: string }
+
+export interface MobileRecipeStep {
+  kind: StepKind;
+  addedWaterGrams: number | null;
+  seconds: number | null;
+  note: string;
+  pourStyle: string | null;
+  pourSpeed: string | null;
+}
 
 export interface MobileRecipe {
   id: string;
@@ -109,8 +147,15 @@ export interface MobileRecipe {
   waterTempC: number | null;
   grinder: string;
   grindSetting: string;
+  grinderModel: string | null;
+  grindLevel: string | null;
+  grindMicrons: number | null;
+  brewer: string;
+  filterType: string | null;
+  roastLevel: string | null;
+  restDays: number | null;
   notes: string;
-  steps: { kind: StepKind; addedWaterGrams: number | null; seconds: number | null; note: string }[];
+  steps: MobileRecipeStep[];
   sourceId: string | null;
   sourceVersion: number | null;
   version: number;
@@ -125,17 +170,22 @@ type RecipeRow = {
   id: string; accountId: string; clientId: string; lotId: string | null; title: string; methodCode: string;
   temperature: string; doseGrams: number | null; hotWaterGrams: number | null; iceGrams: number | null;
   yieldGrams: number | null; waterTempC: number | null; grinder: string; grindSetting: string; notes: string;
+  grinderModel: string | null; grindLevel: string | null; grindMicrons: number | null; brewer: string;
+  filterType: string | null; roastLevel: string | null; restDays: number | null;
   steps: unknown; sourceId: string | null; sourceVersion: number | null; version: number; state: string;
   publishedAt: Date | null; updatedAt: Date;
 };
 
-export function normalizeSteps(raw: unknown): MobileRecipe["steps"] {
+export function normalizeSteps(raw: unknown): MobileRecipeStep[] {
   if (!Array.isArray(raw)) return [];
   return raw.flatMap((s) => {
     const parsed = RecipeStepInput.safeParse(s);
     if (!parsed.success) return [];
-    const { kind, addedWaterGrams, seconds, note } = parsed.data;
-    return [{ kind, addedWaterGrams: addedWaterGrams ?? null, seconds: seconds ?? null, note }];
+    const { kind, addedWaterGrams, seconds, note, pourStyle, pourSpeed } = parsed.data;
+    return [{
+      kind, addedWaterGrams: addedWaterGrams ?? null, seconds: seconds ?? null, note,
+      pourStyle: pourStyle ?? null, pourSpeed: pourSpeed ?? null,
+    }];
   });
 }
 
@@ -156,6 +206,13 @@ export function mapRecipe(
     waterTempC: row.waterTempC,
     grinder: row.grinder,
     grindSetting: row.grindSetting,
+    grinderModel: row.grinderModel,
+    grindLevel: row.grindLevel,
+    grindMicrons: row.grindMicrons,
+    brewer: row.brewer,
+    filterType: row.filterType,
+    roastLevel: row.roastLevel,
+    restDays: row.restDays,
     notes: row.notes,
     steps: normalizeSteps(row.steps),
     sourceId: row.sourceId,
@@ -223,6 +280,7 @@ export async function saveRecipe(prisma: PrismaClient, accountId: string, input:
   const lotId = input.lotSlug ? await lotIdForSlug(prisma, input.lotSlug) : null;
   const steps = input.steps.map((s) => ({
     kind: s.kind, addedWaterGrams: s.addedWaterGrams ?? null, seconds: s.seconds ?? null, note: s.note.trim(),
+    pourStyle: s.pourStyle ?? null, pourSpeed: s.pourSpeed ?? null,
   }));
   const fields = {
     lotId,
@@ -236,6 +294,13 @@ export async function saveRecipe(prisma: PrismaClient, accountId: string, input:
     waterTempC: input.waterTempC ?? null,
     grinder: input.grinder.trim(),
     grindSetting: input.grindSetting.trim(),
+    grinderModel: input.grinderModel?.trim() || null,
+    grindLevel: input.grindLevel ?? null,
+    grindMicrons: input.grindMicrons ?? null,
+    brewer: input.brewer.trim(),
+    filterType: input.filterType ?? null,
+    roastLevel: input.roastLevel ?? null,
+    restDays: input.restDays ?? null,
     notes: input.notes.trim(),
     steps,
   };
