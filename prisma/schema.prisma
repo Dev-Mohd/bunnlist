@@ -426,6 +426,13 @@ model MobileRecipe {
   waterTempC     Float?
   grinder        String   @default("")
   grindSetting   String   @default("")
+  grinderModel   String?
+  grindLevel     String?
+  grindMicrons   Int?
+  brewer         String   @default("")
+  filterType     String?
+  roastLevel     String?
+  restDays       Int?
   notes          String   @default("") @db.Text
   steps          Json     @default("[]")
   sourceId       String?
