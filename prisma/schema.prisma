@@ -407,6 +407,42 @@ model MobileBrewExperience {
   @@index([lotId, state])
 }
 
+/// A brew recipe from the app. Mirrors the app's Recipe: lotId is optional (no lot =
+/// a general recipe); water is stored per step and the total is derived. Lifecycle
+/// draft -> published <-> unpublished, deleted is final; publishing is validated.
+/// Edits bump version; a copy records its source and the version it copied.
+model MobileRecipe {
+  id             String   @id @default(cuid())
+  accountId      String
+  clientId       String
+  lotId          String?
+  title          String
+  methodCode     String
+  temperature    String   @default("hot")
+  doseGrams      Float?
+  hotWaterGrams  Float?
+  iceGrams       Float?
+  yieldGrams     Float?
+  waterTempC     Float?
+  grinder        String   @default("")
+  grindSetting   String   @default("")
+  notes          String   @default("") @db.Text
+  steps          Json     @default("[]")
+  sourceId       String?
+  sourceVersion  Int?
+  version        Int      @default(1)
+  state          String   @default("draft")
+  revision       Int      @default(0)
+  publishedAt    DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([accountId, clientId])
+  @@index([accountId])
+  @@index([state, publishedAt])
+  @@index([lotId, state])
+}
+
 /// Server idempotency record keyed by (owner, operation, device clientId).
 model MobileIdempotency {
   ownerId     String

@@ -26,6 +26,7 @@ export function createPrismaAccountDeletionStore(prisma: PrismaClient): AccountD
         await tx.mobileIdempotency.deleteMany({ where: { ownerId: accountId } });
         // Mobile content has no FK to User, so purge it explicitly.
         await tx.mobileBrewExperience.deleteMany({ where: { accountId } });
+        await tx.mobileRecipe.deleteMany({ where: { accountId } });
         await tx.mobileCollectionEntry.deleteMany({ where: { accountId } });
         await tx.mobileCoffeeSubmission.deleteMany({ where: { accountId } });
         if (user?.email) {
