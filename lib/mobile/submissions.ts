@@ -5,6 +5,9 @@ import { z } from "zod";
 // Arabic (name, roasterName) and, optionally, as printed in Latin script (nameEn,
 // roasterNameEn). Text only for now; image upload is a later step.
 
+/** accountId of suggestions whose author deleted their account. */
+export const DELETED_ACCOUNT = "deleted";
+
 export const SUBMISSION_PROCESSES = [
   "NATURAL", "WASHED", "HONEY", "ANAEROBIC", "WET_HULLED", "CARBONIC_MACERATION", "EXPERIMENTAL", "OTHER",
 ] as const;
