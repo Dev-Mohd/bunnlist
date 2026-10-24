@@ -32,6 +32,7 @@ export const BagExtraction = z.object({
   name: z.string().nullable(),
   nameAr: z.string().nullable(),
   roaster: z.string().nullable(),
+  roasterAr: z.string().nullable(),
   originCountry: z.string().nullable(),
   originCountryAr: z.string().nullable(),
   originCountryCode: z.string().nullable(),
@@ -53,8 +54,9 @@ export type BagExtraction = z.infer<typeof BagExtraction>;
 
 const SYSTEM_PROMPT = `You read photos of specialty coffee bags for BunnList, an Arabic coffee app.
 Extract only what is printed or clearly shown on the bag; use null (or an empty list) for anything not visible. Do not guess from general coffee knowledge.
-- name: the coffee's name as printed (often Latin script); nameAr: an Arabic name only if one is printed.
-- roaster: the roastery's name as printed.
+- Names come in two separate fields and are never mixed:
+  - name / roaster: exactly as printed in Latin script (null if only Arabic is printed).
+  - nameAr / roasterAr: the Arabic as printed; if only Latin is printed, write it in Arabic letters as Arabic speakers say it (e.g. "Sweet Blend" -> "سويت بلند", "Camel Step" -> "كامل ستيب"). Do not translate the meaning of brand names.
 - originCountry in English, originCountryAr in Arabic, originCountryCode as ISO 3166-1 alpha-2.
 - process: map the printed process to the closest code; keep the printed wording in processLabel.
 - roastDate as YYYY-MM-DD only when a full date is printed.
@@ -114,6 +116,7 @@ export function normalizeExtraction(raw: BagExtraction): BagExtraction {
     name: clean(raw.name),
     nameAr: clean(raw.nameAr),
     roaster: clean(raw.roaster),
+    roasterAr: clean(raw.roasterAr),
     originCountry: clean(raw.originCountry),
     originCountryAr: clean(raw.originCountryAr),
     originCountryCode: code,
@@ -132,7 +135,7 @@ export function normalizeExtraction(raw: BagExtraction): BagExtraction {
 
 /** Search terms to try, most specific first: the coffee's names, then the roaster. */
 export function matchQueries(e: BagExtraction): string[] {
-  const terms = [e.nameAr, e.name, e.roaster].filter((t): t is string => !!t && t.trim().length >= 2);
+  const terms = [e.nameAr, e.name, e.roasterAr, e.roaster].filter((t): t is string => !!t && t.trim().length >= 2);
   return [...new Set(terms)];
 }
 

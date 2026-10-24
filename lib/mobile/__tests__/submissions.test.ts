@@ -14,6 +14,14 @@ describe("SubmissionRequest", () => {
     expect(SubmissionRequest.safeParse({ name: "يرجاتشيف", roasterName: "كامل ستيب" }).success).toBe(true);
   });
   it("rejects an over-long note", () => {
-    expect(SubmissionRequest.safeParse({ name: "اسم", roasterName: "محمصة", note: "x".repeat(501) }).success).toBe(false);
+    expect(SubmissionRequest.safeParse({ name: "اسم", roasterName: "محمصة", note: "x".repeat(1001) }).success).toBe(false);
+  });
+  it("accepts Latin names, a process, roast level and flavor notes", () => {
+    const r = SubmissionRequest.parse({
+      name: "سويت بلند", nameEn: "Sweet Blend", roasterName: "ثري بين", roasterNameEn: "3 Bean Coffee Roastery",
+      process: "WASHED", roastLevel: "medium", flavorNotes: ["شوكولاتة", "كراميل"],
+    });
+    expect(r.process).toBe("WASHED");
+    expect(SubmissionRequest.safeParse({ name: "اسم", roasterName: "محمصة", process: "DRY" }).success).toBe(false);
   });
 });
