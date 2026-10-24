@@ -457,6 +457,18 @@ model MobileRecipe {
   @@index([lotId, state])
 }
 
+/// One AI bag-photo scan, for the per-account daily limit. The photo itself is
+/// never stored.
+model MobileAiScan {
+  id           String   @id @default(cuid())
+  accountId    String
+  isCoffeeBag  Boolean  @default(false)
+  matchedCount Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  @@index([accountId, createdAt])
+}
+
 /// Server idempotency record keyed by (owner, operation, device clientId).
 model MobileIdempotency {
   ownerId     String
