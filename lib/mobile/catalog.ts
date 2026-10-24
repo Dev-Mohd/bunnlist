@@ -1,4 +1,5 @@
 import type { PrismaClient } from "@prisma/client";
+import { discovererName } from "./admin";
 
 // Read-only catalog feed for the mobile app. Returns the published coffee lots as a
 // flat, display-oriented DTO (Arabic-first), independent of the website's richer page
@@ -84,6 +85,8 @@ export interface MobileLotDetail extends MobileLot {
   variety: string | null;
   recommendedBrewMethods: string[];
   brewStats: MobileBrewStat[];
+  /** Name of the account whose suggestion became this lot, if still around. */
+  discoveredBy?: string | null;
 }
 
 export function mapLotDetail(row: CoffeeLotDetailRow): MobileLotDetail {
@@ -154,5 +157,6 @@ export async function getPublishedLot(prisma: PrismaClient, slug: string): Promi
       brewStats: { select: { brewMethod: true, averageRating: true, reviewCount: true, wouldBuyAgain: true } },
     },
   });
-  return row ? mapLotDetail(row as unknown as CoffeeLotDetailRow) : null;
+  if (!row) return null;
+  return { ...mapLotDetail(row as unknown as CoffeeLotDetailRow), discoveredBy: await discovererName(prisma, row.id) };
 }

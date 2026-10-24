@@ -31,7 +31,13 @@ export function photoPath(submissionId: string): string {
 /** Port for the storage upload, so the rules are testable without Supabase. */
 export interface PhotoStore {
   put(path: string, bytes: Buffer): Promise<void>;
+  /** A short-lived URL to view a private suggestion photo (admin review). */
+  signedUrl(path: string): Promise<string | null>;
+  /** Copies a suggestion photo into the public catalog bucket; returns its public URL. */
+  publish(path: string, destination: string): Promise<string>;
 }
+
+export const CATALOG_BUCKET = "coffee-images";
 
 function supabaseUrl(): string | undefined {
   const raw = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -50,6 +56,24 @@ export function supabasePhotoStore(): PhotoStore {
         upsert: true,
       });
       if (error) throw new Error(`suggestion photo upload failed: ${error.message}`);
+    },
+    async signedUrl(path) {
+      const { data, error } = await client.storage.from(SUGGESTION_BUCKET).createSignedUrl(path, 60 * 60);
+      return error ? null : data.signedUrl;
+    },
+    async publish(path, destination) {
+      const { data: file, error: downloadError } = await client.storage.from(SUGGESTION_BUCKET).download(path);
+      if (downloadError || !file) throw new Error(`suggestion photo download failed: ${downloadError?.message}`);
+      // The catalog bucket is public; create it on first use, as the website does.
+      const { error: bucketError } = await client.storage.getBucket(CATALOG_BUCKET);
+      if (bucketError) {
+        await client.storage.createBucket(CATALOG_BUCKET, { public: true, fileSizeLimit: 5 * 1024 * 1024 });
+      }
+      const { error } = await client.storage.from(CATALOG_BUCKET).upload(destination, file, {
+        contentType: "image/jpeg", cacheControl: "31536000", upsert: false,
+      });
+      if (error) throw new Error(`catalog photo upload failed: ${error.message}`);
+      return client.storage.from(CATALOG_BUCKET).getPublicUrl(destination).data.publicUrl;
     },
   };
 }

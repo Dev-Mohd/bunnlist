@@ -385,10 +385,15 @@ model MobileCoffeeSubmission {
   photoPath   String?
   note        String?  @db.Text
   status      String   @default("PENDING")
+  /// Set on approval: the published lot this suggestion became.
+  approvedLotId String?
+  reviewNote  String?
+  reviewedAt  DateTime?
   createdAt   DateTime @default(now())
 
   @@index([accountId])
   @@index([status])
+  @@index([approvedLotId])
 }
 
 /// A brew experience logged from the app against a published lot. Mirrors the
