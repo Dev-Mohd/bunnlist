@@ -7,7 +7,7 @@ import {
 import type { MobileLot } from "../catalog";
 
 const base: BagExtraction = {
-  isCoffeeBag: true, name: "  Yirgacheffe Konga ", nameAr: null, roaster: "Camel Step", originCountry: "Ethiopia",
+  isCoffeeBag: true, name: "  Yirgacheffe Konga ", nameAr: null, roaster: "Camel Step", roasterAr: "كامل ستيب", originCountry: "Ethiopia",
   originCountryAr: "إثيوبيا", originCountryCode: "et", region: "Yirgacheffe", farm: null, producer: null,
   varieties: ["Heirloom", "Heirloom ", ""], process: "WASHED", processLabel: "Washed", roastLevel: "light",
   roastDate: "2026-10-01", altitudeMeters: 2100.4, flavorNotesAr: ["ياسمين", "ليمون", "ياسمين"], weightGrams: 250,
@@ -40,8 +40,8 @@ describe("normalizeExtraction", () => {
 
 describe("matching", () => {
   it("queries names before the roaster and skips blanks", () => {
-    expect(matchQueries({ ...base, nameAr: "كونغا", name: "Konga" })).toEqual(["كونغا", "Konga", "Camel Step"]);
-    expect(matchQueries({ ...base, name: null, roaster: "x" })).toEqual([]);
+    expect(matchQueries({ ...base, nameAr: "كونغا", name: "Konga" })).toEqual(["كونغا", "Konga", "كامل ستيب", "Camel Step"]);
+    expect(matchQueries({ ...base, name: null, roaster: "x", roasterAr: null })).toEqual([]);
   });
   it("ranks lots found by more terms first, then by term order", () => {
     const ranked = rankMatches([[lot("a"), lot("b")], [lot("b")], [lot("c"), lot("a")]]);

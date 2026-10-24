@@ -376,6 +376,11 @@ model MobileCoffeeSubmission {
   name        String
   roasterName String
   originName  String?
+  nameEn      String?
+  roasterNameEn String?
+  process     String?
+  roastLevel  String?
+  flavorNotes String[] @default([])
   note        String?  @db.Text
   status      String   @default("PENDING")
   createdAt   DateTime @default(now())
