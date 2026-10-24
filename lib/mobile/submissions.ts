@@ -48,3 +48,31 @@ export async function createSubmission(
   });
   return { id: row.id };
 }
+
+export interface MySubmission {
+  id: string;
+  name: string;
+  roasterName: string;
+  status: string;
+  lotSlug: string | null;
+  reviewNote: string | null;
+  hasPhoto: boolean;
+  createdAt: string;
+}
+
+/** The caller's suggestions with their review status, newest first. */
+export async function listMySubmissions(prisma: PrismaClient, accountId: string): Promise<MySubmission[]> {
+  const rows = await prisma.mobileCoffeeSubmission.findMany({
+    where: { accountId }, orderBy: { createdAt: "desc" }, take: 100,
+  });
+  const lotIds = rows.map((r) => r.approvedLotId).filter((id): id is string => !!id);
+  const lots = lotIds.length
+    ? await prisma.coffeeLot.findMany({ where: { id: { in: lotIds }, publishedAt: { not: null } }, select: { id: true, slug: true } })
+    : [];
+  const slug = new Map(lots.map((l) => [l.id, l.slug]));
+  return rows.map((r) => ({
+    id: r.id, name: r.name, roasterName: r.roasterName, status: r.status,
+    lotSlug: r.approvedLotId ? slug.get(r.approvedLotId) ?? null : null,
+    reviewNote: r.reviewNote, hasPhoto: !!r.photoPath, createdAt: r.createdAt.toISOString(),
+  }));
+}

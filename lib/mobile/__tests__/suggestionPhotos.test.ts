@@ -24,7 +24,9 @@ describe("decodeJpeg", () => {
 });
 
 describe("attachSuggestionPhoto", () => {
-  const store = (): PhotoStore & { put: ReturnType<typeof vi.fn> } => ({ put: vi.fn().mockResolvedValue(undefined) });
+  const store = (): PhotoStore & { put: ReturnType<typeof vi.fn> } => ({
+    put: vi.fn().mockResolvedValue(undefined), signedUrl: vi.fn(), publish: vi.fn(),
+  });
 
   it("stores the photo for the author's pending suggestion", async () => {
     const prisma = fakePrisma({ accountId: "acc", status: "PENDING" });
