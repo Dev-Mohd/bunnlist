@@ -15,7 +15,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
   const { slug } = await params;
   return handle(async () => {
     const accountId = await authenticate(req, requireAccessSecret());
-    return listMyExperiences(prisma, accountId, slug);
+    return { experiences: await listMyExperiences(prisma, accountId, slug) };
   });
 }
 
