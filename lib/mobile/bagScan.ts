@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
+import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import type { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { searchLots, type MobileLot } from "./catalog";
@@ -8,6 +8,9 @@ import { ApiError } from "./errors";
 // AI bag scan: the app sends one photo of a coffee bag; Claude reads it and returns
 // structured fields; we match them against published lots. The photo is never
 // stored. Each account gets a daily limit, since every scan is a paid model call.
+// Claude Haiku 5.5 at low effort: reading a label needs speed and price more than depth.
+
+export const BAG_SCAN_MODEL = "claude-haiku-5-5";
 
 export const DAILY_SCAN_LIMIT = 30;
 const MAX_IMAGE_BASE64 = 6_000_000; // ≈ 4.5 MB decoded; the app sends ~1600px JPEGs
@@ -70,13 +73,10 @@ export function claudeBagReader(apiKey: string): BagReader {
   const client = new Anthropic({ apiKey });
   return {
     async read(image) {
-      const response = await client.beta.messages.parse({
-        model: "claude-opus-5-5",
+      const response = await client.messages.parse({
+        model: BAG_SCAN_MODEL,
         max_tokens: 4000,
-        // Server-side fallback reruns the request on another model if this one declines.
-        betas: ["server-side-fallback-2026-07-01"],
-        fallbacks: "default",
-        output_config: { effort: "low", format: betaZodOutputFormat(BagExtraction) },
+        output_config: { effort: "low", format: zodOutputFormat(BagExtraction) },
         system: SYSTEM_PROMPT,
         messages: [{
           role: "user",
