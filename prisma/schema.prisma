@@ -384,6 +384,8 @@ model MobileCoffeeSubmission {
   /// Object path in the private "suggestion-images" bucket (a background-removed product photo).
   photoPath   String?
   note        String?  @db.Text
+  /// Shown publicly with the lot once approved ("ملاحظة المكتشف").
+  publicNote  String?  @db.Text
   status      String   @default("PENDING")
   /// Set on approval: the published lot this suggestion became.
   approvedLotId String?

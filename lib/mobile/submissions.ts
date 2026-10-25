@@ -22,6 +22,7 @@ export const SubmissionRequest = z.object({
   roastLevel: z.enum(["light", "medium", "dark"]).optional(),
   flavorNotes: z.array(z.string().trim().min(1).max(40)).max(12).optional(),
   note: z.string().trim().max(1000).optional(),
+  publicNote: z.string().trim().max(280).optional(),
 });
 export type SubmissionRequest = z.infer<typeof SubmissionRequest>;
 
@@ -43,6 +44,7 @@ export async function createSubmission(
       roastLevel: data.roastLevel ?? null,
       flavorNotes: data.flavorNotes ?? [],
       note: data.note || null,
+      publicNote: data.publicNote || null,
     },
     select: { id: true },
   });
