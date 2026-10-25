@@ -565,6 +565,7 @@ model MobileNotificationSettings {
   submissionRejected Boolean  @default(true)
   reviewHelpful      Boolean  @default(true)
   recipeLiked        Boolean  @default(true)
+  weeklySummary      Boolean  @default(true)
   updatedAt          DateTime @updatedAt
 }
 
