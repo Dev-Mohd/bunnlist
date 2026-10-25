@@ -2,6 +2,7 @@ import { BrewMethod, ReviewStatus, type PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { ApiError } from "./errors";
 import { award } from "./points";
+import { likeStates } from "./likes";
 import { displayNames } from "./profile";
 
 // Mobile review submission. Mirrors the website's actions/reviews.ts aggregate
@@ -121,6 +122,11 @@ export interface MobileReviewListItem {
   body: string | null;
   authorName: string;
   createdAt: string;
+  /** "مفيد" votes, whether the viewer gave one, and whether it's the viewer's own review. */
+  helpfulCount?: number;
+  markedHelpful?: boolean;
+  isMine?: boolean;
+  authorUsername?: string | null;
 }
 
 export function mapReview(row: ReviewRow): MobileReviewListItem {
@@ -137,7 +143,9 @@ export function mapReview(row: ReviewRow): MobileReviewListItem {
 
 const REVIEWS_PAGE_SIZE = 20;
 
-export async function listReviews(prisma: PrismaClient, slug: string, limit = REVIEWS_PAGE_SIZE): Promise<MobileReviewListItem[]> {
+export async function listReviews(
+  prisma: PrismaClient, slug: string, limit = REVIEWS_PAGE_SIZE, viewerId: string | null = null,
+): Promise<MobileReviewListItem[]> {
   const rows = await prisma.review.findMany({
     where: { coffeeLot: { slug, publishedAt: { not: null } }, status: ReviewStatus.PUBLISHED },
     orderBy: { createdAt: "desc" },
@@ -148,8 +156,21 @@ export async function listReviews(prisma: PrismaClient, slug: string, limit = RE
       user: { select: { name: true } },
     },
   });
-  const names = await displayNames(prisma, rows.map((r) => r.userId));
-  return rows.map((r) => ({ ...mapReview(r as unknown as ReviewRow), authorName: names.get(r.userId) ?? "مستخدم" }));
+  const userIds = rows.map((r) => r.userId);
+  const [names, likes, handles] = await Promise.all([
+    displayNames(prisma, userIds),
+    likeStates(prisma, "review", rows.map((r) => r.id), viewerId),
+    prisma.mobileProfile.findMany({ where: { accountId: { in: userIds } }, select: { accountId: true, username: true } }),
+  ]);
+  const handle = new Map(handles.map((h) => [h.accountId, h.username]));
+  return rows.map((r) => ({
+    ...mapReview(r as unknown as ReviewRow),
+    authorName: names.get(r.userId) ?? "مستخدم",
+    helpfulCount: likes.get(r.id)?.count ?? 0,
+    markedHelpful: likes.get(r.id)?.liked ?? false,
+    isMine: viewerId !== null && r.userId === viewerId,
+    authorUsername: handle.get(r.userId) ?? null,
+  }));
 }
 
 export async function getMyReview(prisma: PrismaClient, accountId: string, slug: string): Promise<MobileReview | null> {

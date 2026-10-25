@@ -1,4 +1,5 @@
 import type { PrismaClient } from "@prisma/client";
+import { likeStates } from "./likes";
 import { z } from "zod";
 import { ApiError } from "./errors";
 import { award, revoke } from "./points";
@@ -181,6 +182,9 @@ export interface MobileRecipe {
   state: RecipeState;
   authorName: string;
   isMine: boolean;
+  /** "أعجبني" count and whether the viewer gave one (lists only). */
+  likeCount?: number;
+  likedByMe?: boolean;
   publishedAt: string | null;
   updatedAt: string;
 }
@@ -286,7 +290,12 @@ export async function listMyRecipes(prisma: PrismaClient, accountId: string): Pr
     orderBy: { updatedAt: "desc" },
     take: 200,
   });
-  return present(prisma, rows as RecipeRow[], accountId);
+  return withLikes(prisma, await present(prisma, rows as RecipeRow[], accountId), accountId);
+}
+
+async function withLikes(prisma: PrismaClient, recipes: MobileRecipe[], viewerId: string | null): Promise<MobileRecipe[]> {
+  const states = await likeStates(prisma, "recipe", recipes.map((r) => r.id), viewerId);
+  return recipes.map((r) => ({ ...r, likeCount: states.get(r.id)?.count ?? 0, likedByMe: states.get(r.id)?.liked ?? false }));
 }
 
 /** Published recipes from everyone, newest first; optionally only those for one lot. */
@@ -299,7 +308,7 @@ export async function exploreRecipes(
     orderBy: { publishedAt: "desc" },
     take: 50,
   });
-  return present(prisma, rows as RecipeRow[], viewerId);
+  return withLikes(prisma, await present(prisma, rows as RecipeRow[], viewerId), viewerId);
 }
 
 /** Create, or edit by clientId (bumps version). `publish` also publishes a draft. */
