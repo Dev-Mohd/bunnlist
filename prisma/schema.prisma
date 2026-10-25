@@ -513,6 +513,16 @@ model MobilePointEvent {
   @@index([createdAt])
 }
 
+/// One account following another.
+model MobileFollow {
+  followerId String
+  followeeId String
+  createdAt  DateTime @default(now())
+
+  @@id([followerId, followeeId])
+  @@index([followeeId])
+}
+
 /// Server idempotency record keyed by (owner, operation, device clientId).
 model MobileIdempotency {
   ownerId     String

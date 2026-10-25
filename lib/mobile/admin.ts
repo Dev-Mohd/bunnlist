@@ -196,3 +196,14 @@ export async function discovererName(prisma: PrismaClient, lotId: string): Promi
   if (!submission) return null;
   return (await displayNames(prisma, [submission.accountId])).get(submission.accountId) ?? null;
 }
+
+/** The discoverer's @username (for linking to their profile), if they have one. */
+export async function discovererUsername(prisma: PrismaClient, lotId: string): Promise<string | null> {
+  const submission = await prisma.mobileCoffeeSubmission.findFirst({
+    where: { approvedLotId: lotId, status: "APPROVED", accountId: { not: DELETED_ACCOUNT } },
+    select: { accountId: true },
+  });
+  if (!submission) return null;
+  const profile = await prisma.mobileProfile.findUnique({ where: { accountId: submission.accountId }, select: { username: true } });
+  return profile?.username ?? null;
+}
