@@ -78,11 +78,13 @@ export interface ProfileSummary {
   recipes: number;
   experiences: number;
   ratings: number;
+  followers: number;
+  following: number;
   taste: TasteProfile;
 }
 
 export async function profileSummary(prisma: PrismaClient, accountId: string): Promise<ProfileSummary> {
-  const [entries, discoveries, submissions, recipes, experiences, reviews] = await Promise.all([
+  const [entries, discoveries, submissions, recipes, experiences, reviews, followers, following] = await Promise.all([
     prisma.mobileCollectionEntry.findMany({ where: { accountId }, orderBy: { updatedAt: "desc" } }),
     prisma.mobileCoffeeSubmission.count({ where: { accountId, status: "APPROVED" } }),
     prisma.mobileCoffeeSubmission.count({ where: { accountId } }),
@@ -96,6 +98,8 @@ export async function profileSummary(prisma: PrismaClient, accountId: string): P
       },
       take: 500,
     }),
+    prisma.mobileFollow.count({ where: { followeeId: accountId } }),
+    prisma.mobileFollow.count({ where: { followerId: accountId } }),
   ]);
 
   const ownedIds = entries.filter((e) => e.owned).slice(0, 3).map((e) => e.lotId);
@@ -114,6 +118,7 @@ export async function profileSummary(prisma: PrismaClient, accountId: string): P
     recentBags: ownedIds.map((id) => bagById.get(id)).filter((u): u is string => !!u),
     discoveries, submissions, recipes, experiences,
     ratings: reviews.length,
+    followers, following,
     taste: tasteProfile(reviews.map((r) => ({
       rating: r.rating,
       method: r.brewMethod,

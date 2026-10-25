@@ -35,6 +35,7 @@ export function createPrismaAccountDeletionStore(
         await tx.mobileAiScan.deleteMany({ where: { accountId } });
         await tx.mobileProfile.deleteMany({ where: { accountId } });
         await tx.mobilePointEvent.deleteMany({ where: { accountId } });
+        await tx.mobileFollow.deleteMany({ where: { OR: [{ followerId: accountId }, { followeeId: accountId }] } });
         await tx.mobileCollectionEntry.deleteMany({ where: { accountId } });
         // Suggestions describe a product, not the person: keep them (and their product
         // photos) for review, but detach them from the account.
