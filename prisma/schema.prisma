@@ -563,5 +563,22 @@ model MobileNotificationSettings {
   newFollower        Boolean  @default(true)
   submissionApproved Boolean  @default(true)
   submissionRejected Boolean  @default(true)
+  reviewHelpful      Boolean  @default(true)
+  recipeLiked        Boolean  @default(true)
+  weeklySummary      Boolean  @default(true)
   updatedAt          DateTime @updatedAt
+}
+
+/// "مفيد" on a review (targetType "review") or "أعجبني" on a recipe ("recipe").
+/// ownerId is the liked thing's author.
+model MobileLike {
+  accountId  String
+  targetType String
+  targetId   String
+  ownerId    String
+  createdAt  DateTime @default(now())
+
+  @@id([accountId, targetType, targetId])
+  @@index([targetType, targetId])
+  @@index([ownerId])
 }

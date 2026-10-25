@@ -7,13 +7,16 @@ import { z } from "zod";
 // APNS_KEY_ID, APNS_TEAM_ID, APNS_PRIVATE_KEY (the .p8 contents) and
 // APNS_BUNDLE_ID. Without them nothing is sent and nothing fails.
 
-export const NOTIFICATION_KINDS = ["newFollower", "submissionApproved", "submissionRejected"] as const;
+export const NOTIFICATION_KINDS = ["newFollower", "submissionApproved", "submissionRejected", "reviewHelpful", "recipeLiked", "weeklySummary"] as const;
 export type NotificationKind = (typeof NOTIFICATION_KINDS)[number];
 
 export const NotificationSettingsUpdate = z.object({
   newFollower: z.boolean().optional(),
   submissionApproved: z.boolean().optional(),
   submissionRejected: z.boolean().optional(),
+  reviewHelpful: z.boolean().optional(),
+  recipeLiked: z.boolean().optional(),
+  weeklySummary: z.boolean().optional(),
 });
 
 export type NotificationSettings = Record<NotificationKind, boolean>;
@@ -24,6 +27,9 @@ export async function getNotificationSettings(prisma: PrismaClient, accountId: s
     newFollower: row?.newFollower ?? true,
     submissionApproved: row?.submissionApproved ?? true,
     submissionRejected: row?.submissionRejected ?? true,
+    reviewHelpful: row?.reviewHelpful ?? true,
+    recipeLiked: row?.recipeLiked ?? true,
+    weeklySummary: row?.weeklySummary ?? true,
   };
 }
 

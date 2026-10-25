@@ -123,7 +123,7 @@ export interface LeaderboardEntry {
   isMe: boolean;
 }
 
-export const LEADERBOARD_KINDS = ["points", "discoverers", "raters"] as const;
+export const LEADERBOARD_KINDS = ["points", "discoverers", "raters", "helpful"] as const;
 export type LeaderboardKind = (typeof LEADERBOARD_KINDS)[number];
 
 /**
@@ -187,6 +187,13 @@ async function scores(
       by: ["accountId"], where: { status: "APPROVED" }, _count: { _all: true },
     });
     return rows.map((r) => ({ accountId: r.accountId, points: r._count._all }));
+  }
+  if (kind === "helpful") {
+    // "أفضل تعليق": the most "مفيد" votes received on one's reviews.
+    const rows = await prisma.mobileLike.groupBy({
+      by: ["ownerId"], where: { targetType: "review" }, _count: { _all: true },
+    });
+    return rows.map((r) => ({ accountId: r.ownerId, points: r._count._all }));
   }
   if (kind === "raters") {
     const rows = await prisma.mobilePointEvent.groupBy({
