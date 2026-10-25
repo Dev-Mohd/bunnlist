@@ -31,7 +31,8 @@ function fakePrisma(opts: { status?: string; photoPath?: string | null; slugTake
       findUnique: vi.fn().mockImplementation(({ where }: { where: { slug: string } }) => (taken.has(where.slug) ? { id: "x" } : null)),
       create: vi.fn().mockImplementation(({ data }: { data: { slug: string } }) => ({ id: "lot1", slug: data.slug })),
     },
-    user: { findUnique: vi.fn() },
+    user: { findUnique: vi.fn(), findMany: vi.fn().mockResolvedValue([]) },
+    mobileProfile: { findMany: vi.fn().mockResolvedValue([]) },
   };
   return { db: m as unknown as PrismaClient, m };
 }
@@ -89,8 +90,10 @@ describe("discovererName", () => {
   it("names the author while the account exists", async () => {
     const { db, m: prisma } = fakePrisma();
     prisma.mobileCoffeeSubmission.findFirst.mockResolvedValue({ accountId: "u1" });
-    prisma.user.findUnique.mockResolvedValue({ name: "محمد" });
+    prisma.user.findMany.mockResolvedValue([{ id: "u1", name: "محمد" }]);
     expect(await discovererName(db, "lot1")).toBe("محمد");
+    prisma.mobileProfile.findMany.mockResolvedValue([{ accountId: "u1", username: "mohd" }]);
+    expect(await discovererName(db, "lot1")).toBe("@mohd");
     prisma.mobileCoffeeSubmission.findFirst.mockResolvedValue(null);
     expect(await discovererName(db, "lot1")).toBeNull();
   });

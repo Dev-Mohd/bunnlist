@@ -1,6 +1,7 @@
 import { BrewMethod, ReviewStatus, type PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { ApiError } from "./errors";
+import { displayNames } from "./profile";
 
 // Mobile review submission. Mirrors the website's actions/reviews.ts aggregate
 // logic (average + per-brew-method stats) but authenticates via the mobile access
@@ -138,10 +139,12 @@ export async function listReviews(prisma: PrismaClient, slug: string, limit = RE
     take: Math.min(Math.max(limit, 1), REVIEWS_PAGE_SIZE),
     select: {
       id: true, rating: true, brewMethod: true, wouldBuyAgain: true, body: true, createdAt: true,
+      userId: true,
       user: { select: { name: true } },
     },
   });
-  return rows.map((r) => mapReview(r as unknown as ReviewRow));
+  const names = await displayNames(prisma, rows.map((r) => r.userId));
+  return rows.map((r) => ({ ...mapReview(r as unknown as ReviewRow), authorName: names.get(r.userId) ?? "مستخدم" }));
 }
 
 export async function getMyReview(prisma: PrismaClient, accountId: string, slug: string): Promise<MobileReview | null> {

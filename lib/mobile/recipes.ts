@@ -1,6 +1,7 @@
 import type { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { ApiError } from "./errors";
+import { displayNames } from "./profile";
 import { BREW_METHOD_CODES, canTransition, EXPERIENCE_STATES, type ExperienceState } from "./experiences";
 
 // Brew recipes from the app. Mirrors BunnListCore's Recipe: an optional lot (none = a
@@ -264,12 +265,11 @@ async function present(prisma: PrismaClient, rows: RecipeRow[], viewerId: string
           select: { id: true, slug: true, nameAr: true, roaster: { select: { nameAr: true } } },
         })
       : Promise.resolve([]),
-    prisma.user.findMany({ where: { id: { in: userIds } }, select: { id: true, name: true } }),
+    displayNames(prisma, userIds),
   ]);
   const lotById = new Map(lots.map((l) => [l.id, { slug: l.slug, nameAr: l.nameAr, roasterNameAr: l.roaster?.nameAr ?? "" }]));
-  const nameById = new Map(users.map((u) => [u.id, u.name?.trim() || "مستخدم"]));
   return rows.map((r) =>
-    mapRecipe(r, viewerId, r.lotId ? lotById.get(r.lotId) ?? null : null, nameById.get(r.accountId) ?? "مستخدم"),
+    mapRecipe(r, viewerId, r.lotId ? lotById.get(r.lotId) ?? null : null, users.get(r.accountId) ?? "مستخدم"),
   );
 }
 
