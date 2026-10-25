@@ -6,6 +6,7 @@ import { createPrismaSessionStore } from "./sessionStore";
 import { createPrismaOtpStore } from "./otpStore";
 import { createResendMailer } from "./mailer";
 import { createPrismaAccountDeletionStore } from "./accountStore";
+import { supabaseAvatarStore } from "./avatars";
 import { createAppleRevoker } from "./appleRevoke";
 import type { AuthDeps } from "./ports";
 import type { EmailDeps } from "./emailService";
@@ -69,7 +70,7 @@ export function buildEmailDeps(): EmailDeps {
 // token revocation).
 export function buildAccountDeps(): AccountDeps {
   return {
-    store: createPrismaAccountDeletionStore(prisma),
+    store: createPrismaAccountDeletionStore(prisma, supabaseAvatarStore()),
     appleRevoker: createAppleRevoker(),
   };
 }

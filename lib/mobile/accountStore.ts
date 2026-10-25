@@ -1,6 +1,7 @@
 import { DELETED_ACCOUNT } from "./submissions";
 import type { PrismaClient } from "@prisma/client";
 import type { AccountDeletionStore } from "./accountService";
+import type { AvatarStore } from "./avatars";
 
 // Prisma-backed account-deletion store. Reads any Apple refresh tokens held for
 // the account (none are stored yet — the current Sign in with Apple flow sends an
@@ -9,7 +10,9 @@ import type { AccountDeletionStore } from "./accountService";
 // to Account/Session/Review via the schema's onDelete: Cascade; the mobile-only
 // tables (no FK to User) are deleted explicitly.
 
-export function createPrismaAccountDeletionStore(prisma: PrismaClient): AccountDeletionStore {
+export function createPrismaAccountDeletionStore(
+  prisma: PrismaClient, avatars: AvatarStore | null = null,
+): AccountDeletionStore {
   return {
     async appleRefreshTokens(accountId: string): Promise<string[]> {
       const rows = await prisma.account.findMany({
@@ -21,6 +24,7 @@ export function createPrismaAccountDeletionStore(prisma: PrismaClient): AccountD
 
     async purge(accountId: string): Promise<void> {
       const user = await prisma.user.findUnique({ where: { id: accountId }, select: { email: true } });
+      const profile = await prisma.mobileProfile.findUnique({ where: { accountId }, select: { avatarPath: true } });
 
       await prisma.$transaction(async (tx) => {
         await tx.mobileSession.deleteMany({ where: { accountId } });
@@ -40,6 +44,8 @@ export function createPrismaAccountDeletionStore(prisma: PrismaClient): AccountD
         // Cascades to Account, Session, Review, etc.
         await tx.user.delete({ where: { id: accountId } });
       });
+      // The profile picture is personal data: remove it too (best effort, after the rows).
+      if (profile?.avatarPath) await avatars?.remove(profile.avatarPath).catch(() => undefined);
     },
   };
 }
