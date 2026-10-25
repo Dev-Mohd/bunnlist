@@ -481,13 +481,18 @@ model MobileAiScan {
   @@index([accountId, createdAt])
 }
 
-/// The app's public handle for an account (shown as @username instead of the raw
-/// account id). Stored lowercase; unique.
+/// The app's public profile for an account: @username (stored lowercase, unique;
+/// shown instead of the raw account id), display name, bio and avatar, and when
+/// the first-run setup was finished.
 model MobileProfile {
-  accountId String   @id
-  username  String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  accountId   String    @id
+  username    String?   @unique
+  displayName String?
+  bio         String?
+  avatarPath  String?
+  onboardedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 /// Server idempotency record keyed by (owner, operation, device clientId).
