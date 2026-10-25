@@ -89,4 +89,19 @@ describe("leaderboard", () => {
     expect(result.entries[2].isMe).toBe(true);
     expect(result.me).toEqual({ rank: 3, points: 10 });
   });
+
+  it("ranks discoverers by approved suggestions, without deleted accounts", async () => {
+    const m = {
+      mobileProfile: { findMany: vi.fn().mockResolvedValueOnce([]).mockResolvedValueOnce([]) },
+      mobileCoffeeSubmission: {
+        groupBy: vi.fn().mockResolvedValue([
+          { accountId: "a", _count: { _all: 2 } }, { accountId: "deleted", _count: { _all: 9 } }, { accountId: "b", _count: { _all: 5 } },
+        ]),
+      },
+      user: { findMany: vi.fn().mockResolvedValue([{ id: "a", name: "A" }, { id: "b", name: "B" }]) },
+    };
+    const result = await leaderboard(m as unknown as PrismaClient, "week", null, new Date(), 3, "discoverers");
+    expect(result.entries.map((e) => [e.name, e.points])).toEqual([["B", 5], ["A", 2]]);
+    expect(m.mobileCoffeeSubmission.groupBy).toHaveBeenCalledWith(expect.objectContaining({ where: { status: "APPROVED" } }));
+  });
 });

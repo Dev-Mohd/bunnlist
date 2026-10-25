@@ -130,6 +130,22 @@ export async function listPublishedLots(prisma: PrismaClient, limit: number = CA
   return rows.map((r) => mapLot(r as unknown as CoffeeLotRow));
 }
 
+/** The best-rated coffees with at least three ratings, topped up with fewer-rated
+ *  ones when there are not enough. */
+export async function topRatedLots(prisma: PrismaClient, limit = 10): Promise<MobileLot[]> {
+  const order = [{ averageRating: "desc" as const }, { reviewCount: "desc" as const }];
+  const solid = await prisma.coffeeLot.findMany({
+    where: { publishedAt: { not: null }, reviewCount: { gte: 3 } }, orderBy: order, take: limit, select: LOT_LIST_SELECT,
+  });
+  const more = solid.length < limit
+    ? await prisma.coffeeLot.findMany({
+        where: { publishedAt: { not: null }, reviewCount: { gte: 1, lt: 3 } }, orderBy: order,
+        take: limit - solid.length, select: LOT_LIST_SELECT,
+      })
+    : [];
+  return [...solid, ...more].map((r) => mapLot(r as unknown as CoffeeLotRow));
+}
+
 export async function searchLots(prisma: PrismaClient, query: string, limit: number = 20): Promise<MobileLot[]> {
   const q = query.trim();
   if (q.length < 2) return [];
