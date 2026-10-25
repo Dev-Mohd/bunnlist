@@ -42,7 +42,7 @@ export interface AdminSubmission {
 }
 
 export async function listSubmissions(
-  prisma: PrismaClient, store: PhotoStore, status: (typeof SUBMISSION_STATUSES)[number],
+  prisma: PrismaClient, store: PhotoStore | null, status: (typeof SUBMISSION_STATUSES)[number],
 ): Promise<AdminSubmission[]> {
   const rows = await prisma.mobileCoffeeSubmission.findMany({
     where: { status }, orderBy: { createdAt: status === "PENDING" ? "asc" : "desc" }, take: 100,
@@ -58,7 +58,8 @@ export async function listSubmissions(
     id: r.id, status: r.status, name: r.name, nameEn: r.nameEn, roasterName: r.roasterName,
     roasterNameEn: r.roasterNameEn, originName: r.originName, process: r.process, roastLevel: r.roastLevel,
     flavorNotes: r.flavorNotes, note: r.note,
-    photoUrl: r.photoPath ? await store.signedUrl(r.photoPath) : null,
+    // Without storage configured the list still works, just without photos.
+    photoUrl: r.photoPath && store ? await store.signedUrl(r.photoPath) : null,
     authorName: author.get(r.accountId) ?? null,
     approvedLotSlug: r.approvedLotId ? slug.get(r.approvedLotId) ?? null : null,
     reviewNote: r.reviewNote,
