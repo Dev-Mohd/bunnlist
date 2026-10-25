@@ -64,3 +64,38 @@ describe("following", () => {
     expect(people).toEqual([{ username: "badr", displayName: null, avatarUrl: null }]);
   });
 });
+
+describe("privacy", () => {
+  function withPrivacy(levels: Record<string, string>, viewerFollows: boolean) {
+    const { db, m } = fakePrisma({ mohd: "a" });
+    m.mobileProfile.findUnique.mockImplementation(({ where }: { where: { username?: string; accountId?: string } }) =>
+      where.username !== undefined ? { accountId: "a" } : { username: "mohd", displayName: "Mohd", bio: null, avatarPath: null, ...levels });
+    m.mobileFollow.findUnique.mockResolvedValue(viewerFollows ? { followerId: "v" } : null);
+    m.mobileCoffeeSubmission.findMany.mockResolvedValue([{ approvedLotId: "l1" }]);
+    return { db, m };
+  }
+
+  it("hides counts and activity from people the owner left out", async () => {
+    const { db } = withPrivacy({ followersVisibility: "followers", followingVisibility: "me", activityVisibility: "followers" }, false);
+    const p = await publicProfile(db, "mohd", "v");
+    expect(p.followers).toBeNull();
+    expect(p.following).toBeNull();
+    expect(p.activityHidden).toBe(true);
+    expect(p.recipes).toEqual([]);
+  });
+
+  it("shows follower-only parts to followers, and everything to the owner", async () => {
+    const asFollower = await publicProfile(withPrivacy({ followersVisibility: "followers", followingVisibility: "me" }, true).db, "mohd", "v");
+    expect(asFollower.followers).toBe(3);
+    expect(asFollower.following).toBeNull();
+    const asOwner = await publicProfile(withPrivacy({ followersVisibility: "me", followingVisibility: "me", activityVisibility: "me" }, false).db, "mohd", "a");
+    expect(asOwner.following).not.toBeNull();
+    expect(asOwner.activityHidden).toBe(false);
+  });
+
+  it("refuses a hidden list", async () => {
+    const { db } = withPrivacy({ followersVisibility: "me" }, true);
+    await expect(followList(db, "mohd", "followers", "v")).rejects.toMatchObject({ code: "forbidden" });
+    await expect(followList(db, "mohd", "followers", "a")).resolves.toBeDefined();
+  });
+});

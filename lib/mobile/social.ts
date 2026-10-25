@@ -1,11 +1,19 @@
 import type { PrismaClient } from "@prisma/client";
 import { mapLot, LOT_LIST_SELECT, type CoffeeLotRow, type MobileLot } from "./catalog";
 import { ApiError } from "./errors";
-import { avatarUrl, normalizeUsername } from "./profile";
+import { asVisibility, avatarUrl, normalizeUsername, type Visibility } from "./profile";
 
 // Public profiles and following. A profile is reachable only by @username (no raw
 // account ids leave the server) and shows what the person already made public:
-// name, bio, picture, points, approved discoveries and published recipes.
+// name, bio, picture, points, approved discoveries and published recipes. Owners
+// choose who sees their followers, whom they follow, and their activity.
+
+/** Whether `viewerId` may see something the owner set to `level`. */
+export function canSee(level: Visibility, isOwner: boolean, viewerFollowsOwner: boolean): boolean {
+  if (isOwner) return true;
+  if (level === "everyone") return true;
+  return level === "followers" && viewerFollowsOwner;
+}
 
 async function accountIdFor(prisma: PrismaClient, username: string): Promise<string> {
   const profile = await prisma.mobileProfile.findUnique({
@@ -23,8 +31,10 @@ export interface PublicProfile {
   bio: string | null;
   avatarUrl: string | null;
   points: number;
-  followers: number;
-  following: number;
+  /** null when the owner keeps it from this viewer. */
+  followers: number | null;
+  following: number | null;
+  activityHidden: boolean;
   isFollowing: boolean;
   isMe: boolean;
   discoveries: MobileLot[];
@@ -50,6 +60,13 @@ export async function publicProfile(prisma: PrismaClient, username: string, view
     }),
   ]);
 
+  const isMe = viewerId === accountId;
+  const follows = !!followRow;
+  const showFollowers = canSee(asVisibility(profile?.followersVisibility), isMe, follows);
+  const showFollowing = canSee(asVisibility(profile?.followingVisibility), isMe, follows);
+  const showActivity = canSee(asVisibility(profile?.activityVisibility), isMe, follows);
+  if (!showActivity) { approved.length = 0; recipes.length = 0; }
+
   const lotIds = [...approved.map((a) => a.approvedLotId as string), ...recipes.map((r) => r.lotId).filter((id): id is string => !!id)];
   const lots = lotIds.length
     ? await prisma.coffeeLot.findMany({ where: { id: { in: lotIds }, publishedAt: { not: null } }, select: LOT_LIST_SELECT })
@@ -62,10 +79,11 @@ export async function publicProfile(prisma: PrismaClient, username: string, view
     bio: profile?.bio ?? null,
     avatarUrl: avatarUrl(profile?.avatarPath ?? null),
     points: points._sum.points ?? 0,
-    followers,
-    following,
-    isFollowing: !!followRow,
-    isMe: viewerId === accountId,
+    followers: showFollowers ? followers : null,
+    following: showFollowing ? following : null,
+    activityHidden: !showActivity,
+    isFollowing: follows,
+    isMe,
     discoveries: approved.flatMap((a) => {
       const lot = lotById.get(a.approvedLotId as string);
       return lot ? [mapLot(lot as unknown as CoffeeLotRow)] : [];
@@ -96,9 +114,21 @@ export interface PersonRow { username: string; displayName: string | null; avata
 
 /** Who follows this person ("followers") or whom they follow ("following"); people without a username are skipped. */
 export async function followList(
-  prisma: PrismaClient, username: string, which: "followers" | "following",
+  prisma: PrismaClient, username: string, which: "followers" | "following", viewerId: string | null = null,
 ): Promise<PersonRow[]> {
   const accountId = await accountIdFor(prisma, username);
+  if (viewerId !== accountId) {
+    const [owner, viewerFollows] = await Promise.all([
+      prisma.mobileProfile.findUnique({
+        where: { accountId }, select: { followersVisibility: true, followingVisibility: true },
+      }),
+      viewerId
+        ? prisma.mobileFollow.findUnique({ where: { followerId_followeeId: { followerId: viewerId, followeeId: accountId } } })
+        : null,
+    ]);
+    const level = asVisibility(which === "followers" ? owner?.followersVisibility : owner?.followingVisibility);
+    if (!canSee(level, false, !!viewerFollows)) throw new ApiError("forbidden", "hidden_by_owner");
+  }
   const rows = await prisma.mobileFollow.findMany({
     where: which === "followers" ? { followeeId: accountId } : { followerId: accountId },
     orderBy: { createdAt: "desc" }, take: 200,

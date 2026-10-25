@@ -83,10 +83,21 @@ export async function displayNames(prisma: PrismaClient, accountIds: string[]): 
 
 // --- Profile details and first-run setup ---------------------------------------
 
+/** Who may see part of a public profile: anyone, people who follow the owner, or only the owner. */
+export const VISIBILITY = ["everyone", "followers", "me"] as const;
+export type Visibility = (typeof VISIBILITY)[number];
+
+export function asVisibility(value: string | null | undefined): Visibility {
+  return (VISIBILITY as readonly string[]).includes(value ?? "") ? (value as Visibility) : "everyone";
+}
+
 export const ProfileUpdate = z.object({
   displayName: z.string().trim().min(1).max(40).optional(),
   bio: z.string().trim().max(160).optional(),
   hideFromLeaderboard: z.boolean().optional(),
+  followersVisibility: z.enum(VISIBILITY).optional(),
+  followingVisibility: z.enum(VISIBILITY).optional(),
+  activityVisibility: z.enum(VISIBILITY).optional(),
 });
 export type ProfileUpdate = z.infer<typeof ProfileUpdate>;
 
@@ -97,6 +108,9 @@ export interface MobileProfileView {
   avatarUrl: string | null;
   onboarded: boolean;
   hideFromLeaderboard: boolean;
+  followersVisibility: Visibility;
+  followingVisibility: Visibility;
+  activityVisibility: Visibility;
 }
 
 /** Public URL of an avatar object, or null without a configured Supabase URL. */
@@ -119,6 +133,9 @@ export async function getProfile(prisma: PrismaClient, accountId: string): Promi
     avatarUrl: avatarUrl(profile?.avatarPath ?? null),
     onboarded: !!profile?.onboardedAt,
     hideFromLeaderboard: profile?.hideFromLeaderboard ?? false,
+    followersVisibility: asVisibility(profile?.followersVisibility),
+    followingVisibility: asVisibility(profile?.followingVisibility),
+    activityVisibility: asVisibility(profile?.activityVisibility),
   };
 }
 
@@ -127,6 +144,9 @@ export async function updateProfile(prisma: PrismaClient, accountId: string, pat
     ...(patch.displayName !== undefined ? { displayName: patch.displayName } : {}),
     ...(patch.bio !== undefined ? { bio: patch.bio || null } : {}),
     ...(patch.hideFromLeaderboard !== undefined ? { hideFromLeaderboard: patch.hideFromLeaderboard } : {}),
+    ...(patch.followersVisibility ? { followersVisibility: patch.followersVisibility } : {}),
+    ...(patch.followingVisibility ? { followingVisibility: patch.followingVisibility } : {}),
+    ...(patch.activityVisibility ? { activityVisibility: patch.activityVisibility } : {}),
   };
   await prisma.mobileProfile.upsert({ where: { accountId }, update: data, create: { accountId, ...data } });
   return getProfile(prisma, accountId);
