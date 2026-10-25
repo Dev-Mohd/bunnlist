@@ -94,13 +94,21 @@ export async function publicProfile(prisma: PrismaClient, username: string, view
   };
 }
 
-export async function follow(prisma: PrismaClient, viewerId: string, username: string): Promise<{ following: true }> {
+/** `onNewFollow` runs only when this is a new follow (not a repeat), e.g. to notify them. */
+export async function follow(
+  prisma: PrismaClient, viewerId: string, username: string, onNewFollow?: (followeeId: string) => Promise<unknown>,
+): Promise<{ following: true }> {
   const accountId = await accountIdFor(prisma, username);
   if (accountId === viewerId) throw ApiError.unprocessable("cannot_follow_self");
+  const existing = await prisma.mobileFollow.findUnique({
+    where: { followerId_followeeId: { followerId: viewerId, followeeId: accountId } },
+  });
+  if (existing) return { following: true };
   await prisma.mobileFollow.upsert({
     where: { followerId_followeeId: { followerId: viewerId, followeeId: accountId } },
     update: {}, create: { followerId: viewerId, followeeId: accountId },
   });
+  await onNewFollow?.(accountId);
   return { following: true };
 }
 
