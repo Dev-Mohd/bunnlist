@@ -1,5 +1,6 @@
 import type { PrismaClient } from "@prisma/client";
 import { discovererName } from "./admin";
+import { displayNames } from "./profile";
 
 // Read-only catalog feed for the mobile app. Returns the published coffee lots as a
 // flat, display-oriented DTO (Arabic-first), independent of the website's richer page
@@ -109,7 +110,7 @@ export function mapLotDetail(row: CoffeeLotDetailRow): MobileLotDetail {
 
 export const CATALOG_PAGE_SIZE = 50;
 
-const LOT_LIST_SELECT = {
+export const LOT_LIST_SELECT = {
   id: true, slug: true, name: true, nameAr: true, process: true, processLabel: true,
   flavorNotes: true, roastLevel: true, averageRating: true, reviewCount: true, imageUrl: true,
   roaster: { select: { nameAr: true, name: true } },
@@ -159,4 +160,41 @@ export async function getPublishedLot(prisma: PrismaClient, slug: string): Promi
   });
   if (!row) return null;
   return { ...mapLotDetail(row as unknown as CoffeeLotDetailRow), discoveredBy: await discovererName(prisma, row.id) };
+}
+
+export interface DiscoveredLot extends MobileLot {
+  /** The account whose suggestion became this lot; null for catalog additions. */
+  discoveredBy: string | null;
+}
+
+/** Newest community discoveries (approved suggestions), topped up with the newest
+ *  published lots when there are few, so the home carousel is never empty. */
+export async function newDiscoveries(prisma: PrismaClient, limit = 10): Promise<DiscoveredLot[]> {
+  const approved = await prisma.mobileCoffeeSubmission.findMany({
+    where: { status: "APPROVED", approvedLotId: { not: null } },
+    orderBy: { reviewedAt: "desc" },
+    take: limit,
+    select: { approvedLotId: true, accountId: true },
+  });
+  const authorByLot = new Map(approved.map((a) => [a.approvedLotId as string, a.accountId]));
+  const names = await displayNames(prisma, [...authorByLot.values()].filter((id) => id !== "deleted"));
+
+  const discovered = authorByLot.size
+    ? await prisma.coffeeLot.findMany({
+        where: { id: { in: [...authorByLot.keys()] }, publishedAt: { not: null } }, select: LOT_LIST_SELECT,
+      })
+    : [];
+  const order = [...authorByLot.keys()];
+  const fromCommunity = discovered
+    .sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id))
+    .map((row) => ({ ...mapLot(row as unknown as CoffeeLotRow), discoveredBy: names.get(authorByLot.get(row.id) ?? "") ?? null }));
+
+  if (fromCommunity.length >= limit) return fromCommunity;
+  const newest = await prisma.coffeeLot.findMany({
+    where: { publishedAt: { not: null }, id: { notIn: fromCommunity.map((l) => l.id) } },
+    orderBy: { publishedAt: "desc" },
+    take: limit - fromCommunity.length,
+    select: LOT_LIST_SELECT,
+  });
+  return [...fromCommunity, ...newest.map((row) => ({ ...mapLot(row as unknown as CoffeeLotRow), discoveredBy: null }))];
 }
