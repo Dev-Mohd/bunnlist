@@ -7,6 +7,10 @@ import { z } from "zod";
 
 /** accountId of suggestions whose author deleted their account. */
 export const DELETED_ACCOUNT = "deleted";
+/** accountId of suggestions from a curated batch import: nobody discovered them. */
+export const CATALOG_ACCOUNT = "catalog";
+/** Suggestions that credit no person. */
+export const UNCREDITED_ACCOUNTS = [DELETED_ACCOUNT, CATALOG_ACCOUNT];
 
 export const SUBMISSION_PROCESSES = [
   "NATURAL", "WASHED", "HONEY", "ANAEROBIC", "WET_HULLED", "CARBONIC_MACERATION", "EXPERIMENTAL", "OTHER",

@@ -386,6 +386,12 @@ model MobileCoffeeSubmission {
   note        String?  @db.Text
   /// Shown publicly with the lot once approved ("ملاحظة المكتشف").
   publicNote  String?  @db.Text
+  /// Curated batch imports (accountId "catalog"): idempotency key, source page,
+  /// extraction confidence, and lot details carried over on approval.
+  importKey        String?  @unique
+  sourceUrl        String?  @db.Text
+  sourceConfidence Float?
+  extras           Json?
   status      String   @default("PENDING")
   /// Set on approval: the published lot this suggestion became.
   approvedLotId String?
@@ -581,4 +587,15 @@ model MobileLike {
   @@id([accountId, targetType, targetId])
   @@index([targetType, targetId])
   @@index([ownerId])
+}
+
+/// A label on a published lot: "luxury", "infused" or "decaf" (note: why).
+model MobileLotTag {
+  lotId     String
+  tag       String
+  note      String?
+  createdAt DateTime @default(now())
+
+  @@id([lotId, tag])
+  @@index([tag])
 }

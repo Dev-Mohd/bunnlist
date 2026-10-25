@@ -1,6 +1,6 @@
 import type { PrismaClient } from "@prisma/client";
 import { avatarUrl } from "./profile";
-import { DELETED_ACCOUNT } from "./submissions";
+import { UNCREDITED_ACCOUNTS } from "./submissions";
 
 // Points, streaks and the leaderboard. Every reward is a ledger row unique per
 // (account, kind, thing), so repeating an action never pays twice and undoing it
@@ -138,7 +138,7 @@ export async function leaderboard(
   const hidden = await prisma.mobileProfile.findMany({ where: { hideFromLeaderboard: true }, select: { accountId: true } });
   const hiddenIds = new Set(hidden.map((h) => h.accountId));
   const ranked = (await scores(prisma, kind, period, now))
-    .filter((s) => s.points > 0 && !hiddenIds.has(s.accountId) && s.accountId !== DELETED_ACCOUNT)
+    .filter((s) => s.points > 0 && !hiddenIds.has(s.accountId) && !UNCREDITED_ACCOUNTS.includes(s.accountId))
     .sort((a, b) => b.points - a.points || a.accountId.localeCompare(b.accountId));
 
   const top = ranked.slice(0, limit);
