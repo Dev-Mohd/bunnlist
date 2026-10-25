@@ -44,6 +44,15 @@ function supabaseUrl(): string | undefined {
   return raw?.replace(/\/rest\/v1\/?$/, "").replace(/\/$/, "");
 }
 
+/** The store, or null when SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY are not set. */
+export function optionalPhotoStore(): PhotoStore | null {
+  try {
+    return supabasePhotoStore();
+  } catch {
+    return null;
+  }
+}
+
 export function supabasePhotoStore(): PhotoStore {
   const url = supabaseUrl();
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;

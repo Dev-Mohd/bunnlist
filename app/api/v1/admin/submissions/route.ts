@@ -3,7 +3,7 @@ import { authenticate } from "@/lib/mobile/authGuard";
 import { requireAccessSecret } from "@/lib/mobile/deps";
 import { handle } from "@/lib/mobile/respond";
 import { listSubmissions, requireAdmin, SUBMISSION_STATUSES } from "@/lib/mobile/admin";
-import { supabasePhotoStore } from "@/lib/mobile/suggestionPhotos";
+import { optionalPhotoStore } from "@/lib/mobile/suggestionPhotos";
 
 // GET /api/v1/admin/submissions?status=PENDING|APPROVED|REJECTED — admins only.
 // Photos come back as one-hour signed URLs to the private bucket.
@@ -17,6 +17,6 @@ export async function GET(req: Request) {
   return handle(async () => {
     const accountId = await authenticate(req, requireAccessSecret());
     await requireAdmin(prisma, accountId);
-    return { submissions: await listSubmissions(prisma, supabasePhotoStore(), status) };
+    return { submissions: await listSubmissions(prisma, optionalPhotoStore(), status) };
   });
 }
