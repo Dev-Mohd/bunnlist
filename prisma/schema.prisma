@@ -494,6 +494,10 @@ model MobileProfile {
   avatarPath  String?
   onboardedAt DateTime?
   hideFromLeaderboard Boolean @default(false)
+  /// "everyone" | "followers" | "me" — see lib/mobile/profile.ts VISIBILITY.
+  followersVisibility String  @default("everyone")
+  followingVisibility String  @default("everyone")
+  activityVisibility  String  @default("everyone")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
