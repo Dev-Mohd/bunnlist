@@ -26,7 +26,7 @@ function fakePrisma(opts: { status?: string; photoPath?: string | null; slugTake
       findFirst: vi.fn(),
     },
     originCountry: { findUnique: vi.fn().mockResolvedValue(null), create: vi.fn().mockResolvedValue({ id: "o1" }) },
-    roaster: { findFirst: vi.fn().mockResolvedValue({ id: "r1" }), findUnique: vi.fn(), create: vi.fn() },
+    roaster: { findFirst: vi.fn().mockResolvedValue({ id: "r1", name: "3 Bean Coffee Roastery" }), findUnique: vi.fn(), create: vi.fn() },
     coffeeLot: {
       findUnique: vi.fn().mockImplementation(({ where }: { where: { slug: string } }) => (taken.has(where.slug) ? { id: "x" } : null)),
       create: vi.fn().mockImplementation(({ data }: { data: { slug: string } }) => ({ id: "lot1", slug: data.slug })),
@@ -46,6 +46,17 @@ describe("slugify", () => {
 });
 
 describe("approveSubmission", () => {
+  it("writes missing Latin names and reuses an existing roaster's", async () => {
+    const { db, m: prisma } = fakePrisma();
+    prisma.roaster.findFirst.mockResolvedValue({ id: "r1", name: "Black Knight" });
+    const namer = { latinize: vi.fn().mockResolvedValue({ name: "Adham", roasterName: "Ignored" }) };
+    const input = ApproveRequest.parse({ ...approve, name: "", roasterName: "" });
+    const result = await approveSubmission(db, store(), "s1", input, namer);
+    expect(result.lotSlug).toBe("black-knight-adham");
+    expect(prisma.coffeeLot.create.mock.calls[0][0].data.name).toBe("Adham");
+    expect(prisma.roaster.create).not.toHaveBeenCalled();
+  });
+
   it("publishes the lot with the photo and links the suggestion", async () => {
     const { db, m: prisma } = fakePrisma({ slugTaken: ["3-bean-coffee-roastery-sweet-blend"] });
     const s = store();
