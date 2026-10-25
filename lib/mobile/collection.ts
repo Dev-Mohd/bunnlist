@@ -71,6 +71,7 @@ export interface CollectionListItem extends CollectionFlags {
   roasterNameAr: string;
   originNameAr: string | null;
   originCode: string | null;
+  imageUrl: string | null;
 }
 
 export async function listEntries(prisma: PrismaClient, accountId: string): Promise<CollectionListItem[]> {
@@ -83,7 +84,7 @@ export async function listEntries(prisma: PrismaClient, accountId: string): Prom
   const lots = await prisma.coffeeLot.findMany({
     where: { id: { in: rows.map((r) => r.lotId) }, publishedAt: { not: null } },
     select: {
-      id: true, slug: true, nameAr: true,
+      id: true, slug: true, nameAr: true, imageUrl: true,
       roaster: { select: { nameAr: true } },
       originCountry: { select: { nameAr: true, isoCode: true } },
     },
@@ -98,6 +99,7 @@ export async function listEntries(prisma: PrismaClient, accountId: string): Prom
       roasterNameAr: lot.roaster?.nameAr ?? "",
       originNameAr: lot.originCountry?.nameAr ?? null,
       originCode: lot.originCountry?.isoCode ?? null,
+      imageUrl: lot.imageUrl ?? null,
       ...pickFlags(r),
     }];
   });
