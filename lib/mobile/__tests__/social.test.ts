@@ -52,8 +52,14 @@ describe("publicProfile", () => {
 describe("following", () => {
   it("follows and unfollows, but never yourself", async () => {
     const { db, m } = fakePrisma({ mohd: "a" });
-    await follow(db, "v", "mohd");
+    m.mobileFollow.findUnique.mockResolvedValueOnce(null);
+    const onNew = vi.fn().mockResolvedValue(undefined);
+    await follow(db, "v", "mohd", onNew);
     expect(m.mobileFollow.upsert).toHaveBeenCalledOnce();
+    expect(onNew).toHaveBeenCalledWith("a");
+    // Following again doesn't notify again.
+    await follow(db, "v", "mohd", onNew);
+    expect(onNew).toHaveBeenCalledOnce();
     await unfollow(db, "v", "mohd");
     expect(m.mobileFollow.deleteMany).toHaveBeenCalledWith({ where: { followerId: "v", followeeId: "a" } });
     await expect(follow(db, "a", "mohd")).rejects.toMatchObject({ code: "unprocessable" });

@@ -6,6 +6,8 @@ import { parseBody } from "@/lib/mobile/schemas";
 import { approveSubmission, ApproveRequest, requireAdmin } from "@/lib/mobile/admin";
 import { claudeLatinNamer } from "@/lib/mobile/latinNames";
 import { optionalPhotoStore } from "@/lib/mobile/suggestionPhotos";
+import { notify } from "@/lib/mobile/push";
+import { DELETED_ACCOUNT } from "@/lib/mobile/submissions";
 
 // POST /api/v1/admin/submissions/[id]/approve — admins only: publish the lot from
 // the (edited) suggestion and credit its author. Missing Latin names are written
@@ -20,6 +22,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     await requireAdmin(prisma, accountId);
     const input = parseBody(ApproveRequest, await readJson(req));
     const apiKey = process.env.ANTHROPIC_API_KEY;
-    return approveSubmission(prisma, optionalPhotoStore(), id, input, apiKey ? claudeLatinNamer(apiKey) : null);
+    const result = await approveSubmission(prisma, optionalPhotoStore(), id, input, apiKey ? claudeLatinNamer(apiKey) : null);
+    const author = await prisma.mobileCoffeeSubmission.findUnique({ where: { id }, select: { accountId: true, name: true } });
+    if (author && author.accountId !== DELETED_ACCOUNT) {
+      await notify(prisma, author.accountId, "submissionApproved", {
+        title: "انقبل اقتراحك 🎉", body: `«${author.name}» صارت في الدليل باسمك`, data: { slug: result.lotSlug },
+      });
+    }
+    return result;
   });
 }

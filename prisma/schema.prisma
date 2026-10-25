@@ -544,3 +544,24 @@ model MobileIdempotency {
 
   @@id([ownerId, operation, clientId])
 }
+
+/// A phone's APNs device token for an account. environment: "sandbox" (debug
+/// builds) or "production".
+model MobilePushDevice {
+  token       String   @id
+  accountId   String
+  environment String   @default("production")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([accountId])
+}
+
+/// Which push notifications an account wants. No row = all on.
+model MobileNotificationSettings {
+  accountId          String   @id
+  newFollower        Boolean  @default(true)
+  submissionApproved Boolean  @default(true)
+  submissionRejected Boolean  @default(true)
+  updatedAt          DateTime @updatedAt
+}
