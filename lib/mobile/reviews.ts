@@ -1,6 +1,7 @@
 import { BrewMethod, ReviewStatus, type PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { ApiError } from "./errors";
+import { award } from "./points";
 import { displayNames } from "./profile";
 
 // Mobile review submission. Mirrors the website's actions/reviews.ts aggregate
@@ -76,12 +77,14 @@ export async function submitReview(
   input: MobileReviewRequest,
 ): Promise<SubmitReviewResult> {
   const data = MobileReviewRequest.parse(input);
-  return prisma.$transaction(async (tx) => {
+  let ratedLotId = "";
+  const result = await prisma.$transaction(async (tx) => {
     const lot = await tx.coffeeLot.findFirst({
       where: { slug, publishedAt: { not: null } },
       select: { id: true },
     });
     if (!lot) throw ApiError.unprocessable("lot_not_found");
+    ratedLotId = lot.id;
 
     const review = await tx.review.upsert({
       where: { coffeeLotId_userId: { coffeeLotId: lot.id, userId: accountId } },
@@ -96,6 +99,8 @@ export async function submitReview(
     const totals = await refreshReviewStats(tx, lot.id);
     return { ...totals, review: { ...review } };
   });
+  await award(prisma, accountId, "rate", ratedLotId);
+  return result;
 }
 
 export interface ReviewRow {

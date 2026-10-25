@@ -86,6 +86,7 @@ export async function displayNames(prisma: PrismaClient, accountIds: string[]): 
 export const ProfileUpdate = z.object({
   displayName: z.string().trim().min(1).max(40).optional(),
   bio: z.string().trim().max(160).optional(),
+  hideFromLeaderboard: z.boolean().optional(),
 });
 export type ProfileUpdate = z.infer<typeof ProfileUpdate>;
 
@@ -95,6 +96,7 @@ export interface MobileProfileView {
   bio: string | null;
   avatarUrl: string | null;
   onboarded: boolean;
+  hideFromLeaderboard: boolean;
 }
 
 /** Public URL of an avatar object, or null without a configured Supabase URL. */
@@ -116,6 +118,7 @@ export async function getProfile(prisma: PrismaClient, accountId: string): Promi
     bio: profile?.bio ?? null,
     avatarUrl: avatarUrl(profile?.avatarPath ?? null),
     onboarded: !!profile?.onboardedAt,
+    hideFromLeaderboard: profile?.hideFromLeaderboard ?? false,
   };
 }
 
@@ -123,6 +126,7 @@ export async function updateProfile(prisma: PrismaClient, accountId: string, pat
   const data = {
     ...(patch.displayName !== undefined ? { displayName: patch.displayName } : {}),
     ...(patch.bio !== undefined ? { bio: patch.bio || null } : {}),
+    ...(patch.hideFromLeaderboard !== undefined ? { hideFromLeaderboard: patch.hideFromLeaderboard } : {}),
   };
   await prisma.mobileProfile.upsert({ where: { accountId }, update: data, create: { accountId, ...data } });
   return getProfile(prisma, accountId);

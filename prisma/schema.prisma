@@ -491,8 +491,26 @@ model MobileProfile {
   bio         String?
   avatarPath  String?
   onboardedAt DateTime?
+  hideFromLeaderboard Boolean @default(false)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+}
+
+/// The points ledger. One row per rewarded action (unique per account, kind and
+/// the thing it was for), plus zero-point "activity" rows (one per day) that make
+/// up the streak. Totals are always summed from here, never stored.
+model MobilePointEvent {
+  id        String   @id @default(cuid())
+  accountId String
+  kind      String
+  refId     String
+  points    Int
+  day       String
+  createdAt DateTime @default(now())
+
+  @@unique([accountId, kind, refId])
+  @@index([accountId, day])
+  @@index([createdAt])
 }
 
 /// Server idempotency record keyed by (owner, operation, device clientId).
