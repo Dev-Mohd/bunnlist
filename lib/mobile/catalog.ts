@@ -1,6 +1,7 @@
 import type { PrismaClient } from "@prisma/client";
 import { lotCommunity, lotDiscoverer, type LotCommunity, type LotDiscoverer } from "./lotCommunity";
 import { displayNames } from "./profile";
+import { CATALOG_ACCOUNT } from "./submissions";
 
 // Read-only catalog feed for the mobile app. Returns the published coffee lots as a
 // flat, display-oriented DTO (Arabic-first), independent of the website's richer page
@@ -91,6 +92,8 @@ export interface MobileLotDetail extends MobileLot {
   discoveredByUsername?: string | null;
   discoverer?: LotDiscoverer | null;
   community?: LotCommunity;
+  /** "luxury" | "infused" | "decaf", with an optional note (why it's luxury). */
+  tags?: { tag: string; note: string | null }[];
 }
 
 export function mapLotDetail(row: CoffeeLotDetailRow): MobileLotDetail {
@@ -178,13 +181,17 @@ export async function getPublishedLot(prisma: PrismaClient, slug: string): Promi
     },
   });
   if (!row) return null;
-  const [discoverer, community] = await Promise.all([lotDiscoverer(prisma, row.id), lotCommunity(prisma, row.id)]);
+  const [discoverer, community, tags] = await Promise.all([
+    lotDiscoverer(prisma, row.id), lotCommunity(prisma, row.id),
+    prisma.mobileLotTag.findMany({ where: { lotId: row.id }, select: { tag: true, note: true }, orderBy: { tag: "asc" } }),
+  ]);
   return {
     ...mapLotDetail(row as unknown as CoffeeLotDetailRow),
     discoveredBy: discoverer?.name ?? null,
     discoveredByUsername: discoverer?.username ?? null,
     discoverer,
     community,
+    tags,
   };
 }
 
@@ -197,7 +204,7 @@ export interface DiscoveredLot extends MobileLot {
  *  published lots when there are few, so the home carousel is never empty. */
 export async function newDiscoveries(prisma: PrismaClient, limit = 10): Promise<DiscoveredLot[]> {
   const approved = await prisma.mobileCoffeeSubmission.findMany({
-    where: { status: "APPROVED", approvedLotId: { not: null } },
+    where: { status: "APPROVED", approvedLotId: { not: null }, accountId: { not: CATALOG_ACCOUNT } },
     orderBy: { reviewedAt: "desc" },
     take: limit,
     select: { approvedLotId: true, accountId: true },

@@ -5,7 +5,7 @@ import { handle, readJson } from "@/lib/mobile/respond";
 import { parseBody } from "@/lib/mobile/schemas";
 import { rejectSubmission, RejectRequest, requireAdmin } from "@/lib/mobile/admin";
 import { notify } from "@/lib/mobile/push";
-import { DELETED_ACCOUNT } from "@/lib/mobile/submissions";
+import { UNCREDITED_ACCOUNTS } from "@/lib/mobile/submissions";
 
 // POST /api/v1/admin/submissions/[id]/reject — admins only, with an optional reason
 // the author sees in "اقتراحاتي".
@@ -20,7 +20,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     const { reason } = parseBody(RejectRequest, await readJson(req));
     const result = await rejectSubmission(prisma, id, reason);
     const author = await prisma.mobileCoffeeSubmission.findUnique({ where: { id }, select: { accountId: true, name: true } });
-    if (author && author.accountId !== DELETED_ACCOUNT) {
+    if (author && !UNCREDITED_ACCOUNTS.includes(author.accountId)) {
       await notify(prisma, author.accountId, "submissionRejected", {
         title: "ما انقبل اقتراحك", body: reason ? `«${author.name}»: ${reason}` : `«${author.name}» ما انقبل. تقدر تشوف التفاصيل في اقتراحاتي.`,
       });

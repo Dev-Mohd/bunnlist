@@ -1,7 +1,7 @@
 import type { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { ApiError } from "./errors";
-import { DELETED_ACCOUNT, SUBMISSION_PROCESSES } from "./submissions";
+import { CATALOG_ACCOUNT, SUBMISSION_PROCESSES, UNCREDITED_ACCOUNTS } from "./submissions";
 import { latinNames, type LatinNamer } from "./latinNames";
 import { award } from "./points";
 import { displayNames } from "./profile";
@@ -38,6 +38,10 @@ export interface AdminSubmission {
   note: string | null;
   publicNote: string | null;
   photoUrl: string | null;
+  /** Batch imports: the page it came from, extraction confidence (0-1), and labels. */
+  sourceUrl: string | null;
+  sourceConfidence: number | null;
+  tags: string[];
   authorName: string | null;
   approvedLotSlug: string | null;
   reviewNote: string | null;
@@ -48,9 +52,11 @@ export async function listSubmissions(
   prisma: PrismaClient, store: PhotoStore | null, status: (typeof SUBMISSION_STATUSES)[number],
 ): Promise<AdminSubmission[]> {
   const rows = await prisma.mobileCoffeeSubmission.findMany({
-    where: { status }, orderBy: { createdAt: status === "PENDING" ? "asc" : "desc" }, take: 100,
+    where: { status }, orderBy: { createdAt: status === "PENDING" ? "asc" : "desc" }, take: 250,
   });
-  const authorIds = [...new Set(rows.map((r) => r.accountId).filter((id) => id !== DELETED_ACCOUNT))];
+  // People's suggestions before batch imports.
+  rows.sort((a, b) => Number(a.accountId === CATALOG_ACCOUNT) - Number(b.accountId === CATALOG_ACCOUNT));
+  const authorIds = [...new Set(rows.map((r) => r.accountId).filter((id) => !UNCREDITED_ACCOUNTS.includes(id)))];
   const lotIds = rows.map((r) => r.approvedLotId).filter((id): id is string => !!id);
   const [author, lots] = await Promise.all([
     displayNames(prisma, authorIds),
@@ -61,9 +67,10 @@ export async function listSubmissions(
     id: r.id, status: r.status, name: r.name, nameEn: r.nameEn, roasterName: r.roasterName,
     roasterNameEn: r.roasterNameEn, originName: r.originName, process: r.process, roastLevel: r.roastLevel,
     flavorNotes: r.flavorNotes, note: r.note, publicNote: r.publicNote,
+    sourceUrl: r.sourceUrl, sourceConfidence: r.sourceConfidence, tags: tagsFrom(readExtras(r.extras)),
     // Without storage configured the list still works, just without photos.
     photoUrl: r.photoPath && store ? await store.signedUrl(r.photoPath) : null,
-    authorName: author.get(r.accountId) ?? null,
+    authorName: r.accountId === CATALOG_ACCOUNT ? "دفعة المحامص" : author.get(r.accountId) ?? null,
     approvedLotSlug: r.approvedLotId ? slug.get(r.approvedLotId) ?? null : null,
     reviewNote: r.reviewNote,
     createdAt: r.createdAt.toISOString(),
@@ -85,6 +92,23 @@ export const ApproveRequest = z.object({
   descriptionAr: z.string().trim().max(2000).optional(),
 });
 export type ApproveRequest = z.infer<typeof ApproveRequest>;
+
+/** Lot details a batch import carries beyond the suggestion form. */
+export interface SubmissionExtras {
+  region?: string | null; farm?: string | null; producer?: string | null;
+  variety?: string[]; brewMethods?: string[]; descriptionAr?: string | null;
+  isLuxury?: boolean; luxuryReason?: string | null; isInfused?: boolean; isDecaf?: boolean;
+}
+
+export function readExtras(value: unknown): SubmissionExtras {
+  return value && typeof value === "object" && !Array.isArray(value) ? (value as SubmissionExtras) : {};
+}
+
+export function tagsFrom(extras: SubmissionExtras): string[] {
+  return [extras.isLuxury && "luxury", extras.isInfused && "infused", extras.isDecaf && "decaf"].filter((t): t is string => !!t);
+}
+
+const BREW_METHODS = ["ESPRESSO", "V60", "CHEMEX", "AEROPRESS", "FRENCH_PRESS", "COLD_BREW", "OTHER"] as const;
 
 export const RejectRequest = z.object({ reason: z.string().trim().max(300).optional() });
 
@@ -117,6 +141,7 @@ export async function approveSubmission(
   if (!submission) throw ApiError.unprocessable("submission_not_found");
   if (submission.status !== "PENDING") throw ApiError.conflict("already_reviewed");
 
+  const extras = readExtras(submission.extras);
   const isoCode = input.originCode.toUpperCase();
   const origin = await prisma.originCountry.findUnique({ where: { isoCode } })
     ?? await prisma.originCountry.create({ data: { isoCode, nameAr: input.originNameAr } });
@@ -161,7 +186,13 @@ export async function approveSubmission(
       process: input.process,
       roastLevel: input.roastLevel ? ROAST_AR[input.roastLevel] : null,
       flavorNotes: input.flavorNotes,
-      descriptionAr: input.descriptionAr || null,
+      descriptionAr: input.descriptionAr || extras.descriptionAr || null,
+      ...(extras.region ? { region: extras.region } : {}),
+      ...(extras.farm ? { farm: extras.farm } : {}),
+      ...(extras.producer ? { producer: extras.producer } : {}),
+      ...(extras.variety?.length ? { variety: extras.variety.join("، ") } : {}),
+      recommendedBrewMethods: (extras.brewMethods ?? []).filter((m): m is (typeof BREW_METHODS)[number] =>
+        (BREW_METHODS as readonly string[]).includes(m)),
       publishedAt: new Date(),
       ...(imageUrl ? {
         imageUrl, storedImageUrl: imageUrl, imageType: "USER_UPLOADED", imagePermissionStatus: "APPROVED",
@@ -174,7 +205,14 @@ export async function approveSubmission(
   await prisma.mobileCoffeeSubmission.update({
     where: { id }, data: { status: "APPROVED", approvedLotId: lot.id, reviewedAt: new Date() },
   });
-  await award(prisma, submission.accountId, "discovery", id);
+  const tags = tagsFrom(extras);
+  if (tags.length) {
+    await prisma.mobileLotTag.createMany({
+      data: tags.map((tag) => ({ lotId: lot.id, tag, note: tag === "luxury" ? extras.luxuryReason ?? null : null })),
+      skipDuplicates: true,
+    });
+  }
+  if (!UNCREDITED_ACCOUNTS.includes(submission.accountId)) await award(prisma, submission.accountId, "discovery", id);
   return { lotSlug: lot.slug };
 }
 
@@ -191,7 +229,7 @@ export async function rejectSubmission(prisma: PrismaClient, id: string, reason?
 /** The account that suggested a lot, if it came from an approved suggestion and still exists. */
 export async function discovererName(prisma: PrismaClient, lotId: string): Promise<string | null> {
   const submission = await prisma.mobileCoffeeSubmission.findFirst({
-    where: { approvedLotId: lotId, status: "APPROVED", accountId: { not: DELETED_ACCOUNT } },
+    where: { approvedLotId: lotId, status: "APPROVED", accountId: { notIn: UNCREDITED_ACCOUNTS } },
     select: { accountId: true },
   });
   if (!submission) return null;
@@ -201,7 +239,7 @@ export async function discovererName(prisma: PrismaClient, lotId: string): Promi
 /** The discoverer's @username (for linking to their profile), if they have one. */
 export async function discovererUsername(prisma: PrismaClient, lotId: string): Promise<string | null> {
   const submission = await prisma.mobileCoffeeSubmission.findFirst({
-    where: { approvedLotId: lotId, status: "APPROVED", accountId: { not: DELETED_ACCOUNT } },
+    where: { approvedLotId: lotId, status: "APPROVED", accountId: { notIn: UNCREDITED_ACCOUNTS } },
     select: { accountId: true },
   });
   if (!submission) return null;

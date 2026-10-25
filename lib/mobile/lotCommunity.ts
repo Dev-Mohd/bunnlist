@@ -1,5 +1,5 @@
 import type { PrismaClient } from "@prisma/client";
-import { DELETED_ACCOUNT } from "./submissions";
+import { UNCREDITED_ACCOUNTS } from "./submissions";
 import { avatarUrl, displayNames } from "./profile";
 
 // The community side of a published lot: who discovered it (with their public
@@ -23,7 +23,7 @@ export interface LotCommunity {
 
 export async function lotDiscoverer(prisma: PrismaClient, lotId: string): Promise<LotDiscoverer | null> {
   const submission = await prisma.mobileCoffeeSubmission.findFirst({
-    where: { approvedLotId: lotId, status: "APPROVED", accountId: { not: DELETED_ACCOUNT } },
+    where: { approvedLotId: lotId, status: "APPROVED", accountId: { notIn: UNCREDITED_ACCOUNTS } },
     select: { accountId: true, publicNote: true },
   });
   if (!submission) return null;
