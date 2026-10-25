@@ -1,5 +1,6 @@
 import type { PrismaClient } from "@prisma/client";
 import { avatarUrl } from "./profile";
+import { DELETED_ACCOUNT } from "./submissions";
 
 // Points, streaks and the leaderboard. Every reward is a ledger row unique per
 // (account, kind, thing), so repeating an action never pays twice and undoing it
@@ -122,20 +123,22 @@ export interface LeaderboardEntry {
   isMe: boolean;
 }
 
+export const LEADERBOARD_KINDS = ["points", "discoverers", "raters"] as const;
+export type LeaderboardKind = (typeof LEADERBOARD_KINDS)[number];
+
+/**
+ * Rankings, with hidden accounts left out and ties sharing a rank. `points` is the
+ * score of the kind: points earned (this week or all time), approved discoveries,
+ * or coffees rated. `period` applies to points only.
+ */
 export async function leaderboard(
   prisma: PrismaClient, period: "week" | "all", viewerId: string | null, now = new Date(), limit = 50,
+  kind: LeaderboardKind = "points",
 ): Promise<{ entries: LeaderboardEntry[]; me: { rank: number; points: number } | null }> {
-  const since = period === "week" ? new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000) : undefined;
   const hidden = await prisma.mobileProfile.findMany({ where: { hideFromLeaderboard: true }, select: { accountId: true } });
   const hiddenIds = new Set(hidden.map((h) => h.accountId));
-  const sums = await prisma.mobilePointEvent.groupBy({
-    by: ["accountId"],
-    where: { points: { gt: 0 }, ...(since ? { createdAt: { gte: since } } : {}) },
-    _sum: { points: true },
-  });
-  const ranked = sums
-    .map((s) => ({ accountId: s.accountId, points: s._sum.points ?? 0 }))
-    .filter((s) => s.points > 0 && !hiddenIds.has(s.accountId))
+  const ranked = (await scores(prisma, kind, period, now))
+    .filter((s) => s.points > 0 && !hiddenIds.has(s.accountId) && s.accountId !== DELETED_ACCOUNT)
     .sort((a, b) => b.points - a.points || a.accountId.localeCompare(b.accountId));
 
   const top = ranked.slice(0, limit);
@@ -174,4 +177,28 @@ export async function leaderboard(
     }
   }
   return { entries, me };
+}
+
+async function scores(
+  prisma: PrismaClient, kind: LeaderboardKind, period: "week" | "all", now: Date,
+): Promise<{ accountId: string; points: number }[]> {
+  if (kind === "discoverers") {
+    const rows = await prisma.mobileCoffeeSubmission.groupBy({
+      by: ["accountId"], where: { status: "APPROVED" }, _count: { _all: true },
+    });
+    return rows.map((r) => ({ accountId: r.accountId, points: r._count._all }));
+  }
+  if (kind === "raters") {
+    const rows = await prisma.mobilePointEvent.groupBy({
+      by: ["accountId"], where: { kind: "rate" }, _count: { _all: true },
+    });
+    return rows.map((r) => ({ accountId: r.accountId, points: r._count._all }));
+  }
+  const since = period === "week" ? new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000) : undefined;
+  const sums = await prisma.mobilePointEvent.groupBy({
+    by: ["accountId"],
+    where: { points: { gt: 0 }, ...(since ? { createdAt: { gte: since } } : {}) },
+    _sum: { points: true },
+  });
+  return sums.map((s) => ({ accountId: s.accountId, points: s._sum.points ?? 0 }));
 }
