@@ -2,6 +2,7 @@ import type { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { ApiError } from "./errors";
 import { DELETED_ACCOUNT, SUBMISSION_PROCESSES } from "./submissions";
+import { displayNames } from "./profile";
 import type { PhotoStore } from "./suggestionPhotos";
 
 // In-app review of coffee suggestions, for accounts with the ADMIN role. Approving
@@ -48,11 +49,10 @@ export async function listSubmissions(
   });
   const authorIds = [...new Set(rows.map((r) => r.accountId).filter((id) => id !== DELETED_ACCOUNT))];
   const lotIds = rows.map((r) => r.approvedLotId).filter((id): id is string => !!id);
-  const [users, lots] = await Promise.all([
-    prisma.user.findMany({ where: { id: { in: authorIds } }, select: { id: true, name: true, email: true } }),
+  const [author, lots] = await Promise.all([
+    displayNames(prisma, authorIds),
     lotIds.length ? prisma.coffeeLot.findMany({ where: { id: { in: lotIds } }, select: { id: true, slug: true } }) : [],
   ]);
-  const author = new Map(users.map((u) => [u.id, u.name?.trim() || u.email || "مستخدم"]));
   const slug = new Map(lots.map((l) => [l.id, l.slug]));
   return Promise.all(rows.map(async (r) => ({
     id: r.id, status: r.status, name: r.name, nameEn: r.nameEn, roasterName: r.roasterName,
@@ -173,6 +173,5 @@ export async function discovererName(prisma: PrismaClient, lotId: string): Promi
     select: { accountId: true },
   });
   if (!submission) return null;
-  const user = await prisma.user.findUnique({ where: { id: submission.accountId }, select: { name: true } });
-  return user ? user.name?.trim() || "مستخدم" : null;
+  return (await displayNames(prisma, [submission.accountId])).get(submission.accountId) ?? null;
 }

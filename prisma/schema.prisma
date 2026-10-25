@@ -481,6 +481,15 @@ model MobileAiScan {
   @@index([accountId, createdAt])
 }
 
+/// The app's public handle for an account (shown as @username instead of the raw
+/// account id). Stored lowercase; unique.
+model MobileProfile {
+  accountId String   @id
+  username  String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 /// Server idempotency record keyed by (owner, operation, device clientId).
 model MobileIdempotency {
   ownerId     String
