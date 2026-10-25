@@ -36,6 +36,7 @@ export interface AdminSubmission {
   roastLevel: string | null;
   flavorNotes: string[];
   note: string | null;
+  publicNote: string | null;
   photoUrl: string | null;
   authorName: string | null;
   approvedLotSlug: string | null;
@@ -59,7 +60,7 @@ export async function listSubmissions(
   return Promise.all(rows.map(async (r) => ({
     id: r.id, status: r.status, name: r.name, nameEn: r.nameEn, roasterName: r.roasterName,
     roasterNameEn: r.roasterNameEn, originName: r.originName, process: r.process, roastLevel: r.roastLevel,
-    flavorNotes: r.flavorNotes, note: r.note,
+    flavorNotes: r.flavorNotes, note: r.note, publicNote: r.publicNote,
     // Without storage configured the list still works, just without photos.
     photoUrl: r.photoPath && store ? await store.signedUrl(r.photoPath) : null,
     authorName: author.get(r.accountId) ?? null,

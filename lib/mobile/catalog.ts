@@ -1,5 +1,5 @@
 import type { PrismaClient } from "@prisma/client";
-import { discovererName, discovererUsername } from "./admin";
+import { lotCommunity, lotDiscoverer, type LotCommunity, type LotDiscoverer } from "./lotCommunity";
 import { displayNames } from "./profile";
 
 // Read-only catalog feed for the mobile app. Returns the published coffee lots as a
@@ -89,6 +89,8 @@ export interface MobileLotDetail extends MobileLot {
   /** Name of the account whose suggestion became this lot, if still around. */
   discoveredBy?: string | null;
   discoveredByUsername?: string | null;
+  discoverer?: LotDiscoverer | null;
+  community?: LotCommunity;
 }
 
 export function mapLotDetail(row: CoffeeLotDetailRow): MobileLotDetail {
@@ -160,10 +162,14 @@ export async function getPublishedLot(prisma: PrismaClient, slug: string): Promi
     },
   });
   if (!row) return null;
-  const [discoveredBy, discoveredByUsername] = await Promise.all([
-    discovererName(prisma, row.id), discovererUsername(prisma, row.id),
-  ]);
-  return { ...mapLotDetail(row as unknown as CoffeeLotDetailRow), discoveredBy, discoveredByUsername };
+  const [discoverer, community] = await Promise.all([lotDiscoverer(prisma, row.id), lotCommunity(prisma, row.id)]);
+  return {
+    ...mapLotDetail(row as unknown as CoffeeLotDetailRow),
+    discoveredBy: discoverer?.name ?? null,
+    discoveredByUsername: discoverer?.username ?? null,
+    discoverer,
+    community,
+  };
 }
 
 export interface DiscoveredLot extends MobileLot {

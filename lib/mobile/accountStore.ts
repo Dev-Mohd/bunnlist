@@ -39,7 +39,7 @@ export function createPrismaAccountDeletionStore(
         await tx.mobileCollectionEntry.deleteMany({ where: { accountId } });
         // Suggestions describe a product, not the person: keep them (and their product
         // photos) for review, but detach them from the account.
-        await tx.mobileCoffeeSubmission.updateMany({ where: { accountId }, data: { accountId: DELETED_ACCOUNT } });
+        await tx.mobileCoffeeSubmission.updateMany({ where: { accountId }, data: { accountId: DELETED_ACCOUNT, publicNote: null } });
         if (user?.email) {
           await tx.mobileEmailOtp.deleteMany({ where: { email: user.email } });
         }
