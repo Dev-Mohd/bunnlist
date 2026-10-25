@@ -2,6 +2,7 @@ import type { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { ApiError } from "./errors";
 import { DELETED_ACCOUNT, SUBMISSION_PROCESSES } from "./submissions";
+import { latinNames, type LatinNamer } from "./latinNames";
 import { displayNames } from "./profile";
 import type { PhotoStore } from "./suggestionPhotos";
 
@@ -67,12 +68,13 @@ export async function listSubmissions(
   })));
 }
 
-/** What the admin confirms (after editing) to publish the lot. */
+/** What the admin confirms (after editing) to publish the lot. Latin names may be
+ *  left empty: an existing roaster keeps its own, the rest are written for them. */
 export const ApproveRequest = z.object({
   nameAr: z.string().trim().min(2).max(120),
-  name: z.string().trim().min(2).max(120),
+  name: z.string().trim().max(120).default(""),
   roasterNameAr: z.string().trim().min(2).max(120),
-  roasterName: z.string().trim().min(2).max(120),
+  roasterName: z.string().trim().max(120).default(""),
   originCode: z.string().trim().regex(/^[A-Za-z]{2}$/),
   originNameAr: z.string().trim().min(2).max(80),
   process: z.enum(SUBMISSION_PROCESSES),
@@ -107,7 +109,7 @@ async function uniqueSlug(base: string, taken: (slug: string) => Promise<boolean
 }
 
 export async function approveSubmission(
-  prisma: PrismaClient, store: PhotoStore, id: string, input: ApproveRequest,
+  prisma: PrismaClient, store: PhotoStore | null, id: string, input: ApproveRequest, namer: LatinNamer | null = null,
 ): Promise<{ lotSlug: string }> {
   const submission = await prisma.mobileCoffeeSubmission.findUnique({ where: { id } });
   if (!submission) throw ApiError.unprocessable("submission_not_found");
@@ -117,27 +119,43 @@ export async function approveSubmission(
   const origin = await prisma.originCountry.findUnique({ where: { isoCode } })
     ?? await prisma.originCountry.create({ data: { isoCode, nameAr: input.originNameAr } });
 
-  const roaster = await prisma.roaster.findFirst({
-    where: { OR: [{ nameAr: input.roasterNameAr }, { name: { equals: input.roasterName, mode: "insensitive" } }] },
-  }) ?? await prisma.roaster.create({
+  const existingRoaster = await prisma.roaster.findFirst({
+    where: {
+      OR: [
+        { nameAr: input.roasterNameAr },
+        ...(input.roasterName ? [{ name: { equals: input.roasterName, mode: "insensitive" as const } }] : []),
+      ],
+    },
+  });
+
+  // Fill any missing Latin names (one model call at most).
+  let name = input.name;
+  let roasterName = input.roasterName || existingRoaster?.name || "";
+  if (!name || !roasterName) {
+    const generated = await latinNames(namer, input.nameAr, input.roasterNameAr);
+    name ||= generated.name;
+    roasterName ||= generated.roasterName;
+  }
+
+  const roaster = existingRoaster ?? await prisma.roaster.create({
     data: {
-      name: input.roasterName, nameAr: input.roasterNameAr,
-      slug: await uniqueSlug(slugify(input.roasterName), async (s) => !!(await prisma.roaster.findUnique({ where: { slug: s } }))),
+      name: roasterName, nameAr: input.roasterNameAr,
+      slug: await uniqueSlug(slugify(roasterName), async (s) => !!(await prisma.roaster.findUnique({ where: { slug: s } }))),
     },
   });
 
   const slug = await uniqueSlug(
-    slugify(`${input.roasterName} ${input.name}`),
+    slugify(`${roaster.name} ${name}`),
     async (s) => !!(await prisma.coffeeLot.findUnique({ where: { slug: s } })),
   );
 
-  const imageUrl = submission.photoPath
+  const imageUrl = submission.photoPath && store
     ? await store.publish(submission.photoPath, `lots/${slug}-${Date.now().toString(36)}.jpg`)
     : null;
 
   const lot = await prisma.coffeeLot.create({
     data: {
-      slug, name: input.name, nameAr: input.nameAr, roasterId: roaster.id, originCountryId: origin.id,
+      slug, name, nameAr: input.nameAr, roasterId: roaster.id, originCountryId: origin.id,
       process: input.process,
       roastLevel: input.roastLevel ? ROAST_AR[input.roastLevel] : null,
       flavorNotes: input.flavorNotes,
