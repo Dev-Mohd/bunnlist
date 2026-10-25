@@ -1,6 +1,7 @@
 import type { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { ApiError } from "./errors";
+import { award, revoke } from "./points";
 import { displayNames } from "./profile";
 import { BREW_METHOD_CODES, canTransition, EXPERIENCE_STATES, type ExperienceState } from "./experiences";
 
@@ -377,6 +378,7 @@ export async function saveRecipe(prisma: PrismaClient, accountId: string, input:
       },
     });
   }
+  if (row.state === "published") await award(prisma, accountId, "recipe", row.id);
   const [mapped] = await present(prisma, [row as RecipeRow], accountId);
   return mapped;
 }
@@ -402,6 +404,8 @@ export async function changeRecipeState(
       ...(to === "published" ? { publishedAt: new Date() } : {}),
     },
   });
+  if (to === "published") await award(prisma, accountId, "recipe", id);
+  if (to === "deleted") await revoke(prisma, accountId, "recipe", id);
   const [mapped] = await present(prisma, [row as RecipeRow], accountId);
   return mapped;
 }

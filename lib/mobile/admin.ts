@@ -3,6 +3,7 @@ import { z } from "zod";
 import { ApiError } from "./errors";
 import { DELETED_ACCOUNT, SUBMISSION_PROCESSES } from "./submissions";
 import { latinNames, type LatinNamer } from "./latinNames";
+import { award } from "./points";
 import { displayNames } from "./profile";
 import type { PhotoStore } from "./suggestionPhotos";
 
@@ -172,6 +173,7 @@ export async function approveSubmission(
   await prisma.mobileCoffeeSubmission.update({
     where: { id }, data: { status: "APPROVED", approvedLotId: lot.id, reviewedAt: new Date() },
   });
+  await award(prisma, submission.accountId, "discovery", id);
   return { lotSlug: lot.slug };
 }
 

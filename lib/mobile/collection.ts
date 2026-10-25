@@ -1,6 +1,7 @@
 import type { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { ApiError } from "./errors";
+import { award, revoke } from "./points";
 
 // The mobile "collection": per-account saved state for a lot (owned / favorite /
 // want-to-try / tried), keyed by (account, lot). A PUT applies a partial patch over
@@ -61,6 +62,8 @@ export async function setEntry(
     update: merged,
     create: { accountId, lotId, ...merged },
   });
+  if (merged.owned && !existing?.owned) await award(prisma, accountId, "collect", lotId);
+  if (!merged.owned && existing?.owned) await revoke(prisma, accountId, "collect", lotId);
   return merged;
 }
 

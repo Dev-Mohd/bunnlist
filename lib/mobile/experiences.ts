@@ -1,6 +1,7 @@
 import type { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { ApiError } from "./errors";
+import { award, revoke } from "./points";
 
 // Brew experiences logged from the app against a published lot. Mirrors the app's
 // BrewExperience + ContentLifecycle: stars rate this attempt only (never the lot
@@ -106,6 +107,7 @@ export async function saveExperience(
     row = await prisma.mobileBrewExperience.create({
       data: { accountId, clientId: input.clientId, lotId, ...fields, state: input.publish ? "published" : "draft" },
     });
+    await award(prisma, accountId, "experience", row.id);
   } else {
     if (existing.lotId !== lotId) throw ApiError.conflict("client_id_reused");
     const from = existing.state as ExperienceState;
@@ -137,5 +139,6 @@ export async function changeExperienceState(
     where: { id },
     data: { state: to, revision: { increment: 1 } },
   });
+  if (to === "deleted") await revoke(prisma, accountId, "experience", id);
   return mapExperience(row);
 }
