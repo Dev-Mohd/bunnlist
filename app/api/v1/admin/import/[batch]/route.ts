@@ -5,6 +5,7 @@ import { ApiError } from "@/lib/mobile/errors";
 import { handle } from "@/lib/mobile/respond";
 import { requireAdmin } from "@/lib/mobile/admin";
 import { BUNDLED_BATCHES, importBatch } from "@/lib/mobile/importBatch";
+import { optionalPhotoStore } from "@/lib/mobile/suggestionPhotos";
 
 // POST /api/v1/admin/import/[batch] — admins only: adds a bundled, cleaned batch
 // of coffees as pending suggestions for review. Safe to run again.
@@ -17,8 +18,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ batch: 
   return handle(async () => {
     const accountId = await authenticate(req, requireAccessSecret());
     await requireAdmin(prisma, accountId);
-    const data = BUNDLED_BATCHES[batch];
-    if (!data) throw ApiError.unprocessable("unknown_batch");
-    return importBatch(prisma, data);
+    const bundle = BUNDLED_BATCHES[batch];
+    if (!bundle) throw ApiError.unprocessable("unknown_batch");
+    return importBatch(prisma, bundle.data, bundle.photos, optionalPhotoStore());
   });
 }
