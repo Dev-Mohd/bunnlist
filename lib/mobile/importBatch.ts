@@ -12,7 +12,7 @@ import blackKnightPhotos from "./data/black-knight-photos.json";
 // catalog (same roaster and name) are skipped. Bags with a bundled product photo
 // (extras.photo, JPEG base64, provided by the roaster's owner) get it uploaded as
 // the suggestion's photo, so approval publishes it; a re-run adds photos to
-// pending imports that lack one.
+// pending imports that lack one, and refreshes their details from the batch.
 
 const Item = z.object({
   importKey: z.string().min(1),
@@ -37,6 +37,23 @@ export const BUNDLED_BATCHES: Record<string, { data: unknown; photos: Record<str
 
 function norm(s: string | null | undefined): string {
   return (s ?? "").trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+/** The suggestion fields a batch item sets. */
+function fields(item: z.infer<typeof Item>) {
+  return {
+    name: item.name,
+    nameEn: item.nameEn || null,
+    roasterName: item.roasterName,
+    roasterNameEn: item.roasterNameEn || null,
+    originName: item.originName || null,
+    process: item.process ?? null,
+    roastLevel: item.roastLevel ?? null,
+    flavorNotes: item.flavorNotes,
+    sourceUrl: item.sourceUrl ?? null,
+    sourceConfidence: item.sourceConfidence ?? null,
+    extras: item.extras as object,
+  };
 }
 
 export async function importBatch(
@@ -68,9 +85,13 @@ export async function importBatch(
     const prior = existing.get(item.importKey);
     if (prior) {
       alreadyImported += 1;
-      if (prior.status === "PENDING" && !prior.photoPath) {
-        const photoPath = await uploadPhoto(item);
-        if (photoPath) await prisma.mobileCoffeeSubmission.update({ where: { id: prior.id }, data: { photoPath } });
+      if (prior.status === "PENDING") {
+        // Still under review: bring it up to date (newer batch data, a photo it lacked).
+        const photoPath = prior.photoPath ? null : await uploadPhoto(item);
+        await prisma.mobileCoffeeSubmission.update({
+          where: { id: prior.id },
+          data: { ...fields(item), ...(photoPath ? { photoPath } : {}) },
+        });
       }
       continue;
     }
@@ -83,17 +104,7 @@ export async function importBatch(
       data: {
         accountId: CATALOG_ACCOUNT,
         importKey: item.importKey,
-        name: item.name,
-        nameEn: item.nameEn || null,
-        roasterName: item.roasterName,
-        roasterNameEn: item.roasterNameEn || null,
-        originName: item.originName || null,
-        process: item.process ?? null,
-        roastLevel: item.roastLevel ?? null,
-        flavorNotes: item.flavorNotes,
-        sourceUrl: item.sourceUrl ?? null,
-        sourceConfidence: item.sourceConfidence ?? null,
-        extras: item.extras as object,
+        ...fields(item),
         photoPath: await uploadPhoto(item),
       },
     });
