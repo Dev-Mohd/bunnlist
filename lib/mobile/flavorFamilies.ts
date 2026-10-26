@@ -27,3 +27,10 @@ export function flavorFamily(note: string): FlavorFamily {
   const text = note.toLowerCase();
   return FLAVOR_FAMILIES.find((f) => KEYWORDS[f].some((k) => text.includes(k))) ?? "other";
 }
+
+/** Arabic names for "why it fits you" lines. Same wording as the app's FlavorFamily.nameAr. */
+export const FLAVOR_FAMILY_AR: Record<(typeof FLAVOR_FAMILIES)[number], string> = {
+  berry: "التوت والفواكه الحمراء", citrus: "الحمضيات", stoneFruit: "الخوخ والمشمش", tropical: "الفواكه الاستوائية",
+  driedFruit: "الفواكه المجففة", floral: "النكهات الزهرية", chocolate: "الشوكولاتة", caramel: "الكراميل والسكريات",
+  nutty: "المكسرات", spice: "البهارات", tea: "الشاي والأعشاب", honey: "العسل",
+};
