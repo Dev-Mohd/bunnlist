@@ -35,7 +35,7 @@ describe("importBatch", () => {
     const result = await importBatch(m as unknown as PrismaClient, bundle.data, bundle.photos, store);
     expect(result.created).toBe(117);
     expect(result.photos).toBe(24);
-    expect(store.put).toHaveBeenCalledWith("imports/bk-milora.jpg", expect.any(Buffer));
+    expect(store.put).toHaveBeenCalledWith(expect.stringMatching(/^imports\/bk-milora-[0-9a-f]{8}\.jpg$/), expect.any(Buffer));
   });
 
   it("refreshes a pending import and gives it its photo", async () => {
@@ -51,11 +51,31 @@ describe("importBatch", () => {
     const withPhoto = { ...item("k1", "ميلورا"), extras: { photo: "bk-x" } };
     const result = await importBatch(m as unknown as PrismaClient, { batch: "t", items: [withPhoto] }, { "bk-x": "AAAA" }, store);
     expect(result).toMatchObject({ created: 0, alreadyImported: 1, photos: 1 });
-    expect(m.mobileCoffeeSubmission.update.mock.calls[0][0].data).toMatchObject({ name: "ميلورا", photoPath: "imports/bk-x.jpg" });
+    expect(m.mobileCoffeeSubmission.update.mock.calls[0][0].data).toMatchObject({ name: "ميلورا", photoPath: expect.stringMatching(/^imports\/bk-x-[0-9a-f]{8}\.jpg$/) });
   });
 
   it("turns extras into lot tags", () => {
     expect(tagsFrom({ isLuxury: true, isDecaf: true })).toEqual(["luxury", "decaf"]);
     expect(tagsFrom({})).toEqual([]);
+  });
+
+  it("swaps a newer photo onto an approved import's lot, once", async () => {
+    const lot = { id: "L1", slug: "bk-milora", imageUrl: "https://x/lots/bk-milora-abc.jpg", imageType: "USER_UPLOADED" };
+    const m = {
+      mobileCoffeeSubmission: {
+        findMany: vi.fn().mockResolvedValue([{ id: "s1", importKey: "k1", status: "APPROVED", photoPath: "imports/bk-x.jpg", approvedLotId: "L1" }]),
+      },
+      coffeeLot: { findMany: vi.fn().mockResolvedValueOnce([lot]).mockResolvedValue([]), update: vi.fn().mockResolvedValue({}) },
+    };
+    const store = { put: vi.fn().mockResolvedValue(undefined), signedUrl: vi.fn(), publish: vi.fn().mockImplementation(async (_p: string, d: string) => `https://x/${d}`) };
+    const withPhoto = { ...item("k1", "ميلورا"), extras: { photo: "bk-x" } };
+    await importBatch(m as unknown as PrismaClient, { batch: "t", items: [withPhoto] }, { "bk-x": "AAAA" }, store);
+    const url = m.coffeeLot.update.mock.calls[0][0].data.imageUrl as string;
+    expect(url).toMatch(/^https:\/\/x\/lots\/bk-milora-[0-9a-f]{8}\.jpg$/);
+
+    // Run again with the lot already on that photo: nothing to do.
+    m.coffeeLot.findMany = vi.fn().mockResolvedValueOnce([{ ...lot, imageUrl: url }]).mockResolvedValue([]);
+    await importBatch(m as unknown as PrismaClient, { batch: "t", items: [withPhoto] }, { "bk-x": "AAAA" }, store);
+    expect(m.coffeeLot.update).toHaveBeenCalledTimes(1);
   });
 });

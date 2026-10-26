@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import type { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { CATALOG_ACCOUNT, SUBMISSION_PROCESSES } from "./submissions";
@@ -61,18 +62,29 @@ export async function importBatch(
 ): Promise<{ created: number; alreadyImported: number; alreadyInCatalog: number; photos: number }> {
   const { items } = Batch.parse(raw);
   const existingRows = await prisma.mobileCoffeeSubmission.findMany({
-    where: { importKey: { in: items.map((i) => i.importKey) } }, select: { id: true, importKey: true, status: true, photoPath: true },
+    where: { importKey: { in: items.map((i) => i.importKey) } }, select: { id: true, importKey: true, status: true, photoPath: true, approvedLotId: true },
   });
   const existing = new Map(existingRows.map((r) => [r.importKey, r]));
   let photoCount = 0;
-  const uploadPhoto = async (item: z.infer<typeof Item>): Promise<string | null> => {
+  // A photo's path carries a hash of its bytes, so a re-cropped photo is a new
+  // file (no stale caches) and an unchanged one is never uploaded twice.
+  const photoOf = (item: z.infer<typeof Item>) => {
     const key = typeof item.extras.photo === "string" ? item.extras.photo : null;
-    if (!key || !photos[key] || !store) return null;
-    const path = `imports/${key}.jpg`;
-    await store.put(path, Buffer.from(photos[key], "base64"));
-    photoCount += 1;
-    return path;
+    if (!key || !photos[key]) return null;
+    const version = createHash("sha1").update(photos[key]).digest("hex").slice(0, 8);
+    return { key, version, path: `imports/${key}-${version}.jpg` };
   };
+  const uploadPhoto = async (item: z.infer<typeof Item>): Promise<string | null> => {
+    const photo = photoOf(item);
+    if (!photo || !store) return null;
+    await store.put(photo.path, Buffer.from(photos[photo.key], "base64"));
+    photoCount += 1;
+    return photo.path;
+  };
+  const approvedLots = new Map((await prisma.coffeeLot.findMany({
+    where: { id: { in: existingRows.flatMap((r) => (r.status === "APPROVED" && r.approvedLotId ? [r.approvedLotId] : [])) } },
+    select: { id: true, slug: true, imageUrl: true, imageType: true },
+  })).map((l) => [l.id, l]));
   const lots = await prisma.coffeeLot.findMany({
     select: { name: true, nameAr: true, roaster: { select: { name: true, nameAr: true } } },
   });
@@ -86,12 +98,24 @@ export async function importBatch(
     if (prior) {
       alreadyImported += 1;
       if (prior.status === "PENDING") {
-        // Still under review: bring it up to date (newer batch data, a photo it lacked).
-        const photoPath = prior.photoPath ? null : await uploadPhoto(item);
+        // Still under review: bring it up to date (newer batch data, a newer photo).
+        const photoPath = prior.photoPath === photoOf(item)?.path ? null : await uploadPhoto(item);
         await prisma.mobileCoffeeSubmission.update({
           where: { id: prior.id },
           data: { ...fields(item), ...(photoPath ? { photoPath } : {}) },
         });
+      } else if (prior.status === "APPROVED" && prior.approvedLotId) {
+        // Already published with an import photo: swap in the newer photo. A lot
+        // whose picture was since replaced on the website is left alone.
+        const lot = approvedLots.get(prior.approvedLotId);
+        const photo = photoOf(item);
+        if (lot && photo && store && lot.imageType === "USER_UPLOADED" && !lot.imageUrl?.endsWith(`-${photo.version}.jpg`)) {
+          const path = await uploadPhoto(item);
+          const imageUrl = await store.publish(path as string, `lots/${lot.slug}-${photo.version}.jpg`);
+          await prisma.coffeeLot.update({
+            where: { id: lot.id }, data: { imageUrl, storedImageUrl: imageUrl, imageStoredAt: new Date() },
+          });
+        }
       }
       continue;
     }
