@@ -42,7 +42,7 @@ export function average(values: number[]): number {
 
 type Tx = Parameters<Parameters<PrismaClient["$transaction"]>[0]>[0];
 
-async function refreshReviewStats(tx: Tx, coffeeLotId: string): Promise<{ averageRating: number; reviewCount: number }> {
+export async function refreshReviewStats(tx: Tx, coffeeLotId: string): Promise<{ averageRating: number; reviewCount: number }> {
   const published = await tx.review.findMany({
     where: { coffeeLotId, status: ReviewStatus.PUBLISHED },
     select: { rating: true, brewMethod: true, wouldBuyAgain: true },

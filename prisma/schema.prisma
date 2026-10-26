@@ -599,3 +599,25 @@ model MobileLotTag {
   @@id([lotId, tag])
   @@index([tag])
 }
+
+/// A report on someone's content (a review, a recipe, a discoverer's note, a
+/// profile), for the admin console. One open report per reporter and target.
+model MobileReport {
+  id         String    @id @default(cuid())
+  reporterId String
+  /// "review" | "recipe" | "note" | "profile" — see lib/mobile/reports.ts.
+  targetType String
+  /// Review id, recipe id, lot id (for its discoverer's note) or account id.
+  targetId   String
+  reason     String
+  details    String?
+  /// "open" | "removed" | "dismissed"
+  status     String    @default("open")
+  resolvedBy String?
+  resolvedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([status, createdAt])
+  @@index([targetType, targetId])
+  @@index([reporterId])
+}

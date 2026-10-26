@@ -35,6 +35,8 @@ export interface PhotoStore {
   signedUrl(path: string): Promise<string | null>;
   /** Copies a suggestion photo into the public catalog bucket; returns its public URL. */
   publish(path: string, destination: string): Promise<string>;
+  /** Uploads straight to the public catalog bucket (admin photo replacement); returns its public URL. */
+  putPublic?(destination: string, bytes: Buffer): Promise<string>;
 }
 
 export const CATALOG_BUCKET = "coffee-images";
@@ -69,6 +71,17 @@ export function supabasePhotoStore(): PhotoStore {
     async signedUrl(path) {
       const { data, error } = await client.storage.from(SUGGESTION_BUCKET).createSignedUrl(path, 60 * 60);
       return error ? null : data.signedUrl;
+    },
+    async putPublic(destination, bytes) {
+      const { error: bucketError } = await client.storage.getBucket(CATALOG_BUCKET);
+      if (bucketError) {
+        await client.storage.createBucket(CATALOG_BUCKET, { public: true, fileSizeLimit: 5 * 1024 * 1024 });
+      }
+      const { error } = await client.storage.from(CATALOG_BUCKET).upload(destination, bytes, {
+        contentType: "image/jpeg", cacheControl: "31536000", upsert: true,
+      });
+      if (error) throw new Error(`catalog photo upload failed: ${error.message}`);
+      return client.storage.from(CATALOG_BUCKET).getPublicUrl(destination).data.publicUrl;
     },
     async publish(path, destination) {
       const { data: file, error: downloadError } = await client.storage.from(SUGGESTION_BUCKET).download(path);
