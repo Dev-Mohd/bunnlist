@@ -1,13 +1,18 @@
 import type { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { CATALOG_ACCOUNT, SUBMISSION_PROCESSES } from "./submissions";
+import type { PhotoStore } from "./suggestionPhotos";
 import batch from "./data/roastery-batch-2026-05.json";
+import blackKnightPhotos from "./data/black-knight-photos.json";
 
 // Curated batches (scraped roastery catalogs, cleaned) enter as pending
 // suggestions from the "catalog" account, so every coffee is reviewed in the app's
 // admin screen before it is published, and nobody is credited as its discoverer.
 // Re-running is safe: each item has an import key, and coffees already in the
-// catalog (same roaster and name) are skipped.
+// catalog (same roaster and name) are skipped. Bags with a bundled product photo
+// (extras.photo, JPEG base64, provided by the roaster's owner) get it uploaded as
+// the suggestion's photo, so approval publishes it; a re-run adds photos to
+// pending imports that lack one, and refreshes their details from the batch.
 
 const Item = z.object({
   importKey: z.string().min(1),
@@ -26,19 +31,48 @@ const Item = z.object({
 export const Batch = z.object({ batch: z.string(), items: z.array(Item) });
 export type Batch = z.infer<typeof Batch>;
 
-export const BUNDLED_BATCHES: Record<string, unknown> = { "roasteries-2026-05": batch };
+export const BUNDLED_BATCHES: Record<string, { data: unknown; photos: Record<string, string> }> = {
+  "roasteries-2026-05": { data: batch, photos: blackKnightPhotos as Record<string, string> },
+};
 
 function norm(s: string | null | undefined): string {
   return (s ?? "").trim().toLowerCase().replace(/\s+/g, " ");
 }
 
-export async function importBatch(prisma: PrismaClient, raw: unknown): Promise<{
-  created: number; alreadyImported: number; alreadyInCatalog: number;
-}> {
+/** The suggestion fields a batch item sets. */
+function fields(item: z.infer<typeof Item>) {
+  return {
+    name: item.name,
+    nameEn: item.nameEn || null,
+    roasterName: item.roasterName,
+    roasterNameEn: item.roasterNameEn || null,
+    originName: item.originName || null,
+    process: item.process ?? null,
+    roastLevel: item.roastLevel ?? null,
+    flavorNotes: item.flavorNotes,
+    sourceUrl: item.sourceUrl ?? null,
+    sourceConfidence: item.sourceConfidence ?? null,
+    extras: item.extras as object,
+  };
+}
+
+export async function importBatch(
+  prisma: PrismaClient, raw: unknown, photos: Record<string, string> = {}, store: PhotoStore | null = null,
+): Promise<{ created: number; alreadyImported: number; alreadyInCatalog: number; photos: number }> {
   const { items } = Batch.parse(raw);
-  const existing = new Set((await prisma.mobileCoffeeSubmission.findMany({
-    where: { importKey: { in: items.map((i) => i.importKey) } }, select: { importKey: true },
-  })).map((r) => r.importKey));
+  const existingRows = await prisma.mobileCoffeeSubmission.findMany({
+    where: { importKey: { in: items.map((i) => i.importKey) } }, select: { id: true, importKey: true, status: true, photoPath: true },
+  });
+  const existing = new Map(existingRows.map((r) => [r.importKey, r]));
+  let photoCount = 0;
+  const uploadPhoto = async (item: z.infer<typeof Item>): Promise<string | null> => {
+    const key = typeof item.extras.photo === "string" ? item.extras.photo : null;
+    if (!key || !photos[key] || !store) return null;
+    const path = `imports/${key}.jpg`;
+    await store.put(path, Buffer.from(photos[key], "base64"));
+    photoCount += 1;
+    return path;
+  };
   const lots = await prisma.coffeeLot.findMany({
     select: { name: true, nameAr: true, roaster: { select: { name: true, nameAr: true } } },
   });
@@ -48,7 +82,19 @@ export async function importBatch(prisma: PrismaClient, raw: unknown): Promise<{
 
   let created = 0, alreadyImported = 0, alreadyInCatalog = 0;
   for (const item of items) {
-    if (existing.has(item.importKey)) { alreadyImported += 1; continue; }
+    const prior = existing.get(item.importKey);
+    if (prior) {
+      alreadyImported += 1;
+      if (prior.status === "PENDING") {
+        // Still under review: bring it up to date (newer batch data, a photo it lacked).
+        const photoPath = prior.photoPath ? null : await uploadPhoto(item);
+        await prisma.mobileCoffeeSubmission.update({
+          where: { id: prior.id },
+          data: { ...fields(item), ...(photoPath ? { photoPath } : {}) },
+        });
+      }
+      continue;
+    }
     if (inCatalog.has(`${norm(item.roasterName)}|${norm(item.name)}`)
       || (item.nameEn && item.roasterNameEn && inCatalog.has(`${norm(item.roasterNameEn)}|${norm(item.nameEn)}`))) {
       alreadyInCatalog += 1;
@@ -58,20 +104,11 @@ export async function importBatch(prisma: PrismaClient, raw: unknown): Promise<{
       data: {
         accountId: CATALOG_ACCOUNT,
         importKey: item.importKey,
-        name: item.name,
-        nameEn: item.nameEn || null,
-        roasterName: item.roasterName,
-        roasterNameEn: item.roasterNameEn || null,
-        originName: item.originName || null,
-        process: item.process ?? null,
-        roastLevel: item.roastLevel ?? null,
-        flavorNotes: item.flavorNotes,
-        sourceUrl: item.sourceUrl ?? null,
-        sourceConfidence: item.sourceConfidence ?? null,
-        extras: item.extras as object,
+        ...fields(item),
+        photoPath: await uploadPhoto(item),
       },
     });
     created += 1;
   }
-  return { created, alreadyImported, alreadyInCatalog };
+  return { created, alreadyImported, alreadyInCatalog, photos: photoCount };
 }

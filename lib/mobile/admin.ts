@@ -95,7 +95,7 @@ export type ApproveRequest = z.infer<typeof ApproveRequest>;
 
 /** Lot details a batch import carries beyond the suggestion form. */
 export interface SubmissionExtras {
-  region?: string | null; farm?: string | null; producer?: string | null;
+  region?: string | null; farm?: string | null; producer?: string | null; altitudeMeters?: number | null;
   variety?: string[]; brewMethods?: string[]; descriptionAr?: string | null;
   isLuxury?: boolean; luxuryReason?: string | null; isInfused?: boolean; isDecaf?: boolean;
 }
@@ -190,6 +190,7 @@ export async function approveSubmission(
       ...(extras.region ? { region: extras.region } : {}),
       ...(extras.farm ? { farm: extras.farm } : {}),
       ...(extras.producer ? { producer: extras.producer } : {}),
+      ...(extras.altitudeMeters ? { altitudeMeters: Math.round(extras.altitudeMeters) } : {}),
       ...(extras.variety?.length ? { variety: extras.variety.join("، ") } : {}),
       recommendedBrewMethods: (extras.brewMethods ?? []).filter((m): m is (typeof BREW_METHODS)[number] =>
         (BREW_METHODS as readonly string[]).includes(m)),

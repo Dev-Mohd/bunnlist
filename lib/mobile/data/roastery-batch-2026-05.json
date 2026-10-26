@@ -1041,33 +1041,42 @@
    }
   },
   {
-   "importKey": "batch-2026-05:12b2bbed852d27e5",
-   "name": "ازورا - أوغندا",
-   "nameEn": "AOZORA - Uganda",
+   "importKey": "batch-2026-05:bk-2827e228613b",
+   "name": "9009",
+   "nameEn": "9009",
    "roasterName": "بلاك نايت",
    "roasterNameEn": "Black Knight Coffee",
-   "originName": "أوغندا",
-   "originCode": "UG",
-   "process": "NATURAL",
+   "sourceUrl": "https://b-k.coffee",
+   "sourceConfidence": 0.95,
    "roastLevel": null,
-   "flavorNotes": [],
-   "sourceUrl": "https://b-k.coffee/products/%D8%A7%D9%88%D8%B2%D9%88%D8%B1%D8%A7-%D8%A7%D9%88%D8%BA%D9%86%D8%AF%D8%A7-%D9%85%D8%AC%D9%81%D9%81-250-%D8%AC%D8%B1%D8%A7%D9%85",
-   "sourceConfidence": 0.82,
    "extras": {
-    "region": null,
-    "farm": null,
-    "producer": null,
-    "variety": [],
     "brewMethods": [],
-    "priceSar": 55.0,
+    "priceSar": null,
     "weightGrams": 250,
-    "availability": "Available",
+    "availability": null,
     "descriptionAr": null,
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
-   }
+    "isDecaf": false,
+    "region": "Mukhtar",
+    "variety": [
+     "Typica"
+    ],
+    "altitudeMeters": 2300,
+    "acidity": 6,
+    "body": "متوسط",
+    "photo": "bk-9009"
+   },
+   "originName": "اليمن",
+   "originCode": "YE",
+   "process": "ANAEROBIC",
+   "flavorNotes": [
+    "عنب أحمر",
+    "توت",
+    "شوكولاتة",
+    "ياسمين"
+   ]
   },
   {
    "importKey": "batch-2026-05:e34b31945eabd96c",
@@ -1075,13 +1084,17 @@
    "nameEn": "Adham",
    "roasterName": "بلاك نايت",
    "roasterNameEn": "Black Knight Coffee",
-   "originName": null,
-   "originCode": null,
+   "originName": "مزيج",
+   "originCode": "XB",
    "process": "OTHER",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "عسل",
+    "كراميل",
+    "مكسرات"
+   ],
    "sourceUrl": "https://b-k.coffee/products/%D8%A3%D8%AF%D9%87%D9%85-%D9%85%D8%B2%D9%8A%D8%AC-250g",
-   "sourceConfidence": 0.72,
+   "sourceConfidence": 0.95,
    "extras": {
     "region": null,
     "farm": null,
@@ -1095,36 +1108,11 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
-   }
-  },
-  {
-   "importKey": "batch-2026-05:dd4e0ec8b1cb0d4f",
-   "name": "الشيخة - قهوة سعودية",
-   "nameEn": "Al-Shaikha - Saudi Coffee",
-   "roasterName": "بلاك نايت",
-   "roasterNameEn": "Black Knight Coffee",
-   "originName": null,
-   "originCode": null,
-   "process": "NATURAL",
-   "roastLevel": null,
-   "flavorNotes": [],
-   "sourceUrl": "https://b-k.coffee/products/%D8%A7%D9%84%D8%B4%D9%8A%D8%AE%D8%A9-250-%D8%AC%D8%B1%D8%A7%D9%85",
-   "sourceConfidence": 0.72,
-   "extras": {
-    "region": null,
-    "farm": null,
-    "producer": null,
-    "variety": [],
-    "brewMethods": [],
-    "priceSar": 42.55,
-    "weightGrams": 250,
-    "availability": "Available",
-    "descriptionAr": null,
-    "isLuxury": false,
-    "luxuryReason": null,
-    "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "altitudeMeters": null,
+    "acidity": 3.75,
+    "body": null,
+    "photo": "bk-adham"
    }
   },
   {
@@ -1157,23 +1145,67 @@
    }
   },
   {
+   "importKey": "batch-2026-05:dd4e0ec8b1cb0d4f",
+   "name": "الشيخة",
+   "nameEn": "Alshikha",
+   "roasterName": "بلاك نايت",
+   "roasterNameEn": "Black Knight Coffee",
+   "originName": "مزيج",
+   "originCode": "XB",
+   "process": "OTHER",
+   "roastLevel": null,
+   "flavorNotes": [
+    "سمسم",
+    "لوز محمص",
+    "فول سوداني"
+   ],
+   "sourceUrl": "https://b-k.coffee/products/%D8%A7%D9%84%D8%B4%D9%8A%D8%AE%D8%A9-250-%D8%AC%D8%B1%D8%A7%D9%85",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [],
+    "priceSar": 42.55,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "altitudeMeters": null,
+    "acidity": null,
+    "body": null,
+    "photo": "bk-alshikha"
+   }
+  },
+  {
    "importKey": "batch-2026-05:f2ef07580553e928",
-   "name": "ألتورا - كولومبيا",
-   "nameEn": "Altura - Colombia",
+   "name": "ألتورا",
+   "nameEn": "Altura",
    "roasterName": "بلاك نايت",
    "roasterNameEn": "Black Knight Coffee",
    "originName": "كولومبيا",
    "originCode": "CO",
    "process": "EXPERIMENTAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كرز",
+    "باشن فروت",
+    "برقوق",
+    "شوكولاتة"
+   ],
    "sourceUrl": "https://b-k.coffee/products/%D8%A3%D9%84%D8%AA%D9%88%D8%B1%D8%A7%D8%A7-%D9%83%D9%88%D9%84%D9%88%D9%85%D8%A8%D9%8A%D8%A7-%D8%AA%D8%AC%D9%81%D9%8A%D9%81-%D9%85%D8%B7%D9%88%D9%84-250-%D8%AC%D8%B1%D8%A7%D9%85",
-   "sourceConfidence": 0.82,
+   "sourceConfidence": 0.95,
    "extras": {
-    "region": null,
+    "region": "Nariño",
     "farm": null,
     "producer": null,
-    "variety": [],
+    "variety": [
+     "Caturra"
+    ],
     "brewMethods": [],
     "priceSar": 63.0,
     "weightGrams": 250,
@@ -1182,8 +1214,91 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "altitudeMeters": 2100,
+    "acidity": 6.25,
+    "body": "ممتلئ",
+    "photo": "bk-altura"
    }
+  },
+  {
+   "importKey": "batch-2026-05:12b2bbed852d27e5",
+   "name": "أزورا",
+   "nameEn": "Azora",
+   "roasterName": "بلاك نايت",
+   "roasterNameEn": "Black Knight Coffee",
+   "originName": "أوغندا",
+   "originCode": "UG",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "شمام",
+    "جوافة",
+    "عنب",
+    "عسل",
+    "شوكولاتة داكنة"
+   ],
+   "sourceUrl": "https://b-k.coffee/products/%D8%A7%D9%88%D8%B2%D9%88%D8%B1%D8%A7-%D8%A7%D9%88%D8%BA%D9%86%D8%AF%D8%A7-%D9%85%D8%AC%D9%81%D9%81-250-%D8%AC%D8%B1%D8%A7%D9%85",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": "Rwenzori",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "SL14",
+     "SL28"
+    ],
+    "brewMethods": [],
+    "priceSar": 55.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "altitudeMeters": 1900,
+    "acidity": 4.75,
+    "body": "ممتلئ",
+    "photo": "bk-azora"
+   }
+  },
+  {
+   "importKey": "batch-2026-05:bk-93196a9bd806",
+   "name": "الجبل الأسود",
+   "nameEn": "Black Mountain",
+   "roasterName": "بلاك نايت",
+   "roasterNameEn": "Black Knight Coffee",
+   "sourceUrl": "https://b-k.coffee",
+   "sourceConfidence": 0.95,
+   "roastLevel": null,
+   "extras": {
+    "brewMethods": [],
+    "priceSar": null,
+    "weightGrams": 250,
+    "availability": null,
+    "descriptionAr": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "region": "Minas Gerais",
+    "variety": [
+     "Catuai"
+    ],
+    "altitudeMeters": 1500,
+    "acidity": 3.25,
+    "body": "ممتلئ",
+    "photo": "bk-black-mountain"
+   },
+   "originName": "البرازيل",
+   "originCode": "BR",
+   "process": "NATURAL",
+   "flavorNotes": [
+    "مكسرات",
+    "فانيليا",
+    "شوكولاتة"
+   ]
   },
   {
    "importKey": "batch-2026-05:9c05f8979ec952c6",
@@ -1245,22 +1360,28 @@
   },
   {
    "importKey": "batch-2026-05:bbf2e345bd44392e",
-   "name": "شيلشلي - إثيوبيا",
-   "nameEn": "Chelchele - Ethiopia",
+   "name": "شيلشلي",
+   "nameEn": "Chelchele",
    "roasterName": "بلاك نايت",
    "roasterNameEn": "Black Knight Coffee",
    "originName": "إثيوبيا",
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فراولة",
+    "توت أسود",
+    "شوكولاتة"
+   ],
    "sourceUrl": "https://b-k.coffee/products/%D8%B4%D9%8A%D9%84%D8%B4%D9%84%D9%8A-%D8%A3%D8%AB%D9%8A%D9%88%D8%A8%D9%8A-%D9%85%D8%AC%D9%81%D9%81-250g",
-   "sourceConfidence": 0.82,
+   "sourceConfidence": 0.95,
    "extras": {
-    "region": null,
+    "region": "Yirgacheffe",
     "farm": null,
     "producer": null,
-    "variety": [],
+    "variety": [
+     "Kurume"
+    ],
     "brewMethods": [],
     "priceSar": 56.99,
     "weightGrams": 250,
@@ -1269,7 +1390,11 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "altitudeMeters": 2100,
+    "acidity": 3.75,
+    "body": "ممتلئ",
+    "photo": "bk-chelchele"
    }
   },
   {
@@ -1303,22 +1428,28 @@
   },
   {
    "importKey": "batch-2026-05:c76d57f2d054fc03",
-   "name": "دي كاف - كولومبيا",
-   "nameEn": "DeCaf - Colombia",
+   "name": "دي كاف",
+   "nameEn": "Decaf",
    "roasterName": "بلاك نايت",
    "roasterNameEn": "Black Knight Coffee",
    "originName": "كولومبيا",
    "originCode": "CO",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "برتقال",
+    "عسل",
+    "شوكولاتة"
+   ],
    "sourceUrl": "https://b-k.coffee/products/%D8%AF%D9%8A-%D9%83%D8%A7%D9%81-%D9%83%D9%88%D9%84%D9%88%D9%85%D8%A8%D9%8A%D8%A7-%D9%85%D8%AC%D9%81%D9%81-g250",
-   "sourceConfidence": 0.82,
+   "sourceConfidence": 0.95,
    "extras": {
-    "region": null,
+    "region": "Nariño",
     "farm": null,
     "producer": null,
-    "variety": [],
+    "variety": [
+     "Caturra"
+    ],
     "brewMethods": [],
     "priceSar": 59.0,
     "weightGrams": 250,
@@ -1327,27 +1458,38 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": true
+    "isDecaf": true,
+    "altitudeMeters": 1500,
+    "acidity": 5.5,
+    "body": "متوسط",
+    "photo": "bk-decaf"
    }
   },
   {
    "importKey": "batch-2026-05:184228690518cf6f",
-   "name": "إكسيلسو - كولومبيا",
-   "nameEn": "Excelso - Colombia",
+   "name": "إكسيلسو",
+   "nameEn": "Excelso",
    "roasterName": "بلاك نايت",
    "roasterNameEn": "Black Knight Coffee",
    "originName": "كولومبيا",
    "originCode": "CO",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل",
+    "سكر بني",
+    "لوز",
+    "حمضيات"
+   ],
    "sourceUrl": "https://b-k.coffee/products/%D9%83%D9%88%D9%84%D9%88%D9%85%D8%A8%D9%8A%D8%A7-%D8%A7%D9%83%D8%B3%D9%8A%D9%84%D8%B3%D9%88-%D9%85%D8%BA%D8%B3%D9%88%D9%84-250g",
-   "sourceConfidence": 0.82,
+   "sourceConfidence": 0.95,
    "extras": {
-    "region": null,
+    "region": "Antioquia",
     "farm": null,
     "producer": null,
-    "variety": [],
+    "variety": [
+     "Caturra"
+    ],
     "brewMethods": [],
     "priceSar": 45.15,
     "weightGrams": 250,
@@ -1356,27 +1498,38 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "altitudeMeters": 1700,
+    "acidity": 4.25,
+    "body": "ممتلئ",
+    "photo": "bk-excelso"
    }
   },
   {
    "importKey": "batch-2026-05:777d646143d927b8",
-   "name": "إيانا - إثيوبيا",
-   "nameEn": "Eyana - Ethiopia",
+   "name": "إيانا",
+   "nameEn": "Eyana",
    "roasterName": "بلاك نايت",
    "roasterNameEn": "Black Knight Coffee",
    "originName": "إثيوبيا",
    "originCode": "ET",
    "process": "ANAEROBIC",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت أحمر",
+    "خوخ",
+    "موز",
+    "ياسمين"
+   ],
    "sourceUrl": "https://b-k.coffee/products/%D8%A5%D9%8A%D8%A7%D9%86%D8%A7%D8%A7-%D8%A3%D8%AB%D9%8A%D9%88%D8%A8%D9%8A%D8%A7-%D9%84%D8%A7%D9%87%D9%88%D8%A7%D8%A6%D9%8A-250-%D8%AC%D8%B1%D8%A7%D9%85",
-   "sourceConfidence": 0.82,
+   "sourceConfidence": 0.95,
    "extras": {
-    "region": null,
+    "region": "Gotiti",
     "farm": null,
     "producer": null,
-    "variety": [],
+    "variety": [
+     "Heirloom"
+    ],
     "brewMethods": [],
     "priceSar": 69.0,
     "weightGrams": 250,
@@ -1385,7 +1538,11 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "altitudeMeters": 2150,
+    "acidity": 6,
+    "body": "متوسط",
+    "photo": "bk-eyana"
    }
   },
   {
@@ -1419,22 +1576,29 @@
   },
   {
    "importKey": "batch-2026-05:e32b2279fc379f6a",
-   "name": "قوجي - إثيوبيا",
-   "nameEn": "Guji - Ethiopia",
+   "name": "قوجي",
+   "nameEn": "Guji",
    "roasterName": "بلاك نايت",
    "roasterNameEn": "Black Knight Coffee",
    "originName": "إثيوبيا",
    "originCode": "ET",
-   "process": "EXPERIMENTAL",
+   "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت أحمر",
+    "فراولة",
+    "عنب",
+    "شوكولاتة"
+   ],
    "sourceUrl": "https://b-k.coffee/products/%D9%82%D9%88%D8%AC%D9%8A-%D8%A7%D8%AB%D9%8A%D9%88%D8%A8%D9%8A%D8%A7-%D9%85%D8%B9%D8%A7%D9%84%D8%AC%D8%A9-%D8%AE%D8%A7%D8%B5%D8%A9-250g",
-   "sourceConfidence": 0.82,
+   "sourceConfidence": 0.95,
    "extras": {
-    "region": null,
+    "region": "Guji",
     "farm": null,
     "producer": null,
-    "variety": [],
+    "variety": [
+     "Heirloom"
+    ],
     "brewMethods": [],
     "priceSar": 55.34,
     "weightGrams": 250,
@@ -1443,7 +1607,11 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "altitudeMeters": 2180,
+    "acidity": 5.25,
+    "body": "ممتلئ",
+    "photo": "bk-guji"
    }
   },
   {
@@ -1477,22 +1645,29 @@
   },
   {
    "importKey": "batch-2026-05:be00fe83ee8904b1",
-   "name": "كيت كات - البرازيل",
-   "nameEn": "Kit Kat - Brazil",
+   "name": "كيت كات",
+   "nameEn": "KitKat",
    "roasterName": "بلاك نايت",
    "roasterNameEn": "Black Knight Coffee",
    "originName": "البرازيل",
    "originCode": "BR",
    "process": "EXPERIMENTAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "شوكولاتة",
+    "فانيليا",
+    "كراميل",
+    "بندق"
+   ],
    "sourceUrl": "https://b-k.coffee/products/%D9%83%D9%8A%D8%AA-%D9%83%D8%A7%D8%AA-%D8%A7%D9%84%D8%A8%D8%B1%D8%A7%D8%B2%D9%8A%D9%84-%D8%A7%D9%86%D9%81%D9%8A%D9%88%D8%AC%D9%86-250g",
-   "sourceConfidence": 0.82,
+   "sourceConfidence": 0.95,
    "extras": {
-    "region": null,
+    "region": "Cerrado",
     "farm": null,
     "producer": null,
-    "variety": [],
+    "variety": [
+     "IBC12"
+    ],
     "brewMethods": [],
     "priceSar": 57.99,
     "weightGrams": 250,
@@ -1500,28 +1675,191 @@
     "descriptionAr": null,
     "isLuxury": false,
     "luxuryReason": null,
-    "isInfused": false,
-    "isDecaf": false
+    "isInfused": true,
+    "isDecaf": false,
+    "altitudeMeters": 1200,
+    "acidity": 3.5,
+    "body": "ممتلئ",
+    "photo": "bk-kitkat"
    }
   },
   {
+   "importKey": "batch-2026-05:bk-16f3b261effc",
+   "name": "لوليت",
+   "nameEn": "Lolit",
+   "roasterName": "بلاك نايت",
+   "roasterNameEn": "Black Knight Coffee",
+   "sourceUrl": "https://b-k.coffee",
+   "sourceConfidence": 0.95,
+   "roastLevel": null,
+   "extras": {
+    "brewMethods": [],
+    "priceSar": null,
+    "weightGrams": 250,
+    "availability": null,
+    "descriptionAr": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "region": "Uraga",
+    "variety": [
+     "Heirloom"
+    ],
+    "altitudeMeters": 2100,
+    "acidity": 4,
+    "body": "متوسط",
+    "photo": "bk-lolit"
+   },
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "NATURAL",
+   "flavorNotes": [
+    "توت أحمر",
+    "تين",
+    "ياسمين",
+    "كراميل"
+   ]
+  },
+  {
+   "importKey": "batch-2026-05:bk-7edd106a6069",
+   "name": "مسار",
+   "nameEn": "Massar",
+   "roasterName": "بلاك نايت",
+   "roasterNameEn": "Black Knight Coffee",
+   "sourceUrl": "https://b-k.coffee",
+   "sourceConfidence": 0.95,
+   "roastLevel": null,
+   "extras": {
+    "brewMethods": [],
+    "priceSar": null,
+    "weightGrams": 250,
+    "availability": null,
+    "descriptionAr": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "region": "إب",
+    "variety": [
+     "Typica"
+    ],
+    "altitudeMeters": 2100,
+    "acidity": 5.5,
+    "body": "متوسط",
+    "photo": "bk-massar"
+   },
+   "originName": "اليمن",
+   "originCode": "YE",
+   "process": "EXPERIMENTAL",
+   "flavorNotes": [
+    "عنب",
+    "تفاح",
+    "مانجو",
+    "عسل"
+   ]
+  },
+  {
+   "importKey": "batch-2026-05:bk-8e8094dc4152",
+   "name": "ميلورا",
+   "nameEn": "Milora",
+   "roasterName": "بلاك نايت",
+   "roasterNameEn": "Black Knight Coffee",
+   "sourceUrl": "https://b-k.coffee",
+   "sourceConfidence": 0.95,
+   "roastLevel": null,
+   "extras": {
+    "brewMethods": [],
+    "priceSar": null,
+    "weightGrams": 250,
+    "availability": null,
+    "descriptionAr": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "region": "Chirripó",
+    "variety": [
+     "Caturra"
+    ],
+    "altitudeMeters": 1800,
+    "acidity": 5.75,
+    "body": "متوسط",
+    "photo": "bk-milora"
+   },
+   "originName": "كوستاريكا",
+   "originCode": "CR",
+   "process": "HONEY",
+   "flavorNotes": [
+    "توت",
+    "باشن فروت",
+    "يوسفي",
+    "كراميل"
+   ]
+  },
+  {
+   "importKey": "batch-2026-05:bk-8f27da003c61",
+   "name": "ناردوس",
+   "nameEn": "Nardos",
+   "roasterName": "بلاك نايت",
+   "roasterNameEn": "Black Knight Coffee",
+   "sourceUrl": "https://b-k.coffee",
+   "sourceConfidence": 0.95,
+   "roastLevel": null,
+   "extras": {
+    "brewMethods": [],
+    "priceSar": null,
+    "weightGrams": 250,
+    "availability": null,
+    "descriptionAr": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "region": "Gedeb",
+    "variety": [
+     "Heirloom"
+    ],
+    "altitudeMeters": 2180,
+    "acidity": 6,
+    "body": "ممتلئ",
+    "photo": "bk-nardos"
+   },
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "ANAEROBIC",
+   "flavorNotes": [
+    "خوخ",
+    "أناناس",
+    "زهري",
+    "شوكولاتة بالحليب"
+   ]
+  },
+  {
    "importKey": "batch-2026-05:ad7fce465e1a800d",
-   "name": "راؤول - غواتيمالا",
-   "nameEn": "Raoul - Guatemala",
+   "name": "راؤول",
+   "nameEn": "Raul",
    "roasterName": "بلاك نايت",
    "roasterNameEn": "Black Knight Coffee",
    "originName": "غواتيمالا",
    "originCode": "GT",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "بابايا",
+    "كرز",
+    "رمان",
+    "شوكولاتة"
+   ],
    "sourceUrl": "https://b-k.coffee/products/%D8%B1%D8%A7%D8%A4%D9%88%D9%84-%D8%BA%D9%88%D8%A7%D8%AA%D9%8A%D9%85%D8%A7%D9%84%D8%A7",
-   "sourceConfidence": 0.82,
+   "sourceConfidence": 0.95,
    "extras": {
-    "region": null,
+    "region": "Fraijanes",
     "farm": null,
     "producer": null,
-    "variety": [],
+    "variety": [
+     "Catuai"
+    ],
     "brewMethods": [],
     "priceSar": 67.0,
     "weightGrams": 250,
@@ -1530,27 +1868,37 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "altitudeMeters": 1800,
+    "acidity": 6,
+    "body": "متوسط",
+    "photo": "bk-raul"
    }
   },
   {
    "importKey": "batch-2026-05:a6b3fd5d87d920c0",
-   "name": "ريو - البرازيل",
-   "nameEn": "Rio - Brazil",
+   "name": "ريو",
+   "nameEn": "Rio",
    "roasterName": "بلاك نايت",
    "roasterNameEn": "Black Knight Coffee",
    "originName": "البرازيل",
    "originCode": "BR",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل",
+    "شوكولاتة",
+    "مكسرات"
+   ],
    "sourceUrl": "https://b-k.coffee/products/%D8%B1%D9%8A%D9%88%D9%88-%D8%A7%D9%84%D8%A8%D8%B1%D8%A7%D8%B2%D9%8A%D9%84-250",
-   "sourceConfidence": 0.82,
+   "sourceConfidence": 0.95,
    "extras": {
-    "region": null,
+    "region": "Cerrado",
     "farm": null,
     "producer": null,
-    "variety": [],
+    "variety": [
+     "Catuai"
+    ],
     "brewMethods": [],
     "priceSar": 49.0,
     "weightGrams": 250,
@@ -1559,27 +1907,38 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "altitudeMeters": 1200,
+    "acidity": 3.25,
+    "body": "ممتلئ",
+    "photo": "bk-rio"
    }
   },
   {
    "importKey": "batch-2026-05:291e05320421d01a",
-   "name": "روزيتا - كوستاريكا",
-   "nameEn": "Rosetta - Costa Rica",
+   "name": "روزيتا",
+   "nameEn": "Rozitta",
    "roasterName": "بلاك نايت",
    "roasterNameEn": "Black Knight Coffee",
    "originName": "كوستاريكا",
    "originCode": "CR",
    "process": "HONEY",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "أناناس",
+    "توت",
+    "كرز",
+    "باشن فروت"
+   ],
    "sourceUrl": "https://b-k.coffee/products/%D8%B1%D9%88%D8%B2%D9%8A%D8%AA%D8%A7-%D9%83%D9%88%D8%B3%D8%AA%D8%A7%D8%B1%D9%8A%D9%83%D9%8A-%D8%B9%D8%B3%D9%84%D9%8A-250g",
-   "sourceConfidence": 0.82,
+   "sourceConfidence": 0.95,
    "extras": {
-    "region": null,
+    "region": "Valley",
     "farm": null,
     "producer": null,
-    "variety": [],
+    "variety": [
+     "Caturra"
+    ],
     "brewMethods": [],
     "priceSar": 76.0,
     "weightGrams": 250,
@@ -1588,7 +1947,11 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "altitudeMeters": 1800,
+    "acidity": 5.5,
+    "body": "متوسط",
+    "photo": "bk-rozitta"
    }
   },
   {
@@ -1622,22 +1985,29 @@
   },
   {
    "importKey": "batch-2026-05:4ee031c743fd221e",
-   "name": "سيلفر - السلفادور",
-   "nameEn": "Silver - El Salvador",
+   "name": "سيلفر",
+   "nameEn": "Silver",
    "roasterName": "بلاك نايت",
    "roasterNameEn": "Black Knight Coffee",
    "originName": "السلفادور",
    "originCode": "SV",
    "process": "HONEY",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت",
+    "كراميل",
+    "لوز",
+    "شوكولاتة داكنة"
+   ],
    "sourceUrl": "https://b-k.coffee/products/%D8%B3%D9%8A%D9%84%D9%81%D8%B1-%D8%A7%D9%84%D8%B3%D9%84%D9%81%D8%A7%D8%AF%D9%88%D8%B1-%D8%B9%D8%B3%D9%84%D9%8A-250g",
-   "sourceConfidence": 0.82,
+   "sourceConfidence": 0.95,
    "extras": {
-    "region": null,
+    "region": "Chalatenango",
     "farm": null,
     "producer": null,
-    "variety": [],
+    "variety": [
+     "Blend"
+    ],
     "brewMethods": [],
     "priceSar": 51.0,
     "weightGrams": 250,
@@ -1646,27 +2016,38 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "altitudeMeters": 1600,
+    "acidity": 4,
+    "body": "ممتلئ",
+    "photo": "bk-silver"
    }
   },
   {
    "importKey": "batch-2026-05:c31146c6babd7054",
-   "name": "سولانا - إثيوبيا",
-   "nameEn": "Solana - Ethiopia",
+   "name": "سولانا",
+   "nameEn": "Solana",
    "roasterName": "بلاك نايت",
    "roasterNameEn": "Black Knight Coffee",
    "originName": "إثيوبيا",
    "originCode": "ET",
    "process": "EXPERIMENTAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت أزرق",
+    "فراولة",
+    "فانيليا",
+    "زهري"
+   ],
    "sourceUrl": "https://b-k.coffee/products/%D8%B3%D9%88%D9%84%D8%A7%D9%86%D8%A7%D8%A7-%D8%A5%D8%AB%D9%8A%D9%88%D8%A8%D9%8A%D8%A7",
-   "sourceConfidence": 0.82,
+   "sourceConfidence": 0.95,
    "extras": {
-    "region": null,
+    "region": "Sidamo",
     "farm": null,
     "producer": null,
-    "variety": [],
+    "variety": [
+     "Heirloom"
+    ],
     "brewMethods": [],
     "priceSar": 69.0,
     "weightGrams": 250,
@@ -1675,27 +2056,38 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "altitudeMeters": 2100,
+    "acidity": 6.25,
+    "body": "متوسط",
+    "photo": "bk-solana"
    }
   },
   {
    "importKey": "batch-2026-05:a18d153eb49e1095",
-   "name": "سلاف - اليمن",
-   "nameEn": "Sulaf - Yemen",
+   "name": "سُلاف",
+   "nameEn": "Sulaf",
    "roasterName": "بلاك نايت",
    "roasterNameEn": "Black Knight Coffee",
    "originName": "اليمن",
    "originCode": "YE",
    "process": "EXPERIMENTAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "عنب",
+    "أناناس",
+    "موز",
+    "عسل"
+   ],
    "sourceUrl": "https://b-k.coffee/products/%D8%B3%D9%88%D9%84%D8%A7%D9%81-%D8%A7%D9%84%D9%8A%D9%85%D9%86-%D8%AA%D8%AE%D9%85%D9%8A%D8%B1-%D8%A8%D9%84%D8%A7%D9%83-%D9%86%D8%A7%D9%8A%D8%AA-250-%D8%AC%D8%B1%D8%A7%D9%85",
-   "sourceConfidence": 0.82,
+   "sourceConfidence": 0.95,
    "extras": {
-    "region": null,
+    "region": "Haraz",
     "farm": null,
     "producer": null,
-    "variety": [],
+    "variety": [
+     "Typica"
+    ],
     "brewMethods": [],
     "priceSar": 96.0,
     "weightGrams": 250,
@@ -1704,27 +2096,39 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "altitudeMeters": 2300,
+    "acidity": 6.25,
+    "body": "متوسط",
+    "photo": "bk-sulaf"
    }
   },
   {
    "importKey": "batch-2026-05:5cd0d9471f6d1532",
-   "name": "فكتوريا - أوغندا",
-   "nameEn": "Victoria - Uganda",
+   "name": "فكتوريا",
+   "nameEn": "Victoria",
    "roasterName": "بلاك نايت",
    "roasterNameEn": "Black Knight Coffee",
    "originName": "أوغندا",
    "originCode": "UG",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "يوسفي",
+    "عنب",
+    "عسل",
+    "مكسرات"
+   ],
    "sourceUrl": "https://b-k.coffee/products/%D9%81%D9%83%D8%AA%D9%88%D8%B1%D9%8A%D8%A7%D8%A7-%D8%A3%D9%88%D8%BA%D9%86%D8%AF%D8%A7",
-   "sourceConfidence": 0.82,
+   "sourceConfidence": 0.95,
    "extras": {
-    "region": null,
+    "region": "Bugisu",
     "farm": null,
     "producer": null,
-    "variety": [],
+    "variety": [
+     "SL14",
+     "SL28"
+    ],
     "brewMethods": [],
     "priceSar": 53.71,
     "weightGrams": 250,
@@ -1733,8 +2137,50 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "altitudeMeters": 1700,
+    "acidity": 5,
+    "body": "ممتلئ",
+    "photo": "bk-victoria"
    }
+  },
+  {
+   "importKey": "batch-2026-05:bk-c52094d95028",
+   "name": "زبيدة",
+   "nameEn": "Zubaida",
+   "roasterName": "بلاك نايت",
+   "roasterNameEn": "Black Knight Coffee",
+   "sourceUrl": "https://b-k.coffee",
+   "sourceConfidence": 0.95,
+   "roastLevel": null,
+   "extras": {
+    "brewMethods": [],
+    "priceSar": null,
+    "weightGrams": 250,
+    "availability": null,
+    "descriptionAr": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "region": "Mukhtar",
+    "variety": [
+     "Typica"
+    ],
+    "altitudeMeters": 2300,
+    "acidity": 5.5,
+    "body": "ممتلئ",
+    "photo": "bk-zubaida"
+   },
+   "originName": "اليمن",
+   "originCode": "YE",
+   "process": "NATURAL",
+   "flavorNotes": [
+    "عنب",
+    "زبيب",
+    "قصب السكر",
+    "شوكولاتة"
+   ]
   },
   {
    "importKey": "batch-2026-05:54a11d1555268647",
@@ -2599,8 +3045,8 @@
    "nameEn": "M Espresso Blend",
    "roasterName": "مارد القهوة",
    "roasterNameEn": "Marid Coffee",
-   "originName": null,
-   "originCode": null,
+   "originName": "مزيج",
+   "originCode": "XB",
    "process": "OTHER",
    "roastLevel": null,
    "flavorNotes": [
@@ -2894,8 +3340,8 @@
    "nameEn": "Modello Espresso Blend",
    "roasterName": "بيكولو",
    "roasterNameEn": "Piccolo",
-   "originName": null,
-   "originCode": null,
+   "originName": "مزيج",
+   "originCode": "XB",
    "process": "OTHER",
    "roastLevel": null,
    "flavorNotes": [],
@@ -3030,8 +3476,8 @@
    "nameEn": "Tiramisu Blend",
    "roasterName": "بيت التحميص",
    "roasterNameEn": "Roasting House",
-   "originName": null,
-   "originCode": null,
+   "originName": "مزيج",
+   "originCode": "XB",
    "process": "OTHER",
    "roastLevel": "dark",
    "flavorNotes": [
