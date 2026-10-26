@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { authenticate } from "@/lib/mobile/authGuard";
 import { requireAccessSecret } from "@/lib/mobile/deps";
+import { assertCanPost } from "@/lib/mobile/adminUsers";
 import { handle, readJson } from "@/lib/mobile/respond";
 import { parseBody } from "@/lib/mobile/schemas";
 import { SubmissionRequest, createSubmission, listMySubmissions } from "@/lib/mobile/submissions";
@@ -14,6 +15,7 @@ export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   return handle(async () => {
     const accountId = await authenticate(req, requireAccessSecret());
+    await assertCanPost(prisma, accountId);
     const input = parseBody(SubmissionRequest, await readJson(req));
     const { id } = await createSubmission(prisma, accountId, input);
     return { ok: true, id };
