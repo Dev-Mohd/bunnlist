@@ -111,6 +111,8 @@ export interface MobileProfileView {
   followersVisibility: Visibility;
   followingVisibility: Visibility;
   activityVisibility: Visibility;
+  /// «مطحنتي», a MobileGrinder id.
+  grinderId: string | null;
 }
 
 /** Public URL of an avatar object, or null without a configured Supabase URL. */
@@ -136,6 +138,7 @@ export async function getProfile(prisma: PrismaClient, accountId: string): Promi
     followersVisibility: asVisibility(profile?.followersVisibility),
     followingVisibility: asVisibility(profile?.followingVisibility),
     activityVisibility: asVisibility(profile?.activityVisibility),
+    grinderId: profile?.grinderId ?? null,
   };
 }
 

@@ -504,6 +504,8 @@ model MobileProfile {
   followersVisibility String  @default("everyone")
   followingVisibility String  @default("everyone")
   activityVisibility  String  @default("everyone")
+  /// «مطحنتي»: a MobileGrinder id, for grind conversions.
+  grinderId           String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
@@ -647,4 +649,34 @@ model MobileBroadcast {
   createdAt DateTime @default(now())
 
   @@index([createdAt])
+}
+
+/// The grinder guide: every grinder people can pick as «مطحنتي». Names come from
+/// the bundled list; specs are filled in from manufacturers' own sources (kept in
+/// `sources`) and edited in the admin console. Photos are provided by the owner.
+model MobileGrinder {
+  id                String   @id
+  brand             String
+  model             String
+  variant           String?
+  /// "hand" | "electric" | "single_dose" | "built_in" | "espresso" | "commercial"
+  category          String
+  /// "clicks" | "stepped" | "stepless" | "timer"; null until verified.
+  adjustment        String?
+  rangeMin          Float?
+  rangeMax          Float?
+  clicksPerRotation Int?
+  micronsPerStep    Float?
+  zeroGuideAr       String?  @db.Text
+  notesAr           String?  @db.Text
+  /// [{ label, url }] where each spec came from.
+  sources           Json     @default("[]")
+  imageUrl          String?  @db.Text
+  imageCredit       String?
+  published         Boolean  @default(true)
+  sortOrder         Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([category, sortOrder])
 }
