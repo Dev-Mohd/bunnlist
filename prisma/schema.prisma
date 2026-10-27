@@ -421,6 +421,18 @@ model MobileBrewExperience {
   revision   Int      @default(0)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  /// «حضّر»'s brew log, all optional: the recipe followed (id, title, where it came
+  /// from), the grind actually used on which guide grinder, the numbers, the time
+  /// brewed, and how it tasted (sour/bitter/weak/strong/balanced).
+  recipeId     String?
+  recipeTitle  String?
+  recipeSource String?
+  grinderId    String?
+  grindSetting String?
+  doseGrams    Float?
+  waterGrams   Float?
+  brewSeconds  Int?
+  taste        String?
 
   @@unique([accountId, clientId])
   @@index([accountId, lotId])

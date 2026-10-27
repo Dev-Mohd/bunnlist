@@ -57,7 +57,40 @@ describe("mapExperience", () => {
     });
     expect(out).toEqual({
       id: "e1", clientId: "c1", methodCode: "V60", stars: 5, brewedAt: "2026-10-24T08:00:00.000Z",
-      note: "حلو", state: "draft", revision: 0, updatedAt: "2026-10-24T09:00:00.000Z",
+      note: "حلو", state: "draft", revision: 0, updatedAt: "2026-10-24T09:00:00.000Z", log: null,
     });
+  });
+  it("includes the brew log when any of it was saved", () => {
+    const out = mapExperience({
+      id: "e1", clientId: "c1", lotId: "l1", accountId: "a1", methodCode: "V60", stars: 4,
+      brewedAt: new Date("2026-10-24T08:00:00Z"), note: "", state: "draft", revision: 0,
+      updatedAt: new Date("2026-10-24T09:00:00Z"), grindSetting: "18", taste: "sour", brewSeconds: 190,
+    });
+    expect(out.log).toEqual({
+      recipeId: null, recipeTitle: null, recipeSource: null, grinderId: null, grindSetting: "18",
+      doseGrams: null, waterGrams: null, brewSeconds: 190, taste: "sour",
+    });
+  });
+});
+
+describe("ExperienceUpsert brew log", () => {
+  const valid = { clientId: "c1", methodCode: "V60", stars: 4, brewedAt: "2026-10-24T08:00:00Z" };
+  it("leaves log fields out when not sent, so an edit keeps them", () => {
+    const r = ExperienceUpsert.parse(valid);
+    expect(r.taste).toBeUndefined();
+    expect(r.grindSetting).toBeUndefined();
+  });
+  it("accepts a full log and blanks empty text to null", () => {
+    const r = ExperienceUpsert.parse({
+      ...valid, recipeId: "preset:v60", recipeTitle: "V60 بداية", recipeSource: "base", grinderId: "comandante-c40",
+      grindSetting: " ", doseGrams: 15, waterGrams: 250, brewSeconds: 185, taste: "bitter",
+    });
+    expect(r.grindSetting).toBeNull();
+    expect(r.taste).toBe("bitter");
+  });
+  it("rejects unknown tastes and sources", () => {
+    expect(ExperienceUpsert.safeParse({ ...valid, taste: "salty" }).success).toBe(false);
+    expect(ExperienceUpsert.safeParse({ ...valid, recipeSource: "ai" }).success).toBe(false);
+    expect(ExperienceUpsert.safeParse({ ...valid, brewSeconds: -1 }).success).toBe(false);
   });
 });
