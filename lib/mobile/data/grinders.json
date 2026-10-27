@@ -6,7 +6,22 @@
    "model": "J",
    "variant": "2023",
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": 30,
+    "micronsPerStep": 25,
+    "zeroGuideAr": "لف قرص الضبط مع عقارب الساعة لين تحس بمقاومة وما يتحرك الذراع بسهولة؛ هذا هو الصفر. أول كم كليك ممكن الشفرات تحتك ببعض، والاحتكاك المستمر يضرها، فاضبط بحذر.",
+    "notesAr": "القرص الداخلي فيه ١٠ أرقام، وكل رقم ٣ كليكات.",
+    "sources": [
+     {
+      "label": "1Zpresso: جدول الضبط الرسمي",
+      "url": "https://1zpresso.coffee/grind-setting/"
+     }
+    ]
+   }
   },
   {
    "id": "1zpresso-j-max",
@@ -14,7 +29,22 @@
    "model": "J-Max",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": 90,
+    "micronsPerStep": 8.8,
+    "zeroGuideAr": "لف القرص الخارجي مع عقارب الساعة لين تحس بمقاومة وما يتحرك الذراع بسهولة، وسجّل وين تأشر النقطة الحمراء؛ هذا هو الصفر. أول كم كليك ممكن الشفرات تحتك ببعض، والاحتكاك المستمر يضرها.",
+    "notesAr": "القرص الخارجي فيه ٩ أرقام، وكل رقم ١٠ كليكات.",
+    "sources": [
+     {
+      "label": "1Zpresso: جدول الضبط الرسمي",
+      "url": "https://1zpresso.coffee/grind-setting/"
+     }
+    ]
+   }
   },
   {
    "id": "1zpresso-j-ultra",
@@ -22,7 +52,22 @@
    "model": "J-Ultra",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": 100,
+    "micronsPerStep": 8,
+    "zeroGuideAr": "لف القرص الخارجي مع عقارب الساعة لين تحس بمقاومة وما يتحرك الذراع بسهولة، وسجّل وين تأشر النقطة الحمراء؛ هذا هو الصفر. أول كم كليك ممكن الشفرات تحتك ببعض، والاحتكاك المستمر يضرها.",
+    "notesAr": "القرص الخارجي فيه ١٠ أرقام، وكل رقم ١٠ كليكات.",
+    "sources": [
+     {
+      "label": "1Zpresso: جدول الضبط الرسمي",
+      "url": "https://1zpresso.coffee/grind-setting/"
+     }
+    ]
+   }
   },
   {
    "id": "1zpresso-jx",
@@ -30,7 +75,22 @@
    "model": "JX",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": 30,
+    "micronsPerStep": null,
+    "zeroGuideAr": "لف قرص الضبط الداخلي مع عقارب الساعة لين تحس بمقاومة وما يتحرك الذراع بسهولة؛ هذا الصفر.",
+    "notesAr": "ضبط داخلي، ٣٠ كليك في اللفة.",
+    "sources": [
+     {
+      "label": "مراجعة Coffee Chronicler: JX (مصدر ثانوي)",
+      "url": "https://coffeechronicler.com/1zpresso-jx-review/"
+     }
+    ]
+   }
   },
   {
    "id": "1zpresso-jx-pro",
@@ -38,7 +98,22 @@
    "model": "JX-Pro",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": 40,
+    "micronsPerStep": 12.5,
+    "zeroGuideAr": "لف قرص الضبط مع عقارب الساعة لين تحس بمقاومة وما يتحرك الذراع بسهولة؛ هذا هو الصفر. أول كم كليك ممكن الشفرات تحتك ببعض، والاحتكاك المستمر يضرها، فاضبط بحذر.",
+    "notesAr": "الضبط من فوق، والقرص فيه ١٠ أرقام وكل رقم ٤ كليكات.",
+    "sources": [
+     {
+      "label": "1Zpresso: جدول الضبط الرسمي",
+      "url": "https://1zpresso.coffee/grind-setting/"
+     }
+    ]
+   }
   },
   {
    "id": "1zpresso-k-max",
@@ -46,7 +121,22 @@
    "model": "K-Max",
    "variant": null,
    "category": "hand",
-   "photo": false
+   "photo": false,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": 90,
+    "micronsPerStep": 22,
+    "zeroGuideAr": "لف القرص الخارجي مع عقارب الساعة لين تحس بمقاومة وما يتحرك الذراع بسهولة، وسجّل وين تأشر النقطة الحمراء؛ هذا هو الصفر. أول كم كليك ممكن الشفرات تحتك ببعض، والاحتكاك المستمر يضرها.",
+    "notesAr": "القرص الخارجي فيه ٩ أرقام، وكل رقم ١٠ كليكات.",
+    "sources": [
+     {
+      "label": "1Zpresso: جدول الضبط الرسمي",
+      "url": "https://1zpresso.coffee/grind-setting/"
+     }
+    ]
+   }
   },
   {
    "id": "1zpresso-k-plus",
@@ -54,7 +144,22 @@
    "model": "K-Plus",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": 90,
+    "micronsPerStep": 22,
+    "zeroGuideAr": "لف القرص الخارجي مع عقارب الساعة لين تحس بمقاومة وما يتحرك الذراع بسهولة، وسجّل وين تأشر النقطة الحمراء؛ هذا هو الصفر. أول كم كليك ممكن الشفرات تحتك ببعض، والاحتكاك المستمر يضرها.",
+    "notesAr": "القرص الخارجي فيه ٩ أرقام، وكل رقم ١٠ كليكات.",
+    "sources": [
+     {
+      "label": "1Zpresso: جدول الضبط الرسمي",
+      "url": "https://1zpresso.coffee/grind-setting/"
+     }
+    ]
+   }
   },
   {
    "id": "1zpresso-k-pro",
@@ -62,7 +167,22 @@
    "model": "K-Pro",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": 90,
+    "micronsPerStep": 22,
+    "zeroGuideAr": "لف القرص الخارجي مع عقارب الساعة لين تحس بمقاومة وما يتحرك الذراع بسهولة، وسجّل وين تأشر النقطة الحمراء؛ هذا هو الصفر. أول كم كليك ممكن الشفرات تحتك ببعض، والاحتكاك المستمر يضرها.",
+    "notesAr": "القرص الخارجي فيه ٩ أرقام، وكل رقم ١٠ كليكات.",
+    "sources": [
+     {
+      "label": "1Zpresso: جدول الضبط الرسمي",
+      "url": "https://1zpresso.coffee/grind-setting/"
+     }
+    ]
+   }
   },
   {
    "id": "1zpresso-k-ultra",
@@ -70,7 +190,22 @@
    "model": "K-Ultra",
    "variant": null,
    "category": "hand",
-   "photo": false
+   "photo": false,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": 100,
+    "micronsPerStep": 20,
+    "zeroGuideAr": "لف القرص الخارجي مع عقارب الساعة لين تحس بمقاومة وما يتحرك الذراع بسهولة، وسجّل وين تأشر النقطة الحمراء؛ هذا هو الصفر. أول كم كليك ممكن الشفرات تحتك ببعض، والاحتكاك المستمر يضرها.",
+    "notesAr": "القرص الخارجي فيه ١٠ أرقام، وكل رقم ١٠ كليكات.",
+    "sources": [
+     {
+      "label": "1Zpresso: جدول الضبط الرسمي",
+      "url": "https://1zpresso.coffee/grind-setting/"
+     }
+    ]
+   }
   },
   {
    "id": "1zpresso-q-air",
@@ -78,7 +213,22 @@
    "model": "Q Air",
    "variant": null,
    "category": "hand",
-   "photo": false
+   "photo": false,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": 30,
+    "micronsPerStep": 25,
+    "zeroGuideAr": "لف قرص الضبط مع عقارب الساعة لين تحس بمقاومة وما يتحرك الذراع بسهولة؛ هذا هو الصفر. أول كم كليك ممكن الشفرات تحتك ببعض، والاحتكاك المستمر يضرها، فاضبط بحذر.",
+    "notesAr": "القرص الداخلي فيه ١٠ أرقام، وكل رقم ٣ كليكات.",
+    "sources": [
+     {
+      "label": "1Zpresso: جدول الضبط الرسمي",
+      "url": "https://1zpresso.coffee/grind-setting/"
+     }
+    ]
+   }
   },
   {
    "id": "1zpresso-q2",
@@ -86,7 +236,22 @@
    "model": "Q2",
    "variant": "Heptagonal",
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": 30,
+    "micronsPerStep": 25,
+    "zeroGuideAr": "لف قرص الضبط مع عقارب الساعة لين تحس بمقاومة وما يتحرك الذراع بسهولة؛ هذا هو الصفر. أول كم كليك ممكن الشفرات تحتك ببعض، والاحتكاك المستمر يضرها، فاضبط بحذر.",
+    "notesAr": "القرص الداخلي فيه ١٠ أرقام، وكل رقم ٣ كليكات.",
+    "sources": [
+     {
+      "label": "1Zpresso: جدول الضبط الرسمي",
+      "url": "https://1zpresso.coffee/grind-setting/"
+     }
+    ]
+   }
   },
   {
    "id": "1zpresso-x-ultra",
@@ -94,7 +259,22 @@
    "model": "X-Ultra",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": 60,
+    "micronsPerStep": 12.5,
+    "zeroGuideAr": "لف القرص الخارجي مع عقارب الساعة لين تحس بمقاومة وما يتحرك الذراع بسهولة، وسجّل وين تأشر النقطة الحمراء؛ هذا هو الصفر. أول كم كليك ممكن الشفرات تحتك ببعض، والاحتكاك المستمر يضرها.",
+    "notesAr": "القرص الخارجي فيه ٦ أرقام، وكل رقم ١٠ كليكات.",
+    "sources": [
+     {
+      "label": "1Zpresso: جدول الضبط الرسمي",
+      "url": "https://1zpresso.coffee/grind-setting/"
+     }
+    ]
+   }
   },
   {
    "id": "1zpresso-zp6",
@@ -102,7 +282,22 @@
    "model": "ZP6 Special",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": 90,
+    "micronsPerStep": 22,
+    "zeroGuideAr": "لف القرص الخارجي مع عقارب الساعة لين تحس بمقاومة وما يتحرك الذراع بسهولة، وسجّل وين تأشر النقطة الحمراء؛ هذا هو الصفر. أول كم كليك ممكن الشفرات تحتك ببعض، والاحتكاك المستمر يضرها.",
+    "notesAr": "القرص الخارجي فيه ٩ أرقام، وكل رقم ١٠ كليكات.",
+    "sources": [
+     {
+      "label": "1Zpresso: جدول الضبط الرسمي",
+      "url": "https://1zpresso.coffee/grind-setting/"
+     }
+    ]
+   }
   },
   {
    "id": "codex-d6",
@@ -110,7 +305,8 @@
    "model": "D6",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "codex-d7",
@@ -118,7 +314,8 @@
    "model": "D7",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "comandante-c40-mk3",
@@ -126,7 +323,22 @@
    "model": "C40 MK3 Nitro Blade",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": 30,
+    "zeroGuideAr": "فرّغ الخزان، ولف قرص الضبط باتجاه الأنعم لين يتسكّر تمامًا وتتلامس الشفرات بخفة؛ هذا الصفر. بعدها عدّ الكليكات وأنت تفتح. لو ضاع منك العد ارجع للصفر وابدأ من جديد.",
+    "notesAr": "كل كليك تقريبًا ٣٠ ميكرون، والعد يبدأ من الصفر (مسكّرة تمامًا).",
+    "sources": [
+     {
+      "label": "متجر Voltage Restaurant Supply: Red Clix (يذكر ٣٠ ميكرون للمحور العادي، مصدر ثانوي)",
+      "url": "https://www.voltagerestaurantsupply.com/products/comandante-rx35-red-clix-burr-adjustment-kit"
+     }
+    ]
+   }
   },
   {
    "id": "comandante-c40-mk4",
@@ -134,7 +346,22 @@
    "model": "C40 MK4 Nitro Blade",
    "variant": null,
    "category": "hand",
-   "photo": false
+   "photo": false,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": 30,
+    "zeroGuideAr": "فرّغ الخزان، ولف قرص الضبط باتجاه الأنعم لين يتسكّر تمامًا وتتلامس الشفرات بخفة؛ هذا الصفر. بعدها عدّ الكليكات وأنت تفتح. لو ضاع منك العد ارجع للصفر وابدأ من جديد.",
+    "notesAr": "كل كليك تقريبًا ٣٠ ميكرون، والعد يبدأ من الصفر (مسكّرة تمامًا).",
+    "sources": [
+     {
+      "label": "متجر Voltage Restaurant Supply: Red Clix (يذكر ٣٠ ميكرون للمحور العادي، مصدر ثانوي)",
+      "url": "https://www.voltagerestaurantsupply.com/products/comandante-rx35-red-clix-burr-adjustment-kit"
+     }
+    ]
+   }
   },
   {
    "id": "comandante-c40-red-clix",
@@ -142,7 +369,22 @@
    "model": "C40 + Red Clix RX35",
    "variant": null,
    "category": "hand",
-   "photo": false
+   "photo": false,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": 15,
+    "zeroGuideAr": "فرّغ الخزان، ولف قرص الضبط باتجاه الأنعم لين يتسكّر تمامًا وتتلامس الشفرات بخفة؛ هذا الصفر. بعدها عدّ الكليكات وأنت تفتح. لو ضاع منك العد ارجع للصفر وابدأ من جديد.",
+    "notesAr": "محور Red Clix يخلي الكليك تقريبًا ١٥ ميكرون، يعني ضعف عدد الكليكات: لو كنت على ٢٥ تصير ٥٠. لا تخلط قطعه مع المحور العادي.",
+    "sources": [
+     {
+      "label": "متجر Voltage Restaurant Supply: Red Clix RX35 (مصدر ثانوي)",
+      "url": "https://www.voltagerestaurantsupply.com/products/comandante-rx35-red-clix-burr-adjustment-kit"
+     }
+    ]
+   }
   },
   {
    "id": "comandante-c60",
@@ -150,7 +392,8 @@
    "model": "C60 Baracuda",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "fiorenzato-pietro",
@@ -158,7 +401,8 @@
    "model": "Pietro Pro Brew",
    "variant": "M-Modal burrs",
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "hario-mini-slim-pro",
@@ -166,7 +410,22 @@
    "model": "Mini Mill Slim Pro",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": "شيل الذراع، وامسك حلقة الضبط ولفها مع عقارب الساعة للأنعم وعكسها للأخشن.",
+    "notesAr": null,
+    "sources": [
+     {
+      "label": "Seattle Coffee Gear: دليل Mini Slim Pro (مصدر ثانوي)",
+      "url": "https://www.seattlecoffeegear.com/pages/product-resources/hario-mini-mill-pro-hand-grinder-product-guide"
+     }
+    ]
+   }
   },
   {
    "id": "hario-skerton-pro",
@@ -174,7 +433,22 @@
    "model": "Skerton Pro",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "الضبط بقرص تحت الشفرات بخطوات كبيرة نسبيًا، مناسب للفلتر والفرنش برس أكثر من الإسبريسو.",
+    "sources": [
+     {
+      "label": "متجر Eight Ounce Coffee: Skerton Pro (مصدر ثانوي)",
+      "url": "https://eightouncecoffee.ca/products/hario-skerton-pro-grinder"
+     }
+    ]
+   }
   },
   {
    "id": "kingrinder-k1",
@@ -182,7 +456,8 @@
    "model": "K1",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "kingrinder-k2",
@@ -190,7 +465,8 @@
    "model": "K2",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "kingrinder-k4",
@@ -198,7 +474,22 @@
    "model": "K4",
    "variant": null,
    "category": "hand",
-   "photo": false
+   "photo": false,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": 60,
+    "micronsPerStep": null,
+    "zeroGuideAr": "لف القرص الخارجي باتجاه الأنعم لين تتلامس الشفرات بخفة والخزان فاضي، وهذا هو الصفر. القراءة تكون لفّة.كليك، مثلًا 1.20 يعني لفة كاملة و٢٠ كليك.",
+    "notesAr": "ضبط خارجي، ٦٠ كليك في اللفة.",
+    "sources": [
+     {
+      "label": "KINGrinder: دليل K4/K6",
+      "url": "https://m.media-amazon.com/images/I/C1DrZy5LZUL.pdf"
+     }
+    ]
+   }
   },
   {
    "id": "kingrinder-k6",
@@ -206,7 +497,26 @@
    "model": "K6",
    "variant": null,
    "category": "hand",
-   "photo": false
+   "photo": false,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": 0,
+    "rangeMax": 240,
+    "clicksPerRotation": 60,
+    "micronsPerStep": 16,
+    "zeroGuideAr": "لف القرص الخارجي باتجاه الأنعم لين تتلامس الشفرات بخفة والخزان فاضي، وهذا هو الصفر. القراءة تكون لفّة.كليك، مثلًا 1.20 يعني لفة كاملة و٢٠ كليك.",
+    "notesAr": "ضبط خارجي: ٦٠ كليك في اللفة و٤ لفات (٢٤٠ كليك). الدليل يقترح للإسبريسو ٤٠–٦٠ كليك.",
+    "sources": [
+     {
+      "label": "KINGrinder: دليل K4/K6",
+      "url": "https://m.media-amazon.com/images/I/C1DrZy5LZUL.pdf"
+     },
+     {
+      "label": "متجر Intelligentsia: K6 (لقيمة الميكرون)",
+      "url": "https://www.intelligentsia.com/products/kingrinder-k6-grinder"
+     }
+    ]
+   }
   },
   {
    "id": "kingrinder-p2",
@@ -214,7 +524,8 @@
    "model": "P2",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "kinu-m47",
@@ -222,7 +533,8 @@
    "model": "M47 Classic",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "mhw-blade-r3",
@@ -230,7 +542,8 @@
    "model": "Blade R3",
    "variant": null,
    "category": "hand",
-   "photo": false
+   "photo": false,
+   "spec": null
   },
   {
    "id": "millab-m01",
@@ -238,7 +551,8 @@
    "model": "M01",
    "variant": null,
    "category": "hand",
-   "photo": false
+   "photo": false,
+   "spec": null
   },
   {
    "id": "mischief-m40-40",
@@ -246,7 +560,8 @@
    "model": "M40",
    "variant": "40 كليك",
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "mischief-m40-80",
@@ -254,7 +569,8 @@
    "model": "M40",
    "variant": "80 كليك",
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "timemore-c2",
@@ -262,7 +578,8 @@
    "model": "Chestnut C2",
    "variant": null,
    "category": "hand",
-   "photo": false
+   "photo": false,
+   "spec": null
   },
   {
    "id": "timemore-c3",
@@ -270,7 +587,22 @@
    "model": "Chestnut C3",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": 12,
+    "micronsPerStep": null,
+    "zeroGuideAr": "لف القرص الداخلي تحت الشفرات مع عقارب الساعة لين يتسكّر وتحس بمقاومة؛ هذا الصفر، وبعدها عدّ الكليكات وأنت تفتح.",
+    "notesAr": "ضبط داخلي، ١٢ كليك في اللفة.",
+    "sources": [
+     {
+      "label": "متجر Eight Ounce Coffee: مقارنة سلسلة C3 (مصدر ثانوي)",
+      "url": "https://wholesale.eightouncecoffee.ca/products/timemore-chestnut-c3s-pro-grinder"
+     }
+    ]
+   }
   },
   {
    "id": "timemore-c3-esp-pro",
@@ -278,7 +610,22 @@
    "model": "Chestnut C3 ESP Pro",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": 30,
+    "micronsPerStep": 23.3,
+    "zeroGuideAr": "لف القرص الداخلي تحت الشفرات مع عقارب الساعة لين يتسكّر وتحس بمقاومة؛ هذا الصفر، وبعدها عدّ الكليكات وأنت تفتح.",
+    "notesAr": "ضبط داخلي أدق مخصص للإسبريسو: ٣٠ كليك في اللفة، وكل كليك ٠٫٠٢٣٣ مم.",
+    "sources": [
+     {
+      "label": "متجر Eight Ounce Coffee: C3 ESP Pro (مصدر ثانوي)",
+      "url": "https://eightouncecoffee.ca/products/timemore-chestnut-c3-esp-pro-grinder"
+     }
+    ]
+   }
   },
   {
    "id": "timemore-c3-pro",
@@ -286,7 +633,22 @@
    "model": "Chestnut C3 Pro",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": 12,
+    "micronsPerStep": null,
+    "zeroGuideAr": "لف القرص الداخلي تحت الشفرات مع عقارب الساعة لين يتسكّر وتحس بمقاومة؛ هذا الصفر، وبعدها عدّ الكليكات وأنت تفتح.",
+    "notesAr": "ضبط داخلي، ١٢ كليك في اللفة.",
+    "sources": [
+     {
+      "label": "متجر Eight Ounce Coffee: مقارنة سلسلة C3 (مصدر ثانوي)",
+      "url": "https://wholesale.eightouncecoffee.ca/products/timemore-chestnut-c3s-pro-grinder"
+     }
+    ]
+   }
   },
   {
    "id": "timemore-s3",
@@ -294,7 +656,22 @@
    "model": "Chestnut S3",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "clicks",
+    "rangeMin": 0,
+    "rangeMax": 90,
+    "clicksPerRotation": null,
+    "micronsPerStep": 15,
+    "zeroGuideAr": "الصفر مضبوط من المصنع على فتحة ٠٫٠٧٥ مم بين الشفرات عند أنعم إعداد. لا تضغط على الذراع وأنت تطحن، لأنه ممكن يحرّك المحور وتحتك الشفرات.",
+    "notesAr": "من جدول الشركة: إسبريسو ١–١٥ كليك، موكا ٥–٢٠، تقطير يدوي ٥٠–٨٠، فرنش برس ٨٠–٩٠.",
+    "sources": [
+     {
+      "label": "Timemore: صفحة Chestnut S3",
+      "url": "https://www.timemore.com/collections/em5/products/timemore-manual-coffee-grinder-chestnut-s3"
+     }
+    ]
+   }
   },
   {
    "id": "timemore-x",
@@ -302,7 +679,8 @@
    "model": "Chestnut X",
    "variant": null,
    "category": "hand",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "alsaif-e03409",
@@ -310,7 +688,8 @@
    "model": "E03409",
    "variant": null,
    "category": "electric",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "baratza-encore",
@@ -318,7 +697,22 @@
    "model": "Encore",
    "variant": null,
    "category": "electric",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 40,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "١ أنعم و٤٠ أخشن. تدير الخزان لين يقابل المؤشر الرقم اللي تبيه.",
+    "sources": [
+     {
+      "label": "Baratza: دليل تشغيل Encore",
+      "url": "https://assets.breville.com/ZCG485/manual-encore-en-v4-3-120122.pdf"
+     }
+    ]
+   }
   },
   {
    "id": "baratza-encore-esp",
@@ -326,7 +720,22 @@
    "model": "Encore ESP",
    "variant": null,
    "category": "electric",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 40,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "١ أنعم و٤٠ أخشن، والأرقام الصغيرة مخصصة للإسبريسو بخطوات أدق.",
+    "sources": [
+     {
+      "label": "Baratza: دليل تشغيل Encore ESP",
+      "url": "https://assets.breville.com/ZCG495/manual-encoreesp-v1-0-en-010923.pdf"
+     }
+    ]
+   }
   },
   {
    "id": "baratza-sette-30",
@@ -334,7 +743,22 @@
    "model": "Sette 30",
    "variant": null,
    "category": "electric",
-   "photo": false
+   "photo": false,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 30,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "ضبط رئيسي فقط بـ٣٠ خطوة.",
+    "sources": [
+     {
+      "label": "متجر Espresso Gear: Sette 30 (مصدر ثانوي)",
+      "url": "https://www.espressogear.com/collections/all/products/baratza-grinder-sette-30"
+     }
+    ]
+   }
   },
   {
    "id": "baratza-sette-270",
@@ -342,7 +766,22 @@
    "model": "Sette 270",
    "variant": null,
    "category": "electric",
-   "photo": false
+   "photo": false,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 31,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "قرص رئيسي من ١ إلى ٣١، وحلقة دقيقة بدون درجات عليها ٩ علامات (A–I)، يعني ٢٧٠ إعداد. للإسبريسو الدليل يقترح تبدأ من 9E: ثبّت الدقيق على E واضبط الرئيسي.",
+    "sources": [
+     {
+      "label": "Baratza: دليل Sette 270",
+      "url": "https://assets.breville.com/ZCG1270/manual-sette270-v2.1-en.pdf"
+     }
+    ]
+   }
   },
   {
    "id": "baratza-vario-plus",
@@ -350,7 +789,8 @@
    "model": "Vario+",
    "variant": null,
    "category": "electric",
-   "photo": false
+   "photo": false,
+   "spec": null
   },
   {
    "id": "baratza-virtuoso-plus",
@@ -358,7 +798,22 @@
    "model": "Virtuoso+",
    "variant": null,
    "category": "electric",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 40,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "٤٠ إعداد: ١ أنعم و٤٠ أخشن، ومؤقت رقمي للطحن.",
+    "sources": [
+     {
+      "label": "Baratza: ورقة مواصفات Virtuoso",
+      "url": "https://www.essentialutensil.au/cdn/shop/files/Baratza-Virtuoso-Product-Info.pdf"
+     }
+    ]
+   }
   },
   {
    "id": "breville-smart-grinder-pro",
@@ -366,7 +821,8 @@
    "model": "Smart Grinder Pro",
    "variant": "BCG820",
    "category": "electric",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "clikon-ck2287",
@@ -374,7 +830,8 @@
    "model": "CK2287",
    "variant": null,
    "category": "electric",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "delonghi-kg79",
@@ -382,7 +839,22 @@
    "model": "KG79",
    "variant": null,
    "category": "electric",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 16,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "١٦ إعداد للطحن من الناعم للخشن.",
+    "sources": [
+     {
+      "label": "متجر Harvey Norman: KG79 (مصدر ثانوي)",
+      "url": "https://www.harveynorman.com.sg/home-appliances/small-kitchen-appliances-en/coffee-machines-en/delonghi-burr-electric-coffee-grinders-black-kg79.html"
+     }
+    ]
+   }
   },
   {
    "id": "delonghi-kg89",
@@ -390,7 +862,22 @@
    "model": "KG89",
    "variant": null,
    "category": "electric",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 16,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "١٦ إعداد للطحن من الناعم للخشن.",
+    "sources": [
+     {
+      "label": "متجر Blackbox: KG89 (مصدر ثانوي)",
+      "url": "https://www.blackbox.com.sa/en/product/delonghi-coffee-grinder-12-cups-170w-steel-dlkg89steel-p-1535111010004001"
+     }
+    ]
+   }
   },
   {
    "id": "edison-cg001",
@@ -398,7 +885,8 @@
    "model": "CG-001",
    "variant": null,
    "category": "electric",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "edison-digital",
@@ -406,7 +894,8 @@
    "model": "Digital Coffee Grinder",
    "variant": null,
    "category": "electric",
-   "photo": false
+   "photo": false,
+   "spec": null
   },
   {
    "id": "edison-hammer",
@@ -414,7 +903,8 @@
    "model": "Hammer",
    "variant": null,
    "category": "electric",
-   "photo": false
+   "photo": false,
+   "spec": null
   },
   {
    "id": "fellow-opus",
@@ -422,7 +912,22 @@
    "model": "Opus",
    "variant": null,
    "category": "electric",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 11,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "الحلقة الخارجية من ١ (ناعم) إلى ١١ (خشن) وفيها ٤١ إعداد، والحلقة الداخلية لتعديل دقيق إضافي.",
+    "sources": [
+     {
+      "label": "Fellow: دليل Opus",
+      "url": "https://www.maxicoffee.com/images/pdf/Opus_notice.pdf"
+     }
+    ]
+   }
   },
   {
    "id": "geepas-gcg286",
@@ -430,7 +935,22 @@
    "model": "GCG286",
    "variant": null,
    "category": "electric",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "timer",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "مطحنة شفرات: ما فيها درجات طحن، والنعومة تتحدد بمدة الطحن. الأفضل ضغطات قصيرة متتابعة عشان الطحنة تطلع متساوية.",
+    "sources": [
+     {
+      "label": "كارفور السعودية: Geepas GCG286",
+      "url": "https://www.carrefourksa.com/mafsau/ar/coffee-grinder/geepas-coffee-grinder-200w-gcg286-white-silver/p/6294001716631"
+     }
+    ]
+   }
   },
   {
    "id": "hibrew-g3",
@@ -438,7 +958,8 @@
    "model": "G3",
    "variant": "CG102",
    "category": "electric",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "hibrew-g7",
@@ -446,7 +967,22 @@
    "model": "G7",
    "variant": "CG213BZ",
    "category": "electric",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 48,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "٤٨ إعداد من الإسبريسو الناعم لين التقطير.",
+    "sources": [
+     {
+      "label": "متجر Onet Ads: HiBREW G7 (مصدر ثانوي)",
+      "url": "https://seller.onetads.pl/produkt/313/hibrew-g7-coffee-grinde-p947407174.html"
+     }
+    ]
+   }
   },
   {
    "id": "homemaster-hm836",
@@ -454,7 +990,8 @@
    "model": "HM-836",
    "variant": null,
    "category": "electric",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "homemaster-hm937",
@@ -462,7 +999,8 @@
    "model": "HM-937",
    "variant": null,
    "category": "electric",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "mahlkonig-x54",
@@ -470,7 +1008,22 @@
    "model": "X54 Allround",
    "variant": null,
    "category": "electric",
-   "photo": false
+   "photo": false,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": 1,
+    "rangeMax": 35,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "٣٥ علامة على قرص بدون درجات، من الإسبريسو لين الفرنش برس. ١ أنعم و٣٥ أخشن.",
+    "sources": [
+     {
+      "label": "Mahlkönig: إعلان X54",
+      "url": "https://www.mahlkoenig.com/blogs/news/shiny-and-new-mahlkonig-presents-the-x54-allround-home-grinder-in-chrome"
+     }
+    ]
+   }
   },
   {
    "id": "rebune-re2194",
@@ -478,7 +1031,8 @@
    "model": "RE-2-194",
    "variant": null,
    "category": "electric",
-   "photo": false
+   "photo": false,
+   "spec": null
   },
   {
    "id": "wilfa-svart-aroma",
@@ -486,7 +1040,22 @@
    "model": "Svart Aroma",
    "variant": "CGWS-130B",
    "category": "electric",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "ضبط من الخشن للناعم، والمتاجر تذكر ٥ مستويات تغطي الإيروبرس والتقطير والفرنش برس.",
+    "sources": [
+     {
+      "label": "Wilfa: صفحة Svart Aroma",
+      "url": "https://wilfa.com/products/svart-aroma"
+     }
+    ]
+   }
   },
   {
    "id": "wilfa-uniform",
@@ -494,7 +1063,22 @@
    "model": "Uniform / Uniform+",
    "variant": null,
    "category": "electric",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 41,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "٤١ إعداد من الخشن لين الإسبريسو. نسخة Uniform+ فيها ميزان مدمج بدقة ٠٫١ جرام.",
+    "sources": [
+     {
+      "label": "متجر Square Mile Coffee: Wilfa Uniform (مصدر ثانوي)",
+      "url": "https://shop.squaremilecoffee.com/products/wilfa-uniform-grinder"
+     }
+    ]
+   }
   },
   {
    "id": "doscher-kmdj2aw",
@@ -502,7 +1086,8 @@
    "model": "Portable Burr Grinder",
    "variant": "KMDJ-2AW",
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "eureka-mignon-zero",
@@ -510,7 +1095,22 @@
    "model": "Mignon Zero",
    "variant": null,
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "ضبط ميكرومتري بدون درجات، ونسخة Zero 65 بشفرات ٦٥ مم.",
+    "sources": [
+     {
+      "label": "متجر Espresso Coffee Shop: Mignon Zero 65 (مصدر ثانوي)",
+      "url": "https://www.espressocoffeeshop.com/en/coffee-grinders/1470-2828-0-eureka-mignon-zero-coffee-grinder.html"
+     }
+    ]
+   }
   },
   {
    "id": "eureka-oro-single-dose",
@@ -518,7 +1118,22 @@
    "model": "Oro Mignon Single Dose",
    "variant": null,
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "بدون درجات، وشفرات Diamond Inside ٦٥ مم وحجرة طحن قليلة الاحتباس.",
+    "sources": [
+     {
+      "label": "متجر Seattle Coffee Gear: Oro Mignon Single Dose (مصدر ثانوي)",
+      "url": "https://www.seattlecoffeegear.com/products/eureka-oro-mignon-single-dose-espresso-grinder-stainless-open-box"
+     }
+    ]
+   }
   },
   {
    "id": "fellow-ode-gen1",
@@ -526,7 +1141,22 @@
    "model": "Ode",
    "variant": "Gen 1",
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 11,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "٣١ إعداد وشفرات مسطحة ٦٤ مم، للتقطير والفلتر ومو مناسبة للإسبريسو.",
+    "sources": [
+     {
+      "label": "متجر Prima Coffee: Ode Gen 1 (مصدر ثانوي)",
+      "url": "https://prima-coffee.com/equipment/fellow-products/ode-fe-pr-pp"
+     }
+    ]
+   }
   },
   {
    "id": "fellow-ode-gen2",
@@ -534,7 +1164,22 @@
    "model": "Ode",
    "variant": "Gen 2",
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 11,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "١١ رقم على القرص فيها ٣١ خطوة، وشفرات مسطحة ٦٤ مم. مصممة للتقطير والفلتر، مو للإسبريسو.",
+    "sources": [
+     {
+      "label": "Fellow: صفحة Ode Gen 2",
+      "url": "https://fellowproducts.com/products/ode-brew-grinder-gen-2"
+     }
+    ]
+   }
   },
   {
    "id": "femobook-a2",
@@ -542,7 +1187,8 @@
    "model": "A2",
    "variant": null,
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "hibrew-g5",
@@ -550,7 +1196,22 @@
    "model": "G5",
    "variant": null,
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": 1,
+    "rangeMax": 36,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "٣٦ علامة على قرص بدون درجات، وشفرات مخروطية ٤٨ مم.",
+    "sources": [
+     {
+      "label": "متجر Fengany: HiBREW G5 (مصدر ثانوي)",
+      "url": "https://fengany.com/products/hibrew-g5-coffee-grinder-conical-burr-electric-black"
+     }
+    ]
+   }
   },
   {
    "id": "hibrew-g5-mini",
@@ -558,7 +1219,8 @@
    "model": "G5 mini",
    "variant": null,
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "mazzer-philos",
@@ -566,7 +1228,22 @@
    "model": "Philos",
    "variant": null,
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "الحلقة المدرّجة تتحرك بخطوات صغيرة لين ٦ ميكرون، وتقدر تحوّلها لوضع بدون درجات.",
+    "sources": [
+     {
+      "label": "Petra Equipment (موزع Mazzer): Philos",
+      "url": "https://petraequipment.com.au/mazzer-philos-i189d-i200d-burrs-coffee-grinder"
+     }
+    ]
+   }
   },
   {
    "id": "niche-zero",
@@ -574,7 +1251,22 @@
    "model": "Zero",
    "variant": null,
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "قرص بدون درجات، وشفرات مخروطية ٦٣ مم.",
+    "sources": [
+     {
+      "label": "Niche: صفحة Niche Zero",
+      "url": "https://www.nichecoffee.co.uk/products/niche-zero"
+     }
+    ]
+   }
   },
   {
    "id": "lagom-mini",
@@ -582,7 +1274,26 @@
    "model": "Lagom Mini",
    "variant": null,
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "ضبط بدون درجات عن طريق لف الجزء العلوي، وشفرات مخروطية ٤٨ مم.",
+    "sources": [
+     {
+      "label": "متجر Prima Coffee: Lagom Mini (مصدر ثانوي)",
+      "url": "https://prima-coffee.com/equipment/option-o/lagom-mini-optio-pp"
+     },
+     {
+      "label": "CoffeeGeek: Lagom Mini",
+      "url": "https://www.coffeegeek.com/new-products/lagom-mini-grinder-a-diminutive-wonder/"
+     }
+    ]
+   }
   },
   {
    "id": "lagom-p64",
@@ -590,7 +1301,22 @@
    "model": "Lagom P64",
    "variant": null,
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": 10,
+    "zeroGuideAr": null,
+    "notesAr": "بدون درجات، وكل خط على القرص يعادل ٠٫٠١ مم (١٠ ميكرون) من حركة الشفرات. شفرات مسطحة ٦٤ مم، من الإسبريسو لين الفرنش برس.",
+    "sources": [
+     {
+      "label": "Option-O: صفحة Lagom P64",
+      "url": "https://www.option-o.com/lagom-p64"
+     }
+    ]
+   }
   },
   {
    "id": "starseeker-e55",
@@ -598,7 +1324,8 @@
    "model": "E55",
    "variant": null,
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "starseeker-e55-pro",
@@ -606,7 +1333,22 @@
    "model": "E55 Pro",
    "variant": null,
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "شفرات مخروطية تيتانيوم ٥٥ مم وضبط بدون درجات بعلامات ٠٫٠١ مم.",
+    "sources": [
+     {
+      "label": "دليل Joybuy (مصدر ثانوي)",
+      "url": "https://www.joybuy.fr/blog/electric-coffee-grinder-best-picks/Kj4RMWAE"
+     }
+    ]
+   }
   },
   {
    "id": "starseeker-edge-plus",
@@ -614,7 +1356,8 @@
    "model": "EDGE Plus",
    "variant": null,
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "storm-v60",
@@ -622,7 +1365,8 @@
    "model": "V60",
    "variant": null,
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "timemore-sculptor-064s",
@@ -630,7 +1374,22 @@
    "model": "Sculptor 064S",
    "variant": null,
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "في نسخة «تقطير وإسبريسو» القرص بدون درجات، تقدر توقف على أي نقطة بينهم.",
+    "sources": [
+     {
+      "label": "Timemore: صفحة سلسلة Sculptor",
+      "url": "https://www.timemore.com/collections/all-products/products/timemore-electric-coffee-grinder-sculptor-series"
+     }
+    ]
+   }
   },
   {
    "id": "timemore-sculptor-078s",
@@ -638,7 +1397,22 @@
    "model": "Sculptor 078S",
    "variant": null,
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "في نسخة «تقطير وإسبريسو» القرص بدون درجات، تقدر توقف على أي نقطة بينهم.",
+    "sources": [
+     {
+      "label": "Timemore: صفحة سلسلة Sculptor",
+      "url": "https://www.timemore.com/collections/all-products/products/timemore-electric-coffee-grinder-sculptor-series"
+     }
+    ]
+   }
   },
   {
    "id": "turin-df54",
@@ -646,7 +1420,22 @@
    "model": "DF54",
    "variant": null,
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "ضبط بدون درجات.",
+    "sources": [
+     {
+      "label": "مقارنة Cliff & Pebble لمطاحن Turin (مصدر ثانوي)",
+      "url": "https://cliffandpebble.com/blogs/our-blog/turin-coffee-grinder-comparison"
+     }
+    ]
+   }
   },
   {
    "id": "turin-df64",
@@ -654,7 +1443,22 @@
    "model": "DF64",
    "variant": "Gen 1",
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "ضبط بدون درجات وشفرات مسطحة ٦٤ مم. القرص ممكن يتحرك لو انضرب، فتأكد منه قبل الطحن.",
+    "sources": [
+     {
+      "label": "مراجعة Countertop Coffee: DF64 (مصدر ثانوي)",
+      "url": "https://www.countertopcoffee.com/reviews/turin-df64-gen-2/"
+     }
+    ]
+   }
   },
   {
    "id": "turin-df64-gen2",
@@ -662,7 +1466,22 @@
    "model": "DF64",
    "variant": "Gen 2",
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "ضبط بدون درجات وشفرات مسطحة ٦٤ مم. القرص ممكن يتحرك لو انضرب، فتأكد منه قبل الطحن.",
+    "sources": [
+     {
+      "label": "مراجعة Countertop Coffee: DF64 (مصدر ثانوي)",
+      "url": "https://www.countertopcoffee.com/reviews/turin-df64-gen-2/"
+     }
+    ]
+   }
   },
   {
    "id": "turin-df64v",
@@ -670,7 +1489,22 @@
    "model": "DF64V",
    "variant": null,
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "ضبط بدون درجات وشفرات مسطحة ٦٤ مم. القرص ممكن يتحرك لو انضرب، فتأكد منه قبل الطحن.",
+    "sources": [
+     {
+      "label": "مراجعة Countertop Coffee: DF64 (مصدر ثانوي)",
+      "url": "https://www.countertopcoffee.com/reviews/turin-df64-gen-2/"
+     }
+    ]
+   }
   },
   {
    "id": "turin-df83",
@@ -678,7 +1512,22 @@
    "model": "DF83",
    "variant": null,
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "ضبط ميكرومتري بدون درجات وقرص مدرّج، وشفرات مسطحة ٨٣ مم.",
+    "sources": [
+     {
+      "label": "متجر Sigma Coffee: DF83V (مصدر ثانوي)",
+      "url": "https://sigmacoffee.co.uk/products/turin-df83v"
+     }
+    ]
+   }
   },
   {
    "id": "turin-df83v",
@@ -686,7 +1535,22 @@
    "model": "DF83V",
    "variant": null,
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "ضبط ميكرومتري بدون درجات وقرص مدرّج، وشفرات مسطحة ٨٣ مم. ونسخة V سرعتها متغيرة.",
+    "sources": [
+     {
+      "label": "متجر Sigma Coffee: DF83V (مصدر ثانوي)",
+      "url": "https://sigmacoffee.co.uk/products/turin-df83v"
+     }
+    ]
+   }
   },
   {
    "id": "varia-vs3-gen1",
@@ -694,7 +1558,26 @@
    "model": "VS3",
    "variant": "Gen 1",
    "category": "single_dose",
-   "photo": false
+   "photo": false,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": 0,
+    "rangeMax": 10,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "مقياس بدون درجات من ٠ إلى ١٠ بعلامات كل ٠٫١. شفرات مخروطية ٤٨ مم.",
+    "sources": [
+     {
+      "label": "Varia: صفحة VS3",
+      "url": "https://www.variabrewing.com/collections/shop-all-new/products/varia-vs3-grinder"
+     },
+     {
+      "label": "متجر Eastlink Espresso: VS3 (مصدر ثانوي)",
+      "url": "https://eastlinkespresso.com.au/product/varia-vs3-grinder-gen-2/"
+     }
+    ]
+   }
   },
   {
    "id": "varia-vs3-gen2",
@@ -702,7 +1585,26 @@
    "model": "VS3",
    "variant": "Gen 2",
    "category": "single_dose",
-   "photo": false
+   "photo": false,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": 0,
+    "rangeMax": 10,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "مقياس بدون درجات من ٠ إلى ١٠ بعلامات كل ٠٫١. شفرات مخروطية ٤٨ مم.",
+    "sources": [
+     {
+      "label": "Varia: صفحة VS3",
+      "url": "https://www.variabrewing.com/collections/shop-all-new/products/varia-vs3-grinder"
+     },
+     {
+      "label": "متجر Eastlink Espresso: VS3 (مصدر ثانوي)",
+      "url": "https://eastlinkespresso.com.au/product/varia-vs3-grinder-gen-2/"
+     }
+    ]
+   }
   },
   {
    "id": "varia-vs6",
@@ -710,7 +1612,22 @@
    "model": "VS6",
    "variant": null,
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": 0,
+    "rangeMax": 60,
+    "clicksPerRotation": null,
+    "micronsPerStep": 5,
+    "zeroGuideAr": null,
+    "notesAr": "بدون درجات من ٠ إلى ٦٠، وكل علامة ٥ ميكرون. تجي بشفرات مسطحة ٥٨ مم، وفيه خيار شفرات مخروطية ٦٣ مم.",
+    "sources": [
+     {
+      "label": "متجر Bean Bros: VS6 (مصدر ثانوي)",
+      "url": "https://beanbros.co/pages/varia-vs6-grinder"
+     }
+    ]
+   }
   },
   {
    "id": "weber-eg1",
@@ -718,7 +1635,22 @@
    "model": "EG-1",
    "variant": null,
    "category": "single_dose",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "ضبط بخطوات دقيقة جدًا، ٥ ميكرون للخطوة.",
+    "sources": [
+     {
+      "label": "متجر Clive Coffee: EG-1 (مصدر ثانوي)",
+      "url": "https://clivecoffee.com/collections/grinders/products/the-eg-1"
+     }
+    ]
+   }
   },
   {
    "id": "breville-bes870",
@@ -726,7 +1658,22 @@
    "model": "Barista Express",
    "variant": "BES870",
    "category": "built_in",
-   "photo": false
+   "photo": false,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 16,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "القرص فيه ١٨ موضع (أنعم، ١–١٦، أخشن). ابدأ من ٥، والرقم الأصغر أنعم.",
+    "sources": [
+     {
+      "label": "Breville: كتيب Barista Express",
+      "url": "https://assets.breville.com/Instruction-Booklets/ANZ/BES870_ANZ_IB_M21_FA_WEB.pdf"
+     }
+    ]
+   }
   },
   {
    "id": "breville-bes876",
@@ -734,7 +1681,22 @@
    "model": "Barista Express Impress",
    "variant": "BES876",
    "category": "built_in",
-   "photo": false
+   "photo": false,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 25,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "٢٥ إعداد على قرص الطحن، والرقم الأصغر أنعم.",
+    "sources": [
+     {
+      "label": "Breville: ضبط الطحن في Barista Express Impress",
+      "url": "https://www.breville.com/en-us/my-products/producthub/bes876/first-time-setup/how-to-adjust-grind-size"
+     }
+    ]
+   }
   },
   {
    "id": "breville-bes878",
@@ -742,7 +1704,22 @@
    "model": "Barista Pro",
    "variant": "BES878",
    "category": "built_in",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 30,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "٣٠ إعداد. Breville تنصح تبدأ من ١٥ وتعدّل.",
+    "sources": [
+     {
+      "label": "Breville: ضبط الطحن في Barista Pro",
+      "url": "https://www.breville.com/en-us/my-products/producthub/bes878/first-time-setup/how-to-adjust-grind-size"
+     }
+    ]
+   }
   },
   {
    "id": "breville-bes880",
@@ -750,7 +1727,22 @@
    "model": "Barista Touch",
    "variant": "BES880",
    "category": "built_in",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 30,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "٣٠ إعداد. Breville تنصح تبدأ من ١٤ وتعدّل حسب ذوقك.",
+    "sources": [
+     {
+      "label": "Breville: ضبط الطحن في Barista Touch",
+      "url": "https://www.breville.com/en-us/my-products/producthub/bes880/first-time-setup/how-to-adjust-grind-size"
+     }
+    ]
+   }
   },
   {
    "id": "breville-bes881",
@@ -758,7 +1750,22 @@
    "model": "Barista Touch Impress",
    "variant": "BES881",
    "category": "built_in",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "أكثر من ٣٠ إعداد للطحن.",
+    "sources": [
+     {
+      "label": "Breville: ضبط الطحن في Barista Touch Impress",
+      "url": "https://www.breville.com/en-us/my-products/producthub/bes881/first-time-setup/how-to-adjust-grind-size"
+     }
+    ]
+   }
   },
   {
    "id": "breville-bes980",
@@ -766,7 +1773,22 @@
    "model": "Oracle",
    "variant": "BES980",
    "category": "built_in",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 45,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "٤٥ إعداد. Breville تنصح تبدأ من ٣٠.",
+    "sources": [
+     {
+      "label": "Breville: ضبط الطحن في Oracle",
+      "url": "https://www.breville.com/en-us/my-products/producthub/bes980/customising-your-machine/how-to-adjust-grind-size"
+     }
+    ]
+   }
   },
   {
    "id": "breville-bes990",
@@ -774,7 +1796,22 @@
    "model": "Oracle Touch",
    "variant": "BES990",
    "category": "built_in",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 45,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "٤٥ إعداد. Breville تنصح تبدأ من ٢٠.",
+    "sources": [
+     {
+      "label": "Breville: ضبط الطحن في Oracle Touch",
+      "url": "https://www.breville.com/en-us/my-products/producthub/bes990/customising-your-machine/how-to-adjust-grind-size"
+     }
+    ]
+   }
   },
   {
    "id": "delonghi-dinamica",
@@ -782,7 +1819,26 @@
    "model": "Dinamica / Dinamica Plus",
    "variant": null,
    "category": "built_in",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 7,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "قرص مرقّم من ١ إلى ٧: لو القهوة خفيفة لف نقرة باتجاه ١، ولو تنزل ببطء لف باتجاه ٧. غيّر الضبط والمطحنة شغّالة بس، كليك وحدة كل مرة، والفرق يبان بعد كوبين أو ثلاثة.",
+    "sources": [
+     {
+      "label": "De'Longhi: دعم Dinamica (القهوة خفيفة)",
+      "url": "https://support.delonghi.com/en/dinamica-ecam35X25/The-coffee-is-weak-3096"
+     },
+     {
+      "label": "De'Longhi: دعم Dinamica (تنزل ببطء)",
+      "url": "https://support.delonghi.com/en/dinamica-ecam35X25/The-coffee-is-delivered-too-slowly-1c52"
+     }
+    ]
+   }
   },
   {
    "id": "delonghi-eletta-explore",
@@ -790,7 +1846,22 @@
    "model": "Eletta Explore",
    "variant": null,
    "category": "built_in",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "الطحن يتعدّل من قائمة المكينة «Adjust grinder» وفيها شرح، وميزة Bean Adapt تضبط الطحن حسب الحبوب.",
+    "sources": [
+     {
+      "label": "De'Longhi: دعم Eletta Explore",
+      "url": "https://support.delonghi.com/en/eletta-explore/The-coffee-is-delivered-one-drop-at-a-time-4c1a"
+     }
+    ]
+   }
   },
   {
    "id": "delonghi-specialista-arte",
@@ -798,7 +1869,22 @@
    "model": "La Specialista Arte",
    "variant": "EC9155",
    "category": "built_in",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 15,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "صفحة الشركة لنسخة EC9155.GR تذكر ١٥ إعداد، وبعض النسخ في المتاجر تذكر ٨، فتأكد من رقم موديلك.",
+    "sources": [
+     {
+      "label": "De'Longhi: صفحة La Specialista Arte EC9155.GR",
+      "url": "https://www.delonghi.com/en/p/la-specialista-arte-la-specialista-arte-manual-espresso-maker-ec9155.gr/EC9155.GR.html"
+     }
+    ]
+   }
   },
   {
    "id": "delonghi-specialista-ec9335",
@@ -806,7 +1892,22 @@
    "model": "La Specialista",
    "variant": "EC9335",
    "category": "built_in",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 6,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "المراجعات تذكر ٦ إعدادات، مع حساسات للجرعة. ما لقينا رقم رسمي من الشركة، فتأكد من الدليل.",
+    "sources": [
+     {
+      "label": "مقارنة Servicesphere لسلسلة La Specialista (مصدر ثانوي)",
+      "url": "https://servicesphere.com.au/blogs/news/2024/Jan/31/delonghi-specialista-vs-delonghi-specialista-prestigio-vs-delonghi-specialista-maestro"
+     }
+    ]
+   }
   },
   {
    "id": "delonghi-specialista-maestro",
@@ -814,7 +1915,22 @@
    "model": "La Specialista Maestro",
    "variant": null,
    "category": "built_in",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 8,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "٨ إعدادات للطحن، مع حساسات تضبط الجرعة.",
+    "sources": [
+     {
+      "label": "De'Longhi: صفحة La Specialista Maestro",
+      "url": "https://www.delonghi.com/en/p/la-specialista-maestro-ec9665.m-la-specialista-maestro-manual-coffee-maker/EC9665.M.html?pid=0132127000"
+     }
+    ]
+   }
   },
   {
    "id": "delonghi-specialista-prestigio",
@@ -822,7 +1938,22 @@
    "model": "La Specialista Prestigio",
    "variant": "EC9355",
    "category": "built_in",
-   "photo": false
+   "photo": false,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 8,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "٨ إعدادات للطحن مع حساسات للطحن.",
+    "sources": [
+     {
+      "label": "De'Longhi: صفحة La Specialista Prestigio",
+      "url": "https://www.delonghi.com/en-ca/p/la-specialista-prestigio-la-specialista-prestigio-espresso-machine-with-smart-tamping-station-e-dual-heating-system--stainless-steel---ec9355m/EC9355M.html"
+     }
+    ]
+   }
   },
   {
    "id": "delonghi-magnifica",
@@ -830,7 +1961,26 @@
    "model": "Magnifica S / Start / Evo",
    "variant": null,
    "category": "built_in",
-   "photo": false
+   "photo": false,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 7,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "١٣ موضع على قرص مرقّم من ١ (أنعم) إلى ٧ (أخشن)، والمصنع يضبطه بين ٣ و٤. غيّر الضبط والمطحنة شغّالة بس، كليك وحدة كل مرة، والفرق يبان بعد كوبين أو ثلاثة.",
+    "sources": [
+     {
+      "label": "De'Longhi: إعدادات مطحنة Magnifica Evo",
+      "url": "https://www.delonghi.com/en-us/faqs/Magnifica-Evo-Next-grinder-settings/a/579006"
+     },
+     {
+      "label": "De'Longhi: ضبط المطحنة",
+      "url": "https://www.delonghi.com/en-gb/faqs/How-to-properly-set-the-grinder-to-obtain-a-good--quality-coffee/a/33735"
+     }
+    ]
+   }
   },
   {
    "id": "delonghi-rivelia",
@@ -838,7 +1988,26 @@
    "model": "Rivelia",
    "variant": null,
    "category": "built_in",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 8,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "الدليل يذكر مدى من ١ (أنعم) إلى ٨ (أخشن)، والمصنع يضبطه على ٥. غيّر الضبط والمطحنة شغّالة بس، كليك وحدة كل مرة، والفرق يبان بعد كوبين أو ثلاثة.",
+    "sources": [
+     {
+      "label": "De'Longhi: دليل Rivelia EXAM440",
+      "url": "https://www.andoo.co.nz/manuals/ak/4/4/5/2/445287f25112501a4fd905c0c4946995701179e5_EXAM_440.55.G_Rivelia_Milk.pdf"
+     },
+     {
+      "label": "De'Longhi: إعداد مطحنة Rivelia",
+      "url": "https://www.delonghi.com/en-nz/faqs/Rivelia:-What-is-the-best-grinder-setting-for-my-beans/a/569930"
+     }
+    ]
+   }
   },
   {
    "id": "gaggia-anima",
@@ -846,7 +2015,22 @@
    "model": "Anima",
    "variant": null,
    "category": "built_in",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 5,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "٥ إعدادات، تضبطها بالمفتاح اللي في ملعقة القياس. غيّر الضبط والمطحنة شغّالة بس، كليك وحدة كل مرة، والفرق يبان بعد كوبين أو ثلاثة.",
+    "sources": [
+     {
+      "label": "Gaggia: صفحة Anima",
+      "url": "https://www.gaggia.com/automatic-machines/anima/"
+     }
+    ]
+   }
   },
   {
    "id": "gaggia-cadorna",
@@ -854,7 +2038,22 @@
    "model": "Cadorna",
    "variant": null,
    "category": "built_in",
-   "photo": false
+   "photo": false,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 10,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "١٠ إعدادات بقرص داخل خزان الحبوب: ١ أنعم (للتحميص الفاتح) و١٠ أخشن (للغامق). غيّر الضبط والمطحنة شغّالة بس، كليك وحدة كل مرة، والفرق يبان بعد كوبين أو ثلاثة.",
+    "sources": [
+     {
+      "label": "Gaggia: صفحة Cadorna Style",
+      "url": "https://www.gaggia.com/automatic-machines/cadorna-style/"
+     }
+    ]
+   }
   },
   {
    "id": "gaggia-magenta",
@@ -862,7 +2061,22 @@
    "model": "Magenta",
    "variant": null,
    "category": "built_in",
-   "photo": false
+   "photo": false,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 5,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "٥ إعدادات بشفرات سيراميك مسطحة. غيّر الضبط والمطحنة شغّالة بس، كليك وحدة كل مرة، والفرق يبان بعد كوبين أو ثلاثة.",
+    "sources": [
+     {
+      "label": "متجر Dateks: Magenta Plus (مصدر ثانوي)",
+      "url": "https://dateks.lv/en/cenas/kafijas-automati/792428-gaggia-magenta-plus-black"
+     }
+    ]
+   }
   },
   {
    "id": "philips-lattego",
@@ -870,7 +2084,22 @@
    "model": "LatteGo",
    "variant": null,
    "category": "built_in",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 12,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "١٢ مستوى للطحن. غيّر الضبط والمطحنة شغّالة بس، كليك وحدة كل مرة، والفرق يبان بعد كوبين أو ثلاثة.",
+    "sources": [
+     {
+      "label": "Philips: صفحة 3200 LatteGo",
+      "url": "https://www.philips.co.uk/c-p/EP3246_70"
+     }
+    ]
+   }
   },
   {
    "id": "saeco-granaroma",
@@ -878,7 +2107,22 @@
    "model": "GranAroma",
    "variant": null,
    "category": "built_in",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 12,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "مطحنة سيراميك فيها ١٢ إعداد. غيّر الضبط والمطحنة شغّالة بس، كليك وحدة كل مرة، والفرق يبان بعد كوبين أو ثلاثة.",
+    "sources": [
+     {
+      "label": "متجر Dateks: مواصفات GranAroma (مصدر ثانوي)",
+      "url": "https://www.dateks.lv/en/cenas/kafijas-automati/1107317-saeco-granaroma-white"
+     }
+    ]
+   }
   },
   {
    "id": "saeco-xelsis",
@@ -886,7 +2130,26 @@
    "model": "Xelsis",
    "variant": null,
    "category": "built_in",
-   "photo": false
+   "photo": false,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 12,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "١٢ إعداد بقرص داخل خزان الحبوب، والرقم الأصغر أقوى. غيّر الضبط والمطحنة شغّالة بس، كليك وحدة كل مرة، والفرق يبان بعد كوبين أو ثلاثة.",
+    "sources": [
+     {
+      "label": "Philips/Saeco: صفحة Xelsis",
+      "url": "https://www.home-appliances.philips/sg/en/u/coffee-machines/saeco-full-automatic-espresso/xelsis"
+     },
+     {
+      "label": "Philips: ضبط المطحنة",
+      "url": "https://www.usa.philips.com/c-t/XC000004121/i-cannot-adjust-the-grinder-setting-on-my-philips-espresso-machine"
+     }
+    ]
+   }
   },
   {
    "id": "xbloom-studio",
@@ -894,7 +2157,22 @@
    "model": "Studio",
    "variant": null,
    "category": "built_in",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 1,
+    "rangeMax": 80,
+    "clicksPerRotation": null,
+    "micronsPerStep": 18.75,
+    "zeroGuideAr": null,
+    "notesAr": "مطحنة مخروطية ٤٨ مم فيها ٨٠ إعداد، وكل خطوة ١٨٫٧٥ ميكرون، من الإسبريسو لين الخشن.",
+    "sources": [
+     {
+      "label": "متجر Whole Latte Love: xBloom Studio (مصدر ثانوي)",
+      "url": "https://wholelattelove.com/products/xbloom-studio"
+     }
+    ]
+   }
   },
   {
    "id": "eureka-atom-75",
@@ -902,7 +2180,22 @@
    "model": "Atom 75",
    "variant": null,
    "category": "espresso",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "ضبط ميكرومتري بدون درجات، وشفرات مسطحة ٧٥ مم.",
+    "sources": [
+     {
+      "label": "Eureka: صفحة Atom Specialty 75",
+      "url": "https://www.eureka.co.it/en/products/eureka+1920/commercial+grinders/atom+range/5/"
+     }
+    ]
+   }
   },
   {
    "id": "eureka-mignon-libra",
@@ -910,7 +2203,22 @@
    "model": "Mignon Libra",
    "variant": null,
    "category": "espresso",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "ضبط ميكرومتري بدون درجات (نظام Eureka المسجّل): لف المقبض مع عقارب الساعة للأنعم وعكسها للأخشن. شفرات مسطحة ٥٥ مم، ونسخة توزن الجرعة بالجرام.",
+    "sources": [
+     {
+      "label": "Eureka: صفحة Mignon Libra",
+      "url": "https://eureka.co.it/en/products/eureka+1920/mignon+grinders/libra+range/117.aspx"
+     }
+    ]
+   }
   },
   {
    "id": "eureka-mignon-manuale",
@@ -918,7 +2226,8 @@
    "model": "Mignon Manuale",
    "variant": null,
    "category": "espresso",
-   "photo": true
+   "photo": true,
+   "spec": null
   },
   {
    "id": "eureka-mignon-silenzio",
@@ -926,7 +2235,22 @@
    "model": "Mignon Silenzio",
    "variant": null,
    "category": "espresso",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "ضبط ميكرومتري بدون درجات (نظام Eureka المسجّل): لف المقبض مع عقارب الساعة للأنعم وعكسها للأخشن. شفرات مسطحة (الكتالوج يذكر ٥٠ مم، ونسخ Diamond Inside ٥٥ مم).",
+    "sources": [
+     {
+      "label": "Eureka: كتالوج Mignon Silenzio",
+      "url": "https://www.eureka.co.it/en/catalogo/prodotti/macinacaff%C3%A8+on+demand/1/19.aspx"
+     }
+    ]
+   }
   },
   {
    "id": "eureka-mignon-specialita",
@@ -934,7 +2258,22 @@
    "model": "Mignon Specialita",
    "variant": null,
    "category": "espresso",
-   "photo": false
+   "photo": false,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "ضبط ميكرومتري بدون درجات (نظام Eureka المسجّل): لف المقبض مع عقارب الساعة للأنعم وعكسها للأخشن. شفرات مسطحة ٥٥ مم.",
+    "sources": [
+     {
+      "label": "Eureka: كتالوج Mignon Specialità",
+      "url": "https://www.eureka.co.it/en/catalogo/prodotti/macinacaff%C3%A8+on+demand/1/20.aspx"
+     }
+    ]
+   }
   },
   {
    "id": "eureka-oro-mignon-xl",
@@ -942,7 +2281,22 @@
    "model": "Oro Mignon XL",
    "variant": null,
    "category": "espresso",
-   "photo": false
+   "photo": false,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "ضبط بدون درجات (نظام Eureka المسجّل) وشفرات مسطحة ٦٥ مم.",
+    "sources": [
+     {
+      "label": "متجر Buna Coffee: Mignon XL 65 (مصدر ثانوي)",
+      "url": "https://www.bunacoffee.co.za/collections/eureka/products/eureka-mignon-xl-65-espresso-grinder"
+     }
+    ]
+   }
   },
   {
    "id": "fiorenzato-allground",
@@ -950,7 +2304,22 @@
    "model": "AllGround",
    "variant": null,
    "category": "espresso",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "ضبط ميكرومتري متصل بحلقة، وشفرات مسطحة ٦٤ مم مغطاة بالتيتانيوم.",
+    "sources": [
+     {
+      "label": "متجر Eight Ounce Coffee: AllGround (مصدر ثانوي)",
+      "url": "https://eightouncecoffee.ca/products/fiorenzato-allground-coffee-grinder-120v"
+     }
+    ]
+   }
   },
   {
    "id": "mazzer-mini",
@@ -958,7 +2327,22 @@
    "model": "Mini",
    "variant": null,
    "category": "espresso",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "ضبط ميكرومتري بدون درجات: تلف الحلقة لين توصل للطحنة اللي تبيها.",
+    "sources": [
+     {
+      "label": "متجر Clive Coffee: Mazzer Mini (مصدر ثانوي)",
+      "url": "https://clivecoffee.com/collections/grinders/products/mini"
+     }
+    ]
+   }
   },
   {
    "id": "rancilio-rocky",
@@ -966,7 +2350,22 @@
    "model": "Rocky",
    "variant": null,
    "category": "espresso",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepped",
+    "rangeMin": 0,
+    "rangeMax": 55,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "٥٥ إعداد: الأقرب للصفر أنعم. تضغط ذراع التحرير وتلف الخزان، والمطحنة شغّالة.",
+    "sources": [
+     {
+      "label": "متجر 1st-line: Rancilio Rocky (مصدر ثانوي)",
+      "url": "https://www.1st-line.com/buy/rancilio-rocky-doserless-espresso-grinder/"
+     }
+    ]
+   }
   },
   {
    "id": "mahlkonig-ek43",
@@ -974,7 +2373,22 @@
    "model": "EK43",
    "variant": null,
    "category": "commercial",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "قرص بدون درجات في واجهة المطحنة، ويغطي المدى كله بلفة وحدة.",
+    "sources": [
+     {
+      "label": "متجر Seattle Coffee Gear: EK43S (مصدر ثانوي)",
+      "url": "https://www.seattlecoffeegear.com/products/mahlkonig-ek43s-commercial-shop-grinder"
+     }
+    ]
+   }
   },
   {
    "id": "mahlkonig-ek43s",
@@ -982,7 +2396,22 @@
    "model": "EK43 S",
    "variant": null,
    "category": "commercial",
-   "photo": true
+   "photo": true,
+   "spec": {
+    "adjustment": "stepless",
+    "rangeMin": null,
+    "rangeMax": null,
+    "clicksPerRotation": null,
+    "micronsPerStep": null,
+    "zeroGuideAr": null,
+    "notesAr": "قرص بدون درجات في واجهة المطحنة، ويغطي المدى كله بلفة وحدة.",
+    "sources": [
+     {
+      "label": "متجر Seattle Coffee Gear: EK43S (مصدر ثانوي)",
+      "url": "https://www.seattlecoffeegear.com/products/mahlkonig-ek43s-commercial-shop-grinder"
+     }
+    ]
+   }
   }
  ]
 }
