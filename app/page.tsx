@@ -1,9 +1,49 @@
 import Image from "next/image";
 import { ComingSoon, PhoneFrame, SiteFooter, SiteNav } from "@/components/site/Chrome";
+import { BagShelf, BrewClip, CountUp, Reveal, Steam, Story, type StoryStep } from "@/components/site/Motion";
 import { CONTACT_EMAIL } from "@/lib/site";
 
 // The BunnList site: one page that introduces the app, laid out in Apple's
-// manner in BunnList's own colors. Everything described here is in the app.
+// manner in BunnList's own colors, with motion that follows the scroll.
+// Everything described here is in the app.
+
+const story: StoryStep[] = [
+  {
+    kicker: "اكتشف",
+    title: "ابدأ بما تحبه.",
+    body: "لكل محصول صورة كيسه الأصلية، ومنشؤه، وطريقة معالجته، ونكهاته. تصفّح حسب النكهة أو البلد، أو ابحث بالمحمصة والمعالجة.",
+    image: "/site/discover.jpg",
+    alt: "شاشة «اكتشف»",
+  },
+  {
+    kicker: "احفظ",
+    title: "مجموعتك في مكان واحد.",
+    body: "ما عندك، وما جرّبته، وما تحبه، وما تنوي تجربته. وصوّر أي كيس فيتعرّف عليه التطبيق ويضيفه.",
+    image: "/site/collection.jpg",
+    alt: "شاشة «مجموعتي»",
+  },
+  {
+    kicker: "حضّر",
+    title: "الوصفة تمشي معك.",
+    body: "اختر الطريقة والوصفة، وحدّد درجة الطحن على مطحنتك، ثم اتبع الخطوات بالثانية.",
+    image: "/site/brew-v60-poster.jpg",
+    alt: "شاشة التحضير",
+  },
+  {
+    kicker: "قيّم",
+    title: "والكوب القادم أطيب.",
+    body: "قل كيف خرج الطعم، ويقترح التطبيق تعديلًا واحدًا تجرّبه في المرة القادمة، ويتذكّره لك.",
+    image: "/site/taste.jpg",
+    alt: "شاشة «كيف طلعت؟»",
+  },
+];
+
+const bags = [
+  ["nardos", "ناردوس"], ["massar", "مسار"], ["lolit", "لوليت"], ["zubaida", "زبيدة"], ["milora", "ميلورا"],
+  ["9009", "9009"], ["eyana", "إيانا"], ["black-mountain", "الجبل الأسود"], ["excelso", "إكسيلسو"], ["solana", "سولانا"],
+  ["altura", "ألتورا"], ["sulaf", "سلاف"], ["rio", "ريو"], ["guji", "جوجي"], ["azora", "أزورا"], ["raul", "راؤول"],
+  ["victoria", "فيكتوريا"], ["silver", "سيلفر"], ["chelchele", "تشلتشلي"], ["rozitta", "روزيتا"],
+].map(([file, name]) => ({ src: `/site/bags/${file}.jpg`, name }));
 
 const features: { title: string; body: string; icon: string; wide?: boolean; dark?: boolean }[] = [
   {
@@ -95,49 +135,48 @@ export default function Home() {
       <main>
         {/* Hero */}
         <section className="overflow-hidden bg-[var(--bg)] pt-14 text-center sm:pt-20">
-          <Image src="/site/app-icon.png" alt="أيقونة BunnList" width={88} height={88} priority className="mx-auto rounded-[22px] shadow-[0_10px_30px_rgba(74,52,40,0.18)]" />
-          <p className="mt-6 text-[21px] font-semibold text-[var(--gold)] sm:text-[24px]">BunnList</p>
-          <h1 className="mx-auto mt-2 max-w-[14ch] px-4 text-[44px] font-bold leading-[1.1] tracking-tight sm:text-[72px] lg:text-[88px]">
+          <div className="hero-in relative mx-auto mt-12 w-fit">
+            <Steam />
+            <Image src="/site/app-icon.png" alt="أيقونة BunnList" width={88} height={88} priority className="rounded-[22px] shadow-[0_10px_30px_rgba(74,52,40,0.18)]" />
+          </div>
+          <p className="hero-in hero-in-2 mt-6 text-[21px] font-semibold text-[var(--gold)] sm:text-[24px]">BunnList</p>
+          <h1 className="hero-in hero-in-2 mx-auto mt-2 max-w-[14ch] px-4 text-[44px] font-bold leading-[1.1] tracking-tight sm:text-[72px] lg:text-[88px]">
             قهوتك الجاية، هنا.
           </h1>
-          <p className="mx-auto mt-5 max-w-[32ch] px-5 text-[19px] leading-relaxed text-[var(--ink-2)] sm:text-[24px]">
+          <p className="hero-in hero-in-3 mx-auto mt-5 max-w-[32ch] px-5 text-[19px] leading-relaxed text-[var(--ink-2)] sm:text-[24px]">
             اكتشف محاصيل تناسب ذوقك، وحضّرها خطوة بخطوة، واجعل كل كوب أطيب من سابقه.
           </p>
-          <div className="mt-8">
+          <div className="hero-in hero-in-4 mt-8">
             <ComingSoon />
           </div>
-          <div className="relative mx-auto mt-14 h-[420px] max-w-[1024px] sm:h-[560px]">
-            <PhoneFrame className="absolute inset-x-0 top-0">
+          <div className="relative mx-auto mt-14 h-[420px] max-w-[1024px] [perspective:1200px] sm:h-[560px]">
+            <PhoneFrame className="phone-rise absolute inset-x-0 top-0">
               <Image src="/site/discover.jpg" alt="شاشة «اكتشف» في التطبيق" fill sizes="300px" className="object-cover object-top" priority />
             </PhoneFrame>
           </div>
         </section>
 
-        {/* Discover */}
-        <section id="discover" className="scroll-mt-12 bg-[var(--bg-alt)] px-5 py-20 sm:py-28">
-          <div className="mx-auto grid max-w-[1024px] items-center gap-12 md:grid-cols-2">
-            <div>
-              <p className="text-[17px] font-semibold text-[var(--accent)]">اكتشف</p>
-              <h2 className="mt-2 text-[34px] font-bold leading-[1.15] tracking-tight sm:text-[48px]">ابدأ بما تحبه.</h2>
-              <p className="mt-5 text-[19px] leading-relaxed text-[var(--ink-2)]">
-                لكل محصول صورة كيسه الأصلية، ومنشؤه، وطريقة معالجته، ونكهاته، والطرق التي تناسب تحضيره. تصفّح حسب النكهة
-                أو البلد، أو ابحث بالمحمصة والمعالجة وطريقة التحضير.
-              </p>
-              <ul className="mt-8 grid grid-cols-2 gap-3 text-[15px]">
-                {["أحدث إضافة", "على ذوقك", "من أين؟", "وصل حديثًا"].map((t) => (
-                  <li key={t} className="rounded-2xl bg-[var(--card)] px-4 py-3 font-medium shadow-[0_1px_0_var(--line)]">{t}</li>
-                ))}
-              </ul>
-            </div>
-            <PhoneFrame>
-              <Image src="/site/discover-large-text.jpg" alt="شاشة «اكتشف» بخط مكبّر" fill sizes="300px" className="object-cover object-top" />
-            </PhoneFrame>
+        {/* The story: discover, keep, brew, rate */}
+        <section id="discover" className="scroll-mt-12 bg-[var(--bg-alt)] px-5 py-10 sm:py-16">
+          <Story steps={story} />
+        </section>
+
+        {/* The shelf */}
+        <section className="overflow-hidden bg-[var(--bg)] py-20 sm:py-28">
+          <Reveal className="mx-auto max-w-[720px] px-5 text-center">
+            <h2 className="text-[34px] font-bold leading-[1.15] tracking-tight sm:text-[48px]">رفّ يكبر كل أسبوع.</h2>
+            <p className="mt-4 text-[19px] leading-relaxed text-[var(--ink-2)]">
+              محاصيل من محامص سعودية، بصور أكياسها كما وصلت من محامصها.
+            </p>
+          </Reveal>
+          <div className="mt-12">
+            <BagShelf bags={bags} />
           </div>
         </section>
 
         {/* Brew, in motion */}
-        <section id="brew" className="scroll-mt-12 bg-[var(--dark)] px-5 py-20 text-[var(--bg)] sm:py-28">
-          <div className="mx-auto max-w-[1024px] text-center">
+        <section id="brew" className="relative scroll-mt-12 overflow-hidden bg-[var(--dark)] px-5 py-20 text-[var(--bg)] sm:py-28">
+          <Reveal className="mx-auto max-w-[1024px] text-center">
             <p className="text-[17px] font-semibold text-[var(--gold-light)]">حضّر</p>
             <h2 className="mx-auto mt-2 max-w-[16ch] text-[40px] font-bold leading-[1.1] tracking-tight sm:text-[64px]">
               كل خطوة أمام عينيك.
@@ -146,19 +185,9 @@ export default function Home() {
               ترى الماء ينساب، والبن ينتفخ، والإبريق يمتلئ، في توقيت وصفتك نفسه. وقبل كل خطوة بثلاث ثوانٍ يهتزّ هاتفك
               اهتزازة خفيفة لتنتبه في الوقت المناسب.
             </p>
-          </div>
-          <div className="mx-auto mt-14 grid max-w-[1024px] items-center gap-12 md:grid-cols-[1fr_auto_1fr]">
-            <ul className="space-y-6 text-[17px] text-[var(--dark-ink-2)]">
-              <li><b className="block text-[21px] text-[var(--bg)]">V60 ساخن ومثلّج</b>صبّ دائري، ثم تشريب، وثلج يذوب في الإبريق.</li>
-              <li><b className="block text-[21px] text-[var(--bg)]">إيروبريس</b>تقليب ونقع، ثم ضغط هادئ حتى تسمع الهسهسة.</li>
-            </ul>
-            <PhoneFrame>
-              <video className="h-full w-full object-cover" src="/site/brew-v60.mp4" poster="/site/brew-v60-poster.jpg" autoPlay muted loop playsInline preload="metadata" aria-label="تحضير V60 خطوة بخطوة في التطبيق" />
-            </PhoneFrame>
-            <ul className="space-y-6 text-[17px] text-[var(--dark-ink-2)]">
-              <li><b className="block text-[21px] text-[var(--bg)]">إسبريسو</b>يتدرّج لون الاستخلاص وتتكوّن الكريما، والهدف بين ٢٥ و٣٢ ثانية.</li>
-              <li><b className="block text-[21px] text-[var(--bg)]">قهوة عربية</b>دلّة على النار، ثم البن والهيل، فتركد قبل أن تُصبّ في الفنجال.</li>
-            </ul>
+          </Reveal>
+          <div className="mt-14">
+            <BrewClip />
           </div>
           <div className="mx-auto mt-16 flex max-w-[1024px] flex-wrap justify-center gap-2">
             {methods.map((m) => (
@@ -170,23 +199,35 @@ export default function Home() {
         {/* Features, as a bento grid */}
         <section id="features" className="scroll-mt-12 bg-[var(--bg-alt)] px-5 py-20 sm:py-28">
           <div className="mx-auto max-w-[1024px]">
-            <h2 className="text-center text-[34px] font-bold tracking-tight sm:text-[48px]">من الحبّة إلى الفنجال.</h2>
+            <Reveal>
+              <h2 className="text-center text-[34px] font-bold tracking-tight sm:text-[48px]">من الحبّة إلى الفنجال.</h2>
+            </Reveal>
+            <Reveal delay={100} className="mx-auto mt-10 grid max-w-[720px] grid-cols-3 gap-4 text-center">
+              {([[123, "مطحنة في الدليل"], [91, "بمواصفات موثّقة"], [7, "طرق تحضير"]] as const).map(([n, label]) => (
+                <div key={label}>
+                  <p className="text-[40px] font-bold tracking-tight text-[var(--accent)] sm:text-[56px]"><CountUp to={n} /></p>
+                  <p className="text-[15px] text-[var(--ink-2)]">{label}</p>
+                </div>
+              ))}
+            </Reveal>
             <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {features.map((f) => (
-                <article
+              {features.map((f, i) => (
+                <Reveal
+                  as="article"
                   key={f.title}
-                  className={`flex min-h-[220px] flex-col justify-between rounded-[28px] p-7 ${f.wide ? "lg:col-span-2" : ""} ${
+                  delay={(i % 4) * 90}
+                  className={`flex min-h-[220px] flex-col justify-between rounded-[28px] p-7 transition-transform duration-300 hover:-translate-y-1 ${f.wide ? "lg:col-span-2" : ""} ${
                     f.dark ? "bg-[var(--dark)] text-[var(--bg)]" : "bg-[var(--card)] shadow-[0_1px_0_var(--line)]"
                   }`}
                 >
-                  <span className={f.dark ? "text-[var(--gold-light)]" : "text-[var(--accent)]"}>
+                  <span className={`pop inline-block w-fit ${f.dark ? "text-[var(--gold-light)]" : "text-[var(--accent)]"}`}>
                     <Icon d={f.icon} />
                   </span>
                   <div>
                     <h3 className="mt-8 text-[24px] font-semibold tracking-tight">{f.title}</h3>
                     <p className={`mt-2 text-[16px] leading-relaxed ${f.dark ? "text-[var(--dark-ink-2)]" : "text-[var(--ink-2)]"}`}>{f.body}</p>
                   </div>
-                </article>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -195,7 +236,7 @@ export default function Home() {
         {/* Specs */}
         <section id="specs" className="scroll-mt-12 bg-[var(--bg)] px-5 py-20 sm:py-28">
           <div className="mx-auto max-w-[880px]">
-            <h2 className="text-[34px] font-bold tracking-tight sm:text-[48px]">المواصفات</h2>
+            <Reveal><h2 className="text-[34px] font-bold tracking-tight sm:text-[48px]">المواصفات</h2></Reveal>
             <dl className="mt-10 border-t border-[var(--line)]">
               {specs.map(([k, v]) => (
                 <div key={k} className="grid gap-1 border-b border-[var(--line)] py-5 sm:grid-cols-[200px_1fr] sm:gap-8">
@@ -209,7 +250,7 @@ export default function Home() {
 
         {/* Roasters */}
         <section id="roasters" className="scroll-mt-12 bg-[var(--bg-alt)] px-5 py-20 text-center sm:py-28">
-          <div className="mx-auto max-w-[720px]">
+          <Reveal className="mx-auto max-w-[720px]">
             <p className="text-[17px] font-semibold text-[var(--accent)]">للمحامص</p>
             <h2 className="mt-2 text-[34px] font-bold leading-[1.15] tracking-tight sm:text-[48px]">محاصيلكم كما قدّمتموها.</h2>
             <p className="mt-5 text-[19px] leading-relaxed text-[var(--ink-2)]">
@@ -219,7 +260,7 @@ export default function Home() {
             <a href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("محمصة في BunnList")}`} className="mt-8 inline-block rounded-full bg-[var(--accent)] px-6 py-3 text-[17px] font-medium text-[var(--bg)] transition hover:bg-[var(--accent-ink)]">
               راسلونا
             </a>
-          </div>
+          </Reveal>
         </section>
 
         {/* Closing */}

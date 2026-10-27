@@ -54,3 +54,66 @@ body {
     transition: none !important;
   }
 }
+
+/* Motion. Things rise into view; the hero phone settles; steam curls; the shelf drifts. */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0ms),
+    transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0ms);
+}
+.reveal[data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+.reveal[data-shown="true"] .pop {
+  animation: pop 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) calc(var(--d, 0ms) + 250ms) both;
+}
+@keyframes pop {
+  0% { transform: scale(0.6) rotate(-12deg); opacity: 0; }
+  60% { transform: scale(1.15) rotate(4deg); opacity: 1; }
+  100% { transform: none; }
+}
+
+.hero-in {
+  animation: hero-in 1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.hero-in-2 { animation-delay: 0.12s; }
+.hero-in-3 { animation-delay: 0.24s; }
+.hero-in-4 { animation-delay: 0.36s; }
+@keyframes hero-in {
+  from { opacity: 0; transform: translateY(24px); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+.phone-rise {
+  animation: phone-rise 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.45s both;
+  transform-origin: 50% 100%;
+}
+@keyframes phone-rise {
+  from { opacity: 0; transform: translateY(120px) rotateX(18deg) scale(0.94); }
+  to { opacity: 1; transform: none; }
+}
+
+.steam path {
+  stroke-dasharray: 60;
+  animation: steam 3s ease-in-out infinite;
+  opacity: 0;
+}
+@keyframes steam {
+  0% { stroke-dashoffset: 60; opacity: 0; transform: translateY(6px); }
+  40% { opacity: 1; }
+  100% { stroke-dashoffset: -60; opacity: 0; transform: translateY(-10px); }
+}
+
+@keyframes shelf {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.shelf:hover > div {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; }
+}
