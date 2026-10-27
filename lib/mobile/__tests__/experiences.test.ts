@@ -36,6 +36,9 @@ describe("ExperienceUpsert", () => {
     expect(ExperienceUpsert.safeParse({ ...valid, brewedAt: "yesterday" }).success).toBe(false);
     expect(ExperienceUpsert.safeParse({ ...valid, note: "x".repeat(2001) }).success).toBe(false);
   });
+  it("accepts Arabic coffee as a method", () => {
+    expect(ExperienceUpsert.safeParse({ ...valid, methodCode: "ARABIC" }).success).toBe(true);
+  });
   it("accepts a timezone offset in brewedAt", () => {
     expect(ExperienceUpsert.safeParse({ ...valid, brewedAt: "2026-10-24T11:00:00+03:00" }).success).toBe(true);
   });

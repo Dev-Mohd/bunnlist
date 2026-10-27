@@ -11,8 +11,10 @@ import { award, revoke } from "./points";
 export const EXPERIENCE_STATES = ["draft", "published", "unpublished", "deleted"] as const;
 export type ExperienceState = (typeof EXPERIENCE_STATES)[number];
 
+// The app's brew methods. ARABIC (Arabic coffee in a dalla) is app-only: reviews
+// keep the website's BrewMethod enum, which doesn't have it.
 export const BREW_METHOD_CODES = [
-  "ESPRESSO", "V60", "CHEMEX", "AEROPRESS", "FRENCH_PRESS", "COLD_BREW", "OTHER",
+  "ESPRESSO", "V60", "CHEMEX", "AEROPRESS", "FRENCH_PRESS", "COLD_BREW", "ARABIC", "OTHER",
 ] as const;
 
 export function canTransition(from: ExperienceState, to: ExperienceState): boolean {
