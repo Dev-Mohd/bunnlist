@@ -2,21 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-/* The site in Apple's manner: white and near-white grounds, near-black type,
-   generous space, one accent. BunnList's olive stands in for Apple's blue. */
 :root {
   color-scheme: light;
-  --bg: #ffffff;
-  --bg-alt: #f5f5f7;
-  --ink: #1d1d1f;
-  --ink-2: #6e6e73;
-  --line: rgba(0, 0, 0, 0.08);
+  /* BunnList's own colors, laid out in Apple's manner: cream grounds, espresso
+     type, olive for actions, gold for highlights, roasted brown for dark sections. */
+  --bg: #f7f1e8;
+  --bg-alt: #efe6d8;
+  --card: #fffdf9;
+  --ink: #171411;
+  --ink-2: #6b5f55;
+  --line: rgba(74, 52, 40, 0.12);
   --accent: #536344;
   --accent-ink: #3f4c33;
-  --gold: #c89a3e;
-  --dark: #000000;
-  --dark-2: #161617;
-  --dark-ink-2: #86868b;
+  --gold: #987024;
+  --gold-light: #c89a3e;
+  --dark: #1c140f;
+  --dark-2: #2a1e17;
+  --dark-ink-2: #b3a597;
 }
 
 * {
@@ -38,7 +40,7 @@ body {
 }
 
 ::selection {
-  background: rgba(83, 99, 68, 0.2);
+  background: rgba(152, 112, 36, 0.22);
 }
 
 @media (prefers-reduced-motion: reduce) {
