@@ -572,6 +572,8 @@ model MobileNotificationSettings {
   reviewHelpful      Boolean  @default(true)
   recipeLiked        Boolean  @default(true)
   weeklySummary      Boolean  @default(true)
+  /// News from the BunnList team (admin broadcasts).
+  announcements      Boolean  @default(true)
   updatedAt          DateTime @updatedAt
 }
 
@@ -620,4 +622,29 @@ model MobileReport {
   @@index([status, createdAt])
   @@index([targetType, targetId])
   @@index([reporterId])
+}
+
+/// An account barred from posting (reviews, recipes, suggestions, profile text)
+/// by an admin, until `until` or indefinitely. Reading the app is unaffected.
+model MobileSuspension {
+  accountId String    @id
+  reason    String
+  until     DateTime?
+  createdBy String
+  createdAt DateTime  @default(now())
+}
+
+/// A push notification an admin sent to many accounts, kept as a log.
+model MobileBroadcast {
+  id        String   @id @default(cuid())
+  title     String
+  body      String
+  /// "test" | "all" | "active30"
+  audience  String
+  accounts  Int
+  delivered Int
+  createdBy String
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
 }

@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { authenticate } from "@/lib/mobile/authGuard";
 import { requireAccessSecret } from "@/lib/mobile/deps";
+import { assertCanPost } from "@/lib/mobile/adminUsers";
 import { handle, readJson } from "@/lib/mobile/respond";
 import { parseBody } from "@/lib/mobile/schemas";
 import { changeRecipeState, RecipeStateChange } from "@/lib/mobile/recipes";
@@ -15,6 +16,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   return handle(async () => {
     const accountId = await authenticate(req, requireAccessSecret());
     const { state } = parseBody(RecipeStateChange, await readJson(req));
+    // A suspended account can still unpublish or delete, not publish.
+    if (state === "published") await assertCanPost(prisma, accountId);
     return changeRecipeState(prisma, accountId, id, state);
   });
 }

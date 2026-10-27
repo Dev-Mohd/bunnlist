@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { authenticate } from "@/lib/mobile/authGuard";
 import { requireAccessSecret } from "@/lib/mobile/deps";
+import { assertCanPost } from "@/lib/mobile/adminUsers";
 import { handle, readJson } from "@/lib/mobile/respond";
 import { parseBody } from "@/lib/mobile/schemas";
 import { listMyRecipes, RecipeUpsert, saveRecipe } from "@/lib/mobile/recipes";
@@ -21,6 +22,7 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   return handle(async () => {
     const accountId = await authenticate(req, requireAccessSecret());
+    await assertCanPost(prisma, accountId);
     const input = parseBody(RecipeUpsert, await readJson(req));
     return saveRecipe(prisma, accountId, input);
   });

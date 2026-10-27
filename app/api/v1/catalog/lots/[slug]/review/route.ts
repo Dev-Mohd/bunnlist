@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { authenticate } from "@/lib/mobile/authGuard";
 import { requireAccessSecret } from "@/lib/mobile/deps";
+import { assertCanPost } from "@/lib/mobile/adminUsers";
 import { handle, readJson } from "@/lib/mobile/respond";
 import { parseBody } from "@/lib/mobile/schemas";
 import { MobileReviewRequest, submitReview, getMyReview } from "@/lib/mobile/reviews";
@@ -15,6 +16,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ slug: s
   const { slug } = await params;
   return handle(async () => {
     const accountId = await authenticate(req, requireAccessSecret());
+    await assertCanPost(prisma, accountId);
     const input = parseBody(MobileReviewRequest, await readJson(req));
     return submitReview(prisma, accountId, slug, input);
   });
