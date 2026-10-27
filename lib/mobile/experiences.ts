@@ -24,6 +24,27 @@ export function canTransition(from: ExperienceState, to: ExperienceState): boole
   return false;
 }
 
+export const BREW_TASTES = ["balanced", "sour", "bitter", "weak", "strong"] as const;
+export const RECIPE_SOURCES = ["mine", "community", "base"] as const;
+
+const optionalText = (max: number) => z.string().trim().max(max).transform((v) => v || null).nullable().optional();
+
+/** What «حضّر» knows about the brew; every field optional, and a field left out on
+ *  an edit keeps what was saved. */
+export const BrewLog = z.object({
+  recipeId: optionalText(120),
+  recipeTitle: optionalText(120),
+  recipeSource: z.enum(RECIPE_SOURCES).nullable().optional(),
+  grinderId: optionalText(80),
+  grindSetting: optionalText(40),
+  doseGrams: z.number().min(0).max(2000).nullable().optional(),
+  waterGrams: z.number().min(0).max(5000).nullable().optional(),
+  brewSeconds: z.number().int().min(0).max(86_400).nullable().optional(),
+  taste: z.enum(BREW_TASTES).nullable().optional(),
+});
+export type BrewLog = z.infer<typeof BrewLog>;
+const LOG_KEYS = Object.keys(BrewLog.shape) as (keyof BrewLog)[];
+
 export const ExperienceUpsert = z.object({
   clientId: z.string().min(1).max(100),
   methodCode: z.enum(BREW_METHOD_CODES),
@@ -31,7 +52,7 @@ export const ExperienceUpsert = z.object({
   brewedAt: z.iso.datetime({ offset: true }),
   note: z.string().max(2000).default(""),
   publish: z.boolean().default(false),
-});
+}).merge(BrewLog);
 export type ExperienceUpsert = z.infer<typeof ExperienceUpsert>;
 
 export const ExperienceStateChange = z.object({
@@ -48,12 +69,31 @@ export interface MobileExperience {
   state: ExperienceState;
   revision: number;
   updatedAt: string;
+  /** The «حضّر» details, when the brew was logged from there. */
+  log: { [K in keyof BrewLog]-?: Exclude<BrewLog[K], undefined> } | null;
 }
 
-type Row = {
+type LogRow = {
+  recipeId?: string | null; recipeTitle?: string | null; recipeSource?: string | null; grinderId?: string | null;
+  grindSetting?: string | null; doseGrams?: number | null; waterGrams?: number | null; brewSeconds?: number | null;
+  taste?: string | null;
+};
+
+type Row = LogRow & {
   id: string; clientId: string; lotId: string; accountId: string; methodCode: string; stars: number;
   brewedAt: Date; note: string; state: string; revision: number; updatedAt: Date;
 };
+
+function mapLog(row: LogRow): MobileExperience["log"] {
+  if (LOG_KEYS.every((k) => row[k] == null)) return null;
+  return {
+    recipeId: row.recipeId ?? null, recipeTitle: row.recipeTitle ?? null,
+    recipeSource: (row.recipeSource ?? null) as BrewLog["recipeSource"] & {},
+    grinderId: row.grinderId ?? null, grindSetting: row.grindSetting ?? null,
+    doseGrams: row.doseGrams ?? null, waterGrams: row.waterGrams ?? null, brewSeconds: row.brewSeconds ?? null,
+    taste: (row.taste ?? null) as BrewLog["taste"] & {},
+  };
+}
 
 export function mapExperience(row: Row): MobileExperience {
   return {
@@ -66,6 +106,7 @@ export function mapExperience(row: Row): MobileExperience {
     state: row.state as ExperienceState,
     revision: row.revision,
     updatedAt: row.updatedAt.toISOString(),
+    log: mapLog(row),
   };
 }
 
@@ -97,6 +138,7 @@ export async function saveExperience(
     stars: input.stars,
     brewedAt: new Date(input.brewedAt),
     note: input.note.trim(),
+    ...Object.fromEntries(LOG_KEYS.filter((k) => input[k] !== undefined).map((k) => [k, input[k]])),
   };
   const existing = await prisma.mobileBrewExperience.findUnique({
     where: { accountId_clientId: { accountId, clientId: input.clientId } },
