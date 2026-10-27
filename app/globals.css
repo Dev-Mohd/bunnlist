@@ -2,9 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* The site in Apple's manner: white and near-white grounds, near-black type,
+   generous space, one accent. BunnList's olive stands in for Apple's blue. */
 :root {
   color-scheme: light;
-  background: #fafaf9;
+  --bg: #ffffff;
+  --bg-alt: #f5f5f7;
+  --ink: #1d1d1f;
+  --ink-2: #6e6e73;
+  --line: rgba(0, 0, 0, 0.08);
+  --accent: #536344;
+  --accent-ink: #3f4c33;
+  --gold: #c89a3e;
+  --dark: #000000;
+  --dark-2: #161617;
+  --dark-ink-2: #86868b;
 }
 
 * {
@@ -14,62 +26,29 @@
 html {
   min-width: 320px;
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
-  min-height: 100vh;
-  background: #fafaf9;
-  color: #1c1917;
-  text-rendering: geometricPrecision;
-}
-
-button,
-input {
-  font: inherit;
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "kern";
 }
 
 ::selection {
-  background: rgba(201, 164, 93, 0.35);
-  color: #fffaf2;
-}
-
-.bean-pattern {
-  background-image:
-    radial-gradient(ellipse at 50% 45%, rgba(201, 164, 93, 0.18) 0 18%, transparent 19%),
-    linear-gradient(35deg, transparent 42%, rgba(201, 164, 93, 0.16) 43% 47%, transparent 48%);
-  background-position:
-    0 0,
-    0 0;
-  background-size:
-    76px 46px,
-    76px 46px;
-  mask-image: linear-gradient(to bottom, black 0%, black 52%, transparent 100%);
-}
-
-.animate-rise {
-  animation: rise 850ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
-}
-
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  background: rgba(83, 99, 68, 0.2);
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
+    animation: none !important;
+    transition: none !important;
   }
 }

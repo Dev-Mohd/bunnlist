@@ -1,44 +1,55 @@
-import type { Metadata } from "next";
-import { Cairo } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { IBM_Plex_Sans_Arabic } from "next/font/google";
 import "./globals.css";
 
-const cairo = Cairo({
+// Apple devices get the system font (SF Arabic); everyone else IBM Plex Sans Arabic.
+const plex = IBM_Plex_Sans_Arabic({
   subsets: ["arabic", "latin"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
+  variable: "--font-plex",
 });
+
+const description =
+  "BunnList تطبيق لمحبي القهوة المختصة: اكتشف المحاصيل حسب ذوقك، حضّرها خطوة بخطوة بالحركة، وسجّل كل كوب. قريبًا على App Store.";
 
 export const metadata: Metadata = {
   title: {
-    default: "BunnList — منصة تقييم محاصيل القهوة المختصة",
-    template: "%s | BunnList",
+    default: "BunnList — قهوتك الجاية، هنا.",
+    template: "%s — BunnList",
   },
-  description:
-    "اكتشف محاصيل القهوة المختصة، اقرأ تجارب الناس، واعرف أفضل طريقة تحضير قبل ما تشتري.",
-  keywords: ["قهوة", "قهوة مختصة", "تقييم قهوة", "محاصيل قهوة", "specialty coffee"],
+  description,
+  keywords: ["قهوة مختصة", "تطبيق قهوة", "V60", "تحضير القهوة", "محامص سعودية", "BunnList"],
   metadataBase: new URL("https://bunnlist.com"),
+  icons: { icon: "/icon.svg", apple: "/site/app-icon.png" },
   openGraph: {
-    title: "BunnList — منصة تقييم محاصيل القهوة المختصة",
-    description:
-      "اكتشف محاصيل القهوة المختصة، اقرأ تجارب الناس، واعرف أفضل طريقة تحضير قبل ما تشتري.",
+    title: "BunnList — قهوتك الجاية، هنا.",
+    description,
     siteName: "BunnList",
     locale: "ar_SA",
     type: "website",
+    images: ["/site/app-icon.png"],
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "BunnList — منصة تقييم محاصيل القهوة المختصة",
-    description: "اكتشف محاصيل القهوة المختصة واعرف أفضل طرق تحضيرها.",
-  },
+  twitter: { card: "summary", title: "BunnList — قهوتك الجاية، هنا.", description },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export const viewport: Viewport = {
+  themeColor: "#ffffff",
+  width: "device-width",
+  initialScale: 1,
+};
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ar" dir="rtl">
-      <body className={cairo.className}>{children}</body>
+    <html lang="ar" dir="rtl" className={plex.variable}>
+      <body
+        style={{
+          fontFamily:
+            '-apple-system, BlinkMacSystemFont, "SF Arabic", "SF Pro Text", var(--font-plex), "Helvetica Neue", sans-serif',
+        }}
+      >
+        {children}
+      </body>
     </html>
   );
 }
