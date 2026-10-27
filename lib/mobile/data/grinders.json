@@ -1,0 +1,988 @@
+{
+ "items": [
+  {
+   "id": "1zpresso-j",
+   "brand": "1Zpresso",
+   "model": "J",
+   "variant": "2023",
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "1zpresso-j-max",
+   "brand": "1Zpresso",
+   "model": "J-Max",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "1zpresso-j-ultra",
+   "brand": "1Zpresso",
+   "model": "J-Ultra",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "1zpresso-jx",
+   "brand": "1Zpresso",
+   "model": "JX",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "1zpresso-jx-pro",
+   "brand": "1Zpresso",
+   "model": "JX-Pro",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "1zpresso-k-max",
+   "brand": "1Zpresso",
+   "model": "K-Max",
+   "variant": null,
+   "category": "hand",
+   "photo": false
+  },
+  {
+   "id": "1zpresso-k-plus",
+   "brand": "1Zpresso",
+   "model": "K-Plus",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "1zpresso-k-pro",
+   "brand": "1Zpresso",
+   "model": "K-Pro",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "1zpresso-k-ultra",
+   "brand": "1Zpresso",
+   "model": "K-Ultra",
+   "variant": null,
+   "category": "hand",
+   "photo": false
+  },
+  {
+   "id": "1zpresso-q-air",
+   "brand": "1Zpresso",
+   "model": "Q Air",
+   "variant": null,
+   "category": "hand",
+   "photo": false
+  },
+  {
+   "id": "1zpresso-q2",
+   "brand": "1Zpresso",
+   "model": "Q2",
+   "variant": "Heptagonal",
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "1zpresso-x-ultra",
+   "brand": "1Zpresso",
+   "model": "X-Ultra",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "1zpresso-zp6",
+   "brand": "1Zpresso",
+   "model": "ZP6 Special",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "codex-d6",
+   "brand": "CODEX",
+   "model": "D6",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "codex-d7",
+   "brand": "CODEX",
+   "model": "D7",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "comandante-c40-mk3",
+   "brand": "Comandante",
+   "model": "C40 MK3 Nitro Blade",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "comandante-c40-mk4",
+   "brand": "Comandante",
+   "model": "C40 MK4 Nitro Blade",
+   "variant": null,
+   "category": "hand",
+   "photo": false
+  },
+  {
+   "id": "comandante-c40-red-clix",
+   "brand": "Comandante",
+   "model": "C40 + Red Clix RX35",
+   "variant": null,
+   "category": "hand",
+   "photo": false
+  },
+  {
+   "id": "comandante-c60",
+   "brand": "Comandante",
+   "model": "C60 Baracuda",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "fiorenzato-pietro",
+   "brand": "Fiorenzato",
+   "model": "Pietro Pro Brew",
+   "variant": "M-Modal burrs",
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "hario-mini-slim-pro",
+   "brand": "Hario",
+   "model": "Mini Mill Slim Pro",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "hario-skerton-pro",
+   "brand": "Hario",
+   "model": "Skerton Pro",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "kingrinder-k1",
+   "brand": "KINGrinder",
+   "model": "K1",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "kingrinder-k2",
+   "brand": "KINGrinder",
+   "model": "K2",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "kingrinder-k4",
+   "brand": "KINGrinder",
+   "model": "K4",
+   "variant": null,
+   "category": "hand",
+   "photo": false
+  },
+  {
+   "id": "kingrinder-k6",
+   "brand": "KINGrinder",
+   "model": "K6",
+   "variant": null,
+   "category": "hand",
+   "photo": false
+  },
+  {
+   "id": "kingrinder-p2",
+   "brand": "KINGrinder",
+   "model": "P2",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "kinu-m47",
+   "brand": "Kinu",
+   "model": "M47 Classic",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "mhw-blade-r3",
+   "brand": "MHW-3Bomber",
+   "model": "Blade R3",
+   "variant": null,
+   "category": "hand",
+   "photo": false
+  },
+  {
+   "id": "millab-m01",
+   "brand": "MILLAB",
+   "model": "M01",
+   "variant": null,
+   "category": "hand",
+   "photo": false
+  },
+  {
+   "id": "mischief-m40-40",
+   "brand": "MisChief",
+   "model": "M40",
+   "variant": "40 كليك",
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "mischief-m40-80",
+   "brand": "MisChief",
+   "model": "M40",
+   "variant": "80 كليك",
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "timemore-c2",
+   "brand": "Timemore",
+   "model": "Chestnut C2",
+   "variant": null,
+   "category": "hand",
+   "photo": false
+  },
+  {
+   "id": "timemore-c3",
+   "brand": "Timemore",
+   "model": "Chestnut C3",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "timemore-c3-esp-pro",
+   "brand": "Timemore",
+   "model": "Chestnut C3 ESP Pro",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "timemore-c3-pro",
+   "brand": "Timemore",
+   "model": "Chestnut C3 Pro",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "timemore-s3",
+   "brand": "Timemore",
+   "model": "Chestnut S3",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "timemore-x",
+   "brand": "Timemore",
+   "model": "Chestnut X",
+   "variant": null,
+   "category": "hand",
+   "photo": true
+  },
+  {
+   "id": "alsaif-e03409",
+   "brand": "AlSaif",
+   "model": "E03409",
+   "variant": null,
+   "category": "electric",
+   "photo": true
+  },
+  {
+   "id": "baratza-encore",
+   "brand": "Baratza",
+   "model": "Encore",
+   "variant": null,
+   "category": "electric",
+   "photo": true
+  },
+  {
+   "id": "baratza-encore-esp",
+   "brand": "Baratza",
+   "model": "Encore ESP",
+   "variant": null,
+   "category": "electric",
+   "photo": true
+  },
+  {
+   "id": "baratza-sette-30",
+   "brand": "Baratza",
+   "model": "Sette 30",
+   "variant": null,
+   "category": "electric",
+   "photo": false
+  },
+  {
+   "id": "baratza-sette-270",
+   "brand": "Baratza",
+   "model": "Sette 270",
+   "variant": null,
+   "category": "electric",
+   "photo": false
+  },
+  {
+   "id": "baratza-vario-plus",
+   "brand": "Baratza",
+   "model": "Vario+",
+   "variant": null,
+   "category": "electric",
+   "photo": false
+  },
+  {
+   "id": "baratza-virtuoso-plus",
+   "brand": "Baratza",
+   "model": "Virtuoso+",
+   "variant": null,
+   "category": "electric",
+   "photo": true
+  },
+  {
+   "id": "breville-smart-grinder-pro",
+   "brand": "Breville",
+   "model": "Smart Grinder Pro",
+   "variant": "BCG820",
+   "category": "electric",
+   "photo": true
+  },
+  {
+   "id": "clikon-ck2287",
+   "brand": "Clikon",
+   "model": "CK2287",
+   "variant": null,
+   "category": "electric",
+   "photo": true
+  },
+  {
+   "id": "delonghi-kg79",
+   "brand": "De'Longhi",
+   "model": "KG79",
+   "variant": null,
+   "category": "electric",
+   "photo": true
+  },
+  {
+   "id": "delonghi-kg89",
+   "brand": "De'Longhi",
+   "model": "KG89",
+   "variant": null,
+   "category": "electric",
+   "photo": true
+  },
+  {
+   "id": "edison-cg001",
+   "brand": "Edison",
+   "model": "CG-001",
+   "variant": null,
+   "category": "electric",
+   "photo": true
+  },
+  {
+   "id": "edison-digital",
+   "brand": "Edison",
+   "model": "Digital Coffee Grinder",
+   "variant": null,
+   "category": "electric",
+   "photo": false
+  },
+  {
+   "id": "edison-hammer",
+   "brand": "Edison",
+   "model": "Hammer",
+   "variant": null,
+   "category": "electric",
+   "photo": false
+  },
+  {
+   "id": "fellow-opus",
+   "brand": "Fellow",
+   "model": "Opus",
+   "variant": null,
+   "category": "electric",
+   "photo": true
+  },
+  {
+   "id": "geepas-gcg286",
+   "brand": "Geepas",
+   "model": "GCG286",
+   "variant": null,
+   "category": "electric",
+   "photo": true
+  },
+  {
+   "id": "hibrew-g3",
+   "brand": "HiBREW",
+   "model": "G3",
+   "variant": "CG102",
+   "category": "electric",
+   "photo": true
+  },
+  {
+   "id": "hibrew-g7",
+   "brand": "HiBREW",
+   "model": "G7",
+   "variant": "CG213BZ",
+   "category": "electric",
+   "photo": true
+  },
+  {
+   "id": "homemaster-hm836",
+   "brand": "Home Master",
+   "model": "HM-836",
+   "variant": null,
+   "category": "electric",
+   "photo": true
+  },
+  {
+   "id": "homemaster-hm937",
+   "brand": "Home Master",
+   "model": "HM-937",
+   "variant": null,
+   "category": "electric",
+   "photo": true
+  },
+  {
+   "id": "mahlkonig-x54",
+   "brand": "Mahlkönig",
+   "model": "X54 Allround",
+   "variant": null,
+   "category": "electric",
+   "photo": false
+  },
+  {
+   "id": "rebune-re2194",
+   "brand": "Rebune",
+   "model": "RE-2-194",
+   "variant": null,
+   "category": "electric",
+   "photo": false
+  },
+  {
+   "id": "wilfa-svart-aroma",
+   "brand": "Wilfa",
+   "model": "Svart Aroma",
+   "variant": "CGWS-130B",
+   "category": "electric",
+   "photo": true
+  },
+  {
+   "id": "wilfa-uniform",
+   "brand": "Wilfa",
+   "model": "Uniform / Uniform+",
+   "variant": null,
+   "category": "electric",
+   "photo": true
+  },
+  {
+   "id": "doscher-kmdj2aw",
+   "brand": "DOSCHER",
+   "model": "Portable Burr Grinder",
+   "variant": "KMDJ-2AW",
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "eureka-mignon-zero",
+   "brand": "Eureka",
+   "model": "Mignon Zero",
+   "variant": null,
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "eureka-oro-single-dose",
+   "brand": "Eureka",
+   "model": "Oro Mignon Single Dose",
+   "variant": null,
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "fellow-ode-gen1",
+   "brand": "Fellow",
+   "model": "Ode",
+   "variant": "Gen 1",
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "fellow-ode-gen2",
+   "brand": "Fellow",
+   "model": "Ode",
+   "variant": "Gen 2",
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "femobook-a2",
+   "brand": "Femobook",
+   "model": "A2",
+   "variant": null,
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "hibrew-g5",
+   "brand": "HiBREW",
+   "model": "G5",
+   "variant": null,
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "hibrew-g5-mini",
+   "brand": "HiBREW",
+   "model": "G5 mini",
+   "variant": null,
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "mazzer-philos",
+   "brand": "Mazzer",
+   "model": "Philos",
+   "variant": null,
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "niche-zero",
+   "brand": "Niche",
+   "model": "Zero",
+   "variant": null,
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "lagom-mini",
+   "brand": "Option-O",
+   "model": "Lagom Mini",
+   "variant": null,
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "lagom-p64",
+   "brand": "Option-O",
+   "model": "Lagom P64",
+   "variant": null,
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "starseeker-e55",
+   "brand": "STARSEEKER",
+   "model": "E55",
+   "variant": null,
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "starseeker-e55-pro",
+   "brand": "STARSEEKER",
+   "model": "E55 Pro",
+   "variant": null,
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "starseeker-edge-plus",
+   "brand": "STARSEEKER",
+   "model": "EDGE Plus",
+   "variant": null,
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "storm-v60",
+   "brand": "Storm",
+   "model": "V60",
+   "variant": null,
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "timemore-sculptor-064s",
+   "brand": "Timemore",
+   "model": "Sculptor 064S",
+   "variant": null,
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "timemore-sculptor-078s",
+   "brand": "Timemore",
+   "model": "Sculptor 078S",
+   "variant": null,
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "turin-df54",
+   "brand": "Turin",
+   "model": "DF54",
+   "variant": null,
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "turin-df64",
+   "brand": "Turin",
+   "model": "DF64",
+   "variant": "Gen 1",
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "turin-df64-gen2",
+   "brand": "Turin",
+   "model": "DF64",
+   "variant": "Gen 2",
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "turin-df64v",
+   "brand": "Turin",
+   "model": "DF64V",
+   "variant": null,
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "turin-df83",
+   "brand": "Turin",
+   "model": "DF83",
+   "variant": null,
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "turin-df83v",
+   "brand": "Turin",
+   "model": "DF83V",
+   "variant": null,
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "varia-vs3-gen1",
+   "brand": "Varia",
+   "model": "VS3",
+   "variant": "Gen 1",
+   "category": "single_dose",
+   "photo": false
+  },
+  {
+   "id": "varia-vs3-gen2",
+   "brand": "Varia",
+   "model": "VS3",
+   "variant": "Gen 2",
+   "category": "single_dose",
+   "photo": false
+  },
+  {
+   "id": "varia-vs6",
+   "brand": "Varia",
+   "model": "VS6",
+   "variant": null,
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "weber-eg1",
+   "brand": "Weber Workshops",
+   "model": "EG-1",
+   "variant": null,
+   "category": "single_dose",
+   "photo": true
+  },
+  {
+   "id": "breville-bes870",
+   "brand": "Breville",
+   "model": "Barista Express",
+   "variant": "BES870",
+   "category": "built_in",
+   "photo": false
+  },
+  {
+   "id": "breville-bes876",
+   "brand": "Breville",
+   "model": "Barista Express Impress",
+   "variant": "BES876",
+   "category": "built_in",
+   "photo": false
+  },
+  {
+   "id": "breville-bes878",
+   "brand": "Breville",
+   "model": "Barista Pro",
+   "variant": "BES878",
+   "category": "built_in",
+   "photo": true
+  },
+  {
+   "id": "breville-bes880",
+   "brand": "Breville",
+   "model": "Barista Touch",
+   "variant": "BES880",
+   "category": "built_in",
+   "photo": true
+  },
+  {
+   "id": "breville-bes881",
+   "brand": "Breville",
+   "model": "Barista Touch Impress",
+   "variant": "BES881",
+   "category": "built_in",
+   "photo": true
+  },
+  {
+   "id": "breville-bes980",
+   "brand": "Breville",
+   "model": "Oracle",
+   "variant": "BES980",
+   "category": "built_in",
+   "photo": true
+  },
+  {
+   "id": "breville-bes990",
+   "brand": "Breville",
+   "model": "Oracle Touch",
+   "variant": "BES990",
+   "category": "built_in",
+   "photo": true
+  },
+  {
+   "id": "delonghi-dinamica",
+   "brand": "De'Longhi",
+   "model": "Dinamica / Dinamica Plus",
+   "variant": null,
+   "category": "built_in",
+   "photo": true
+  },
+  {
+   "id": "delonghi-eletta-explore",
+   "brand": "De'Longhi",
+   "model": "Eletta Explore",
+   "variant": null,
+   "category": "built_in",
+   "photo": true
+  },
+  {
+   "id": "delonghi-specialista-arte",
+   "brand": "De'Longhi",
+   "model": "La Specialista Arte",
+   "variant": "EC9155",
+   "category": "built_in",
+   "photo": true
+  },
+  {
+   "id": "delonghi-specialista-ec9335",
+   "brand": "De'Longhi",
+   "model": "La Specialista",
+   "variant": "EC9335",
+   "category": "built_in",
+   "photo": true
+  },
+  {
+   "id": "delonghi-specialista-maestro",
+   "brand": "De'Longhi",
+   "model": "La Specialista Maestro",
+   "variant": null,
+   "category": "built_in",
+   "photo": true
+  },
+  {
+   "id": "delonghi-specialista-prestigio",
+   "brand": "De'Longhi",
+   "model": "La Specialista Prestigio",
+   "variant": "EC9355",
+   "category": "built_in",
+   "photo": false
+  },
+  {
+   "id": "delonghi-magnifica",
+   "brand": "De'Longhi",
+   "model": "Magnifica S / Start / Evo",
+   "variant": null,
+   "category": "built_in",
+   "photo": false
+  },
+  {
+   "id": "delonghi-rivelia",
+   "brand": "De'Longhi",
+   "model": "Rivelia",
+   "variant": null,
+   "category": "built_in",
+   "photo": true
+  },
+  {
+   "id": "gaggia-anima",
+   "brand": "Gaggia",
+   "model": "Anima",
+   "variant": null,
+   "category": "built_in",
+   "photo": true
+  },
+  {
+   "id": "gaggia-cadorna",
+   "brand": "Gaggia",
+   "model": "Cadorna",
+   "variant": null,
+   "category": "built_in",
+   "photo": false
+  },
+  {
+   "id": "gaggia-magenta",
+   "brand": "Gaggia",
+   "model": "Magenta",
+   "variant": null,
+   "category": "built_in",
+   "photo": false
+  },
+  {
+   "id": "philips-lattego",
+   "brand": "Philips",
+   "model": "LatteGo",
+   "variant": null,
+   "category": "built_in",
+   "photo": true
+  },
+  {
+   "id": "saeco-granaroma",
+   "brand": "Saeco",
+   "model": "GranAroma",
+   "variant": null,
+   "category": "built_in",
+   "photo": true
+  },
+  {
+   "id": "saeco-xelsis",
+   "brand": "Saeco",
+   "model": "Xelsis",
+   "variant": null,
+   "category": "built_in",
+   "photo": false
+  },
+  {
+   "id": "xbloom-studio",
+   "brand": "xBloom",
+   "model": "Studio",
+   "variant": null,
+   "category": "built_in",
+   "photo": true
+  },
+  {
+   "id": "eureka-atom-75",
+   "brand": "Eureka",
+   "model": "Atom 75",
+   "variant": null,
+   "category": "espresso",
+   "photo": true
+  },
+  {
+   "id": "eureka-mignon-libra",
+   "brand": "Eureka",
+   "model": "Mignon Libra",
+   "variant": null,
+   "category": "espresso",
+   "photo": true
+  },
+  {
+   "id": "eureka-mignon-manuale",
+   "brand": "Eureka",
+   "model": "Mignon Manuale",
+   "variant": null,
+   "category": "espresso",
+   "photo": true
+  },
+  {
+   "id": "eureka-mignon-silenzio",
+   "brand": "Eureka",
+   "model": "Mignon Silenzio",
+   "variant": null,
+   "category": "espresso",
+   "photo": true
+  },
+  {
+   "id": "eureka-mignon-specialita",
+   "brand": "Eureka",
+   "model": "Mignon Specialita",
+   "variant": null,
+   "category": "espresso",
+   "photo": false
+  },
+  {
+   "id": "eureka-oro-mignon-xl",
+   "brand": "Eureka",
+   "model": "Oro Mignon XL",
+   "variant": null,
+   "category": "espresso",
+   "photo": false
+  },
+  {
+   "id": "fiorenzato-allground",
+   "brand": "Fiorenzato",
+   "model": "AllGround",
+   "variant": null,
+   "category": "espresso",
+   "photo": true
+  },
+  {
+   "id": "mazzer-mini",
+   "brand": "Mazzer",
+   "model": "Mini",
+   "variant": null,
+   "category": "espresso",
+   "photo": true
+  },
+  {
+   "id": "rancilio-rocky",
+   "brand": "Rancilio",
+   "model": "Rocky",
+   "variant": null,
+   "category": "espresso",
+   "photo": true
+  },
+  {
+   "id": "mahlkonig-ek43",
+   "brand": "Mahlkönig",
+   "model": "EK43",
+   "variant": null,
+   "category": "commercial",
+   "photo": true
+  },
+  {
+   "id": "mahlkonig-ek43s",
+   "brand": "Mahlkönig",
+   "model": "EK43 S",
+   "variant": null,
+   "category": "commercial",
+   "photo": true
+  }
+ ]
+}
