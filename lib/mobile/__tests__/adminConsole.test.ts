@@ -18,6 +18,7 @@ function lotPrisma() {
     },
     originCountry: { findUnique: vi.fn().mockResolvedValue({ id: "O-YE" }), create: vi.fn() },
     mobileLotTag: { findMany: vi.fn().mockResolvedValue([]), deleteMany: vi.fn(), createMany: vi.fn() },
+    mobileTrendingOverride: { findUnique: vi.fn().mockResolvedValue(null) },
   };
 }
 

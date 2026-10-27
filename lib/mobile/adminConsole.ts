@@ -121,6 +121,8 @@ export interface AdminLot extends AdminLotRow {
   altitudeMeters: number | null;
   descriptionAr: string | null;
   tags: string[];
+  /** Home trending override: "pin", "hide" or null. */
+  trending: string | null;
 }
 
 export async function adminLot(prisma: PrismaClient, id: string): Promise<AdminLot> {
@@ -132,11 +134,15 @@ export async function adminLot(prisma: PrismaClient, id: string): Promise<AdminL
     },
   });
   if (!lot) throw ApiError.unprocessable("lot_not_found");
-  const tags = await prisma.mobileLotTag.findMany({ where: { lotId: id }, select: { tag: true } });
+  const [tags, override] = await Promise.all([
+    prisma.mobileLotTag.findMany({ where: { lotId: id }, select: { tag: true } }),
+    prisma.mobileTrendingOverride.findUnique({ where: { lotId: id }, select: { mode: true } }),
+  ]);
   return {
     ...toRow(lot), process: lot.process, processLabel: lot.processLabel, roastLevel: lot.roastLevel,
     flavorNotes: lot.flavorNotes, region: lot.regionAr ?? lot.region, variety: lot.variety,
     altitudeMeters: lot.altitudeMeters, descriptionAr: lot.descriptionAr, tags: tags.map((t) => t.tag),
+    trending: override?.mode ?? null,
   };
 }
 

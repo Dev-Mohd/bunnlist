@@ -1,11 +1,12 @@
 import type { Prisma, PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { LOT_LIST_SELECT, mapLot, type CoffeeLotRow, type MobileLot } from "./catalog";
+import { LOT_TAGS } from "./adminConsole";
 import { ApiError } from "./errors";
 import { FLAVOR_FAMILIES, flavorFamily } from "./flavorFamilies";
 
 // Search & filters for the app's search tab: text, sort, origin, roaster, process,
-// brew method, flavor family, and the caller's own shelf (owned / not yet /
+// brew method, flavor family, tag (luxury / infused / decaf), and the caller's own shelf (owned / not yet /
 // favorites). Flavor notes are free text, so the family filter runs in memory
 // over the database-filtered set; the catalog is small enough for that.
 
@@ -26,6 +27,7 @@ export const BrowseQuery = z.object({
   processes: csv(z.enum(PROCESSES)),
   methods: csv(z.enum(METHODS)),
   flavors: csv(z.enum(FLAVOR_FAMILIES)),
+  tags: csv(z.enum(LOT_TAGS)),
   shelf: z.enum(["all", "owned", "missing"]).default("all"),
   favorites: z.enum(["0", "1"]).default("0").transform((v) => v === "1"),
   offset: z.coerce.number().int().min(0).max(MAX_SCAN).default(0),
@@ -68,6 +70,10 @@ export async function browseLots(
   if (query.roasters.length) and.push({ roaster: { slug: { in: query.roasters } } });
   if (query.processes.length) and.push({ process: { in: [...query.processes] } });
   if (query.methods.length) and.push({ recommendedBrewMethods: { hasSome: [...query.methods] } });
+  if (query.tags.length) {
+    const tagged = await prisma.mobileLotTag.findMany({ where: { tag: { in: [...query.tags] } }, select: { lotId: true } });
+    and.push({ id: { in: tagged.map((t) => t.lotId) } });
+  }
 
   if (query.shelf !== "all" || query.favorites) {
     if (!accountId) throw new ApiError("unauthorized");

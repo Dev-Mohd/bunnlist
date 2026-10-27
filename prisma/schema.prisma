@@ -692,3 +692,12 @@ model MobileGrinder {
 
   @@index([category, sortOrder])
 }
+
+/// Admin overrides for the home's trending coffees: "pin" puts a coffee on the
+/// list (pins first, oldest pin first), "hide" keeps it off.
+model MobileTrendingOverride {
+  lotId     String   @id
+  mode      String
+  createdBy String
+  createdAt DateTime @default(now())
+}
