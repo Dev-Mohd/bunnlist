@@ -2,21 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-/* The site in Apple's manner: white and near-white grounds, near-black type,
-   generous space, one accent. BunnList's olive stands in for Apple's blue. */
 :root {
   color-scheme: light;
-  --bg: #ffffff;
-  --bg-alt: #f5f5f7;
-  --ink: #1d1d1f;
-  --ink-2: #6e6e73;
-  --line: rgba(0, 0, 0, 0.08);
+  /* BunnList's own colors, laid out in Apple's manner: cream grounds, espresso
+     type, olive for actions, gold for highlights, roasted brown for dark sections. */
+  --bg: #f7f1e8;
+  --bg-alt: #efe6d8;
+  --card: #fffdf9;
+  --ink: #171411;
+  --ink-2: #6b5f55;
+  --line: rgba(74, 52, 40, 0.12);
   --accent: #536344;
   --accent-ink: #3f4c33;
-  --gold: #c89a3e;
-  --dark: #000000;
-  --dark-2: #161617;
-  --dark-ink-2: #86868b;
+  --gold: #987024;
+  --gold-light: #c89a3e;
+  --dark: #1c140f;
+  --dark-2: #2a1e17;
+  --dark-ink-2: #b3a597;
 }
 
 * {
@@ -38,7 +40,7 @@ body {
 }
 
 ::selection {
-  background: rgba(83, 99, 68, 0.2);
+  background: rgba(152, 112, 36, 0.22);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -51,4 +53,67 @@ body {
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* Motion. Things rise into view; the hero phone settles; steam curls; the shelf drifts. */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0ms),
+    transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0ms);
+}
+.reveal[data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+.reveal[data-shown="true"] .pop {
+  animation: pop 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) calc(var(--d, 0ms) + 250ms) both;
+}
+@keyframes pop {
+  0% { transform: scale(0.6) rotate(-12deg); opacity: 0; }
+  60% { transform: scale(1.15) rotate(4deg); opacity: 1; }
+  100% { transform: none; }
+}
+
+.hero-in {
+  animation: hero-in 1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.hero-in-2 { animation-delay: 0.12s; }
+.hero-in-3 { animation-delay: 0.24s; }
+.hero-in-4 { animation-delay: 0.36s; }
+@keyframes hero-in {
+  from { opacity: 0; transform: translateY(24px); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+.phone-rise {
+  animation: phone-rise 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.45s both;
+  transform-origin: 50% 100%;
+}
+@keyframes phone-rise {
+  from { opacity: 0; transform: translateY(120px) rotateX(18deg) scale(0.94); }
+  to { opacity: 1; transform: none; }
+}
+
+.steam path {
+  stroke-dasharray: 60;
+  animation: steam 3s ease-in-out infinite;
+  opacity: 0;
+}
+@keyframes steam {
+  0% { stroke-dashoffset: 60; opacity: 0; transform: translateY(6px); }
+  40% { opacity: 1; }
+  100% { stroke-dashoffset: -60; opacity: 0; transform: translateY(-10px); }
+}
+
+@keyframes shelf {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.shelf:hover > div {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; }
 }

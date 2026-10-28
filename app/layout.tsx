@@ -11,7 +11,7 @@ const plex = IBM_Plex_Sans_Arabic({
 });
 
 const description =
-  "BunnList تطبيق لمحبي القهوة المختصة: اكتشف المحاصيل حسب ذوقك، حضّرها خطوة بخطوة بالحركة، وسجّل كل كوب. قريبًا على App Store.";
+  "BunnList تطبيق لعشّاق القهوة المختصة: اكتشف المحاصيل التي تناسب ذوقك، وحضّرها خطوة بخطوة، واحتفظ بسجلّ لكل كوب. قريبًا على App Store.";
 
 export const metadata: Metadata = {
   title: {
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  themeColor: "#f7f1e8",
   width: "device-width",
   initialScale: 1,
 };

@@ -5,7 +5,7 @@ import { AVAILABILITY, CONTACT_EMAIL } from "@/lib/site";
 const links = [
   { href: "/#discover", label: "اكتشف" },
   { href: "/#brew", label: "حضّر" },
-  { href: "/#features", label: "المميزات" },
+  { href: "/#features", label: "المزايا" },
   { href: "/#specs", label: "المواصفات" },
   { href: "/#roasters", label: "للمحامص" },
 ];
@@ -13,7 +13,7 @@ const links = [
 /** A thin frosted bar, like Apple's global nav. */
 export function SiteNav() {
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--line)] bg-white/75 backdrop-blur-xl backdrop-saturate-150">
+    <header className="sticky top-0 z-50 border-b border-[var(--line)] bg-[rgba(247,241,232,0.8)] backdrop-blur-xl backdrop-saturate-150">
       <nav className="mx-auto flex h-12 max-w-[1024px] items-center justify-between gap-4 px-4 sm:px-6" aria-label="الرئيسية">
         <Link href="/" aria-label="BunnList" className="shrink-0">
           <BunnListLogo className="scale-[0.62] origin-right" />
@@ -27,7 +27,7 @@ export function SiteNav() {
             </li>
           ))}
         </ul>
-        <span className="rounded-full bg-[var(--ink)] px-3 py-1 text-[12px] font-medium text-white">قريبًا</span>
+        <span className="rounded-full bg-[var(--accent)] px-3 py-1 text-[12px] font-medium text-[var(--bg)]">قريبًا</span>
       </nav>
     </header>
   );
@@ -38,8 +38,8 @@ export function SiteFooter() {
     <footer className="bg-[var(--bg-alt)] text-[12px] leading-6 text-[var(--ink-2)]">
       <div className="mx-auto max-w-[1024px] px-4 py-8 sm:px-6">
         <p className="border-b border-[var(--line)] pb-4">
-          BunnList تطبيق لأجهزة iPhone، {AVAILABILITY}. أسماء المحاصيل وصور أكياسها لأصحابها من المحامص، وتُعرض بإذنهم أو
-          من مصادرهم المنشورة، وتُحذف عند طلبهم.
+          BunnList تطبيق لأجهزة iPhone، {AVAILABILITY}. أسماء المحاصيل وصور أكياسها ملك لمحامصها، تُعرض بإذنهم أو
+          من مصادرهم المنشورة، وتُحذف متى طلبوا ذلك.
         </p>
         <div className="flex flex-col gap-3 pt-4 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} BunnList. جميع الحقوق محفوظة.</p>
@@ -47,7 +47,7 @@ export function SiteFooter() {
             <li><Link className="hover:text-[var(--ink)]" href="/privacy">الخصوصية</Link></li>
             <li><Link className="hover:text-[var(--ink)]" href="/terms">الشروط</Link></li>
             <li><Link className="hover:text-[var(--ink)]" href="/support">الدعم</Link></li>
-            <li><a className="hover:text-[var(--ink)]" href={`mailto:${CONTACT_EMAIL}`}>تواصل معنا</a></li>
+            <li><a className="hover:text-[var(--ink)]" href={`mailto:${CONTACT_EMAIL}`}>راسلنا</a></li>
           </ul>
         </div>
       </div>
@@ -60,7 +60,7 @@ export function ComingSoon({ dark = false }: { dark?: boolean }) {
   return (
     <span
       className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[15px] font-medium ${
-        dark ? "bg-white text-black" : "bg-[var(--ink)] text-white"
+        dark ? "bg-[var(--bg)] text-[var(--ink)]" : "bg-[var(--ink)] text-[var(--bg)]"
       }`}
     >
       <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
@@ -74,8 +74,8 @@ export function ComingSoon({ dark = false }: { dark?: boolean }) {
 /** A screen shown in a simple iPhone frame. */
 export function PhoneFrame({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`relative mx-auto aspect-[393/852] w-[260px] rounded-[46px] bg-black p-[9px] shadow-[0_30px_80px_rgba(0,0,0,0.18)] sm:w-[300px] ${className}`}>
-      <div className="relative h-full w-full overflow-hidden rounded-[38px] bg-black">{children}</div>
+    <div className={`relative mx-auto aspect-[393/852] w-[260px] rounded-[46px] bg-[var(--ink)] p-[9px] shadow-[0_30px_80px_rgba(74,52,40,0.25)] sm:w-[300px] ${className}`}>
+      <div className="relative h-full w-full overflow-hidden rounded-[38px] bg-[var(--ink)]">{children}</div>
     </div>
   );
 }
