@@ -309,7 +309,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "ar-hima-wells"
    }
   },
   {
@@ -345,7 +346,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "ar-al-naslaa-rock"
    }
   },
   {
@@ -420,7 +422,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "ar-qarah-mountain"
    }
   },
   {
@@ -458,7 +461,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "ar-jabal-al-soudah-coffee"
    }
   },
   {
@@ -496,7 +500,8 @@
     "isLuxury": true,
     "luxuryReason": "Exceptional lot with carbonic maceration and high 250g price.",
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "ar-al-nawras-island-coffee"
    }
   },
   {
@@ -534,7 +539,8 @@
     "isLuxury": true,
     "luxuryReason": "Exceptional lot, Pink Bourbon variety, and high price close to premium threshold.",
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "ar-atawil-island-coffee"
    }
   },
   {
@@ -572,7 +578,8 @@
     "isLuxury": true,
     "luxuryReason": "Exceptional Colombian Gesha lot from Inmaculada Fellow Farms.",
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "ar-sheybarah-island-coffee"
    }
   },
   {
@@ -679,7 +686,8 @@
     "isLuxury": true,
     "luxuryReason": "90+ Panama Gesha coffee.",
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "ar-alsroh-coffee"
    }
   },
   {
@@ -867,7 +875,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "ar-shmaisy-street"
    }
   },
   {
@@ -904,7 +913,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "ar-al-thumairi-street-coffee"
    }
   },
   {
@@ -1008,7 +1018,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "ar-taamir-market-coffee"
    }
   },
   {
@@ -4045,6 +4056,106 @@
     "luxuryReason": null,
     "isInfused": false,
     "isDecaf": false
+   }
+  },
+  {
+   "importKey": "batch-2026-05:ar-3af67627a967",
+   "name": "شارع الأحساء",
+   "nameEn": "Al Ahsa Street",
+   "roasterName": "محمصة الرياض",
+   "roasterNameEn": "Arriyadh Roaster",
+   "originName": null,
+   "originCode": null,
+   "process": null,
+   "roastLevel": null,
+   "flavorNotes": [],
+   "sourceUrl": "https://arriyadhroaster.com",
+   "sourceConfidence": 0.6,
+   "extras": {
+    "brewMethods": [
+     "V60"
+    ],
+    "photo": "ar-al-ahsa-street-coffee"
+   }
+  },
+  {
+   "importKey": "batch-2026-05:ar-1b28602aef2b",
+   "name": "سوق العويس",
+   "nameEn": "Al Owais Market",
+   "roasterName": "محمصة الرياض",
+   "roasterNameEn": "Arriyadh Roaster",
+   "originName": null,
+   "originCode": null,
+   "process": null,
+   "roastLevel": null,
+   "flavorNotes": [],
+   "sourceUrl": "https://arriyadhroaster.com",
+   "sourceConfidence": 0.6,
+   "extras": {
+    "brewMethods": [
+     "V60"
+    ],
+    "photo": "ar-al-owais-market-coffee"
+   }
+  },
+  {
+   "importKey": "batch-2026-05:ar-7b8eabd94f7a",
+   "name": "شارع الثلاثين",
+   "nameEn": "Al Thalatheen Street",
+   "roasterName": "محمصة الرياض",
+   "roasterNameEn": "Arriyadh Roaster",
+   "originName": null,
+   "originCode": null,
+   "process": null,
+   "roastLevel": null,
+   "flavorNotes": [],
+   "sourceUrl": "https://arriyadhroaster.com",
+   "sourceConfidence": 0.6,
+   "extras": {
+    "brewMethods": [
+     "V60"
+    ],
+    "photo": "ar-al-thalatheen-street"
+   }
+  },
+  {
+   "importKey": "batch-2026-05:ar-284caad3ebf9",
+   "name": "خلطة إكسبو الرياض 2030",
+   "nameEn": "Riyadh Expo 2030 Blend",
+   "roasterName": "محمصة الرياض",
+   "roasterNameEn": "Arriyadh Roaster",
+   "originName": null,
+   "originCode": null,
+   "process": null,
+   "roastLevel": null,
+   "flavorNotes": [],
+   "sourceUrl": "https://arriyadhroaster.com",
+   "sourceConfidence": 0.6,
+   "extras": {
+    "brewMethods": [
+     "V60"
+    ],
+    "photo": "ar-riyadh-expo-2030-blend"
+   }
+  },
+  {
+   "importKey": "batch-2026-05:ar-1a6a523dccb2",
+   "name": "خلطة القدية",
+   "nameEn": "Qiddiyah Blend",
+   "roasterName": "محمصة الرياض",
+   "roasterNameEn": "Arriyadh Roaster",
+   "originName": null,
+   "originCode": null,
+   "process": null,
+   "roastLevel": null,
+   "flavorNotes": [],
+   "sourceUrl": "https://arriyadhroaster.com",
+   "sourceConfidence": 0.6,
+   "extras": {
+    "brewMethods": [
+     "ESPRESSO"
+    ],
+    "photo": "ar-qiddiyah-blend"
    }
   }
  ]
