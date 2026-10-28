@@ -8,16 +8,28 @@ import type { Mailer } from "./emailService";
 const RESEND_ENDPOINT = "https://api.resend.com/emails";
 const DEFAULT_FROM = "BunnList <onboarding@resend.dev>";
 
-function otpEmail(code: string): { subject: string; text: string; html: string } {
-  const subject = `رمز الدخول إلى بن لست: ${code}`;
-  const text = `رمز الدخول الخاص بك هو: ${code}\nصالح لمدة 10 دقائق. إذا لم تطلب هذا الرمز، تجاهل هذه الرسالة.`;
-  const html = `<!doctype html><html dir="rtl" lang="ar"><body style="font-family:system-ui,Arial,sans-serif;background:#faf7f2;padding:24px;color:#2b2b2b">
-  <div style="max-width:420px;margin:auto;background:#fff;border-radius:16px;padding:28px;text-align:center">
-    <h1 style="font-size:20px;margin:0 0 12px">بن لست</h1>
-    <p style="margin:0 0 16px;color:#666">رمز الدخول الخاص بك:</p>
-    <div style="font-size:34px;font-weight:700;letter-spacing:8px;direction:ltr">${code}</div>
-    <p style="margin:18px 0 0;font-size:13px;color:#999">صالح لمدة 10 دقائق. إذا لم تطلب هذا الرمز، تجاهل هذه الرسالة.</p>
-  </div></body></html>`;
+export function otpEmail(code: string): { subject: string; text: string; html: string } {
+  const subject = `رمز الدخول إلى BunnList: ${code}`;
+  const text = [
+    "رمز الدخول إلى BunnList:",
+    code,
+    "",
+    "الرمز صالح لمدة ١٠ دقائق. إذا لم تطلبه، فتجاهل هذه الرسالة ولن يتغيّر شيء في حسابك.",
+    "",
+    "BunnList — قهوتك الجاية، هنا.",
+    "https://bunnlist.com",
+  ].join("\n");
+  // BunnList's colors: cream ground, espresso type, the code on olive.
+  const html = `<!doctype html><html dir="rtl" lang="ar"><head><meta charset="utf-8"><meta name="color-scheme" content="light"></head>
+<body style="margin:0;background:#f7f1e8;padding:32px 16px;font-family:-apple-system,BlinkMacSystemFont,'SF Arabic','Segoe UI',Tahoma,Arial,sans-serif;color:#171411">
+  <div style="max-width:440px;margin:0 auto;background:#fffdf9;border-radius:22px;padding:32px 28px;text-align:center;border:1px solid rgba(74,52,40,0.10)">
+    <div style="font-size:22px;font-weight:700;letter-spacing:0.5px;direction:ltr">BunnList</div>
+    <p style="margin:20px 0 14px;font-size:16px;color:#6b5f55">رمز الدخول إلى حسابك</p>
+    <div style="display:inline-block;background:#536344;color:#f7f1e8;border-radius:14px;padding:14px 22px;font-size:32px;font-weight:700;letter-spacing:8px;direction:ltr">${code}</div>
+    <p style="margin:20px 0 0;font-size:14px;line-height:1.7;color:#6b5f55">الرمز صالح لمدة ١٠ دقائق. إذا لم تطلبه، فتجاهل هذه الرسالة ولن يتغيّر شيء في حسابك.</p>
+  </div>
+  <p style="max-width:440px;margin:18px auto 0;text-align:center;font-size:12px;color:#987024">قهوتك الجاية، هنا. · <a href="https://bunnlist.com" style="color:#987024">bunnlist.com</a></p>
+</body></html>`;
   return { subject, text, html };
 }
 
