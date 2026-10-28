@@ -21,7 +21,7 @@ describe("importBatch", () => {
     const result = await importBatch(m as unknown as PrismaClient, {
       batch: "t", items: [item("k1", "قديمة"), item("k2", "جبل السودة"), item("k3", "جديدة")],
     });
-    expect(result).toEqual({ created: 1, alreadyImported: 1, alreadyInCatalog: 1, photos: 0 });
+    expect(result).toEqual({ created: 1, alreadyImported: 1, alreadyInCatalog: 1, photos: 0, photoErrors: 0 });
     expect(m.mobileCoffeeSubmission.create.mock.calls[0][0].data).toMatchObject({ accountId: "catalog", importKey: "k3", extras: { isLuxury: true } });
   });
 
@@ -78,5 +78,23 @@ describe("importBatch", () => {
     m.coffeeLot.findMany = vi.fn().mockResolvedValueOnce([{ ...lot, imageUrl: url }]).mockResolvedValue([]);
     await importBatch(m as unknown as PrismaClient, { batch: "t", items: [withPhoto] }, { "bk-x": "AAAA" }, store);
     expect(m.coffeeLot.update).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps going when one lot's photo won't go up", async () => {
+    const lot = { id: "L1", slug: "bk-milora", imageUrl: "https://x/lots/bk-milora-abc.jpg", imageType: "USER_UPLOADED" };
+    const m = {
+      mobileCoffeeSubmission: {
+        findMany: vi.fn().mockResolvedValue([{ id: "s1", importKey: "k1", status: "APPROVED", photoPath: "imports/bk-x.jpg", approvedLotId: "L1" }]),
+        create: vi.fn().mockResolvedValue({}),
+      },
+      coffeeLot: { findMany: vi.fn().mockResolvedValueOnce([lot]).mockResolvedValue([]), update: vi.fn() },
+    };
+    const store = { put: vi.fn().mockResolvedValue(undefined), signedUrl: vi.fn(), publish: vi.fn().mockRejectedValue(new Error("exists")) };
+    const errors = vi.spyOn(console, "error").mockImplementation(() => {});
+    const result = await importBatch(m as unknown as PrismaClient,
+      { batch: "t", items: [{ ...item("k1", "ميلورا"), extras: { photo: "bk-x" } }, item("k2", "جديدة")] }, { "bk-x": "AAAA" }, store);
+    errors.mockRestore();
+    expect(result).toMatchObject({ created: 1, photoErrors: 1 });
+    expect(m.coffeeLot.update).not.toHaveBeenCalled();
   });
 });

@@ -72,7 +72,7 @@ function fields(item: z.infer<typeof Item>) {
 
 export async function importBatch(
   prisma: PrismaClient, raw: unknown, photos: Record<string, string> = {}, store: PhotoStore | null = null,
-): Promise<{ created: number; alreadyImported: number; alreadyInCatalog: number; photos: number }> {
+): Promise<{ created: number; alreadyImported: number; alreadyInCatalog: number; photos: number; photoErrors: number }> {
   const { items } = Batch.parse(raw);
   const existingRows = await prisma.mobileCoffeeSubmission.findMany({
     where: { importKey: { in: items.map((i) => i.importKey) } }, select: { id: true, importKey: true, status: true, photoPath: true, approvedLotId: true },
@@ -105,7 +105,7 @@ export async function importBatch(
     `${norm(l.roaster?.nameAr)}|${norm(l.nameAr)}`, `${norm(l.roaster?.name)}|${norm(l.name)}`,
   ]));
 
-  let created = 0, alreadyImported = 0, alreadyInCatalog = 0;
+  let created = 0, alreadyImported = 0, alreadyInCatalog = 0, photoErrors = 0;
   for (const item of items) {
     const prior = existing.get(item.importKey);
     if (prior) {
@@ -123,11 +123,17 @@ export async function importBatch(
         const lot = approvedLots.get(prior.approvedLotId);
         const photo = photoOf(item);
         if (lot && photo && store && lot.imageType === "USER_UPLOADED" && !lot.imageUrl?.endsWith(`-${photo.version}.jpg`)) {
-          const path = await uploadPhoto(item);
-          const imageUrl = await store.publish(path as string, `lots/${lot.slug}-${photo.version}.jpg`);
-          await prisma.coffeeLot.update({
-            where: { id: lot.id }, data: { imageUrl, storedImageUrl: imageUrl, imageStoredAt: new Date() },
-          });
+          // A photo that won't go up leaves the lot's current one; the rest of the batch carries on.
+          try {
+            const path = await uploadPhoto(item);
+            const imageUrl = await store.publish(path as string, `lots/${lot.slug}-${photo.version}.jpg`);
+            await prisma.coffeeLot.update({
+              where: { id: lot.id }, data: { imageUrl, storedImageUrl: imageUrl, imageStoredAt: new Date() },
+            });
+          } catch (e) {
+            console.error("import photo swap failed", lot.slug, e);
+            photoErrors += 1;
+          }
         }
       }
       continue;
@@ -147,5 +153,5 @@ export async function importBatch(
     });
     created += 1;
   }
-  return { created, alreadyImported, alreadyInCatalog, photos: photoCount };
+  return { created, alreadyImported, alreadyInCatalog, photos: photoCount, photoErrors };
 }
