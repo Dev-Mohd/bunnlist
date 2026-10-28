@@ -5,6 +5,7 @@ import { CATALOG_ACCOUNT, SUBMISSION_PROCESSES } from "./submissions";
 import type { PhotoStore } from "./suggestionPhotos";
 import batch from "./data/roastery-batch-2026-05.json";
 import arriyadhPhotos from "./data/arriyadh-photos.json";
+import ashPhotos from "./data/ash-photos.json";
 import blackKnightPhotos from "./data/black-knight-photos.json";
 import bunistaPhotos from "./data/bunista-photos.json";
 
@@ -41,6 +42,7 @@ export const BUNDLED_BATCHES: Record<string, { data: unknown; photos: Record<str
       ...(blackKnightPhotos as Record<string, string>),
       ...(arriyadhPhotos as Record<string, string>),
       ...(bunistaPhotos as Record<string, string>),
+      ...(ashPhotos as Record<string, string>),
     },
   },
 };
