@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import type { ShelfLot } from "@/lib/site-bags";
+import { AppLotCard } from "./AppLotCard";
 
 // The site's motion: things rise into view, the story follows the scroll, bags
 // drift past like a roaster's shelf, the brew clip lights its steps in time, and
@@ -142,21 +144,17 @@ export function Story({ steps }: { steps: StoryStep[] }) {
 
 // MARK: The shelf of bags
 
-/** Two rows of real bags drifting in opposite directions, like a roaster's shelf. */
-export function BagShelf({ bags }: { bags: { src: string; name: string }[] }) {
-  const half = Math.ceil(bags.length / 2);
-  const rows = [bags.slice(0, half), bags.slice(half)];
+/** Two rows of bag cards, drawn as the app draws them, drifting in opposite
+ *  directions like a roaster's shelf. */
+export function BagShelf({ lots }: { lots: ShelfLot[] }) {
+  const half = Math.ceil(lots.length / 2);
+  const rows = [lots.slice(0, half), lots.slice(half)];
   return (
-    <div className="shelf relative space-y-5 overflow-hidden py-2" dir="ltr" aria-label="أكياس من الدليل">
+    <div className="shelf relative space-y-5 overflow-hidden py-3" dir="ltr" aria-label="محاصيل من الدليل">
       {rows.map((row, r) => (
-        <div key={r} className="flex w-max gap-5" style={{ animation: `shelf ${row.length * 4}s linear infinite ${r ? "reverse" : ""}` }}>
-          {[...row, ...row].map((b, i) => (
-            <figure key={`${b.name}-${i}`} aria-hidden={i >= row.length} className="w-[150px] shrink-0 sm:w-[180px]">
-              <div className="grid aspect-square place-items-center rounded-[24px] bg-[var(--card)] shadow-[0_1px_0_var(--line)]">
-                <Image src={b.src} alt={i < row.length ? b.name : ""} width={160} height={160} className="h-[82%] w-[82%] object-contain mix-blend-multiply" />
-              </div>
-              <figcaption className="mt-2 text-center text-[14px] font-medium text-[var(--ink-2)]" dir="rtl">{b.name}</figcaption>
-            </figure>
+        <div key={r} className="flex w-max gap-4" style={{ animation: `shelf ${row.length * 5}s linear infinite ${r ? "reverse" : ""}` }}>
+          {[...row, ...row].map((lot, i) => (
+            <AppLotCard key={`${lot.file}-${i}`} lot={lot} hidden={i >= row.length} />
           ))}
         </div>
       ))}

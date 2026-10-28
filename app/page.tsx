@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ComingSoon, PhoneFrame, SiteFooter, SiteNav } from "@/components/site/Chrome";
 import { BagShelf, BrewClip, CountUp, Reveal, Steam, Story, type StoryStep } from "@/components/site/Motion";
 import { CONTACT_EMAIL } from "@/lib/site";
+import { SHELF_LOTS } from "@/lib/site-bags";
 
 // The BunnList site: one page that introduces the app, laid out in Apple's
 // manner in BunnList's own colors, with motion that follows the scroll.
@@ -38,12 +39,7 @@ const story: StoryStep[] = [
   },
 ];
 
-const bags = [
-  ["nardos", "ناردوس"], ["massar", "مسار"], ["lolit", "لوليت"], ["zubaida", "زبيدة"], ["milora", "ميلورا"],
-  ["9009", "9009"], ["eyana", "إيانا"], ["black-mountain", "الجبل الأسود"], ["excelso", "إكسيلسو"], ["solana", "سولانا"],
-  ["altura", "ألتورا"], ["sulaf", "سلاف"], ["rio", "ريو"], ["guji", "جوجي"], ["azora", "أزورا"], ["raul", "راؤول"],
-  ["victoria", "فيكتوريا"], ["silver", "سيلفر"], ["chelchele", "تشلتشلي"], ["rozitta", "روزيتا"],
-].map(([file, name]) => ({ src: `/site/bags/${file}.jpg`, name }));
+
 
 const features: { title: string; body: string; icon: string; wide?: boolean; dark?: boolean }[] = [
   {
@@ -166,11 +162,11 @@ export default function Home() {
           <Reveal className="mx-auto max-w-[720px] px-5 text-center">
             <h2 className="text-[34px] font-bold leading-[1.15] tracking-tight sm:text-[48px]">رفّ يكبر كل أسبوع.</h2>
             <p className="mt-4 text-[19px] leading-relaxed text-[var(--ink-2)]">
-              محاصيل من محامص سعودية، بصور أكياسها كما وصلت من محامصها.
+              محاصيل من محامص سعودية، بصور أكياسها كما وصلت من محامصها. هذه من بلاك نايت.
             </p>
           </Reveal>
           <div className="mt-12">
-            <BagShelf bags={bags} />
+            <BagShelf lots={SHELF_LOTS} />
           </div>
         </section>
 
