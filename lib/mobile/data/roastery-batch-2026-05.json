@@ -5027,6 +5027,945 @@
     "isDecaf": true,
     "photo": "bn-brazil-serra-negra-decaf"
    }
+  },
+  {
+   "importKey": "ash-2026-10:nawras",
+   "name": "النورس",
+   "nameEn": "Nawras",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": null,
+   "originCode": null,
+   "process": null,
+   "roastLevel": null,
+   "flavorNotes": [
+    "قصب السكر",
+    "كراميل",
+    "شوكولاتة داكنة"
+   ],
+   "sourceUrl": "https://ash.coffee/nawras-blend-coffee/p1693553747",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [],
+    "altitudeM": null,
+    "priceSar": 48,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "مزيج يومي متوازن، حلاوة متزنة وقوام كريمي.",
+    "cuppingScore": 83,
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "ash-nawras"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:wafer",
+   "name": "ويفر",
+   "nameEn": "Wafer",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": "البرازيل",
+   "originCode": "BR",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "بسكويت ويفر",
+    "فانيلا",
+    "بندق",
+    "شوكولاتة",
+    "كراميل"
+   ],
+   "sourceUrl": "https://ash.coffee/wafer-brazil-coffee/p1020796477",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كاتواي"
+    ],
+    "brewMethods": [
+     "ESPRESSO"
+    ],
+    "altitudeM": "1040-1200",
+    "priceSar": 58.03,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "نكهة شوكولاتة بالحليب وبسكويت ويفر، مناسب للإسبريسو ومشروبات الحليب.",
+    "cuppingScore": 87.25,
+    "processDetail": "لاهوائية (شوكولاتة)",
+    "isLuxury": true,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "ash-wafer"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:jeddah-night-decaf",
+   "name": "جدة نايت",
+   "nameEn": "Jeddah Night Decaf",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "OTHER",
+   "roastLevel": null,
+   "flavorNotes": [
+    "كراميل",
+    "بندق",
+    "شوكولاتة بالحليب"
+   ],
+   "sourceUrl": "https://ash.coffee/decaf-decaffienated-coffee/p1107310542",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "روكيرا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "بوربون"
+    ],
+    "brewMethods": [
+     "ESPRESSO"
+    ],
+    "altitudeM": "1600-2200",
+    "priceSar": 48,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "قهوة كولومبية منزوعة الكافيين بنكهة سلسة وحلوة، مناسبة للإسبريسو.",
+    "cuppingScore": 83,
+    "processDetail": "Sugar Cane",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": true,
+    "photo": "ash-jeddah-night-decaf"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:peru-piura",
+   "name": "بيرو بيرا",
+   "nameEn": "Peru Piura",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": "بيرو",
+   "originCode": "PE",
+   "process": "WASHED",
+   "roastLevel": null,
+   "flavorNotes": [
+    "زهور",
+    "بابونج",
+    "سكر القصب",
+    "شوكولاتة الحليب"
+   ],
+   "sourceUrl": "https://ash.coffee/peru-piura-coffee/p1650046430",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "بيورا",
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [],
+    "altitudeM": null,
+    "priceSar": 58.03,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "قهوة ناعمة ومتوازنة بطابع زهري واضح وكوب نظيف وعطري.",
+    "cuppingScore": null,
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "ash-peru-piura"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:ethiopia-hambella",
+   "name": "إثيوبيا هامبيلا",
+   "nameEn": "Ethiopia Hambella",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "WASHED",
+   "roastLevel": null,
+   "flavorNotes": [
+    "أزهار",
+    "توت",
+    "شوكولاتة",
+    "شاي أخضر"
+   ],
+   "sourceUrl": "https://ash.coffee/ethiopia-hambella-coffee/p41189767",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "هامبيلا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "هيرلوم"
+    ],
+    "brewMethods": [
+     "V60"
+    ],
+    "altitudeM": "1800-2200",
+    "priceSar": 58.03,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "نكهات زهرية واضحة ولمسة شاي؛ مناسبة للفلتر.",
+    "cuppingScore": 87.5,
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "ash-ethiopia-hambella"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:ethiopia-guji",
+   "name": "إثيوبيا قوجي",
+   "nameEn": "Ethiopia Guji",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "ياسمين",
+    "توت أزرق",
+    "بابايا",
+    "شوكولاتة بالحليب"
+   ],
+   "sourceUrl": "https://ash.coffee/ethiopia-guji-coffee/p1901969366",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "قوجي",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "هيرلوم"
+    ],
+    "brewMethods": [
+     "V60"
+    ],
+    "altitudeM": "1800-2200",
+    "priceSar": 58.03,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "فاكهي ومشرق، مناسب للفلتر والقهوة المثلجة.",
+    "cuppingScore": 87,
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "ash-ethiopia-guji"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:el-salvador-buena-vista",
+   "name": "السلفادور بوينا فيستا",
+   "nameEn": "El Salvador Buena Vista",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": "السلفادور",
+   "originCode": "SV",
+   "process": "WASHED",
+   "roastLevel": null,
+   "flavorNotes": [
+    "شوكولاتة داكنة",
+    "كراميل",
+    "جريب فروت",
+    "سكر بني"
+   ],
+   "sourceUrl": "https://ash.coffee/salvador-buenavista-coffee/p282510940",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "بوينا فيستا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كاتورا",
+     "بوربون"
+    ],
+    "brewMethods": [],
+    "altitudeM": "1100-1250",
+    "priceSar": 48,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "متوازن بين الحلاوة والحموضة مع لمسة حمضيات خفيفة.",
+    "cuppingScore": 85,
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "ash-el-salvador-buena-vista"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:three-elements-blend",
+   "name": "العناصر الثلاثة",
+   "nameEn": "Three Elements Blend",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": null,
+   "originCode": null,
+   "process": null,
+   "roastLevel": null,
+   "flavorNotes": [
+    "توت أزرق",
+    "كراميل",
+    "شوكولاتة بالحليب"
+   ],
+   "sourceUrl": "https://ash.coffee/3elements-blend-coffee/p1026381891",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO"
+    ],
+    "altitudeM": null,
+    "priceSar": 48,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "بلند إسبريسو بحلاوة وقوام كريمي، مناسب للإسبريسو وقهوة اليوم.",
+    "cuppingScore": 84,
+    "processDetail": "مزيج تختلف أصوله وأصنافه حسب المصدر",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "ash-three-elements-blend"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:colombia-la-cabana",
+   "name": "كولومبيا لا كابانا",
+   "nameEn": "Colombia La Cabana",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "تفاح أخضر",
+    "فراولة",
+    "كراميل",
+    "شوكولاتة داكنة"
+   ],
+   "sourceUrl": "https://ash.coffee/colombia-lacabana-coffee/p1473489589",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "لاكابانا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كاتورا"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "1700-2100",
+    "priceSar": 58.03,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "فاكهي ومتوازن للفلتر والإسبريسو الخفيف. ملاحظة المحمص تذكر رمانًا وأناناسًا بخلاف قائمة الإيحاءات.",
+    "cuppingScore": 87.5,
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "ash-colombia-la-cabana"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:costa-rica-mirador",
+   "name": "كوستاريكا ميرادور",
+   "nameEn": "Costa Rica Mirador",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": "كوستاريكا",
+   "originCode": "CR",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "توت أسود",
+    "خوخ",
+    "توت بري",
+    "شوكولاتة الحليب"
+   ],
+   "sourceUrl": "https://ash.coffee/costarica-mirador-coffee/p885549682",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "ميرادور",
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "V60"
+    ],
+    "altitudeM": null,
+    "priceSar": 58.03,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "توازن بين الفاكهة والشوكولاتة، مناسب للفلتر والدرب بريو.",
+    "cuppingScore": 87,
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "ash-costa-rica-mirador"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:brazil-santa-antonio",
+   "name": "البرازيل سانتا أنتونيو",
+   "nameEn": "Brazil Santa Antonio",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": "البرازيل",
+   "originCode": "BR",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "سكر بني",
+    "كاكاو",
+    "شوكولاتة بالحليب",
+    "مكسرات"
+   ],
+   "sourceUrl": "https://ash.coffee/brazil-santaantonio-coffee/p1027664164",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "سانتا أنطونيو",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كاتواي أحمر"
+    ],
+    "brewMethods": [],
+    "altitudeM": "800-1200",
+    "priceSar": 48,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "مذاق كلاسيكي بقوام ممتلئ يناسب جميع الاستخدامات.",
+    "cuppingScore": 84.5,
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "ash-brazil-santa-antonio"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:uganda-mama-betty",
+   "name": "أوغندا ماما بيتي",
+   "nameEn": "Uganda Mama Betty",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": "أوغندا",
+   "originCode": "UG",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "تفاح أحمر",
+    "كرز",
+    "شراب القيقب",
+    "كاكاو"
+   ],
+   "sourceUrl": "https://ash.coffee/uganda-mamabetty-coffee/p2023334117",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": null,
+    "farm": "ماما بيتي",
+    "producer": null,
+    "variety": [
+     "SL14",
+     "SL28"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "1700-2100",
+    "priceSar": 48,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "فاكهة حمراء مع عمق شوكولاتة، مناسب للفلتر والإسبريسو.",
+    "cuppingScore": 87,
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "ash-uganda-mama-betty"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:colombia-gentiana",
+   "name": "كولومبيا جينتيانا",
+   "nameEn": "Colombia Gentiana",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "WASHED",
+   "roastLevel": null,
+   "flavorNotes": [
+    "خوخ",
+    "جريب فروت",
+    "عنب أبيض",
+    "شوكولاتة"
+   ],
+   "sourceUrl": "https://ash.coffee/colombia-gentiana-coffee/p1592175270",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "جينتيانا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كاتورا"
+    ],
+    "brewMethods": [
+     "V60"
+    ],
+    "altitudeM": "1700-1900",
+    "priceSar": 48,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "فاكهي وهادئ ونظيف، مناسب للفلتر.",
+    "cuppingScore": 85.5,
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "ash-colombia-gentiana"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:indonesia-bener-meriah",
+   "name": "إندونيسيا بنير ميريا",
+   "nameEn": "Indonesia Bener Meriah",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": "إندونيسيا",
+   "originCode": "ID",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "باشن فروت",
+    "خوخ",
+    "يوسفي",
+    "فراولة"
+   ],
+   "sourceUrl": "https://ash.coffee/indonesia-benirmeria-coffee/p764173276",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "بنير ميريا",
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "V60"
+    ],
+    "altitudeM": null,
+    "priceSar": 58.03,
+    "weightGrams": 250,
+    "availability": "Sold Out",
+    "descriptionAr": "نكهات استوائية واضحة؛ مناسب للفلتر والقهوة المثلجة.",
+    "cuppingScore": 87,
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "ash-indonesia-bener-meriah"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:jeddah-summer",
+   "name": "صيف جدة",
+   "nameEn": "Jeddah Summer",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": null,
+   "originCode": null,
+   "process": null,
+   "roastLevel": null,
+   "flavorNotes": [
+    "كرز",
+    "فراولة",
+    "تفاح أخضر",
+    "بيكان"
+   ],
+   "sourceUrl": "https://ash.coffee/blend-summerjeddah-coffee/p1461355308",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "V60"
+    ],
+    "altitudeM": null,
+    "priceSar": 36,
+    "weightGrams": 120,
+    "availability": "Available",
+    "descriptionAr": "محصول عطلة موسمي محدود بطابع خفيف ومنعش؛ موصى به للقهوة المثلجة باستخدام V60.",
+    "cuppingScore": null,
+    "processDetail": null,
+    "isLuxury": true,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "ash-jeddah-summer"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:ethiopia-leke",
+   "name": "إثيوبيا ليكي",
+   "nameEn": "Ethiopia Leke",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "بطيخ",
+    "كيوي",
+    "فواكه حلوة",
+    "توت أزرق"
+   ],
+   "sourceUrl": "https://ash.coffee/ethiopia-leke-coffee/p241509215",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "ليكي",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "هيرلوم"
+    ],
+    "brewMethods": [
+     "V60"
+    ],
+    "altitudeM": "1800-2200",
+    "priceSar": 36,
+    "weightGrams": 120,
+    "availability": "Available",
+    "descriptionAr": "فاكهي مشرق ومنعش، مناسب للفلتر والآيس بلاك.",
+    "cuppingScore": 87.25,
+    "processDetail": null,
+    "isLuxury": true,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "ash-ethiopia-leke"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:uganda-kitoma",
+   "name": "أوغندا كيتوما",
+   "nameEn": "Uganda Kitoma",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": "أوغندا",
+   "originCode": "UG",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "شوكولاتة داكنة",
+    "عنب",
+    "أناناس",
+    "جوزة الطيب"
+   ],
+   "sourceUrl": "https://ash.coffee/uganda-kitoma-coffee/p744020835",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "كيتوما",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "SL14",
+     "SL28"
+    ],
+    "brewMethods": [],
+    "altitudeM": "1700-2100",
+    "priceSar": 36,
+    "weightGrams": 120,
+    "availability": "Available",
+    "descriptionAr": "كوب متوازن غني ودافئ مع حضور للتوابل.",
+    "cuppingScore": 88,
+    "processDetail": null,
+    "isLuxury": true,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "ash-uganda-kitoma"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:jasmine-indonesia",
+   "name": "ياسمين إندونيسيا",
+   "nameEn": "Jasmine Indonesia",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": "إندونيسيا",
+   "originCode": "ID",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "ياسمين",
+    "بابونج",
+    "فواكه مجففة"
+   ],
+   "sourceUrl": "https://ash.coffee/jasmine-indonesia-coffee/p969345727",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "V60"
+    ],
+    "altitudeM": null,
+    "priceSar": 36,
+    "weightGrams": 120,
+    "availability": "Available",
+    "descriptionAr": "قهوة عطرية خفيفة مناسبة لطرق الفلتر.",
+    "cuppingScore": 86.75,
+    "processDetail": "يصفه المصدر بأنه معزز بنكهات ياسمين وبابونج وفواكه مجففة",
+    "isLuxury": true,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "ash-jasmine-indonesia"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:grape-colombia",
+   "name": "عنب كولومبيا",
+   "nameEn": "Grape Colombia",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "عنب",
+    "عسل",
+    "شمع عسل",
+    "شوكولاتة"
+   ],
+   "sourceUrl": "https://ash.coffee/grape-colombia-coffee/p1426880260",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كاستيلو"
+    ],
+    "brewMethods": [
+     "V60"
+    ],
+    "altitudeM": "1700-2000",
+    "priceSar": 60,
+    "weightGrams": 120,
+    "availability": "Available",
+    "descriptionAr": "نكهات فاكهية جريئة، مناسبة للقهوة المثلجة.",
+    "cuppingScore": 87.5,
+    "processDetail": "Co-Infused كما ورد في ملاحظة المحمص",
+    "isLuxury": true,
+    "luxuryReason": null,
+    "isInfused": true,
+    "isDecaf": false,
+    "photo": "ash-grape-colombia"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:melon-colombia",
+   "name": "شمام كولومبيا",
+   "nameEn": "Melon Colombia",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "شمام"
+   ],
+   "sourceUrl": "https://ash.coffee/melon-colombia-coffee/p190832457",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "كينديو",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كاتورا",
+     "بوربون"
+    ],
+    "brewMethods": [
+     "ESPRESSO"
+    ],
+    "altitudeM": "1700-2000",
+    "priceSar": 60,
+    "weightGrams": 120,
+    "availability": "Available",
+    "descriptionAr": "حلاوة هادئة ونكهة شمام واضحة، مناسب للآيس بلاك والإسبريسو، ولا يرشح للمشروبات الحليبية.",
+    "cuppingScore": 87,
+    "processDetail": "تخمير مشترك",
+    "isLuxury": true,
+    "luxuryReason": null,
+    "isInfused": true,
+    "isDecaf": false,
+    "photo": "ash-melon-colombia"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:passion-fruit-colombia",
+   "name": "باشن فروت كولومبيا",
+   "nameEn": "Passion Fruit Colombia",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "باشن فروت",
+    "مانجو",
+    "برتقال",
+    "كيوي"
+   ],
+   "sourceUrl": "https://ash.coffee/passionfruit-colombia-coffee/p731978967",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كاستيلو"
+    ],
+    "brewMethods": [
+     "V60"
+    ],
+    "altitudeM": "1700-2000",
+    "priceSar": 60,
+    "weightGrams": 120,
+    "availability": "Available",
+    "descriptionAr": "طابع استوائي واضح وكوب حيوي متوازن، مناسب لـV60 والكيمكس.",
+    "cuppingScore": null,
+    "processDetail": "لاهوائية معززة",
+    "isLuxury": true,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "ash-passion-fruit-colombia"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:peach-colombia",
+   "name": "خوخ كولومبيا",
+   "nameEn": "Peach Colombia",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "خوخ",
+    "حليب حلو",
+    "شاي أبيض",
+    "جوز الهند",
+    "ياسمين"
+   ],
+   "sourceUrl": "https://ash.coffee/peach-colombia-coffee/p1476969909",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كاستيلو"
+    ],
+    "brewMethods": [
+     "V60"
+    ],
+    "altitudeM": "1700-2000",
+    "priceSar": 60,
+    "weightGrams": 120,
+    "availability": "Available",
+    "descriptionAr": "تجربة فاكهية جريئة وقوية، مناسبة للقهوة المثلجة.",
+    "cuppingScore": 88,
+    "processDetail": "Co-Infused كما ورد في ملاحظة المحمص",
+    "isLuxury": true,
+    "luxuryReason": null,
+    "isInfused": true,
+    "isDecaf": false,
+    "photo": "ash-peach-colombia"
+   }
+  },
+  {
+   "importKey": "ash-2026-10:saudi-bani-malik",
+   "name": "بن سعودي بني مالك",
+   "nameEn": "Saudi Bani Malik",
+   "roasterName": "آش",
+   "roasterNameEn": "ASH",
+   "originName": "السعودية",
+   "originCode": "SA",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "عسل",
+    "فواكه مجففة"
+   ],
+   "sourceUrl": "https://ash.coffee/banimalik-saudi-coffee/p1368673905",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "بني مالك، جبال الداير",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "خولاني"
+    ],
+    "brewMethods": [],
+    "altitudeM": "1600-1800",
+    "priceSar": 60,
+    "weightGrams": 60,
+    "availability": "Sold Out",
+    "descriptionAr": "محصول سعودي استثنائي من جبال الداير يعكس موروث زراعة البن في بني مالك.",
+    "cuppingScore": null,
+    "processDetail": "المزارع حسن المالكي",
+    "isLuxury": true,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "ash-saudi-bani-malik"
+   }
   }
  ]
 }
