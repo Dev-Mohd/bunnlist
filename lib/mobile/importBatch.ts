@@ -4,6 +4,7 @@ import { z } from "zod";
 import { CATALOG_ACCOUNT, SUBMISSION_PROCESSES } from "./submissions";
 import type { PhotoStore } from "./suggestionPhotos";
 import batch from "./data/roastery-batch-2026-05.json";
+import arriyadhPhotos from "./data/arriyadh-photos.json";
 import blackKnightPhotos from "./data/black-knight-photos.json";
 
 // Curated batches (scraped roastery catalogs, cleaned) enter as pending
@@ -33,7 +34,10 @@ export const Batch = z.object({ batch: z.string(), items: z.array(Item) });
 export type Batch = z.infer<typeof Batch>;
 
 export const BUNDLED_BATCHES: Record<string, { data: unknown; photos: Record<string, string> }> = {
-  "roasteries-2026-05": { data: batch, photos: blackKnightPhotos as Record<string, string> },
+  "roasteries-2026-05": {
+    data: batch,
+    photos: { ...(blackKnightPhotos as Record<string, string>), ...(arriyadhPhotos as Record<string, string>) },
+  },
 };
 
 function norm(s: string | null | undefined): string {
