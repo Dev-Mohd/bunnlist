@@ -4157,6 +4157,850 @@
     ],
     "photo": "ar-qiddiyah-blend"
    }
+  },
+  {
+   "importKey": "bunista-2026-10:indonesia-java-frinsa",
+   "name": "إندونيسيا جافا فريينسا",
+   "nameEn": "Indonesia Java Frinsa",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": "إندونيسيا",
+   "originCode": "ID",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "توت",
+    "عنب",
+    "مانجو"
+   ],
+   "sourceUrl": "https://bunista.com/products/Indonesia-Java-Frinsa",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": "West Java",
+    "farm": "Frinsa",
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "V60"
+    ],
+    "priceSar": 71.9,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "من غرب جزيرة جافا على ارتفاع 1600 إلى 1650 مترًا، بمعالجة تجفيف لاهوائي: يُغسل الكرز ويُحكم إغلاقه ثلاثة أيام ثم يجفف على الأسرّة 18 إلى 21 يومًا. كوب عطري بقوام ممتلئ وإيحاءات التوت والعنب والمانجو.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:colombia-lime",
+   "name": "كولومبيا لايم",
+   "nameEn": "Colombia Lime Infused",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "EXPERIMENTAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "لايم",
+    "قشر البرتقال",
+    "فواكه مجففة"
+   ],
+   "sourceUrl": "https://bunista.com/products/Colombia-Lime",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 55.0,
+    "weightGrams": 100,
+    "availability": "Available",
+    "descriptionAr": "قهوة كولومبية بمعالجة منقوعة، حمضية منعشة ومتوازنة بإيحاءات اللايم وقشر البرتقال والفواكه المجففة.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": true,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:colombia-green-apple",
+   "name": "كولومبيا تفاح أخضر",
+   "nameEn": "Colombia Green Apple Infused",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "EXPERIMENTAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "موز",
+    "تفاح أخضر",
+    "سكر بني"
+   ],
+   "sourceUrl": "https://bunista.com/products/Colombia-Green-Apple",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 55.0,
+    "weightGrams": 100,
+    "availability": "Available",
+    "descriptionAr": "قهوة كولومبية بمعالجة منقوعة، قوام مخملي وطابع فاكهي حلو بإيحاءات الموز والتفاح الأخضر والسكر البني.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": true,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:colombia-pomegranate",
+   "name": "كولومبيا رمان",
+   "nameEn": "Colombia Pomegranate Infused",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "EXPERIMENTAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "أناناس",
+    "رمان"
+   ],
+   "sourceUrl": "https://bunista.com/products/Colombia-Pomegranate",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 55.0,
+    "weightGrams": 100,
+    "availability": "Available",
+    "descriptionAr": "قهوة كولومبية بمعالجة منقوعة، حموضة متوازنة وقوام ناعم بإيحاءات الأناناس والرمان.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": true,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:ethiopia-buna-buna",
+   "name": "إثيوبيا بونا بونا",
+   "nameEn": "Ethiopia Buna Buna",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "شوكولاتة",
+    "زهور",
+    "برتقال"
+   ],
+   "sourceUrl": "https://bunista.com/products/Ethiopia-Buna-Buna",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "Heirloom"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 49.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "سلالة هيرلوم على ارتفاع 1800 إلى 2200 متر، بمعالجة مجففة لمدة 17 يومًا، بإيحاءات الشوكولاتة والزهور والبرتقال.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:costa-rica-copey-candy",
+   "name": "كوستاريكا كوبي كاندي",
+   "nameEn": "Costa Rica Copey Candy",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": "كوستاريكا",
+   "originCode": "CR",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "توت",
+    "عنب",
+    "فواكه استوائية"
+   ],
+   "sourceUrl": "https://bunista.com/products/Costa-Rica-Copey-Candy",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "Red Catuai"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 83.16,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "من مرتفعات كوستاريكا، سلالة ريد كاتواي بمعالجة طبيعية، طابع غني وفاكهي تمتزج فيه حلاوة العنب والتوت بلمسة من الفواكه الاستوائية.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:ethiopia-fruity",
+   "name": "إثيوبيا فروتي",
+   "nameEn": "Ethiopia Fruity",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "كاكاو",
+    "توت أزرق",
+    "ليمون"
+   ],
+   "sourceUrl": "https://bunista.com/products/Ethiopia-Fruity",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "Heirloom"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 54.05,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "سلالة هيرلوم بمعالجة لاهوائية طبيعية، كوب عطري بقوام ممتلئ وإيحاءات الكاكاو والتوت الأزرق والليمون.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:brazil-desafinado",
+   "name": "البرازيل فلورا ديسافينادو",
+   "nameEn": "Brazil Flora Desafinado",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": "البرازيل",
+   "originCode": "BR",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "حمضيات",
+    "تفاح أخضر",
+    "سكر بني"
+   ],
+   "sourceUrl": "https://bunista.com/products/Brazil-Desafinado",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "Bourbon",
+     "Yellow Bourbon"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 48.99,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "بوربون وبوربون أصفر بمعالجة طبيعية، كوب بقوام ممتلئ وإيحاءات الحمضيات والتفاح الأخضر والسكر البني.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:sharqi-blend",
+   "name": "شرقي بلند",
+   "nameEn": "Sharqi Blend",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": null,
+   "originCode": null,
+   "process": null,
+   "roastLevel": null,
+   "flavorNotes": [],
+   "sourceUrl": "https://bunista.com/products/Sharqi-Blend",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO"
+    ],
+    "priceSar": 45.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "مزيج للإسبريسو من عدة مصادر بطعم غني وقوي، يتميز مع مشروبات الحليب الحارة والباردة.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:guatemala-huehuetenango-waykan",
+   "name": "غواتيمالا وايكان",
+   "nameEn": "Guatemala Huehuetenango Waykan",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": "غواتيمالا",
+   "originCode": "GT",
+   "process": "WASHED",
+   "roastLevel": null,
+   "flavorNotes": [
+    "شوكولاتة",
+    "عنب",
+    "برتقال"
+   ],
+   "sourceUrl": "https://bunista.com/products/Guatemala-Huehuetenango-Waykan",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": "Huehuetenango",
+    "farm": "Smallholder farmers",
+    "producer": null,
+    "variety": [
+     "Bourbon",
+     "Caturra",
+     "Catuai",
+     "Pache"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 49.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "من ويويتينانغو، إحدى أشهر مناطق زراعة البن في غواتيمالا، على ارتفاع 1100 إلى 1800 متر. مغسولة، بحلاوة الشوكولاتة وحموضة العنب والبرتقال وقوام ناعم إلى متوسط.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:uganda-boda-boda",
+   "name": "أوغندا بودا بودا",
+   "nameEn": "Uganda Boda Boda",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": "أوغندا",
+   "originCode": "UG",
+   "process": null,
+   "roastLevel": null,
+   "flavorNotes": [
+    "توت",
+    "لومي",
+    "كراميل"
+   ],
+   "sourceUrl": "https://bunista.com/products/Uganda-Boda-Boda",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": "Mount Elgon",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "SL28",
+     "SL34"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 54.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "من جبل إلغون على ارتفاع يتجاوز 1800 متر، سلالتا SL28 وSL34، تُعالج في محطة كايومبي وتجفف 22 يومًا. حلاوة عالية وقوام كريمي متوسط بإيحاءات التوت واللومي والكراميل.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:colombia-huila",
+   "name": "كولومبيا ويلا",
+   "nameEn": "Colombia Huila",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "WASHED",
+   "roastLevel": null,
+   "flavorNotes": [
+    "شوكولاتة",
+    "كراميل"
+   ],
+   "sourceUrl": "https://bunista.com/products/Colombia-Huila",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": "Huila",
+    "farm": "Smallholder farmers",
+    "producer": null,
+    "variety": [
+     "Castillo",
+     "Caturra",
+     "Colombia"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 47.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "من منطقة هويلا على ارتفاع 1200 إلى 2000 متر، مغسولة، كوب متوازن بحلاوة الشوكولاتة والكراميل وقوام سلس وحريري.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:bunista-espresso-blend",
+   "name": "بونيستا بلند",
+   "nameEn": "Bunista Blend",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": null,
+   "originCode": null,
+   "process": null,
+   "roastLevel": null,
+   "flavorNotes": [
+    "حمضيات",
+    "كراميل",
+    "مكسرات"
+   ],
+   "sourceUrl": "https://bunista.com/products/Bunista-Espresso-Blend",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 45.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "مزيج للاستخدام اليومي في الإسبريسو والفلتر والمشروبات الحارة والباردة، بحموضة الحمضيات وحلاوة الكراميل والمكسرات.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:brazil-serra-negra",
+   "name": "البرازيل سيرا نيغرا",
+   "nameEn": "Brazil Serra Negra",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": "البرازيل",
+   "originCode": "BR",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "توفي",
+    "شوكولاتة",
+    "جوز مملح"
+   ],
+   "sourceUrl": "https://bunista.com/products/Brazil-Serra-Negra",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": "Serra Negra",
+    "farm": "Smallholder farmers",
+    "producer": null,
+    "variety": [
+     "Bourbon",
+     "Typica",
+     "Catuai"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 45.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "من سيرا نيغرا على ارتفاع 1016 إلى 1290 مترًا، مجففة طبيعيًا، بقوام ممتلئ وحلاوة التوفي والشوكولاتة مع إيحاء الجوز المملح.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:saudi-roast-coffee",
+   "name": "الحمصة السعودية",
+   "nameEn": "Saudi Roast Coffee",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": null,
+   "originCode": null,
+   "process": null,
+   "roastLevel": "light",
+   "flavorNotes": [],
+   "sourceUrl": "https://bunista.com/products/Saudi-Roast-Coffee",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ARABIC"
+    ],
+    "priceSar": 24.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "مزيج للقهوة السعودية بتحميص خفيف (أشقر) يناسب طريقة التحضير التقليدية، حبوب كاملة.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:ethiopia-hambella-buku",
+   "name": "إثيوبيا هامبيلا بوكو",
+   "nameEn": "Ethiopia Hambella Buku",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "ياسمين",
+    "دراق",
+    "برتقال"
+   ],
+   "sourceUrl": "https://bunista.com/products/Ethiopia-Hambella-Buku",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": "Hambella, Guji",
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 64.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "من منطقة هامبيلا في إقليم قوجي، بمعالجة مجففة تضيف حلاوة طبيعية، كوب متوازن بإيحاءات الياسمين والدراق والبرتقال.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:el-salvador-santa-ana",
+   "name": "السلفادور سانتا آنا",
+   "nameEn": "El Salvador Santa Ana",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": "السلفادور",
+   "originCode": "SV",
+   "process": "WASHED",
+   "roastLevel": null,
+   "flavorNotes": [
+    "شوكولاتة",
+    "كشمش أحمر",
+    "بندق"
+   ],
+   "sourceUrl": "https://bunista.com/products/El-Salvador-Santa-Ana",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": "Santa Ana",
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 54.34,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "من سانتا آنا بتربتها البركانية، مغسولة، بحلاوة ناعمة وقوام متوازن وإيحاءات الشوكولاتة والكشمش الأحمر والبندق.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:peru-valle-dorado",
+   "name": "بيرو فالي دورادو",
+   "nameEn": "Peru Valle Dorado",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": "بيرو",
+   "originCode": "PE",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "تفاح أحمر",
+    "سكر بني",
+    "برتقال"
+   ],
+   "sourceUrl": "https://bunista.com/products/Peru-Valle-Dorado",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 60.38,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "من مرتفعات البيرو، بمعالجة مجففة وقوام لطيف وإيحاءات التفاح الأحمر والسكر البني والبرتقال.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:yemen-haraz",
+   "name": "اليمن حراز",
+   "nameEn": "Yemen Haraz",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": "اليمن",
+   "originCode": "YE",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "مانجو",
+    "توت أزرق",
+    "شوكولاتة"
+   ],
+   "sourceUrl": "https://bunista.com/products/Yemen-Haraz",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": "Haraz",
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 64.75,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "من جبال حراز، بمعالجة لاهوائية مجففة، كوب غني فاكهي بحلاوة طبيعية وإيحاءات المانجو والتوت الأزرق والشوكولاتة.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:uganda-mugisi",
+   "name": "أوغندا موجيزي",
+   "nameEn": "Uganda Mugisi",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": "أوغندا",
+   "originCode": "UG",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "برقوق",
+    "شوكولاتة",
+    "حمضيات"
+   ],
+   "sourceUrl": "https://bunista.com/products/Uganda-Mugisi",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 57.5,
+    "weightGrams": 250,
+    "availability": "Sold Out",
+    "descriptionAr": "محصول أوغندي بمعالجة مجففة وإيحاءات البرقوق والشوكولاتة والحمضيات.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:ethiopia-decaf",
+   "name": "إثيوبيا ديكاف",
+   "nameEn": "Ethiopia Decaf",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "OTHER",
+   "roastLevel": null,
+   "flavorNotes": [
+    "شوكولاتة",
+    "جوز",
+    "شمام"
+   ],
+   "sourceUrl": "https://bunista.com/products/Ethiopia-Decaf",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "Heirloom"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 62.0,
+    "weightGrams": 250,
+    "availability": "Sold Out",
+    "descriptionAr": "سلالة هيرلوم منزوعة الكافيين بطريقة Swiss Water، نكهات ناعمة متناسقة بإيحاءات الشوكولاتة والجوز والشمام.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": true
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:china-lao",
+   "name": "الصين لاو سو زاي",
+   "nameEn": "China Lao Su Zhai",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": "الصين",
+   "originCode": "CN",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "برقوق",
+    "عنب",
+    "كرز"
+   ],
+   "sourceUrl": "https://bunista.com/products/China-Lao",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "Catimor"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 66.0,
+    "weightGrams": 250,
+    "availability": "Sold Out",
+    "descriptionAr": "سلالة كاتيمور بمعالجة لاهوائية طبيعية، بإيحاءات البرقوق والعنب والكرز.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "bunista-2026-10:brazil-serra-negra-decaf",
+   "name": "البرازيل سيرا نيغرا ديكاف",
+   "nameEn": "Brazil Serra Negra Decaf",
+   "roasterName": "بونيستا",
+   "roasterNameEn": "Bunista",
+   "originName": "البرازيل",
+   "originCode": "BR",
+   "process": "OTHER",
+   "roastLevel": null,
+   "flavorNotes": [
+    "بسكويت",
+    "كراميل",
+    "حمضيات"
+   ],
+   "sourceUrl": "https://bunista.com/products/Brazil-Serra-Negra-Decaf",
+   "sourceConfidence": 0.95,
+   "extras": {
+    "region": "Serra Negra",
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 54.97,
+    "weightGrams": 250,
+    "availability": "Sold Out",
+    "descriptionAr": "منزوعة الكافيين بطريقة Swiss Water، نكهة ناعمة متوازنة بإيحاءات البسكويت والكراميل والحمضيات.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": true
+   }
   }
  ]
 }
