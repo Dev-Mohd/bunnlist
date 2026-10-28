@@ -6,6 +6,7 @@ import type { PhotoStore } from "./suggestionPhotos";
 import batch from "./data/roastery-batch-2026-05.json";
 import arriyadhPhotos from "./data/arriyadh-photos.json";
 import blackKnightPhotos from "./data/black-knight-photos.json";
+import bunistaPhotos from "./data/bunista-photos.json";
 
 // Curated batches (scraped roastery catalogs, cleaned) enter as pending
 // suggestions from the "catalog" account, so every coffee is reviewed in the app's
@@ -36,7 +37,11 @@ export type Batch = z.infer<typeof Batch>;
 export const BUNDLED_BATCHES: Record<string, { data: unknown; photos: Record<string, string> }> = {
   "roasteries-2026-05": {
     data: batch,
-    photos: { ...(blackKnightPhotos as Record<string, string>), ...(arriyadhPhotos as Record<string, string>) },
+    photos: {
+      ...(blackKnightPhotos as Record<string, string>),
+      ...(arriyadhPhotos as Record<string, string>),
+      ...(bunistaPhotos as Record<string, string>),
+    },
   },
 };
 
