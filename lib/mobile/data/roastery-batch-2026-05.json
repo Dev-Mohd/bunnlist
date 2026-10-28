@@ -4190,7 +4190,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "bn-indonesia-java-frinsa"
    }
   },
   {
@@ -4226,7 +4227,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": true,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "bn-colombia-lime"
    }
   },
   {
@@ -4262,7 +4264,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": true,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "bn-colombia-green-apple"
    }
   },
   {
@@ -4297,7 +4300,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": true,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "bn-colombia-pomegranate"
    }
   },
   {
@@ -4335,7 +4339,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "bn-ethiopia-buna-buna"
    }
   },
   {
@@ -4373,7 +4378,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "bn-costa-rica-copey-candy"
    }
   },
   {
@@ -4411,7 +4417,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "bn-ethiopia-fruity"
    }
   },
   {
@@ -4450,7 +4457,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "bn-brazil-desafinado"
    }
   },
   {
@@ -4461,9 +4469,13 @@
    "roasterNameEn": "Bunista",
    "originName": null,
    "originCode": null,
-   "process": null,
+   "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كرز",
+    "كراميل",
+    "بندق"
+   ],
    "sourceUrl": "https://bunista.com/products/Sharqi-Blend",
    "sourceConfidence": 0.95,
    "extras": {
@@ -4481,7 +4493,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "bn-sharqi-blend"
    }
   },
   {
@@ -4522,7 +4535,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "bn-guatemala-huehuetenango-waykan"
    }
   },
   {
@@ -4600,7 +4614,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "bn-colombia-huila"
    }
   },
   {
@@ -4636,7 +4651,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "bn-bunista-espresso-blend"
    }
   },
   {
@@ -4676,7 +4692,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "bn-brazil-serra-negra"
    }
   },
   {
@@ -4707,7 +4724,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "bn-saudi-roast-coffee"
    }
   },
   {
@@ -4743,7 +4761,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "bn-ethiopia-hambella-buku"
    }
   },
   {
@@ -4779,7 +4798,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "bn-el-salvador-santa-ana"
    }
   },
   {
@@ -4815,7 +4835,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "bn-peru-valle-dorado"
    }
   },
   {
@@ -4851,7 +4872,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "bn-yemen-haraz"
    }
   },
   {
@@ -4887,7 +4909,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "bn-uganda-mugisi"
    }
   },
   {
@@ -4925,7 +4948,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": true
+    "isDecaf": true,
+    "photo": "bn-ethiopia-decaf"
    }
   },
   {
@@ -4963,7 +4987,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "bn-china-lao"
    }
   },
   {
@@ -4999,7 +5024,8 @@
     "isLuxury": false,
     "luxuryReason": null,
     "isInfused": false,
-    "isDecaf": true
+    "isDecaf": true,
+    "photo": "bn-brazil-serra-negra-decaf"
    }
   }
  ]
