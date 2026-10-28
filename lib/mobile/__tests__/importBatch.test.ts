@@ -33,8 +33,8 @@ describe("importBatch", () => {
     const store = { put: vi.fn().mockResolvedValue(undefined), signedUrl: vi.fn(), publish: vi.fn() };
     const bundle = BUNDLED_BATCHES["roasteries-2026-05"];
     const result = await importBatch(m as unknown as PrismaClient, bundle.data, bundle.photos, store);
-    expect(result.created).toBe(168);
-    expect(result.photos).toBe(85); // 24 Black Knight + 16 Arriyadh Roaster + 22 Bunista + 23 ASH
+    expect(result.created).toBe(179);
+    expect(result.photos).toBe(96); // 24 Black Knight + 16 Arriyadh Roaster + 22 Bunista + 23 ASH + 11 SHOVEL
     expect(store.put).toHaveBeenCalledWith(expect.stringMatching(/^imports\/bk-milora-[0-9a-f]{8}\.jpg$/), expect.any(Buffer));
     expect(store.put).toHaveBeenCalledWith(expect.stringMatching(/^imports\/ar-shmaisy-street-[0-9a-f]{8}\.jpg$/), expect.any(Buffer));
   });
