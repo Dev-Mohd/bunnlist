@@ -5966,6 +5966,439 @@
     "isDecaf": false,
     "photo": "ash-saudi-bani-malik"
    }
+  },
+  {
+   "importKey": "shovel-2026-10:sado",
+   "name": "قهوة سدو",
+   "nameEn": "Sado",
+   "roasterName": "شفل",
+   "roasterNameEn": "SHOVEL",
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "NATURAL",
+   "roastLevel": "light",
+   "flavorNotes": [],
+   "sourceUrl": "https://al-shovel.com/products/قهوة-السعودية-المختصة-محمصة-شفل",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "هيرلوم"
+    ],
+    "brewMethods": [
+     "ARABIC"
+    ],
+    "altitudeM": null,
+    "priceSar": 46.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "قهوة سعودية التحضير من بن إثيوبي مختص منتقى يدويًا، بحمصة شقراء وطابع أصيل.",
+    "processDetail": "Natural وفق الملصق الأصلي",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "shovel-sado"
+   }
+  },
+  {
+   "importKey": "shovel-2026-10:wafer-chocolate",
+   "name": "ويفر شوكلاتة",
+   "nameEn": "Wafer Chocolate",
+   "roasterName": "شفل",
+   "roasterNameEn": "SHOVEL",
+   "originName": "البرازيل",
+   "originCode": "BR",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "شوكولاتة داكنة",
+    "شوكولاتة بالحليب",
+    "جوز الهند",
+    "كراميل",
+    "طبقات ويفر",
+    "دبس"
+   ],
+   "sourceUrl": "https://al-shovel.com/products/ويفر-شوكلاتة-250g",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "ميناس جرايس",
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "950-1200",
+    "priceSar": 80.01,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "كوب ممتلئ وغني بحموضة خفيفة ونهاية دبس، مناسب للإسبريسو ومشروبات الحليب والترشيح.",
+    "processDetail": "الملصق: لاهوائية محفّزة؛ ليست عبارة صريحة لإثبات المنقوعة",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "shovel-wafer-chocolate"
+   }
+  },
+  {
+   "importKey": "shovel-2026-10:uganda-mama-betty",
+   "name": "أوغندا ماما بيتي",
+   "nameEn": "Uganda Mama Betty",
+   "roasterName": "شفل",
+   "roasterNameEn": "SHOVEL",
+   "originName": "أوغندا",
+   "originCode": "UG",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "توت",
+    "فواكه استوائية",
+    "أناناس",
+    "كيوي",
+    "باشن فروت",
+    "يوسفي"
+   ],
+   "sourceUrl": "https://al-shovel.com/products/أوغندا-ماما-بيتي-250g",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "روينزوري",
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "1500-1800",
+    "priceSar": 65.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "حمضية متوسطة وقوام معتدل مع نهاية طعم يوسفي.",
+    "processDetail": "تجفيف مطوّل (Extended Drying) وفق الملصق",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "shovel-uganda-mama-betty"
+   }
+  },
+  {
+   "importKey": "shovel-2026-10:ethiopia-geisha",
+   "name": "جيشا إثيوبيا",
+   "nameEn": "Ethiopia Geisha",
+   "roasterName": "شفل",
+   "roasterNameEn": "SHOVEL",
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "ياسمين",
+    "تفاح أخضر",
+    "ليمون",
+    "شاي أسود"
+   ],
+   "sourceUrl": "https://al-shovel.com/products/جيشا-إثيوبيا-250g",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "جيشا كما ورد في الوصف",
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "1800-2200",
+    "priceSar": 92.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "محصول إثيوبي بطابع زهري وحمضي. الملصق يذكر بطيخًا وياسمينًا وشايًا أسود.",
+    "processDetail": "Natural وفق الملصق الأصلي",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "shovel-ethiopia-geisha"
+   }
+  },
+  {
+   "importKey": "shovel-2026-10:brazil-decaf",
+   "name": "ديكاف برازيل",
+   "nameEn": "Brazil Decaf",
+   "roasterName": "شفل",
+   "roasterNameEn": "SHOVEL",
+   "originName": "البرازيل",
+   "originCode": "BR",
+   "process": "OTHER",
+   "roastLevel": null,
+   "flavorNotes": [
+    "شوكولاتة",
+    "كراميل بندقي"
+   ],
+   "sourceUrl": "https://al-shovel.com/products/ديكاف-برازيل-250g",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": null,
+    "priceSar": 45.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "قهوة برازيلية منزوعة الكافيين بطريقة المياه السويسرية، بقوام ناعم ومخملي، مناسبة للفلتر والإسبريسو.",
+    "processDetail": "Swiss Water؛ إزالة الكافيين بالماء والحرارة والوقت",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": true,
+    "photo": "shovel-brazil-decaf"
+   }
+  },
+  {
+   "importKey": "shovel-2026-10:classic",
+   "name": "كلاسيك",
+   "nameEn": "Classic",
+   "roasterName": "شفل",
+   "roasterNameEn": "SHOVEL",
+   "originName": "البرازيل",
+   "originCode": "BR",
+   "process": "OTHER",
+   "roastLevel": null,
+   "flavorNotes": [
+    "شوكولاتة داكنة",
+    "مكسرات"
+   ],
+   "sourceUrl": "https://al-shovel.com/products/كلاسيك",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "2000",
+    "priceSar": 46.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "طابع كلاسيكي شوكولاتي وقوام مرتفع، مع وصفات للإسبريسو والحليب والترشيح.",
+    "processDetail": "كما ورد في الوصف",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "shovel-classic"
+   }
+  },
+  {
+   "importKey": "shovel-2026-10:fruity",
+   "name": "فروتي",
+   "nameEn": "Fruity",
+   "roasterName": "شفل",
+   "roasterNameEn": "SHOVEL",
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": null,
+   "roastLevel": null,
+   "flavorNotes": [
+    "توت",
+    "زهور",
+    "ياسمين",
+    "فواكه حمضية"
+   ],
+   "sourceUrl": "https://al-shovel.com/products/فروتي",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "مزيج من مناطق مختلفة",
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "1700-2300",
+    "priceSar": 55.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "قهوة إثيوبية فاكهية وزهرية بقوام ناعم حسب الوصف. الملصق يذكر الشوكولاتة وقوامًا ممتلئًا.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "shovel-fruity"
+   }
+  },
+  {
+   "importKey": "shovel-2026-10:yemen-haraz",
+   "name": "اليمن حراز",
+   "nameEn": "Yemen Haraz",
+   "roasterName": "شفل",
+   "roasterNameEn": "SHOVEL",
+   "originName": "اليمن",
+   "originCode": "YE",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "توت",
+    "عنب",
+    "زبيب"
+   ],
+   "sourceUrl": "https://al-shovel.com/products/اليمن-مجففة-لاهوائية-1",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "حراز",
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "1800-2400",
+    "priceSar": 100.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "حمضية متوسطة وقوام ناعم، بطابع فواكه وزبيب.",
+    "processDetail": "Natural Anaerobic وفق اسم المنتج والملصق",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "shovel-yemen-haraz"
+   }
+  },
+  {
+   "importKey": "shovel-2026-10:ethiopia-hambela",
+   "name": "إثيوبيا هامبيلا",
+   "nameEn": "Ethiopia Hambela",
+   "roasterName": "شفل",
+   "roasterNameEn": "SHOVEL",
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "كرز",
+    "تفاح أحمر",
+    "خوخ"
+   ],
+   "sourceUrl": "https://al-shovel.com/products/اثيوبيا-هامبيلا-مجففة-1",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "هامبيلا",
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "1850-2200",
+    "priceSar": 56.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "قهوة إثيوبية بقوام كريمي. يضيف الملصق الكراميل إلى الإيحاءات.",
+    "processDetail": "Natural وفق اسم المنتج والملصق",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "shovel-ethiopia-hambela"
+   }
+  },
+  {
+   "importKey": "shovel-2026-10:refresh",
+   "name": "ريفريش",
+   "nameEn": "Refresh",
+   "roasterName": "شفل",
+   "roasterNameEn": "SHOVEL",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": null,
+   "roastLevel": null,
+   "flavorNotes": [
+    "عطرية",
+    "شوكولاتة داكنة"
+   ],
+   "sourceUrl": "https://al-shovel.com/products/ريفريش",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "مزيج من منطقتين مختلفتين",
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "1100-1400",
+    "priceSar": 50.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "قهوة كولومبية بقوام ممتلئ حسب الوصف؛ الملصق يصفه بالمتوسط.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "shovel-refresh"
+   }
+  },
+  {
+   "importKey": "shovel-2026-10:ethiopia-chelchele",
+   "name": "شيلشلي إثيوبيا",
+   "nameEn": "Ethiopia Chelchele",
+   "roasterName": "شفل",
+   "roasterNameEn": "SHOVEL",
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "توت",
+    "برقوق",
+    "زهور",
+    "شاي أسود"
+   ],
+   "sourceUrl": "https://al-shovel.com/products/chelchele-ethiopia-yirgacheffe-natural-coffee-250g",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "يرغاتشيف",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "هيرلوم"
+    ],
+    "brewMethods": [
+     "V60"
+    ],
+    "altitudeM": "1920-2200",
+    "priceSar": 62.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "قهوة إثيوبية عطرية ومشرقة ومتوازنة، بحموضة متوسطة وحلاوة واضحة وقوام كريمي ونهاية نظيفة.",
+    "processDetail": "Natural",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "shovel-ethiopia-chelchele"
+   }
   }
  ]
 }
