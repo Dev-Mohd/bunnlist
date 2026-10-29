@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import type { PrismaClient } from "@prisma/client";
-import { follow, followList, publicProfile, unfollow } from "../social";
+import { activityVisibleTo, answerFollowRequest, follow, followList, publicProfile, removeFollower, unfollow } from "../social";
 
 function fakePrisma(profiles: Record<string, string>) {
   const byUsername = new Map(Object.entries(profiles)); // username -> accountId
@@ -27,6 +27,11 @@ function fakePrisma(profiles: Record<string, string>) {
     mobileCoffeeSubmission: { findMany: vi.fn().mockResolvedValue([]) },
     mobileRecipe: { findMany: vi.fn().mockResolvedValue([{ id: "r1", title: "صباحية", methodCode: "V60", lotId: null }]) },
     coffeeLot: { findMany: vi.fn().mockResolvedValue([]) },
+    mobileFollowRequest: {
+      findUnique: vi.fn().mockResolvedValue(null), create: vi.fn().mockResolvedValue({}),
+      deleteMany: vi.fn().mockResolvedValue({ count: 1 }), findMany: vi.fn().mockResolvedValue([]),
+    },
+    $transaction: vi.fn().mockImplementation(async (ops: unknown[]) => ops),
   };
   return { db: m as unknown as PrismaClient, m };
 }
@@ -56,12 +61,13 @@ describe("following", () => {
     const onNew = vi.fn().mockResolvedValue(undefined);
     await follow(db, "v", "mohd", onNew);
     expect(m.mobileFollow.upsert).toHaveBeenCalledOnce();
-    expect(onNew).toHaveBeenCalledWith("a");
+    expect(onNew).toHaveBeenCalledWith("a", "follow");
     // Following again doesn't notify again.
     await follow(db, "v", "mohd", onNew);
     expect(onNew).toHaveBeenCalledOnce();
     await unfollow(db, "v", "mohd");
     expect(m.mobileFollow.deleteMany).toHaveBeenCalledWith({ where: { followerId: "v", followeeId: "a" } });
+    expect(m.mobileFollowRequest.deleteMany).toHaveBeenCalledWith({ where: { requesterId: "v", targetId: "a" } });
     await expect(follow(db, "a", "mohd")).rejects.toMatchObject({ code: "unprocessable" });
   });
 
@@ -103,5 +109,63 @@ describe("privacy", () => {
     const { db } = withPrivacy({ followersVisibility: "me" }, true);
     await expect(followList(db, "mohd", "followers", "v")).rejects.toMatchObject({ code: "forbidden" });
     await expect(followList(db, "mohd", "followers", "a")).resolves.toBeDefined();
+  });
+});
+
+describe("private accounts", () => {
+  function privateOwner(viewerFollows: boolean) {
+    const { db, m } = fakePrisma({ mohd: "a" });
+    m.mobileProfile.findUnique.mockImplementation(({ where }: { where: { username?: string; accountId?: string } }) =>
+      where.username !== undefined ? { accountId: "a" } : { username: "mohd", displayName: "Mohd", bio: null, avatarPath: null, isPrivate: true });
+    m.mobileFollow.findUnique.mockResolvedValue(viewerFollows ? { followerId: "v" } : null);
+    return { db, m };
+  }
+
+  it("turns a follow into a request, once", async () => {
+    const { db, m } = privateOwner(false);
+    const onNew = vi.fn().mockResolvedValue(undefined);
+    expect(await follow(db, "v", "mohd", onNew)).toEqual({ following: false, requested: true });
+    expect(m.mobileFollowRequest.create).toHaveBeenCalledWith({ data: { requesterId: "v", targetId: "a" } });
+    expect(m.mobileFollow.upsert).not.toHaveBeenCalled();
+    expect(onNew).toHaveBeenCalledWith("a", "request");
+    m.mobileFollowRequest.findUnique.mockResolvedValue({ requesterId: "v" });
+    await follow(db, "v", "mohd", onNew);
+    expect(onNew).toHaveBeenCalledOnce();
+  });
+
+  it("shows the header but keeps activity and lists for followers", async () => {
+    const stranger = await publicProfile(privateOwner(false).db, "mohd", "v");
+    expect(stranger.isPrivate).toBe(true);
+    expect(stranger.followers).toBe(3);
+    expect(stranger.activityHidden).toBe(true);
+    expect(stranger.recipes).toEqual([]);
+    await expect(followList(privateOwner(false).db, "mohd", "followers", "v")).rejects.toMatchObject({ code: "forbidden" });
+    const follower = await publicProfile(privateOwner(true).db, "mohd", "v");
+    expect(follower.activityHidden).toBe(false);
+  });
+
+  it("accepts a request into a follow, and declines quietly", async () => {
+    const { db, m } = privateOwner(false);
+    const told = vi.fn().mockResolvedValue(undefined);
+    await answerFollowRequest(db, "a", "mohd", true, told);
+    expect(m.mobileFollow.upsert).toHaveBeenCalledOnce();
+    expect(told).toHaveBeenCalledWith("a");
+    m.mobileFollow.upsert.mockClear();
+    await answerFollowRequest(db, "a", "mohd", false, told);
+    expect(m.mobileFollow.upsert).not.toHaveBeenCalled();
+    await removeFollower(db, "a", "mohd");
+    expect(m.mobileFollow.deleteMany).toHaveBeenCalledWith({ where: { followerId: "a", followeeId: "a" } });
+  });
+
+  it("says whose activity a viewer may see", async () => {
+    const { db, m } = fakePrisma({});
+    m.mobileProfile.findMany.mockResolvedValue([
+      { accountId: "pub", activityVisibility: "everyone", isPrivate: false },
+      { accountId: "priv", activityVisibility: "everyone", isPrivate: true },
+      { accountId: "friend", activityVisibility: "everyone", isPrivate: true },
+    ]);
+    m.mobileFollow.findMany.mockResolvedValue([{ followeeId: "friend" }]);
+    const seen = await activityVisibleTo(db, "v", ["pub", "priv", "friend", "v"]);
+    expect([...seen].sort()).toEqual(["friend", "pub", "v"]);
   });
 });

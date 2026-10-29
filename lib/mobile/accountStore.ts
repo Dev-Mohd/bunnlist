@@ -36,6 +36,7 @@ export function createPrismaAccountDeletionStore(
         await tx.mobileProfile.deleteMany({ where: { accountId } });
         await tx.mobilePointEvent.deleteMany({ where: { accountId } });
         await tx.mobileFollow.deleteMany({ where: { OR: [{ followerId: accountId }, { followeeId: accountId }] } });
+        await tx.mobileFollowRequest.deleteMany({ where: { OR: [{ requesterId: accountId }, { targetId: accountId }] } });
         await tx.mobileCollectionEntry.deleteMany({ where: { accountId } });
         await tx.mobilePushDevice.deleteMany({ where: { accountId } });
         await tx.mobileLike.deleteMany({ where: { OR: [{ accountId }, { ownerId: accountId }] } });

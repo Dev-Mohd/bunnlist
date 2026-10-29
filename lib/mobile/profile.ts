@@ -9,7 +9,7 @@ import { ApiError } from "./errors";
 
 const RESERVED = new Set([
   "admin", "administrator", "support", "help", "bunnlist", "bunn", "official", "root", "system",
-  "moderator", "mod", "staff", "team", "null", "undefined", "me", "settings", "api",
+  "moderator", "mod", "staff", "team", "null", "undefined", "me", "settings", "api", "search", "suggested",
 ]);
 
 export type UsernameProblem = "too_short" | "too_long" | "must_start_with_letter" | "invalid_chars" | "reserved";
@@ -91,6 +91,12 @@ export function asVisibility(value: string | null | undefined): Visibility {
   return (VISIBILITY as readonly string[]).includes(value ?? "") ? (value as Visibility) : "everyone";
 }
 
+/** A private account shows its activity to followers at most, whatever the setting says. */
+export function activityLevel(profile: { activityVisibility?: string | null; isPrivate?: boolean | null } | null | undefined): Visibility {
+  const level = asVisibility(profile?.activityVisibility);
+  return profile?.isPrivate && level === "everyone" ? "followers" : level;
+}
+
 export const ProfileUpdate = z.object({
   displayName: z.string().trim().min(1).max(40).optional(),
   bio: z.string().trim().max(160).optional(),
@@ -98,6 +104,7 @@ export const ProfileUpdate = z.object({
   followersVisibility: z.enum(VISIBILITY).optional(),
   followingVisibility: z.enum(VISIBILITY).optional(),
   activityVisibility: z.enum(VISIBILITY).optional(),
+  isPrivate: z.boolean().optional(),
 });
 export type ProfileUpdate = z.infer<typeof ProfileUpdate>;
 
@@ -111,6 +118,8 @@ export interface MobileProfileView {
   followersVisibility: Visibility;
   followingVisibility: Visibility;
   activityVisibility: Visibility;
+  /// Followers need approval; activity is for followers only.
+  isPrivate: boolean;
   /// «مطحنتي», a MobileGrinder id.
   grinderId: string | null;
 }
@@ -138,6 +147,7 @@ export async function getProfile(prisma: PrismaClient, accountId: string): Promi
     followersVisibility: asVisibility(profile?.followersVisibility),
     followingVisibility: asVisibility(profile?.followingVisibility),
     activityVisibility: asVisibility(profile?.activityVisibility),
+    isPrivate: profile?.isPrivate ?? false,
     grinderId: profile?.grinderId ?? null,
   };
 }
@@ -150,8 +160,21 @@ export async function updateProfile(prisma: PrismaClient, accountId: string, pat
     ...(patch.followersVisibility ? { followersVisibility: patch.followersVisibility } : {}),
     ...(patch.followingVisibility ? { followingVisibility: patch.followingVisibility } : {}),
     ...(patch.activityVisibility ? { activityVisibility: patch.activityVisibility } : {}),
+    ...(patch.isPrivate !== undefined ? { isPrivate: patch.isPrivate } : {}),
   };
   await prisma.mobileProfile.upsert({ where: { accountId }, update: data, create: { accountId, ...data } });
+  // Going public lets everyone who asked in.
+  if (patch.isPrivate === false) {
+    const pending = await prisma.mobileFollowRequest.findMany({ where: { targetId: accountId }, select: { requesterId: true } });
+    if (pending.length) {
+      await prisma.$transaction([
+        prisma.mobileFollow.createMany({
+          data: pending.map((p) => ({ followerId: p.requesterId, followeeId: accountId })), skipDuplicates: true,
+        }),
+        prisma.mobileFollowRequest.deleteMany({ where: { targetId: accountId } }),
+      ]);
+    }
+  }
   return getProfile(prisma, accountId);
 }
 

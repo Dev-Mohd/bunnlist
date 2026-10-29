@@ -2,7 +2,7 @@ import type { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { LOT_LIST_SELECT, mapLot, type CoffeeLotRow, type MobileLot } from "./catalog";
 import { mapExperience, type MobileExperience } from "./experiences";
-import { asVisibility, avatarUrl, displayNames } from "./profile";
+import { activityLevel, avatarUrl, displayNames } from "./profile";
 import { canSee } from "./social";
 import { UNCREDITED_ACCOUNTS } from "./submissions";
 
@@ -240,20 +240,27 @@ export interface PulseItem {
 }
 
 /** The latest public activity: published brews, published recipes and discoveries.
- *  People the caller follows come first; each person's activity setting is honored. */
-export async function pulse(prisma: PrismaClient, viewerId: string | null, now = new Date(), limit = 8): Promise<PulseItem[]> {
-  const since = new Date(now.getTime() - 30 * DAY);
+ *  People the caller follows come first; each person's activity setting is honored.
+ *  `from` narrows it to some accounts (the people one follows). */
+export async function pulse(
+  prisma: PrismaClient, viewerId: string | null, now = new Date(), limit = 8, from?: string[],
+): Promise<PulseItem[]> {
+  const since = new Date(now.getTime() - (from ? 60 : 30) * DAY);
+  const who = from ? { accountId: { in: from } } : {};
   const [brews, recipes, discoveries, follows] = await Promise.all([
     prisma.mobileBrewExperience.findMany({
-      where: { state: "published", createdAt: { gte: since } }, orderBy: { createdAt: "desc" }, take: 40,
+      where: { state: "published", createdAt: { gte: since }, ...who }, orderBy: { createdAt: "desc" }, take: from ? 80 : 40,
       select: { accountId: true, lotId: true, methodCode: true, stars: true, note: true, createdAt: true },
     }),
     prisma.mobileRecipe.findMany({
-      where: { state: "published", publishedAt: { gte: since } }, orderBy: { publishedAt: "desc" }, take: 20,
+      where: { state: "published", publishedAt: { gte: since }, ...who }, orderBy: { publishedAt: "desc" }, take: from ? 40 : 20,
       select: { id: true, accountId: true, title: true, methodCode: true, lotId: true, publishedAt: true },
     }),
     prisma.mobileCoffeeSubmission.findMany({
-      where: { status: "APPROVED", approvedLotId: { not: null }, reviewedAt: { gte: since }, accountId: { notIn: UNCREDITED_ACCOUNTS } },
+      where: {
+        status: "APPROVED", approvedLotId: { not: null }, reviewedAt: { gte: since },
+        accountId: from ? { in: from, notIn: UNCREDITED_ACCOUNTS } : { notIn: UNCREDITED_ACCOUNTS },
+      },
       orderBy: { reviewedAt: "desc" }, take: 20, select: { accountId: true, approvedLotId: true, reviewedAt: true },
     }),
     viewerId ? prisma.mobileFollow.findMany({ where: { followerId: viewerId }, select: { followeeId: true } }) : [],
@@ -270,12 +277,12 @@ export async function pulse(prisma: PrismaClient, viewerId: string | null, now =
   const ids = [...new Set(raw.map((r) => r.accountId))];
   const following = new Set(follows.map((f) => f.followeeId));
   const profiles = await prisma.mobileProfile.findMany({
-    where: { accountId: { in: ids } }, select: { accountId: true, username: true, avatarPath: true, activityVisibility: true },
+    where: { accountId: { in: ids } }, select: { accountId: true, username: true, avatarPath: true, activityVisibility: true, isPrivate: true },
   });
   const profile = new Map(profiles.map((p) => [p.accountId, p]));
   const visible = raw.filter((r) => {
     const p = profile.get(r.accountId);
-    return !!p && canSee(asVisibility(p.activityVisibility), r.accountId === viewerId, following.has(r.accountId));
+    return !!p && canSee(activityLevel(p), r.accountId === viewerId, following.has(r.accountId));
   });
   // One line per person and coffee, followed people first, then newest.
   const seen = new Set<string>();
