@@ -27,7 +27,7 @@ touched here.
 | File | Role |
 |---|---|
 | `verifier.ts` | `CredentialVerifier` — verifies Apple/Google ID tokens (RS256) against each provider's JWKS, checks issuer + audience, flags Apple private-relay; a pre-verified email becomes an `email` identity with no crypto |
-| `resolver.ts` | `IdentityResolver` — resolves/creates an account by `(provider, subject)` only via the existing `User`/`Account` tables; never merges by email, never writes a relay address |
+| `resolver.ts` | `IdentityResolver` — resolves an account by `(provider, subject)`, else joins a new sign-in method to the account holding the same provider-verified email (never an unverified or relay address), else creates one |
 | `sessionStore.ts` | `SessionStore` — backs `MobileSession` with Prisma (pure row↔family mappers are unit-tested) |
 | `deps.ts` | assembles the real `AuthDeps` from env + Prisma per request |
 | `respond.ts` | route plumbing: JSON parse, zod → 422, `ApiError` → status, opaque 500 |

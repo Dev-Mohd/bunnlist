@@ -2,10 +2,14 @@ import type { PrismaClient } from "@prisma/client";
 import type { IdentityResolver, VerifiedIdentity } from "./ports";
 
 // Resolves a verified identity to an app account using the existing User/Account
-// tables, keyed strictly by (provider, subject). Invariants from the contract:
-//   • Never merge accounts by email alone — a brand-new (provider, subject) always
-//     becomes a new account, even if some other account shares the email.
-//   • Apple private-relay addresses are never written as a user email.
+// tables. Invariants:
+//   • (provider, subject) is the key: once linked, a sign-in method always lands on
+//     its account.
+//   • One person, one account: a new sign-in method whose address the provider has
+//     verified (Google/Apple email_verified, or our email code) joins the account
+//     that already holds that address, instead of starting an empty second one. An
+//     unverified address never links.
+//   • Apple private-relay addresses are never written as a user email or matched.
 //   • The app account id is the User id (what the access token's subject carries).
 //
 // User.email is unique for the website, so for an app-created account we only
@@ -31,6 +35,26 @@ export function createPrismaIdentityResolver(prisma: PrismaClient): IdentityReso
 
       const existing = await findAccount(provider, subject);
       if (existing) return { accountId: existing.userId, isNew: false };
+
+      const realEmail = identity.email && !identity.emailIsPrivateRelay ? identity.email.toLowerCase() : null;
+      if (realEmail && identity.emailVerified) {
+        const owner = await prisma.user.findFirst({
+          where: { email: { equals: realEmail, mode: "insensitive" } }, select: { id: true },
+        });
+        if (owner) {
+          try {
+            await prisma.account.create({
+              data: { userId: owner.id, type: accountType(provider), provider, providerAccountId: subject },
+            });
+          } catch (err) {
+            if (!(err && typeof err === "object" && "code" in err && err.code === PRISMA_UNIQUE_VIOLATION)) throw err;
+            const raced = await findAccount(provider, subject);
+            if (raced) return { accountId: raced.userId, isNew: false };
+            throw err;
+          }
+          return { accountId: owner.id, isNew: false };
+        }
+      }
 
       // Adopt the email only if it is real and unclaimed; never a private relay.
       let email: string | null = null;

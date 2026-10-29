@@ -42,7 +42,7 @@ describe("provider credential verifier", () => {
   it("verifies a valid Google identity token", async () => {
     const jwt = await sign({ sub: "google-user-1", email: "a@b.com", email_verified: true }, GOOGLE_ISS, GOOGLE_AUD);
     const id = await makeVerifier().verify("google", jwt);
-    expect(id).toEqual({ provider: "google", subject: "google-user-1", email: "a@b.com", emailIsPrivateRelay: false });
+    expect(id).toEqual({ provider: "google", subject: "google-user-1", email: "a@b.com", emailIsPrivateRelay: false, emailVerified: true });
   });
 
   it("verifies a valid Apple identity token and flags private relay", async () => {
@@ -73,7 +73,7 @@ describe("provider credential verifier", () => {
 
   it("treats a pre-verified email as an email identity without crypto", async () => {
     const id = await makeVerifier().verify("email", "User@Example.com");
-    expect(id).toEqual({ provider: "email", subject: "user@example.com", email: "user@example.com", emailIsPrivateRelay: false });
+    expect(id).toEqual({ provider: "email", subject: "user@example.com", email: "user@example.com", emailIsPrivateRelay: false, emailVerified: true });
   });
 
   it("does not equate an Apple relay subject with a Google email identity", async () => {

@@ -3,10 +3,10 @@ import { ApiError } from "./errors";
 import type { CredentialVerifier, Provider, VerifiedIdentity } from "./ports";
 
 // Verifies Apple/Google identity tokens (OIDC ID tokens, RS256) against the
-// provider's published keys, checking issuer and audience. Identities resolve by
-// (provider, subject) only — the subject (`sub`) is the stable account key; email
-// is advisory. Apple private-relay addresses are flagged and never equated with a
-// real address from another provider.
+// provider's published keys, checking issuer and audience. The subject (`sub`) is
+// the stable account key; the email, when the provider marks it verified, lets a
+// second sign-in method join the same account. Apple private-relay addresses are
+// flagged and never equated with a real address from another provider.
 //
 // A pre-verified email (the OTP was already checked by the email/verify route) is
 // turned into an `email` identity directly, with no crypto.
@@ -64,7 +64,8 @@ export function createProviderVerifier(config: ProviderVerifierConfig): Credenti
       (payload.is_private_email === true ||
         payload.is_private_email === "true" ||
         (email?.endsWith(APPLE_RELAY_DOMAIN) ?? false));
-    return { provider, subject: payload.sub, email, emailIsPrivateRelay };
+    const emailVerified = payload.email_verified === true || payload.email_verified === "true";
+    return { provider, subject: payload.sub, email, emailIsPrivateRelay, emailVerified };
   }
 
   return {
@@ -72,7 +73,7 @@ export function createProviderVerifier(config: ProviderVerifierConfig): Credenti
       if (provider === "email") {
         const email = credential.trim().toLowerCase();
         if (email.length === 0) throw ApiError.unauthorized("credential_invalid");
-        return { provider: "email", subject: email, email, emailIsPrivateRelay: false };
+        return { provider: "email", subject: email, email, emailIsPrivateRelay: false, emailVerified: true };
       }
       return verifyIdToken(provider, credential);
     },
