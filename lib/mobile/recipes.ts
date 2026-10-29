@@ -4,6 +4,7 @@ import { z } from "zod";
 import { ApiError } from "./errors";
 import { award, revoke } from "./points";
 import { displayNames } from "./profile";
+import { activityVisibleTo } from "./social";
 import { BREW_METHOD_CODES, canTransition, EXPERIENCE_STATES, type ExperienceState } from "./experiences";
 
 // Brew recipes from the app. Mirrors BunnListCore's Recipe: an optional lot (none = a
@@ -306,9 +307,12 @@ export async function exploreRecipes(
   const rows = await prisma.mobileRecipe.findMany({
     where: { state: "published", ...(lotId ? { lotId } : {}) },
     orderBy: { publishedAt: "desc" },
-    take: 50,
+    take: 80,
   });
-  return withLikes(prisma, await present(prisma, rows as RecipeRow[], viewerId), viewerId);
+  // A private account's recipes are for its followers.
+  const visible = await activityVisibleTo(prisma, viewerId, rows.map((r) => r.accountId));
+  const shown = rows.filter((r) => visible.has(r.accountId)).slice(0, 50);
+  return withLikes(prisma, await present(prisma, shown as RecipeRow[], viewerId), viewerId);
 }
 
 /** Create, or edit by clientId (bumps version). `publish` also publishes a draft. */

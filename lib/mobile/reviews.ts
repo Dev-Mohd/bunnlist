@@ -4,6 +4,7 @@ import { ApiError } from "./errors";
 import { award } from "./points";
 import { likeStates } from "./likes";
 import { displayNames } from "./profile";
+import { activityVisibleTo } from "./social";
 
 // Mobile review submission. Mirrors the website's actions/reviews.ts aggregate
 // logic (average + per-brew-method stats) but authenticates via the mobile access
@@ -157,19 +158,22 @@ export async function listReviews(
     },
   });
   const userIds = rows.map((r) => r.userId);
-  const [names, likes, handles] = await Promise.all([
+  const [names, likes, handles, visible] = await Promise.all([
     displayNames(prisma, userIds),
     likeStates(prisma, "review", rows.map((r) => r.id), viewerId),
     prisma.mobileProfile.findMany({ where: { accountId: { in: userIds } }, select: { accountId: true, username: true } }),
+    activityVisibleTo(prisma, viewerId, userIds),
   ]);
   const handle = new Map(handles.map((h) => [h.accountId, h.username]));
+  // A private account's rating still counts; who wrote it, and what, is for their followers.
   return rows.map((r) => ({
     ...mapReview(r as unknown as ReviewRow),
-    authorName: names.get(r.userId) ?? "مستخدم",
+    ...(visible.has(r.userId) ? {} : { body: null }),
+    authorName: visible.has(r.userId) ? names.get(r.userId) ?? "مستخدم" : "مستخدم",
     helpfulCount: likes.get(r.id)?.count ?? 0,
     markedHelpful: likes.get(r.id)?.liked ?? false,
     isMine: viewerId !== null && r.userId === viewerId,
-    authorUsername: handle.get(r.userId) ?? null,
+    authorUsername: visible.has(r.userId) ? handle.get(r.userId) ?? null : null,
   }));
 }
 

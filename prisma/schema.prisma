@@ -516,6 +516,8 @@ model MobileProfile {
   followersVisibility String  @default("everyone")
   followingVisibility String  @default("everyone")
   activityVisibility  String  @default("everyone")
+  /// A private account approves each follower; its activity is for followers only.
+  isPrivate           Boolean @default(false)
   /// «مطحنتي»: a MobileGrinder id, for grind conversions.
   grinderId           String?
   createdAt   DateTime  @default(now())
@@ -547,6 +549,16 @@ model MobileFollow {
 
   @@id([followerId, followeeId])
   @@index([followeeId])
+}
+
+/// A pending follow of a private account, until its owner accepts or declines.
+model MobileFollowRequest {
+  requesterId String
+  targetId    String
+  createdAt   DateTime @default(now())
+
+  @@id([requesterId, targetId])
+  @@index([targetId])
 }
 
 /// Server idempotency record keyed by (owner, operation, device clientId).
