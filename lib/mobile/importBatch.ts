@@ -10,6 +10,7 @@ import blackKnightPhotos from "./data/black-knight-photos.json";
 import bunistaPhotos from "./data/bunista-photos.json";
 import shovelPhotos from "./data/shovel-photos.json";
 import roastingHousePhotos from "./data/roasting-house-photos.json";
+import camelStepPhotos from "./data/camel-step-photos.json";
 
 // Curated batches (scraped roastery catalogs, cleaned) enter as pending
 // suggestions from the "catalog" account, so every coffee is reviewed in the app's
@@ -47,6 +48,7 @@ export const BUNDLED_BATCHES: Record<string, { data: unknown; photos: Record<str
       ...(ashPhotos as Record<string, string>),
       ...(shovelPhotos as Record<string, string>),
       ...(roastingHousePhotos as Record<string, string>),
+      ...(camelStepPhotos as Record<string, string>),
     },
   },
 };

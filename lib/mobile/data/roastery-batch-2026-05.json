@@ -7417,6 +7417,541 @@
     "isDecaf": false,
     "photo": "trh-al-pasha-turkish-coffee"
    }
+  },
+  {
+   "importKey": "camel-2026-10:yemen-sela",
+   "name": "اليمن سيلة",
+   "nameEn": "Yemen Sela",
+   "roasterName": "خطوة جمل",
+   "roasterNameEn": "Camel Step",
+   "originName": "اليمن",
+   "originCode": "YE",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "عسل",
+    "عنب",
+    "شمام",
+    "فراولة",
+    "لوز"
+   ],
+   "sourceUrl": "https://camelstep.com/products/اليمن-سيلة",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "وادي السيل، جبال حراز",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "تيبيكا"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": null,
+    "priceSar": 253,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "قهوة يمنية من وادي السيل في جبال حراز، خضعت لمعالجة طبيعية تعتمد على تجفيف حبوب القهوة مع ثمارها، لتعزيز حلاوتها وإبراز إيحاءات العسل والفراولة والعنب والشمام، مع لمسات من اللوز فنجان غني بطابع فاكهي مميز وتوازن يعكس خصوصية المحصول اليمني.",
+    "processDetail": "تجفيف حبوب القهوة مع ثمارها وفق الوصف",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "camel-yemen-sela"
+   }
+  },
+  {
+   "importKey": "camel-2026-10:panama-blu",
+   "name": "بنما بلو",
+   "nameEn": "Panama Blu",
+   "roasterName": "خطوة جمل",
+   "roasterNameEn": "Camel Step",
+   "originName": "بنما",
+   "originCode": "PA",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "توت",
+    "فراولة",
+    "شوكولاتة داكنة",
+    "قرفة"
+   ],
+   "sourceUrl": "https://camelstep.com/products/بنما-بنما",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "شيريكي",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "قيشا"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": null,
+    "priceSar": 161,
+    "weightGrams": 250,
+    "availability": "Sold Out",
+    "descriptionAr": "من مزارع بنما الاستوائية، تأتي بنما بلو بتجربة غنية تجمع بين الحلاوة والعمق في النكهة معالجة مجففة تبرز إيحاءات التوت والفراولة مع لمسات الشوكولاتة الداكنة والقرفة، لتمنح كوبًا متوازنًا بطابع فاكهي دافئ يعكس دقة المعالجة وجودة المحصول في كل رشفة.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "camel-panama-blu"
+   }
+  },
+  {
+   "importKey": "camel-2026-10:ghaid-blend",
+   "name": "مزيج غيد",
+   "nameEn": "Ghaid Blend",
+   "roasterName": "خطوة جمل",
+   "roasterNameEn": "Camel Step",
+   "originName": null,
+   "originCode": null,
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "مكسرات",
+    "شوكولاتة",
+    "لوز",
+    "قرفة",
+    "ورد"
+   ],
+   "sourceUrl": "https://camelstep.com/products/مزيج-غيد-1",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "مزيج كوستاريكا هاندوراس إثيوبيا",
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": null,
+    "priceSar": 67,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "مزيج غيد هو توليفة فريدة من محاصيل إثيوبيا، كوستاريكا، هاندوراس،\n\nتمتزج فيها نكهات اللوز مع لمسات الخزامى العطرية في انسجام متزن ومذاق غني،\n\nمناسبة لإعداد قهوة الاسبريسو ومشروبات الحليب\n\n250جرام",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "camel-ghaid-blend"
+   }
+  },
+  {
+   "importKey": "camel-2026-10:decaf-lavado",
+   "name": "ديكاف لافادو",
+   "nameEn": "Decaf Lavado",
+   "roasterName": "خطوة جمل",
+   "roasterNameEn": "Camel Step",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "WASHED",
+   "roastLevel": null,
+   "flavorNotes": [
+    "برتقال",
+    "لوز",
+    "شوكولاتة داكنة"
+   ],
+   "sourceUrl": "https://camelstep.com/products/ديكاف-لافادو-",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "بيونيروس",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كاستيلو"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": null,
+    "priceSar": 63.25,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "قهوة كولومبية مختصة منزوعة الكافيين، بحبوب إكسلسو ومعالجة مغسولة تبرز فيها نكهات الشوكولاتة الداكنة ونفحات البرتقال.\nتجمع بين توازن النكهة ونقاء المصدر من مزارع كولومبيا، لتقدم تجربة قهوة غنية ومتوازنة، مثالية لمن يبحث عن قهوة مميزة دون الكافيين.\nطريقة نزع الكافيين: تُزال الكافيين باستخدام مستخلص قصب السكر، مما يساعد على تقليل نسبة الكافيين مع الحفاظ على النكهات والخصائص الطبيعية للقهوة، لتستمتع بتجربة غنية ومتوازنة وقريبة من خصائص القهوة الأصلية.",
+    "processDetail": "نزع الكافيين باستخدام مستخلص قصب السكر؛ المعالجة مغسولة",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": true,
+    "photo": "camel-decaf-lavado"
+   }
+  },
+  {
+   "importKey": "camel-2026-10:kenya-gititu",
+   "name": "كينيا قيتيتو",
+   "nameEn": "Kenya Gititu",
+   "roasterName": "خطوة جمل",
+   "roasterNameEn": "Camel Step",
+   "originName": "كينيا",
+   "originCode": "KE",
+   "process": "WASHED",
+   "roastLevel": null,
+   "flavorNotes": [
+    "كركديه",
+    "جريب فروت",
+    "شوكولاتة داكنة",
+    "ورد"
+   ],
+   "sourceUrl": "https://camelstep.com/products/كينيا-قيتيتو",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "وسط كينيا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "باتيان - رويرو - اس ال 34 - اس ال 28"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": null,
+    "priceSar": 88,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "قهوة كينية من وسط كينيا، بمعالجة مغسولة تبرز إيحاءات الكركديه والجريب فروت، مع لمسات من الشوكولاتة الداكنة والورد فنجان متوازن بطابع زهري وحمضي مميز، يعكس هوية القهوة الكينية وثراء نكهاتها.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "camel-kenya-gititu"
+   }
+  },
+  {
+   "importKey": "camel-2026-10:saudi-guji",
+   "name": "قهوة سعودية قوجي",
+   "nameEn": "Saudi Guji",
+   "roasterName": "خطوة جمل",
+   "roasterNameEn": "Camel Step",
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "شوكولاتة"
+   ],
+   "sourceUrl": "https://camelstep.com/products/قهوة-سعودية-قوجي",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "قوجي",
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ARABIC"
+    ],
+    "altitudeM": "1900",
+    "priceSar": 46,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "قهوة إثيوبية مختارة بعناية ومُعالَجة طبيعيًا، بنكهة بندقية واضحة ولمسات خفيفة من الفول السوداني\nتمزج بين عمق التراث السعودي وغنى القهوة الإثيوبية الأصيلة تُزرع في منطقة غوجي الشهيرة\nعلى ارتفاع 1900 متر، مما يمنح الحبوب حلاوة طبيعية وحموضة متوسطة، لتقدّم فنجانًا متوازنًا وغنيًا في كل رشفة.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "camel-saudi-guji"
+   }
+  },
+  {
+   "importKey": "camel-2026-10:guatemala-rojo",
+   "name": "غواتيمالا روهو",
+   "nameEn": "Guatemala Rojo",
+   "roasterName": "خطوة جمل",
+   "roasterNameEn": "Camel Step",
+   "originName": "غواتيمالا",
+   "originCode": "GT",
+   "process": "WASHED",
+   "roastLevel": null,
+   "flavorNotes": [
+    "خوخ",
+    "لوز",
+    "شوكولاتة",
+    "زهور"
+   ],
+   "sourceUrl": "https://camelstep.com/products/غواتيمالا-روهو",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "هيوهويتينانغو؛ مزرعة إل إنخيرتو",
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": null,
+    "priceSar": 76,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "قهوة غواتيمالية فاخرة من مزرعة إل إنخيرتو، معالجة مغسولة تمنح نقاء عالي في النكهة، بإيحاءات الخوخ واللوز المحمص ولمسات زهرية ناعمة. تزرع في مرتفعات هيوهويتينانغو على تربة بركانية غنية، لتقدم فنجانًا متوازنًا بتجربة مميزة في كل رشفة.",
+    "processDetail": null,
+    "isLuxury": true,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "camel-guatemala-rojo"
+   }
+  },
+  {
+   "importKey": "camel-2026-10:ethiopia-anasora",
+   "name": "إثيوبيا أناسورا",
+   "nameEn": "Ethiopia Anasora",
+   "roasterName": "خطوة جمل",
+   "roasterNameEn": "Camel Step",
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "CARBONIC_MACERATION",
+   "roastLevel": null,
+   "flavorNotes": [
+    "زبيب",
+    "فراولة",
+    "كاجو",
+    "أزهار"
+   ],
+   "sourceUrl": "https://camelstep.com/products/-اثيوبيا-اناسورا",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "قوجي",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "هيرليوم"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": null,
+    "priceSar": 86,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "من مرتفعات قوجي في إثيوبيا، حيث تنمو سلالة الهيرليوم في بيئة مثالية وعلى ارتفاعات شاهقة، تأتي أناسورا بتجربة استثنائية تعكس ثراء المنشأ ودقة المعالجة. تمنح هذه الظروف الطبيعية الحبوب كثافة سكرية عالية وتعقيدًا مميزًا في النكهات.\n\nتخضع القهوة لمعالجة كاربونيك داخل بيئة محكمة الإغلاق، وهي تقنية تعزز الطبقات الفاكهية وتُبرز الحلاوة الطبيعية بوضوح أكبر، مع الحفاظ على نقاء الكوب وتوازنه. تتجلى في الفنجان إيحاءات الزبيب والفراولة، تتناغم مع لمسات الكاجو والأزهار، لتقدم قهوة أنيقة بقوام ناعم ونهاية طويلة تعكس جودة القهوة المختصة الإثيوبية.",
+    "processDetail": "كاربونيك داخل بيئة محكمة الإغلاق",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "camel-ethiopia-anasora"
+   }
+  },
+  {
+   "importKey": "camel-2026-10:rwanda-nyura",
+   "name": "رواندا نيورا",
+   "nameEn": "Rwanda Nyura",
+   "roasterName": "خطوة جمل",
+   "roasterNameEn": "Camel Step",
+   "originName": "رواندا",
+   "originCode": "RW",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "فراولة",
+    "جوافة",
+    "تين",
+    "بندق"
+   ],
+   "sourceUrl": "https://camelstep.com/products/رواندا-نيورا-250-جم",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "نيونغوي",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "بوربون أحمر"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": null,
+    "priceSar": 86,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "من مرتفعات نيونغوي في رواندا تأتي نيورا؛ محصول يعكس جمال المنشأ وروعة التفاصيل تنمو حبوب البوربون الأحمر على ارتفاعات شاهقة في تربة بركانية غنية ومناخ مثالي، لتقدم كوبًا متوازنًا يبرز الخصائص الفريدة لمحاصيل رواندا\n\nيُقطف المحصول يدويًا بعناية عند اكتمال نضجه، ثم يمر بمراحل دقيقة من الفرز والمعالجة للحفاظ على جودة الحبوب وإبراز خصائصها الطبيعية في كل فنجان\n\nفي الكوب، تستقبلك إيحاءات الفراولة والجوافة والتين، تتناغم مع لمسات ناعمة من البندق، لتمنحك حلاوة طبيعية، وقوامًا متوازنًا، ونهاية نظيفة وأنيقة تدوم مع كل رشفة\n\nتناسب نيورا عشاق القهوة الفاكهية المتوازنة، حيث تجمع بين وضوح النكهات، والحلاوة الطبيعية، والقوام السلس، لتمنحك تجربة استثنائية تعكس جودة هذا المنشأ المميز... فنجانًا بعد فنجان.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "camel-rwanda-nyura"
+   }
+  },
+  {
+   "importKey": "camel-2026-10:colombia-descanso",
+   "name": "كولومبيا ديسكانسو",
+   "nameEn": "Colombia Descanso",
+   "roasterName": "خطوة جمل",
+   "roasterNameEn": "Camel Step",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "حبق",
+    "رمان",
+    "جوافة",
+    "كاجو"
+   ],
+   "sourceUrl": "https://camelstep.com/products/كولمبيا-ديسكانسو",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "ويلا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كاستيلو"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": null,
+    "priceSar": 78,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "من مرتفعات هويلا الكولومبية، تأتي قهوة ديسكانسو بتجربة غنية تعكس عناية دقيقة في الزراعة والمعالجة\n\nحبوب كاستيلو مجففة طبيعيًا بتقنيات تخمير وتجفيف مطوّلة، لتمنح كوبًا فاكهيًا متوازنًا بإيحاءات الرمان والجوافة والكاجو ولمسات الحبق العطرية.",
+    "processDetail": "تخمير وتجفيف مطوّلان؛ الدليل الرسمي يذكر الكربنة والتجفيف الشمسي على طاولات مرتفعة",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "camel-colombia-descanso"
+   }
+  },
+  {
+   "importKey": "camel-2026-10:costa-rica-baratila",
+   "name": "كوستاريكا باراتيلا",
+   "nameEn": "Costa Rica Baratila",
+   "roasterName": "خطوة جمل",
+   "roasterNameEn": "Camel Step",
+   "originName": "كوستاريكا",
+   "originCode": "CR",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "فراولة",
+    "توت",
+    "مكسرات",
+    "زهور"
+   ],
+   "sourceUrl": "https://camelstep.com/products/كوستاريكا-باراتيلا",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "لوس سانتوس",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كاتواي - كاتورا"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": null,
+    "priceSar": 80.5,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "من مرتفعات كوستاريكا، تأتي باراتيلا بتجربة غنية تنبض بحلاوة الفاكهة ووضوح النكهة.\n\n معالجة مجففة تبرز إيحاءات الفراولة والتوت مع لمسات المكسرات والزهور،\n\n لتمنح كوبًا متوازنًا بقوام ناعم يعكس جودة المحصول ونقاء الطبيعة في كل رشفة.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "camel-costa-rica-baratila"
+   }
+  },
+  {
+   "importKey": "camel-2026-10:colombia-las-palmas",
+   "name": "كولومبيا لاس بالماس",
+   "nameEn": "Colombia Las Palmas",
+   "roasterName": "خطوة جمل",
+   "roasterNameEn": "Camel Step",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "WASHED",
+   "roastLevel": null,
+   "flavorNotes": [
+    "كراميل",
+    "فانيلا",
+    "تفاح",
+    "ياسمين"
+   ],
+   "sourceUrl": "https://camelstep.com/products/كولومبيا-لاس-بالماس",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "ويلا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كاستيلو"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "1450-1600",
+    "priceSar": 46,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "قهوة كولومبية مختارة بعناية، تعكس فن الزراعة التقليدية بنكهات الفاكهة الاستوائية ولمسة متوازنة من الحلاوة. \n\nتُزرع على ارتفاع يتراوح بين 1450 و1600 متر في مناطق جبلية خصبة، حيث تخضع الحبوب لعملية تخمير طبيعية وتجفيف تحت أشعة الشمس.\n\n النتيجة فنجان استثنائي يجمع بين الأصالة والنكهة المميزة في كل رشفة. 250 جرام",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "camel-colombia-las-palmas"
+   }
+  },
+  {
+   "importKey": "camel-2026-10:brazil-sertao-turkish",
+   "name": "البرازيل سيرتاو (قهوة تركية)",
+   "nameEn": "Brazil Sertao Turkish",
+   "roasterName": "خطوة جمل",
+   "roasterNameEn": "Camel Step",
+   "originName": "البرازيل",
+   "originCode": "BR",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "زهور",
+    "شوكولاتة",
+    "لوز"
+   ],
+   "sourceUrl": "https://camelstep.com/products/البرازيل-سيرتاو",
+   "sourceConfidence": 0.9,
+   "extras": {
+    "region": "فازيندا سيرتاو",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "الكاتواي الأصفر"
+    ],
+    "brewMethods": [
+     "OTHER"
+    ],
+    "altitudeM": "1000-1300",
+    "priceSar": 34.5,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "في قلب سلسلة جبال مانتيكويرا جنوب ولاية كارمو دي ميناس في البرازيل، تنمو قهوة سيرتاو في بيئة استثنائية تحيط بها الينابيع المعدنية الطبيعية والتربة البركانية الخصبة. وعلى ارتفاعات تتراوح بين 1000 و1300 متر، تجد حبوب الكاتواي الأصفر الظروف المثالية لتطوير نكهاتها المتوازنة وجودتها العالية.\n\nتعتمد المنطقة وسكانها على زراعة القهوة بوصفها إرثًا ومصدرًا رئيسيًا للعيش، حيث تُزرع الحبوب بعناية فائقة لتقدم فنجانًا يتميز بقوام متناغم، وحموضة متوسطة تميل إلى الحيوية، ونكهة نظيفة تعكس أصالة المنشأ وجودة المحصول. إنها قهوة تجسد عراقة مزارع البرازيل وروح القهوة المختصة في كل رشفة.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "camel-brazil-sertao-turkish"
+   }
   }
  ]
 }
