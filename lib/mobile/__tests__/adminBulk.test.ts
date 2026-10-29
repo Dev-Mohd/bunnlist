@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import type { PrismaClient } from "@prisma/client";
-import { approvalFor, bulkReview, deleteLot } from "../adminBulk";
+import { approvalFor, bulkDeleteLots, bulkReview, deleteLot } from "../adminBulk";
 
 const row = (over: Record<string, unknown> = {}) => ({
   id: "s1", status: "PENDING", name: "كولومبيا ويلا", nameEn: "Colombia Huila", roasterName: "بونيستا", roasterNameEn: "Bunista",
@@ -21,7 +21,7 @@ function db(rows: ReturnType<typeof row>[], origins: Record<string, string> = { 
     },
     roaster: { findFirst: vi.fn().mockResolvedValue({ id: "r1", name: "Bunista" }), findUnique: vi.fn(), create: vi.fn() },
     coffeeLot: {
-      findUnique: vi.fn().mockResolvedValue(null), delete: vi.fn(),
+      findUnique: vi.fn().mockResolvedValue(null), delete: vi.fn(), findMany: vi.fn().mockResolvedValue([]),
       create: vi.fn().mockImplementation(({ data }: { data: { slug: string } }) => ({ id: "lot1", slug: data.slug })),
     },
     mobileLotTag: { createMany: vi.fn(), deleteMany: vi.fn() },
@@ -85,5 +85,27 @@ describe("deleteLot", () => {
     m.review.count.mockResolvedValue(1);
     await expect(deleteLot(prisma, "lot1")).rejects.toMatchObject({ reason: "lot_in_use" });
     expect(m.$transaction).not.toHaveBeenCalled();
+  });
+});
+
+describe("removing rejected suggestions", () => {
+  it("archives rejected ones and leaves the rest", async () => {
+    const { prisma, m } = db([row({ status: "REJECTED" }), row({ id: "s2" })]);
+    const r = await bulkReview(prisma, null, { ids: ["s1", "s2"], action: "remove" });
+    expect(r.done).toEqual(["s1"]);
+    expect(r.failed[0]).toMatchObject({ id: "s2", reason: "تنحذف المرفوضة بس" });
+    expect(m.mobileCoffeeSubmission.update).toHaveBeenCalledWith({ where: { id: "s1" }, data: { status: "ARCHIVED" } });
+  });
+});
+
+describe("bulkDeleteLots", () => {
+  it("deletes unused lots and names the used ones", async () => {
+    const { prisma, m } = db([]);
+    m.coffeeLot.findUnique.mockResolvedValue({ id: "x" });
+    m.coffeeLot.findMany.mockResolvedValue([{ id: "L1", nameAr: "أ" }, { id: "L2", nameAr: "ب" }]);
+    m.review.count.mockResolvedValueOnce(0).mockResolvedValueOnce(2);
+    const r = await bulkDeleteLots(prisma, ["L1", "L2"]);
+    expect(r.done).toEqual(["L1"]);
+    expect(r.failed).toEqual([{ id: "L2", name: "ب", reason: "لها تقييمات أو تحضيرات، أخفها بدال الحذف" }]);
   });
 });

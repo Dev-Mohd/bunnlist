@@ -27,6 +27,7 @@ export async function POST(req: Request) {
       where: { id: { in: result.done }, accountId: { notIn: UNCREDITED_ACCOUNTS } }, select: { accountId: true, name: true },
     });
     for (const a of authored) {
+      if (input.action === "remove") break;
       await notify(prisma, a.accountId, input.action === "approve" ? "submissionApproved" : "submissionRejected",
         input.action === "approve"
           ? { title: "انقبل اقتراحك 🎉", body: `«${a.name}» صارت في الدليل باسمك` }

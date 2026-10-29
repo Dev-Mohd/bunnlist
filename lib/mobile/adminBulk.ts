@@ -12,7 +12,8 @@ import type { PhotoStore } from "./suggestionPhotos";
 
 export const BulkReviewRequest = z.object({
   ids: z.array(z.string().min(1)).min(1).max(100),
-  action: z.enum(["approve", "reject"]),
+  /** remove: clears rejected suggestions off the list (kept as ARCHIVED so re-imports skip them). */
+  action: z.enum(["approve", "reject", "remove"]),
   reason: z.string().trim().max(300).optional(),
 });
 export type BulkReviewRequest = z.infer<typeof BulkReviewRequest>;
@@ -54,6 +55,9 @@ export async function approvalFor(
 const REASON_AR: Record<string, string> = {
   unknown_origin: "بلد المنشأ غير معروف، افتحها وعدّله",
   already_reviewed: "انراجعت من قبل",
+  not_rejected: "تنحذف المرفوضة بس",
+  lot_in_use: "لها تقييمات أو تحضيرات، أخفها بدال الحذف",
+  lot_not_found: "ما لقيناها",
   submission_not_found: "ما لقيناها",
 };
 
@@ -69,11 +73,37 @@ export async function bulkReview(
     try {
       if (!row) throw ApiError.unprocessable("submission_not_found");
       if (req.action === "approve") await approveSubmission(prisma, store, id, await approvalFor(prisma, row), namer);
-      else await rejectSubmission(prisma, id, req.reason);
+      else if (req.action === "reject") await rejectSubmission(prisma, id, req.reason);
+      else await archiveSubmission(prisma, row);
       result.done.push(id);
     } catch (e) {
       const code = e instanceof ApiError ? e.reason ?? e.code : "error";
       result.failed.push({ id, name: row?.name ?? id, reason: REASON_AR[code] ?? "تعذّر" });
+    }
+  }
+  return result;
+}
+
+/** Takes a rejected suggestion off every list; the row stays so a re-import knows it. */
+async function archiveSubmission(prisma: PrismaClient, row: { id: string; status: string }): Promise<void> {
+  if (row.status !== "REJECTED") throw ApiError.conflict("not_rejected");
+  await prisma.mobileCoffeeSubmission.update({ where: { id: row.id }, data: { status: "ARCHIVED" } });
+}
+
+export const BulkDeleteLotsRequest = z.object({ ids: z.array(z.string().min(1)).min(1).max(100) });
+
+/** Deletes several lots; the ones people have used stay, with the reason. */
+export async function bulkDeleteLots(prisma: PrismaClient, ids: string[]): Promise<BulkReviewResult> {
+  const names = new Map((await prisma.coffeeLot.findMany({ where: { id: { in: ids } }, select: { id: true, nameAr: true } }))
+    .map((l) => [l.id, l.nameAr]));
+  const result: BulkReviewResult = { done: [], failed: [] };
+  for (const id of ids) {
+    try {
+      await deleteLot(prisma, id);
+      result.done.push(id);
+    } catch (e) {
+      const code = e instanceof ApiError ? e.reason ?? e.code : "error";
+      result.failed.push({ id, name: names.get(id) ?? id, reason: REASON_AR[code] ?? "تعذّر" });
     }
   }
   return result;
