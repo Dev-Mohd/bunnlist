@@ -65,6 +65,7 @@ describe("importBatch", () => {
     const m = {
       mobileCoffeeSubmission: {
         findMany: vi.fn().mockResolvedValue([{ id: "s1", importKey: "k1", status: "APPROVED", photoPath: "imports/bk-x.jpg", approvedLotId: "L1" }]),
+        update: vi.fn().mockResolvedValue({}),
       },
       coffeeLot: { findMany: vi.fn().mockResolvedValueOnce([lot]).mockResolvedValue([]), update: vi.fn().mockResolvedValue({}) },
     };
@@ -73,6 +74,7 @@ describe("importBatch", () => {
     await importBatch(m as unknown as PrismaClient, { batch: "t", items: [withPhoto] }, { "bk-x": "AAAA" }, store);
     const url = m.coffeeLot.update.mock.calls[0][0].data.imageUrl as string;
     expect(url).toMatch(/^https:\/\/x\/lots\/bk-milora-[0-9a-f]{8}\.jpg$/);
+    expect(m.mobileCoffeeSubmission.update.mock.calls[0][0].data.photoPath).toMatch(/^imports\/bk-x-[0-9a-f]{8}\.jpg$/);
 
     // Run again with the lot already on that photo: nothing to do.
     m.coffeeLot.findMany = vi.fn().mockResolvedValueOnce([{ ...lot, imageUrl: url }]).mockResolvedValue([]);
@@ -96,5 +98,22 @@ describe("importBatch", () => {
     errors.mockRestore();
     expect(result).toMatchObject({ created: 1, photoErrors: 1 });
     expect(m.coffeeLot.update).not.toHaveBeenCalled();
+  });
+
+  it("leaves a lot alone when it was published from this same photo", async () => {
+    const version = (await import("node:crypto")).createHash("sha1").update("AAAA").digest("hex").slice(0, 8);
+    const m = {
+      mobileCoffeeSubmission: {
+        findMany: vi.fn().mockResolvedValue([{ id: "s1", importKey: "k1", status: "APPROVED", photoPath: `imports/bk-x-${version}.jpg`, approvedLotId: "L1" }]),
+      },
+      coffeeLot: {
+        findMany: vi.fn().mockResolvedValueOnce([{ id: "L1", slug: "bk-milora", imageUrl: "https://x/lots/bk-milora-mvz1k2.jpg", imageType: "USER_UPLOADED" }]).mockResolvedValue([]),
+        update: vi.fn(),
+      },
+    };
+    const store = { put: vi.fn(), signedUrl: vi.fn(), publish: vi.fn() };
+    await importBatch(m as unknown as PrismaClient, { batch: "t", items: [{ ...item("k1", "ميلورا"), extras: { photo: "bk-x" } }] }, { "bk-x": "AAAA" }, store);
+    expect(store.put).not.toHaveBeenCalled();
+    expect(store.publish).not.toHaveBeenCalled();
   });
 });
