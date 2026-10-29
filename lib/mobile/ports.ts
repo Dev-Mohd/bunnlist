@@ -11,6 +11,8 @@ export interface VerifiedIdentity {
   subject: string;
   email: string | null;
   emailIsPrivateRelay: boolean;
+  /** The provider vouches the address belongs to this person (Google/Apple email_verified, or our OTP). */
+  emailVerified?: boolean;
 }
 
 /** Verifies a provider credential (Apple/Google identity JWT, or a pre-verified email). */
@@ -18,7 +20,7 @@ export interface CredentialVerifier {
   verify(provider: Provider, credential: string): Promise<VerifiedIdentity>;
 }
 
-/** Resolves a verified identity to an account by (provider, subject) only. */
+/** Resolves a verified identity to an account: by (provider, subject), else by its verified email. */
 export interface IdentityResolver {
   resolve(identity: VerifiedIdentity): Promise<{ accountId: string; isNew: boolean }>;
 }
