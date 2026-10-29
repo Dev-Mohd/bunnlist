@@ -69,7 +69,7 @@ export interface MySubmission {
 /** The caller's suggestions with their review status, newest first. */
 export async function listMySubmissions(prisma: PrismaClient, accountId: string): Promise<MySubmission[]> {
   const rows = await prisma.mobileCoffeeSubmission.findMany({
-    where: { accountId }, orderBy: { createdAt: "desc" }, take: 100,
+    where: { accountId, status: { not: "ARCHIVED" } }, orderBy: { createdAt: "desc" }, take: 100,
   });
   const lotIds = rows.map((r) => r.approvedLotId).filter((id): id is string => !!id);
   const lots = lotIds.length
