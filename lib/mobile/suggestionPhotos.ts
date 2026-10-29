@@ -91,8 +91,10 @@ export function supabasePhotoStore(): PhotoStore {
       if (bucketError) {
         await client.storage.createBucket(CATALOG_BUCKET, { public: true, fileSizeLimit: 5 * 1024 * 1024 });
       }
+      // Destinations are unique per photo (a content hash or a timestamp), so an existing
+      // file there is this same photo from an earlier, interrupted run.
       const { error } = await client.storage.from(CATALOG_BUCKET).upload(destination, file, {
-        contentType: "image/jpeg", cacheControl: "31536000", upsert: false,
+        contentType: "image/jpeg", cacheControl: "31536000", upsert: true,
       });
       if (error) throw new Error(`catalog photo upload failed: ${error.message}`);
       return client.storage.from(CATALOG_BUCKET).getPublicUrl(destination).data.publicUrl;
