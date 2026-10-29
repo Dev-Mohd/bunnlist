@@ -6399,6 +6399,1024 @@
     "isDecaf": false,
     "photo": "shovel-ethiopia-chelchele"
    }
+  },
+  {
+   "importKey": "trh-2026-10:colombia-huila-light-roast",
+   "name": "كولومبيا ويلا (حمصة فاتحة)",
+   "nameEn": "Colombia Huila Light Roast",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "WASHED",
+   "roastLevel": "light",
+   "flavorNotes": [
+    "شاي أسود",
+    "تفاح أخضر",
+    "دبس الليمون"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/colombia-huila-lighter-roast.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "ويلا، كولومبيا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كاتورا",
+     "كولومبيا"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "1,900 متر فوق سطح البحر",
+    "priceSar": 51.0,
+    "weightGrams": 227,
+    "availability": "Available",
+    "descriptionAr": "محصول مغسول من مزارعين تعاونيين في ويلا. حمصته الفاتحة تظهر طابع الشاي وحموضة التفاح، مع نهاية حلوة. مناسب للترشيح والإسبريسو.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "trh-2026-10:costa-rica-san-marcos-omni-roast",
+   "name": "كوستاريكا سان ماركوس",
+   "nameEn": "Costa Rica San Marcos Omni Roast",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": "كوستاريكا",
+   "originCode": "CR",
+   "process": "WASHED",
+   "roastLevel": null,
+   "flavorNotes": [
+    "بيكان",
+    "عنب أسود",
+    "تمر"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/costa-rica-san-marcos-omni-roast.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "تارازو، سان خوسيه، كوستاريكا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كاتواي",
+     "كاتورا"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "حتى 1,950 متراً فوق سطح البحر",
+    "priceSar": 61.0,
+    "weightGrams": 227,
+    "availability": "Available",
+    "descriptionAr": "قهوة من تعاونية في مرتفعات تارازو، بتحميص أومني وقوام ممتلئ. تجمع المكسرات والفواكه الداكنة وحلاوة التمر؛ مناسبة للترشيح والإسبريسو والحليب.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "trh-costa-rica-san-marcos-omni-roast"
+   }
+  },
+  {
+   "importKey": "trh-2026-10:ethiopia-lalesa",
+   "name": "إثيوبيا لاليسا",
+   "nameEn": "Ethiopia Lalesa",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "يوسفي",
+    "بطيخ",
+    "مشمش"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/ethiopia-lalesa.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "قديب، منطقة قيديو (يرقاتشيفي)",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "سلالات إثيوبية محلية (هيرلوم)"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "1900 - 2200 متر فوق سطح البحر",
+    "priceSar": 69.0,
+    "weightGrams": 227,
+    "availability": "Available",
+    "descriptionAr": "محصول من محطة بانكو لاليسا في قديب. يجفف الكرز ببطء تحت الظل على أسرّة مرتفعة لمدة تتراوح بين أسبوعين وأربعة أسابيع، لإظهار العطر والفواكه بوضوح.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "trh-ethiopia-lalesa"
+   }
+  },
+  {
+   "importKey": "trh-2026-10:uganda-mananasi",
+   "name": "أوغندا ماناناسي",
+   "nameEn": "Uganda Mananasi",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": "أوغندا",
+   "originCode": "UG",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "أناناس",
+    "توت أسود",
+    "فواكه استوائية"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/uganda-mananasi.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "مقاطعة كابوتشوروا، جبل إلجون",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "SL28",
+     "SL14"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "1800 - 2000 متر فوق سطح البحر",
+    "priceSar": 59.0,
+    "weightGrams": 227,
+    "availability": "Available",
+    "descriptionAr": "قهوة جبل إلجون من محطة سيبي فولز، بتعاون زوكوكا بورا مع صغار المزارعين. تخمير محكم ثم تجفيف بطيء يعطي طابعًا استوائيًا وقوامًا غنيًا؛ مناسبة للفلتر والإسبريسو.",
+    "processDetail": "تخمير الكرز في خزانات محكمة ثم تجفيفه على أسرّة مرتفعة.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "trh-uganda-mananasi"
+   }
+  },
+  {
+   "importKey": "trh-2026-10:kenya-sasha",
+   "name": "كينيا ساشا",
+   "nameEn": "Kenya Sasha",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": "كينيا",
+   "originCode": "KE",
+   "process": "CARBONIC_MACERATION",
+   "roastLevel": null,
+   "flavorNotes": [
+    "شمام",
+    "خوخ أصفر",
+    "بوميلي"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/kenya-sasha.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "مقاطعة نيري",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "SL28",
+     "SL34"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "1650 - 1800 متر فوق سطح البحر",
+    "priceSar": 99.0,
+    "weightGrams": 227,
+    "availability": "Available",
+    "descriptionAr": "محصول كيني من نيري، يجمع التجفيف مع التخمير الكربوني. يظهر فيه الشمام والخوخ والحمضيات، من سلالتي SL28 وSL34.",
+    "processDetail": "تخمير كربوني مع معالجة طبيعية.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "trh-kenya-sasha"
+   }
+  },
+  {
+   "importKey": "trh-2026-10:colombia-chambaku",
+   "name": "كولومبيا تشامباكو",
+   "nameEn": "Colombia Chambaku",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "حبوب الكاكاو",
+    "تفاح أحمر",
+    "فراولة"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/colombia-chambaku.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "فيلاماريا، كالداس، كولومبيا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كاستيو",
+     "بوربون الوردي"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "1460 - 1800 متر فوق سطح البحر",
+    "priceSar": 59.0,
+    "weightGrams": 227,
+    "availability": "Available",
+    "descriptionAr": "محصول من مزرعة تشامباكو في كالداس، ينتجه إلمر ريستريبو. المعالجة الطبيعية اللاهوائية تبرز الفاكهة مع طابع الكاكاو.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "trh-2026-10:ecuador-geisha-72",
+   "name": "قيشا 72 الإكوادور",
+   "nameEn": "Ecuador Geisha 72",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": "الإكوادور",
+   "originCode": "EC",
+   "process": "HONEY",
+   "roastLevel": null,
+   "flavorNotes": [
+    "حمضية البرتقال",
+    "شمع العسل",
+    "كراميل"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/geisha-72-honey-process.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "سان خوسيه دي ميناس، مقاطعة بيتشينتشا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "قيشا"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "1750 متر فوق سطح البحر",
+    "priceSar": 101.0,
+    "weightGrams": 227,
+    "availability": "Available",
+    "descriptionAr": "قيشا من مزرعة كروز لوما الإكوادورية. تزال قشور الكرز قبل تخمير مكشوف يستمر ثلاثة أيام، ثم يجفف على الأسرّة لمدة 18–25 يومًا، لينتج طابعًا حلوًا وفاكهيًا.",
+    "processDetail": "تخمير 72 ساعة بعد التقشير، ثم تجفيف 18–25 يومًا.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "trh-ecuador-geisha-72"
+   }
+  },
+  {
+   "importKey": "trh-2026-10:rwanda-simba",
+   "name": "رواندا سيمبا",
+   "nameEn": "Rwanda Simba",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": "رواندا",
+   "originCode": "RW",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "زهور",
+    "مشمش",
+    "شوكولاتة بالحليب"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/the-rwandian-simba.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "المقاطعة الجنوبية، منطقة هووي، رواندا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "البوربون الأحمر"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "1600 متر",
+    "priceSar": 129.0,
+    "weightGrams": 227,
+    "availability": "Available",
+    "descriptionAr": "محصول مزاد رواندي بتقييم حسي 89.69، من بوربون أحمر يجفف طبيعيًا. تتدرج نكهاته من الزهور والمشمش إلى شوكولاتة الحليب مع انخفاض حرارة الكوب؛ مناسب للترشيح والإسبريسو.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "trh-rwanda-simba"
+   }
+  },
+  {
+   "importKey": "trh-2026-10:el-salvador-aida-batlle",
+   "name": "السلفادور عايدة باتل",
+   "nameEn": "El Salvador Aida Batlle",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": "السلفادور",
+   "originCode": "SV",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "توفي",
+    "عنب أبيض",
+    "جريب فروت"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/el-salvador-aida-batlle.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "كليمنجارو، سانتا آنتا، السلفادور",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كينيا SL28",
+     "كينيا SL34"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "1720 متر فوق سطح البحر",
+    "priceSar": 35.01,
+    "weightGrams": 227,
+    "availability": "Available",
+    "descriptionAr": "قهوة عايدة باتل من السلفادور بسلالتين كينيتين ومعالجة طبيعية. تجمع حلاوة التوفي والعنب الأبيض مع حمضيات الجريب فروت.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "trh-2026-10:blueberry-muffin",
+   "name": "بلوبيري مافن",
+   "nameEn": "Blueberry Muffin",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "WASHED",
+   "roastLevel": null,
+   "flavorNotes": [
+    "توت أزرق",
+    "نعناع",
+    "زهور"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/blueberry-muffin-super-funky.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "ويلا، كولومبيا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كاتورا"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "1600 متر",
+    "priceSar": 109.64,
+    "weightGrams": 227,
+    "availability": "Available",
+    "descriptionAr": "محصول كاتورا من برايان ألفيار في ويلا. تخمر الحبوب مع دبس السكر ولب التوت الأزرق، ثم تغسل وتجفف شمسيًا؛ لذلك يصنف ضمن القهوة المنقوعة أو المضاف إليها أثناء المعالجة.",
+    "processDetail": "تخمير مع المولاس ولب التوت الأزرق، ثم غسل وتجفيف حتى 15 يومًا.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": true,
+    "isDecaf": false
+   }
+  },
+  {
+   "importKey": "trh-2026-10:ethiopia-gotiti-plus",
+   "name": "إثيوبيا جوتيتي بلس",
+   "nameEn": "Ethiopia Gotiti Plus",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "فراولة",
+    "زهور",
+    "توت"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/ethiopia-gotiti-plus.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "قيدب، منطقة قيديو، اثيوبيا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "الفصائل المتوارثة"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "يصل الى 2100 متر فوق سطح البحر",
+    "priceSar": 71.0,
+    "weightGrams": 227,
+    "availability": "Available",
+    "descriptionAr": "قهوة من تعاونية بانكو جوتيتي في قيديو، تجفف كرزاتها على أسرّة مرتفعة لمدة تصل إلى عشرين يومًا. طابعها فاكهي وزهري، وتناسب الترشيح والإسبريسو والكولد برو.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "trh-ethiopia-gotiti-plus"
+   }
+  },
+  {
+   "importKey": "trh-2026-10:tiramisu",
+   "name": "تيراميسو",
+   "nameEn": "Tiramisu",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": null,
+   "originCode": null,
+   "process": null,
+   "roastLevel": "dark",
+   "flavorNotes": [
+    "شوكولاتة سوداء",
+    "كاكاو"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/tiramisu.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "مقاطعة جافا – منطقة الحيمة",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "الفصائل المتوارثة"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "يصل الى 2100 متر فوق سطح البحر",
+    "priceSar": 39.0,
+    "weightGrams": 227,
+    "availability": "Available",
+    "descriptionAr": "مزيج داكن من مناطق جاوة والحيمة، مصمم لقوام قوي وطابع كاكاو وشوكولاتة داكنة. يذكر الوصف أيضًا الفانيلا والقرفة كإيحاءات؛ لا يثبت إضافة هذه المكونات.",
+    "processDetail": "مزيج؛ لم تفصل طرق معالجة مكوناته.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "trh-tiramisu"
+   }
+  },
+  {
+   "importKey": "trh-2026-10:colombia-select-decaf",
+   "name": "كولومبيا سيليكت ديكاف",
+   "nameEn": "Colombia Select Decaf",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "WASHED",
+   "roastLevel": null,
+   "flavorNotes": [
+    "حلاوة الكراميل",
+    "سكر بني",
+    "شوكولاتة"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/colombia-select-decaf-coffee.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "كولومبيا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كاتورا",
+     "تيبيكا"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "تصل الى 1500 متر عن سطح البحر",
+    "priceSar": 48.0,
+    "weightGrams": 227,
+    "availability": "Available",
+    "descriptionAr": "قهوة كولومبية منزوع منها الكافيين بالماء. تمنح حلاوة السكر والكراميل مع الشوكولاتة، وتناسب الترشيح والإسبريسو.",
+    "processDetail": "نزع الكافيين بالماء.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": true
+   }
+  },
+  {
+   "importKey": "trh-2026-10:costa-rica-santa-maria",
+   "name": "كوستاريكا سانتا ماريا",
+   "nameEn": "Costa Rica Santa Maria",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": "كوستاريكا",
+   "originCode": "CR",
+   "process": "WASHED",
+   "roastLevel": null,
+   "flavorNotes": [
+    "زهور",
+    "مكسرات محمصة",
+    "شوكولاتة بيضاء"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/costa-rica-sant-maria-washed.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "دوتا، سان خوسيه، كوستاريكا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كاتويا",
+     "كاتورا"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "حتى 1950 مترا فوق سطح البحر",
+    "priceSar": 47.0,
+    "weightGrams": 227,
+    "availability": "Available",
+    "descriptionAr": "محصول تعاونية دوتا في كوستاريكا. يتميز بإيحاءات زهرية ومكسرات وشوكولاتة بيضاء؛ ملائم للترشيح والإسبريسو ومشروبات الحليب.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "trh-costa-rica-santa-maria"
+   }
+  },
+  {
+   "importKey": "trh-2026-10:ethiopia-kedida",
+   "name": "إثيوبيا كديدا",
+   "nameEn": "Ethiopia Kedida",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "برتقال",
+    "فواكه حمراء",
+    "زهور"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/ethiopia-kedida.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "الفصائل المتوارثة"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "2300 متر فوق سطح البحر",
+    "priceSar": 67.0,
+    "weightGrams": 227,
+    "availability": "Available",
+    "descriptionAr": "قهوة من مزارعي كديدا، بكرز منتقى يدويًا يجفف على أسرّة مرفوعة مع التقليب والحماية من الشمس الشديدة. طابعها فاكهي بحموضة معتدلة.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "trh-ethiopia-kedida"
+   }
+  },
+  {
+   "importKey": "trh-2026-10:guatemala-buena-vista",
+   "name": "غواتيمالا بوينا فيستا",
+   "nameEn": "Guatemala Buena Vista",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": "غواتيمالا",
+   "originCode": "GT",
+   "process": "WASHED",
+   "roastLevel": null,
+   "flavorNotes": [
+    "تين",
+    "زهور",
+    "شوكولاتة",
+    "حمضية التفاح"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/guatemala-buena-vista.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "انتيغوا، سان خوان، غواتيمالا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "بوربون",
+     "كاتورا"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "1900 متر فوق سطح البحر",
+    "priceSar": 44.0,
+    "weightGrams": 227,
+    "availability": "Available",
+    "descriptionAr": "محصول من مزرعة تديرها ماريا كريستينا وعائلتها في سان خوان قرب أنتيغوا. تعالج الحبوب بالغسل ثم النقع ليوم والتجفيف البطيء لنحو أسبوعين.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "trh-guatemala-buena-vista"
+   }
+  },
+  {
+   "importKey": "trh-2026-10:trh-espresso",
+   "name": "مزيج إسبريسو بيت التحميص",
+   "nameEn": "TRH Espresso",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": null,
+   "originCode": null,
+   "process": null,
+   "roastLevel": null,
+   "flavorNotes": [
+    "كاكاو"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/trh-espresso.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "عدة مناطق من شتى دول العالم",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "فصائل متعددة"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "مايقارب 1900 متر فوق سطح البحر",
+    "priceSar": 43.0,
+    "weightGrams": 227,
+    "availability": "Available",
+    "descriptionAr": "مزيج موسمي من مناطق وسلالات متعددة، مخصص للإسبريسو والحليب. يقدم قوامًا كريميًا متوازنًا مع الكاكاو ومرارة معتدلة.",
+    "processDetail": "مزيج؛ طرق المكونات غير مفصلة.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "trh-trh-espresso"
+   }
+  },
+  {
+   "importKey": "trh-2026-10:espresso-no-4",
+   "name": "إسبريسو No. 4",
+   "nameEn": "Espresso No 4",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": null,
+   "originCode": null,
+   "process": null,
+   "roastLevel": null,
+   "flavorNotes": [
+    "فاكهة",
+    "شوكولاتة"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/no-4-espresso.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": null,
+    "farm": null,
+    "producer": null,
+    "variety": [],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": null,
+    "priceSar": 51.0,
+    "weightGrams": 227,
+    "availability": "Available",
+    "descriptionAr": "مزيج إسبريسو موسمي طور احتفالًا بأربعة أعوام على تأسيس المحمصة. يجمع محاصيل بمعالجات عسلية وطبيعية ومغسولة، بطابع فاكهي وشوكولاتي مناسب للحليب.",
+    "processDetail": "عسلية وطبيعية ومغسولة.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "trh-espresso-no-4"
+   }
+  },
+  {
+   "importKey": "trh-2026-10:colombia-agustino",
+   "name": "كولومبيا أغوستينو",
+   "nameEn": "Colombia Agustino",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "WASHED",
+   "roastLevel": null,
+   "flavorNotes": [
+    "شاي الفواكه",
+    "كركديه",
+    "حمضية لطيفة"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/colombia-agustino.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "غابة أغوستينو، ويلا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كولومبيا",
+     "كاتورا"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "1900 متر فوق سطح البحر",
+    "priceSar": 40.0,
+    "weightGrams": 227,
+    "availability": "Available",
+    "descriptionAr": "محصول تعاونية كو أغوستينوس في ويلا، يعالج بالغسل ويجفف على مناضد مرتفعة. يجمع الحلاوة العطرية مع طابع شاي الفاكهة والكركديه؛ مناسب للترشيح والإسبريسو.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "trh-colombia-agustino"
+   }
+  },
+  {
+   "importKey": "trh-2026-10:java-estate-blawan",
+   "name": "جافا إستيت بلاوان",
+   "nameEn": "Java Estate Blawan",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": "إندونيسيا",
+   "originCode": "ID",
+   "process": "WASHED",
+   "roastLevel": null,
+   "flavorNotes": [
+    "كاكاو",
+    "عنب",
+    "شوكولاتة"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/java-estate-blawan.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "شرق جاوة، إندونيسيا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "تيبيكا"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "altitudeM": "1200 متر فوق سطح البحر",
+    "priceSar": 41.0,
+    "weightGrams": 227,
+    "availability": "Available",
+    "descriptionAr": "قهوة من مزرعة بلاوان في شرق جاوة، بتجارة مباشرة مع المحمصة. طابعها حلو وقوامها ممتلئ ومرارتها متوسطة، مع الكاكاو والعنب والشوكولاتة.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "trh-java-estate-blawan"
+   }
+  },
+  {
+   "importKey": "trh-2026-10:al-barryah-decaf-saudi-coffee",
+   "name": "البرّية ديكاف",
+   "nameEn": "Al Barryah Decaf Saudi Coffee",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "WASHED",
+   "roastLevel": null,
+   "flavorNotes": [
+    "حلاوة الكراميل",
+    "سكر بني",
+    "شوكولاتة"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/the-wilderness-al-barryah-decaf-saudi-coffee.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "كولومبيا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "كاتورا",
+     "تيبيكا"
+    ],
+    "brewMethods": [
+     "ARABIC"
+    ],
+    "altitudeM": "تصل الى 1500 متر عن سطح البحر",
+    "priceSar": 40.0,
+    "weightGrams": null,
+    "availability": "Available",
+    "descriptionAr": "بن كولومبي منزوع الكافيين بالماء، يقدم بأسلوب القهوة السعودية. المعالجة المائية تستهدف الحفاظ على القوام والنكهة مع إزالة الكافيين.",
+    "processDetail": "نزع الكافيين بالماء.",
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": true,
+    "photo": "trh-al-barryah-decaf-saudi-coffee"
+   }
+  },
+  {
+   "importKey": "trh-2026-10:al-shaqraa-saudi-coffee",
+   "name": "الشقراء",
+   "nameEn": "Al Shaqraa Saudi Coffee",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": "السعودية",
+   "originCode": "SA",
+   "process": "NATURAL",
+   "roastLevel": "light",
+   "flavorNotes": [
+    "الفول السوداني",
+    "حلاوة السمسم",
+    "الزبيب"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/al-shaqraa-saudi-coffee.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "جنوب السعودية",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "خولاني"
+    ],
+    "brewMethods": [
+     "ARABIC"
+    ],
+    "altitudeM": "1600 متر فوق سطح البحر",
+    "priceSar": 159.0,
+    "weightGrams": null,
+    "availability": "Available",
+    "descriptionAr": "محصول خولاني سعودي من مزرعة حسن المالكي في جنوب المملكة. يقدم بتحميص أشقر يرتبط بأسلوب القهوة في المنطقة الوسطى.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "trh-al-shaqraa-saudi-coffee"
+   }
+  },
+  {
+   "importKey": "trh-2026-10:al-safraa-saudi-coffee",
+   "name": "الصفراء",
+   "nameEn": "Al Safraa Saudi Coffee",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": null,
+   "originCode": null,
+   "process": "NATURAL",
+   "roastLevel": "light",
+   "flavorNotes": [
+    "الكرز",
+    "الزبيب الحلو",
+    "المكسرات المحمصة"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/al-safraa-saudi-coffee.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "غوجي ، اثيوبيا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "الفصائل المتوارثة"
+    ],
+    "brewMethods": [
+     "ARABIC"
+    ],
+    "altitudeM": "2200 متر فوق سطح البحر",
+    "priceSar": 34.99,
+    "weightGrams": null,
+    "availability": "Available",
+    "descriptionAr": "قهوة محمصة باللون الأصفر الذهبي. بياناتها التعريفية تشير إلى غوجي الإثيوبية، بينما القصة تتحدث عن اليمن؛ يلزم تأكيد المنشأ من المحمصة قبل النشر.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "trh-al-safraa-saudi-coffee"
+   }
+  },
+  {
+   "importKey": "trh-2026-10:al-sahbaa-saudi-coffee",
+   "name": "الصهباء",
+   "nameEn": "Al Sahbaa Saudi Coffee",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "NATURAL",
+   "roastLevel": "light",
+   "flavorNotes": [
+    "حمضية الليمون",
+    "سمسم",
+    "لوز محمص"
+   ],
+   "sourceUrl": "https://roastinghouse.sa/al-sahbaa-saudi-coffee.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "سيدامو ، اثيوبيا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "الفصائل المتوارثة"
+    ],
+    "brewMethods": [
+     "ARABIC"
+    ],
+    "altitudeM": "2200 متر فوق سطح البحر",
+    "priceSar": 24.99,
+    "weightGrams": null,
+    "availability": "Available",
+    "descriptionAr": "قهوة سعودية التحضير من سيدامو الإثيوبية. يقطف الكرز الناضج ويجفف على أسرّة مرفوعة؛ تجمع إيحاءات الليمون والسمسم واللوز.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "trh-al-sahbaa-saudi-coffee"
+   }
+  },
+  {
+   "importKey": "trh-2026-10:al-pasha-turkish-coffee",
+   "name": "الباشا",
+   "nameEn": "Al Pasha Turkish Coffee",
+   "roasterName": "بيت التحميص",
+   "roasterNameEn": "Roasting House",
+   "originName": null,
+   "originCode": null,
+   "process": "NATURAL",
+   "roastLevel": "dark",
+   "flavorNotes": [],
+   "sourceUrl": "https://roastinghouse.sa/the-pasha-turkish-coffee.html",
+   "sourceConfidence": 0.85,
+   "extras": {
+    "region": "فارجينها بالبرازيل ويرغاتشيفي بإثيوبيا",
+    "farm": null,
+    "producer": null,
+    "variety": [
+     "موندو نوفو",
+     "الفصائل المتوارثة"
+    ],
+    "brewMethods": [
+     "OTHER"
+    ],
+    "altitudeM": "حتى 2000 متر",
+    "priceSar": 29.0,
+    "weightGrams": null,
+    "availability": "Available",
+    "descriptionAr": "مزيج أرابيكا من البرازيل وإثيوبيا، بحمصة داكنة وطحن ناعم جدًا للتحضير بالركوة أو أجهزة القهوة التركية. يصفه المتجر بقوام واضح وكريما غنية ونهاية لطيفة.",
+    "processDetail": null,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "isInfused": false,
+    "isDecaf": false,
+    "photo": "trh-al-pasha-turkish-coffee"
+   }
   }
  ]
 }
