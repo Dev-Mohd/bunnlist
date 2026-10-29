@@ -110,7 +110,9 @@ export async function importBatch(
   ]));
 
   let created = 0, alreadyImported = 0, alreadyInCatalog = 0, photoErrors = 0;
-  for (const item of items) {
+  // A few items at a time: each one waits on storage, and the whole run has to
+  // finish inside the route's time limit.
+  await eachLimited(items, 6, async (item) => {
     const prior = existing.get(item.importKey);
     if (prior) {
       alreadyImported += 1;
@@ -123,10 +125,13 @@ export async function importBatch(
         });
       } else if (prior.status === "APPROVED" && prior.approvedLotId) {
         // Already published with an import photo: swap in the newer photo. A lot
-        // whose picture was since replaced on the website is left alone.
+        // whose picture was since replaced on the website is left alone, and so is
+        // one published from this very photo (approval names its file by time, not
+        // by the photo's hash, so the URL alone can't tell).
         const lot = approvedLots.get(prior.approvedLotId);
         const photo = photoOf(item);
-        if (lot && photo && store && lot.imageType === "USER_UPLOADED" && !lot.imageUrl?.endsWith(`-${photo.version}.jpg`)) {
+        const current = prior.photoPath === photo?.path || !!(photo && lot?.imageUrl?.endsWith(`-${photo.version}.jpg`));
+        if (lot && photo && store && lot.imageType === "USER_UPLOADED" && !current) {
           // A photo that won't go up leaves the lot's current one; the rest of the batch carries on.
           try {
             const path = await uploadPhoto(item);
@@ -134,18 +139,19 @@ export async function importBatch(
             await prisma.coffeeLot.update({
               where: { id: lot.id }, data: { imageUrl, storedImageUrl: imageUrl, imageStoredAt: new Date() },
             });
+            await prisma.mobileCoffeeSubmission.update({ where: { id: prior.id }, data: { photoPath: path } });
           } catch (e) {
             console.error("import photo swap failed", lot.slug, e);
             photoErrors += 1;
           }
         }
       }
-      continue;
+      return;
     }
     if (inCatalog.has(`${norm(item.roasterName)}|${norm(item.name)}`)
       || (item.nameEn && item.roasterNameEn && inCatalog.has(`${norm(item.roasterNameEn)}|${norm(item.nameEn)}`))) {
       alreadyInCatalog += 1;
-      continue;
+      return;
     }
     await prisma.mobileCoffeeSubmission.create({
       data: {
@@ -156,6 +162,15 @@ export async function importBatch(
       },
     });
     created += 1;
-  }
+  });
   return { created, alreadyImported, alreadyInCatalog, photos: photoCount, photoErrors };
+}
+
+/** Runs `fn` over the items with at most `limit` in flight. */
+async function eachLimited<T>(items: T[], limit: number, fn: (item: T) => Promise<void>): Promise<void> {
+  let next = 0;
+  const worker = async () => {
+    while (next < items.length) await fn(items[next++]);
+  };
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
 }
