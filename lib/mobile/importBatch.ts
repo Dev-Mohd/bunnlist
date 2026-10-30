@@ -3,6 +3,7 @@ import type { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { CATALOG_ACCOUNT, SUBMISSION_PROCESSES } from "./submissions";
 import { readExtras } from "./admin";
+import { ADMIN_EXTRAS, adminEdited } from "./adminEdit";
 import { approvalFor } from "./adminBulk";
 import type { PhotoStore } from "./suggestionPhotos";
 import batch from "./data/roastery-batch-2026-05.json";
@@ -143,14 +144,16 @@ export async function importBatch(
       alreadyImported += 1;
       if (prior.status === "PENDING") {
         // Still under review: bring it up to date (newer batch data, a newer photo).
-        // One that already matches the batch is passed over, so a re-run stays quick.
-        const photoCurrent = !photoOf(item) || prior.photoPath === photoOf(item)?.path;
-        if (photoCurrent && sameFields(prior, item)) return;
+        // What the admin set by hand (fields, an edited or deleted photo) stays.
+        // One that already matches is passed over, so a re-run stays quick.
+        const want = keepAdminEdits(prior, fields(item));
+        const photoCurrent = !photoOf(item) || prior.photoPath === photoOf(item)?.path || !!readAdmin(prior.extras).photoEdited;
+        if (photoCurrent && sameFields(prior, want)) return;
         if (outOfTime) { remaining += 1; return; }
         const photoPath = photoCurrent ? null : await uploadPhoto(item);
         await prisma.mobileCoffeeSubmission.update({
           where: { id: prior.id },
-          data: { ...fields(item), ...(photoPath ? { photoPath } : {}) },
+          data: { ...want, ...(photoPath ? { photoPath } : {}) },
         });
       } else if (prior.status === "APPROVED" && prior.approvedLotId) {
         if (outOfTime) return;
@@ -216,9 +219,19 @@ function stable(v: unknown): string {
   return JSON.stringify(v ?? null);
 }
 
-/** True when a pending suggestion already holds the item's fields. */
-function sameFields(row: Record<string, unknown>, item: z.infer<typeof Item>): boolean {
-  const want = fields(item);
+const readAdmin = (extras: unknown): Record<string, unknown> =>
+  (extras && typeof extras === "object" && !Array.isArray(extras) ? (extras as Record<string, unknown>) : {});
+
+/** The batch's fields, with the ones an admin set by hand (and the admin's extras) kept from the row. */
+function keepAdminEdits(row: Record<string, unknown>, want: ReturnType<typeof fields>): ReturnType<typeof fields> {
+  const extras = readAdmin(row.extras);
+  const kept = Object.fromEntries(adminEdited(row.extras).filter((k) => k in want).map((k) => [k, row[k]]));
+  const adminExtras = Object.fromEntries(ADMIN_EXTRAS.filter((k) => k in extras).map((k) => [k, extras[k]]));
+  return { ...want, ...kept, extras: { ...(want.extras as object), ...adminExtras } };
+}
+
+/** True when a pending suggestion already holds these fields. */
+function sameFields(row: Record<string, unknown>, want: ReturnType<typeof fields>): boolean {
   return (Object.keys(want) as (keyof typeof want)[]).every((k) => stable(row[k] ?? (k === "extras" ? {} : null)) === stable(want[k]));
 }
 

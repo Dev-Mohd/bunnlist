@@ -76,6 +76,27 @@ describe("importBatch", () => {
     expect(m.mobileCoffeeSubmission.update.mock.calls[0][0].where).toEqual({ id: "s2" });
   });
 
+  it("leaves what an admin set by hand on a waiting suggestion, and an edited photo", async () => {
+    const it1 = { ...item("k1", "ميلورا"), extras: { photo: "bk-x" } };
+    const m = {
+      mobileCoffeeSubmission: {
+        findMany: vi.fn().mockResolvedValue([{
+          id: "s1", importKey: "k1", status: "PENDING", photoPath: "imports/edit-s1-aaaa.jpg", name: "قديم", originName: "كينيا",
+          extras: { adminEdited: ["originName"], photoEdited: true, originalPhotoPath: "imports/bk-x-1.jpg" },
+        }]),
+        update: vi.fn().mockResolvedValue({}),
+        create: vi.fn(),
+      },
+      coffeeLot: { findMany: vi.fn().mockResolvedValue([]) },
+    };
+    const store = { put: vi.fn(), signedUrl: vi.fn(), publish: vi.fn() };
+    await importBatch(m as unknown as PrismaClient, { batch: "t", items: [it1] }, { "bk-x": "AAAA" }, store);
+    expect(store.put).not.toHaveBeenCalled();
+    const data = m.mobileCoffeeSubmission.update.mock.calls[0][0].data;
+    expect(data).toMatchObject({ name: "ميلورا", originName: "كينيا", extras: { photo: "bk-x", photoEdited: true, adminEdited: ["originName"] } });
+    expect(data.photoPath).toBeUndefined();
+  });
+
   it("turns extras into lot tags", () => {
     expect(tagsFrom({ isLuxury: true, isDecaf: true })).toEqual(["luxury", "decaf"]);
     expect(tagsFrom({})).toEqual([]);
