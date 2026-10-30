@@ -21,7 +21,7 @@ describe("importBatch", () => {
     const result = await importBatch(m as unknown as PrismaClient, {
       batch: "t", items: [item("k1", "قديمة"), item("k2", "جبل السودة"), item("k3", "جديدة")],
     });
-    expect(result).toEqual({ created: 1, alreadyImported: 1, alreadyInCatalog: 1, photos: 0, photoErrors: 0 });
+    expect(result).toEqual({ created: 1, alreadyImported: 1, alreadyInCatalog: 1, photos: 0, photoErrors: 0, remaining: 0 });
     expect(m.mobileCoffeeSubmission.create.mock.calls[0][0].data).toMatchObject({ accountId: "catalog", importKey: "k3", extras: { isLuxury: true } });
   });
 
@@ -33,8 +33,8 @@ describe("importBatch", () => {
     const store = { put: vi.fn().mockResolvedValue(undefined), signedUrl: vi.fn(), publish: vi.fn() };
     const bundle = BUNDLED_BATCHES["roasteries-2026-05"];
     const result = await importBatch(m as unknown as PrismaClient, bundle.data, bundle.photos, store);
-    expect(result.created).toBe(217);
-    expect(result.photos).toBe(129); // 24 Black Knight + 16 Arriyadh Roaster + 22 Bunista + 23 ASH + 11 SHOVEL + 20 Roasting House + 13 Camel Step
+    expect(result.created).toBe(569);
+    expect(result.photos).toBe(410); // 24 Black Knight + 16 Arriyadh Roaster + 22 Bunista + 23 ASH + 11 SHOVEL + 20 Roasting House + 13 Camel Step + 281 Yahim Cups
     expect(store.put).toHaveBeenCalledWith(expect.stringMatching(/^imports\/bk-milora-[0-9a-f]{8}\.jpg$/), expect.any(Buffer));
     expect(store.put).toHaveBeenCalledWith(expect.stringMatching(/^imports\/ar-shmaisy-street-[0-9a-f]{8}\.jpg$/), expect.any(Buffer));
   });
@@ -115,5 +115,15 @@ describe("importBatch", () => {
     await importBatch(m as unknown as PrismaClient, { batch: "t", items: [{ ...item("k1", "ميلورا"), extras: { photo: "bk-x" } }] }, { "bk-x": "AAAA" }, store);
     expect(store.put).not.toHaveBeenCalled();
     expect(store.publish).not.toHaveBeenCalled();
+  });
+
+  it("leaves new coffees for the next run once out of time", async () => {
+    const m = {
+      mobileCoffeeSubmission: { findMany: vi.fn().mockResolvedValue([]), create: vi.fn().mockResolvedValue({}) },
+      coffeeLot: { findMany: vi.fn().mockResolvedValue([]) },
+    };
+    const result = await importBatch(m as unknown as PrismaClient, { batch: "t", items: [item("k1", "أولى"), item("k2", "ثانية")] }, {}, null, -1);
+    expect(result).toMatchObject({ created: 0, remaining: 2 });
+    expect(m.mobileCoffeeSubmission.create).not.toHaveBeenCalled();
   });
 });
