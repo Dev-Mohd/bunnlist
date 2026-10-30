@@ -723,7 +723,7 @@
    "roasterNameEn": "Arriyadh Roaster",
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "NATURAL",
    "roastLevel": "light",
    "flavorNotes": [
     "فراولة",
@@ -4753,8 +4753,8 @@
    "nameEn": "Saudi Roast Coffee",
    "roasterName": "بونيستا",
    "roasterNameEn": "Bunista",
-   "originName": null,
-   "originCode": null,
+   "originName": "السعودية",
+   "originCode": "SA",
    "process": null,
    "roastLevel": "light",
    "flavorNotes": [],
@@ -7158,7 +7158,7 @@
    "roasterNameEn": "Roasting House",
    "originName": null,
    "originCode": null,
-   "process": null,
+   "process": "HONEY",
    "roastLevel": null,
    "flavorNotes": [
     "فاكهة",
@@ -7438,8 +7438,8 @@
    "nameEn": "Al Pasha Turkish Coffee",
    "roasterName": "بيت التحميص",
    "roasterNameEn": "Roasting House",
-   "originName": null,
-   "originCode": null,
+   "originName": "البرازيل",
+   "originCode": "BR",
    "process": "NATURAL",
    "roastLevel": "dark",
    "flavorNotes": [],
@@ -8109,7 +8109,11 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كرز",
+    "زهور",
+    "ليمون"
+   ],
    "sourceUrl": "https://yahimcups.com/الوعل-البري-سيدامو-sidamo/p1362310988",
    "sourceConfidence": 0.75,
    "extras": {
@@ -8144,7 +8148,9 @@
    "originCode": "UG",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "شوكولاتة داكنة"
+   ],
    "sourceUrl": "https://yahimcups.com/الوعل-البري-لويس-اوغندا-200g/p164088640",
    "sourceConfidence": 0.75,
    "extras": {
@@ -8174,11 +8180,15 @@
    "nameEn": null,
    "roasterName": "الوعل البري",
    "roasterNameEn": "Alwaal Albari",
-   "originName": null,
-   "originCode": null,
+   "originName": "كولومبيا",
+   "originCode": "CO",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فواكه مجففة",
+    "أناناس",
+    "جريب فروت"
+   ],
    "sourceUrl": "https://yahimcups.com/الوعل-البري-بلانداس-plandas/p972225137",
    "sourceConfidence": 0.75,
    "extras": {
@@ -8212,7 +8222,11 @@
    "originCode": "ET",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "زهور",
+    "كراميل",
+    "فانيلا"
+   ],
    "sourceUrl": "https://yahimcups.com/الوعل-البري-تيما-tema/p898173250",
    "sourceConfidence": 0.75,
    "extras": {
@@ -8242,11 +8256,15 @@
    "nameEn": null,
    "roasterName": "الوعل البري",
    "roasterNameEn": "Alwaal Albari",
-   "originName": null,
-   "originCode": null,
+   "originName": "بنما",
+   "originCode": "PA",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "شوكولاتة",
+    "بندق",
+    "بابونج"
+   ],
    "sourceUrl": "https://yahimcups.com/الوعل-البري-خارميلو-jaramillo/p1073392711",
    "sourceConfidence": 0.75,
    "extras": {
@@ -8280,7 +8298,10 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "حمضيات",
+    "زهور"
+   ],
    "sourceUrl": "https://alwaalalbari.com/ar/شيلشلي-chelchele/p1940030724",
    "sourceConfidence": 0.85,
    "extras": {
@@ -8314,7 +8335,10 @@
    "originCode": "CO",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كرز",
+    "شوكولاتة"
+   ],
    "sourceUrl": "https://yahimcups.com/قهوة-الوعل-البري-أنتيوكيا-أكسيلسو-كولومبيا-مغسولة/p557057374",
    "sourceConfidence": 0.75,
    "extras": {
@@ -8347,7 +8371,10 @@
    "originCode": "CR",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "تمر",
+    "كرز"
+   ],
    "sourceUrl": "https://yahimcups.com/قهوة-الوعل-البري-لوما-بورو-كوستاريكا-مجففة-فاخرة/p1466951261",
    "sourceConfidence": 0.75,
    "extras": {
@@ -8380,7 +8407,11 @@
    "originCode": "CO",
    "process": "ANAEROBIC",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كرز",
+    "باشن فروت",
+    "مانجو"
+   ],
    "sourceUrl": "https://yahimcups.com/قهوة-الوعل-البري-سكارليت-كولومبيا-عسلية-لاهوائي-فاخرة/p1971471545",
    "sourceConfidence": 0.75,
    "extras": {
@@ -8516,7 +8547,7 @@
    "roasterNameEn": "Oden",
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "فراولة"
@@ -8655,8 +8686,8 @@
    "nameEn": null,
    "roasterName": "أودن",
    "roasterNameEn": "Oden",
-   "originName": null,
-   "originCode": null,
+   "originName": "السلفادور",
+   "originCode": "SV",
    "process": "ANAEROBIC",
    "roastLevel": null,
    "flavorNotes": [
@@ -8733,7 +8764,7 @@
    "roasterNameEn": "Oden",
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "ANAEROBIC",
    "roastLevel": null,
    "flavorNotes": [
     "عنب",
@@ -8767,8 +8798,8 @@
    "nameEn": "SALVADOR SANCARLOS",
    "roasterName": "أودن",
    "roasterNameEn": "Oden",
-   "originName": null,
-   "originCode": null,
+   "originName": "السلفادور",
+   "originCode": "SV",
    "process": "WASHED",
    "roastLevel": null,
    "flavorNotes": [
@@ -8880,7 +8911,7 @@
    "roasterNameEn": "Oden",
    "originName": "أوغندا",
    "originCode": "UG",
-   "process": "OTHER",
+   "process": "ANAEROBIC",
    "roastLevel": null,
    "flavorNotes": [
     "فراولة",
@@ -9064,7 +9095,7 @@
    "roasterNameEn": "Oden",
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "بطيخ",
@@ -9135,7 +9166,7 @@
    "roasterNameEn": "Oden",
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "عنب"
@@ -9206,7 +9237,7 @@
    "roasterNameEn": "Oden",
    "originName": null,
    "originCode": null,
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "الياسمين",
@@ -9242,7 +9273,7 @@
    "roasterNameEn": "Oden",
    "originName": null,
    "originCode": null,
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "خوخ",
@@ -9278,7 +9309,7 @@
    "roasterNameEn": "Oden",
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "جوز الهند",
@@ -9315,7 +9346,7 @@
    "roasterNameEn": "Oden",
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "التوت الاسود",
@@ -9674,7 +9705,11 @@
    "originCode": "GT",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "شوكولاتة",
+    "مكسرات",
+    "ياسمين"
+   ],
    "sourceUrl": "https://yahimcups.com/قهوة-ادمي-روزاريو-غواتيمالا-مغسولة-قهوة-ادمي-روزاريو-غواتيمالا-مغسولة/p2114920322",
    "sourceConfidence": 0.75,
    "extras": {
@@ -10387,7 +10422,11 @@
    "originCode": "CR",
    "process": "HONEY",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "سكر بني",
+    "لوز",
+    "توت"
+   ],
    "sourceUrl": "https://yahimcups.com/قهوة-اليوم-الثامن-اناروزا-كوستاريكا-عسلية-أسود/p576484246",
    "sourceConfidence": 0.75,
    "extras": {
@@ -10418,7 +10457,9 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت بري"
+   ],
    "sourceUrl": "https://hoy8store.com/mZGQEaz",
    "sourceConfidence": 0.85,
    "extras": {
@@ -10449,7 +10490,10 @@
    "originCode": "BR",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "بندق",
+    "فراولة"
+   ],
    "sourceUrl": "https://hoy8store.com/BrWYDEO",
    "sourceConfidence": 0.85,
    "extras": {
@@ -10480,7 +10524,11 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فراولة",
+    "خوخ",
+    "توت أزرق"
+   ],
    "sourceUrl": "https://hoy8store.com/bRgqBlK",
    "sourceConfidence": 0.85,
    "extras": {
@@ -10511,7 +10559,11 @@
    "originCode": "YE",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فراولة",
+    "توت أزرق",
+    "برتقال"
+   ],
    "sourceUrl": "https://hoy8store.com/YgRdEQQ",
    "sourceConfidence": 0.85,
    "extras": {
@@ -10611,7 +10663,10 @@
    "originCode": "BR",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "أناناس",
+    "شوكولاتة"
+   ],
    "sourceUrl": "https://ananasroastery.com/products/قهوة-برازيلية-مختصة",
    "sourceConfidence": 0.85,
    "extras": {
@@ -10642,7 +10697,9 @@
    "originCode": "ET",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "تين"
+   ],
    "sourceUrl": "https://ananasroastery.com/products/قهوة-شيلشلي",
    "sourceConfidence": 0.85,
    "extras": {
@@ -10920,7 +10977,10 @@
    "originCode": "BR",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "عسل",
+    "كراميل"
+   ],
    "sourceUrl": "https://outoflineksa.com/products/البرازيل-موجيانا-brazil-mogiana",
    "sourceConfidence": 0.85,
    "extras": {
@@ -10951,7 +11011,11 @@
    "originCode": "CO",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فواكه حمراء",
+    "توت",
+    "كاكاو"
+   ],
    "sourceUrl": "https://outoflineksa.com/products/كولومبيا-كولومبوس-colombia-colombus",
    "sourceConfidence": 0.85,
    "extras": {
@@ -11168,9 +11232,12 @@
    "roasterNameEn": "Out of Line",
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": null,
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت العليق",
+    "كرز"
+   ],
    "sourceUrl": "https://outoflineksa.com/products/بيري-بوبسيكل-كولومبيا-berry-popsicles-colombia",
    "sourceConfidence": 0.85,
    "extras": {
@@ -11383,7 +11450,9 @@
    "originCode": "CO",
    "process": "ANAEROBIC",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فراولة"
+   ],
    "sourceUrl": "https://outoflineksa.com/products/كولومبيا-فراولة-colombia-strawberry",
    "sourceConfidence": 0.85,
    "extras": {
@@ -11443,7 +11512,10 @@
    "originCode": "SV",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل",
+    "بندق"
+   ],
    "sourceUrl": "https://outoflineksa.com/products/السلفادور",
    "sourceConfidence": 0.85,
    "extras": {
@@ -11531,7 +11603,7 @@
    "roasterNameEn": null,
    "originName": "البرازيل",
    "originCode": "BR",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "تشوكلت",
@@ -11634,7 +11706,7 @@
    "roasterNameEn": null,
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "فراولة",
@@ -11670,7 +11742,7 @@
    "roasterNameEn": null,
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "خوخ",
@@ -11879,7 +11951,7 @@
    "roasterNameEn": null,
    "originName": "إثيوبيا",
    "originCode": "ET",
-   "process": null,
+   "process": "NATURAL",
    "roastLevel": null,
    "flavorNotes": [],
    "sourceUrl": "https://olalaroastery.com/products/كونجا-اثيوبيا-سوبر-ناتشورال-250-غرام-konga",
@@ -12146,7 +12218,9 @@
    "originCode": "SV",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "زهور"
+   ],
    "sourceUrl": "https://olalaroastery.com/products/vista-فيستا-السلفادور-250-g",
    "sourceConfidence": 0.85,
    "extras": {
@@ -12176,7 +12250,9 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "زهور"
+   ],
    "sourceUrl": "https://olalaroastery.com/products/chelchele-شيلشيلي-اثيوبيا-250-g",
    "sourceConfidence": 0.85,
    "extras": {
@@ -13068,7 +13144,11 @@
    "originCode": "CO",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "لوز",
+    "توت",
+    "فراولة"
+   ],
    "sourceUrl": "https://oro-sa.com/ar/rmbbXr",
    "sourceConfidence": 0.85,
    "extras": {
@@ -13099,7 +13179,12 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فواكه حمراء",
+    "عنب",
+    "توت",
+    "شوكولاتة"
+   ],
    "sourceUrl": "https://oro-sa.com/ar/GWVVOw",
    "sourceConfidence": 0.85,
    "extras": {
@@ -13166,7 +13251,11 @@
    "originCode": null,
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "شوكولاتة",
+    "بندق",
+    "كراميل"
+   ],
    "sourceUrl": "https://oro-sa.com/ar/EZKyGOB",
    "sourceConfidence": 0.85,
    "extras": {
@@ -13196,7 +13285,11 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "خوخ",
+    "توت",
+    "زهور"
+   ],
    "sourceUrl": "https://oro-sa.com/ar/lGBxxqD",
    "sourceConfidence": 0.85,
    "extras": {
@@ -13227,7 +13320,12 @@
    "originCode": "CO",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل",
+    "شوكولاتة",
+    "سكر بني",
+    "مكسرات"
+   ],
    "sourceUrl": "https://oro-sa.com/ar/AyKojZ",
    "sourceConfidence": 0.85,
    "extras": {
@@ -13320,7 +13418,7 @@
    "roasterNameEn": "L.TONE",
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "توت اسود",
@@ -13422,7 +13520,7 @@
    "roasterNameEn": "L.TONE",
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "جح حلاوه"
@@ -13486,7 +13584,11 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت",
+    "فول سوداني",
+    "كراميل"
+   ],
    "sourceUrl": "https://www.batchroastery.com/shop/اوروميو-250ج-1423",
    "sourceConfidence": 0.85,
    "extras": {
@@ -13516,7 +13618,13 @@
    "originCode": "ID",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "برتقال",
+    "فراولة",
+    "كراميل",
+    "بندق",
+    "قرفة"
+   ],
    "sourceUrl": "https://www.batchroastery.com/shop/قايو250ج-1419",
    "sourceConfidence": 0.85,
    "extras": {
@@ -13546,7 +13654,12 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت",
+    "فراولة",
+    "زهور",
+    "شوكولاتة"
+   ],
    "sourceUrl": "https://www.batchroastery.com/shop/chelechle-1425",
    "sourceConfidence": 0.85,
    "extras": {
@@ -13576,7 +13689,9 @@
    "originCode": "BR",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل"
+   ],
    "sourceUrl": "https://www.batchroastery.com/shop/بليند-250ج-1416",
    "sourceConfidence": 0.85,
    "extras": {
@@ -13605,7 +13720,12 @@
    "originCode": null,
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "جريب فروت",
+    "ليمون",
+    "برتقال",
+    "كراميل"
+   ],
    "sourceUrl": "https://www.batchroastery.com/shop/هويلا250ج-1418",
    "sourceConfidence": 0.85,
    "extras": {
@@ -13635,7 +13755,9 @@
    "originCode": "CO",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فواكه مجففة"
+   ],
    "sourceUrl": "https://breehant.com/ar/EBjrzD",
    "sourceConfidence": 0.85,
    "extras": {
@@ -13667,7 +13789,11 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "تفاح أخضر",
+    "فراولة",
+    "خوخ"
+   ],
    "sourceUrl": "https://breehant.com/ar/XeyxPPy",
    "sourceConfidence": 0.85,
    "extras": {
@@ -13699,7 +13825,11 @@
    "originCode": "BR",
    "process": "ANAEROBIC",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "بندق",
+    "شوكولاتة",
+    "جوز الهند"
+   ],
    "sourceUrl": "https://breehant.com/ar/bwXRRbX",
    "sourceConfidence": 0.85,
    "extras": {
@@ -13730,7 +13860,13 @@
    "originCode": "YE",
    "process": "ANAEROBIC",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "عنب",
+    "يوسفي",
+    "زبيب",
+    "شوكولاتة",
+    "دبس"
+   ],
    "sourceUrl": "https://breehant.com/ar/XexqAYV",
    "sourceConfidence": 0.85,
    "extras": {
@@ -13789,9 +13925,11 @@
    "roasterNameEn": "Breehant",
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": null,
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "حمضيات"
+   ],
    "sourceUrl": "https://breehant.com/ar/VDYQeXP",
    "sourceConfidence": 0.85,
    "extras": {
@@ -13822,7 +13960,10 @@
    "originCode": "ET",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل",
+    "برتقال"
+   ],
    "sourceUrl": "https://breehant.com/ar/DpXgqgE",
    "sourceConfidence": 0.85,
    "extras": {
@@ -13914,7 +14055,9 @@
    "originCode": "CO",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل"
+   ],
    "sourceUrl": "https://breehant.com/ar/NKRjozX",
    "sourceConfidence": 0.85,
    "extras": {
@@ -14011,7 +14154,12 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "زهور",
+    "شمام",
+    "ياسمين",
+    "أناناس"
+   ],
    "sourceUrl": "https://yahimcups.com/قهوة-بريهانت-هامبيلا-إثيوبيا-مجففة/p48063241",
    "sourceConfidence": 0.75,
    "extras": {
@@ -14077,7 +14225,10 @@
    "originCode": "ID",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "شوكولاتة",
+    "زهور"
+   ],
    "sourceUrl": "https://breehant.com/ar/QzqYEZv",
    "sourceConfidence": 0.85,
    "extras": {
@@ -14108,7 +14259,12 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "شوكولاتة",
+    "برغموت",
+    "كراميل",
+    "ياسمين"
+   ],
    "sourceUrl": "https://yahimcups.com/محمصة-بريهانت-كافا-إثيوبيا-1-كيلو/p1787515115",
    "sourceConfidence": 0.75,
    "extras": {
@@ -14139,7 +14295,9 @@
    "originCode": "CO",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "شوكولاتة داكنة"
+   ],
    "sourceUrl": "https://breehant.com/ar/ydjmgDl",
    "sourceConfidence": 0.85,
    "extras": {
@@ -14170,7 +14328,12 @@
    "originCode": "CR",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "سكر بني",
+    "بندق",
+    "جوز الهند",
+    "أناناس"
+   ],
    "sourceUrl": "https://yahimcups.com/محمصة-بريهانت-سان-اجناسيو-كوستاريكا/p2102472051",
    "sourceConfidence": 0.75,
    "extras": {
@@ -14201,7 +14364,12 @@
    "originCode": "SV",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل",
+    "فانيلا",
+    "عسل",
+    "بندق"
+   ],
    "sourceUrl": "https://yahimcups.com/قهوة-بريهانت-لاماجادا-السلفادور-مجففة/p188139548",
    "sourceConfidence": 0.75,
    "extras": {
@@ -14259,9 +14427,12 @@
    "roasterNameEn": null,
    "originName": "غواتيمالا",
    "originCode": "GT",
-   "process": "OTHER",
+   "process": "ANAEROBIC",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "تفاح أخضر",
+    "فواكه استوائية"
+   ],
    "sourceUrl": "https://geisha.sa/جيجانتي-غواتيمالا/p2067594085",
    "sourceConfidence": 0.85,
    "extras": {
@@ -14294,7 +14465,11 @@
    "originCode": "CR",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "زهور",
+    "توت",
+    "كرز"
+   ],
    "sourceUrl": "https://geisha.sa/لابكايا-كوستاريكا/p1383747428",
    "sourceConfidence": 0.85,
    "extras": {
@@ -14355,7 +14530,13 @@
    "originCode": "UG",
    "process": "OTHER",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت",
+    "أناناس",
+    "كيوي",
+    "يوسفي",
+    "فواكه استوائية"
+   ],
    "sourceUrl": "https://geisha.sa/ماما-بيتي-اوغندا/p1643794456",
    "sourceConfidence": 0.85,
    "extras": {
@@ -14389,7 +14570,9 @@
    "originCode": "CO",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "حمضيات"
+   ],
    "sourceUrl": "https://geisha.sa/ويلا-كولومبيا/p252891377",
    "sourceConfidence": 0.85,
    "extras": {
@@ -14421,7 +14604,9 @@
    "originCode": "ET",
    "process": "OTHER",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت أحمر"
+   ],
    "sourceUrl": "https://geisha.sa/بينتي-نينكا-اثيوبيا/p241940602",
    "sourceConfidence": 0.85,
    "extras": {
@@ -14453,7 +14638,12 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "أناناس",
+    "جريب فروت",
+    "فراولة",
+    "كراميل"
+   ],
    "sourceUrl": "https://geisha.sa/هامبيلا-إثيوبيا/p1097790848",
    "sourceConfidence": 0.85,
    "extras": {
@@ -14485,7 +14675,10 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كرز",
+    "سكر بني"
+   ],
    "sourceUrl": "https://geisha.sa/قوجي-اثيوبيا/p800542385",
    "sourceConfidence": 0.85,
    "extras": {
@@ -14517,7 +14710,9 @@
    "originCode": "BR",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كاكاو"
+   ],
    "sourceUrl": "https://geisha.sa/ساو-باولو-البرازيل/p360791813",
    "sourceConfidence": 0.85,
    "extras": {
@@ -14730,7 +14925,10 @@
    "originCode": "CR",
    "process": "HONEY",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "قرنفل",
+    "فراولة"
+   ],
    "sourceUrl": "https://hasil-r.com/products/كوستاريكا-مارفن",
    "sourceConfidence": 0.85,
    "extras": {
@@ -15230,7 +15428,7 @@
    "roasterNameEn": "W",
    "originName": "إندونيسيا",
    "originCode": "ID",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "خوخ ناضج"
@@ -15343,7 +15541,10 @@
    "originCode": "UG",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فواكه استوائية",
+    "توت أحمر"
+   ],
    "sourceUrl": "https://dapilio.com/ar/nuzori/p590267756",
    "sourceConfidence": 0.85,
    "extras": {
@@ -15378,7 +15579,11 @@
    "originCode": null,
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل",
+    "مكسرات",
+    "شوكولاتة"
+   ],
    "sourceUrl": "https://yahimcups.com/قهوة-دبليو-مزيج-سدرة-فلتر-و-إسبريسو/p669153988",
    "sourceConfidence": 0.75,
    "extras": {
@@ -15572,7 +15777,10 @@
    "originCode": "ET",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت",
+    "شوكولاتة"
+   ],
    "sourceUrl": "https://slope.coffee/اثيوبيا-سيدامو-بينسا-250غ/p1169894017",
    "sourceConfidence": 0.85,
    "extras": {
@@ -15632,7 +15840,10 @@
    "originCode": null,
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل",
+    "شوكولاتة"
+   ],
    "sourceUrl": "https://slope.coffee/مزيج-سلوب-v2-250غ/p106687832",
    "sourceConfidence": 0.85,
    "extras": {
@@ -15662,7 +15873,11 @@
    "originCode": "BR",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "مكسرات",
+    "كراميل",
+    "شوكولاتة"
+   ],
    "sourceUrl": "https://slope.coffee/البرازيل-موجيانا-250غ/p2107367278",
    "sourceConfidence": 0.85,
    "extras": {
@@ -15722,7 +15937,11 @@
    "originCode": "CO",
    "process": "OTHER",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "شوكولاتة",
+    "كراميل",
+    "سكر بني"
+   ],
    "sourceUrl": "https://slope.coffee/كولومبيا-دي-كاف-منزوعة-الكافيين-250غ/p918236591",
    "sourceConfidence": 0.85,
    "extras": {
@@ -15934,7 +16153,7 @@
    "roasterNameEn": "Soil Roastery",
    "originName": "إندونيسيا",
    "originCode": "ID",
-   "process": "OTHER",
+   "process": "NATURAL",
    "roastLevel": null,
    "flavorNotes": [
     "خوخ",
@@ -16146,7 +16365,7 @@
    "roasterNameEn": "Soil Roastery",
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": null,
+   "process": "ANAEROBIC",
    "roastLevel": null,
    "flavorNotes": [
     "جوز الهند",
@@ -16550,7 +16769,10 @@
    "originCode": "ET",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "مانجو",
+    "توت"
+   ],
    "sourceUrl": "https://soutroastery.com/KjxxzvG",
    "sourceConfidence": 0.85,
    "extras": {
@@ -16581,7 +16803,13 @@
    "originCode": "UG",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "مانجو",
+    "مشمش",
+    "عسل",
+    "باشن فروت",
+    "شوكولاتة داكنة"
+   ],
    "sourceUrl": "https://soutroastery.com/nEDbyAn",
    "sourceConfidence": 0.85,
    "extras": {
@@ -16647,7 +16875,10 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت أزرق",
+    "فراولة"
+   ],
    "sourceUrl": "https://soutroastery.com/eNBjjK",
    "sourceConfidence": 0.85,
    "extras": {
@@ -17325,7 +17556,9 @@
    "originCode": "CO",
    "process": "HONEY",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل"
+   ],
    "sourceUrl": "https://abla.sa/ar/santamonica250g/p633683373",
    "sourceConfidence": 0.85,
    "extras": {
@@ -17595,11 +17828,15 @@
    "nameEn": null,
    "roasterName": "محمصة قاف",
    "roasterNameEn": null,
-   "originName": null,
-   "originCode": null,
+   "originName": "إثيوبيا",
+   "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "مشمش",
+    "فانيلا",
+    "رمان"
+   ],
    "sourceUrl": "https://yahimcups.com/محمصة-قاف-اثيويبا-قوتيتي/p1057100089",
    "sourceConfidence": 0.75,
    "extras": {
@@ -17691,7 +17928,10 @@
    "originCode": "GT",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "برتقال",
+    "عسل"
+   ],
    "sourceUrl": "https://qafcoffee.com/ar/guatemalaantigua/p364803457",
    "sourceConfidence": 0.85,
    "extras": {
@@ -17756,7 +17996,9 @@
    "originCode": "CR",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فانيلا"
+   ],
    "sourceUrl": "https://yahimcups.com/قهوة-كفة-ويست-فالي/p2015099021",
    "sourceConfidence": 0.75,
    "extras": {
@@ -17787,7 +18029,11 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كرز",
+    "توفي",
+    "عنب"
+   ],
    "sourceUrl": "https://kiffa.sa/products/بوكو",
    "sourceConfidence": 0.85,
    "extras": {
@@ -17817,7 +18063,11 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت أسود",
+    "عنب",
+    "برقوق"
+   ],
    "sourceUrl": "https://yahimcups.com/قهوة-كفة-سوليمو/p1086180911",
    "sourceConfidence": 0.75,
    "extras": {
@@ -17847,7 +18097,10 @@
    "originCode": "CO",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "تفاح أخضر",
+    "برتقال"
+   ],
    "sourceUrl": "https://yahimcups.com/قهوة-كفة-سـان-جيرمــان/p361979743",
    "sourceConfidence": 0.75,
    "extras": {
@@ -17878,7 +18131,11 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت",
+    "عنب",
+    "فراولة"
+   ],
    "sourceUrl": "https://yahimcups.com/قهوة-كفة-اوراقا-يابيتو/p339537640",
    "sourceConfidence": 0.75,
    "extras": {
@@ -17909,7 +18166,9 @@
    "originCode": "GT",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت"
+   ],
    "sourceUrl": "https://yahimcups.com/قهوة-كفة-سانتا-ريتا/p1301902215",
    "sourceConfidence": 0.75,
    "extras": {
@@ -17939,7 +18198,10 @@
    "originCode": "SV",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "شوكولاتة بالحليب",
+    "كراميل"
+   ],
    "sourceUrl": "https://kiffa.sa/products/SALVADOR",
    "sourceConfidence": 0.85,
    "extras": {
@@ -18008,7 +18270,10 @@
    "originCode": "ET",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "عنب",
+    "توت"
+   ],
    "sourceUrl": "https://yahimcups.com/قهوة-كفة-آنوسورو/p123273196",
    "sourceConfidence": 0.75,
    "extras": {
@@ -18068,7 +18333,9 @@
    "originCode": "IN",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل"
+   ],
    "sourceUrl": "https://kiffa.sa/products/BUDAN",
    "sourceConfidence": 0.85,
    "extras": {
@@ -18098,7 +18365,10 @@
    "originCode": "MX",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "شوكولاتة",
+    "لوز"
+   ],
    "sourceUrl": "https://kiffa.sa/products/MEXICO",
    "sourceConfidence": 0.85,
    "extras": {
@@ -18421,7 +18691,10 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "عنب",
+    "فانيلا"
+   ],
    "sourceUrl": "https://yahimcups.com/قهوة-مصنع-القهوة-إثيوبيا-نانسيبو-250-جرام/p1417300430",
    "sourceConfidence": 0.75,
    "extras": {
@@ -18931,7 +19204,7 @@
    "roasterNameEn": "Milano Lab",
    "originName": "اليمن",
    "originCode": "YE",
-   "process": null,
+   "process": "ANAEROBIC",
    "roastLevel": null,
    "flavorNotes": [],
    "sourceUrl": "https://yahimcups.com/محمصة-ميلانو-لاب-قهوة-اليمن-حراز/p833682020",
@@ -19262,8 +19535,8 @@
    "nameEn": null,
    "roasterName": "محمصة يوف",
    "roasterNameEn": "YOOF",
-   "originName": null,
-   "originCode": null,
+   "originName": "السلفادور",
+   "originCode": "SV",
    "process": null,
    "roastLevel": null,
    "flavorNotes": [],
@@ -19412,7 +19685,7 @@
    "roasterNameEn": "YOOF",
    "originName": "اليمن",
    "originCode": "YE",
-   "process": "OTHER",
+   "process": "ANAEROBIC",
    "roastLevel": null,
    "flavorNotes": [
     "فواكه استوائية",
@@ -19656,8 +19929,8 @@
    "sourceConfidence": 0.85,
    "name": "سلفادور تيكابا",
    "nameEn": null,
-   "originName": null,
-   "originCode": null,
+   "originName": "السلفادور",
+   "originCode": "SV",
    "process": null,
    "roastLevel": null,
    "flavorNotes": [],
@@ -19690,7 +19963,9 @@
    "originCode": null,
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كاكاو"
+   ],
    "sourceUrl": "https://12cups.com.sa/products/cacao-spree-espresso-blend",
    "extras": {
     "brewMethods": [
@@ -19719,7 +19994,9 @@
    "originCode": "CO",
    "process": "OTHER",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "شاي أسود"
+   ],
    "sourceUrl": "https://12cups.com.sa/products/colombia-dcaf-250",
    "extras": {
     "brewMethods": [
@@ -19775,8 +20052,8 @@
    "sourceConfidence": 0.85,
    "name": "سلفادور سانتا انا",
    "nameEn": null,
-   "originName": null,
-   "originCode": null,
+   "originName": "السلفادور",
+   "originCode": "SV",
    "process": null,
    "roastLevel": null,
    "flavorNotes": [],
@@ -19809,7 +20086,11 @@
    "originCode": "CO",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت",
+    "حمضيات",
+    "سكر بني"
+   ],
    "sourceUrl": "https://alwaalalbari.com/ar/دولسي-dulce/p24442914",
    "extras": {
     "variety": [
@@ -19841,7 +20122,12 @@
    "originCode": "BR",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "دبس",
+    "كراميل",
+    "شوكولاتة",
+    "بندق"
+   ],
    "sourceUrl": "https://alwaalalbari.com/ar/كايكسا-caixa/p224598122",
    "extras": {
     "variety": [
@@ -19873,7 +20159,12 @@
    "originCode": "CO",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل",
+    "مكسرات",
+    "شوكولاتة",
+    "شوكولاتة داكنة"
+   ],
    "sourceUrl": "https://alwaalalbari.com/ar/انتيوكيا-antioquia/p348797391",
    "extras": {
     "region": "انتيوكيا",
@@ -19907,7 +20198,12 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كرز",
+    "توت",
+    "خوخ",
+    "ياسمين"
+   ],
    "sourceUrl": "https://alwaalalbari.com/ar/بونا-buna/p505540277",
    "extras": {
     "variety": [
@@ -19939,7 +20235,11 @@
    "originCode": "CO",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "سكر بني",
+    "مكسرات",
+    "شوكولاتة"
+   ],
    "sourceUrl": "https://alwaalalbari.com/ar/بانتيرا-pantera/p518637466",
    "extras": {
     "variety": [
@@ -19971,7 +20271,10 @@
    "originCode": "CO",
    "process": "OTHER",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل",
+    "شوكولاتة داكنة"
+   ],
    "sourceUrl": "https://alwaalalbari.com/ar/ديكاف-decaf/p1874575400",
    "extras": {
     "variety": [
@@ -20037,7 +20340,11 @@
    "originCode": "UG",
    "process": "ANAEROBIC",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فراولة",
+    "أناناس",
+    "فواكه استوائية"
+   ],
    "sourceUrl": "https://alwaalalbari.com/ar/كابوا-kapwa/p449816530",
    "extras": {
     "variety": [
@@ -20069,7 +20376,11 @@
    "originCode": "YE",
    "process": "ANAEROBIC",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت أسود",
+    "فواكه استوائية",
+    "دبس"
+   ],
    "sourceUrl": "https://alwaalalbari.com/ar/حراز-haraz/p1232997306",
    "extras": {
     "variety": [
@@ -20101,7 +20412,10 @@
    "originCode": "CO",
    "process": "ANAEROBIC",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "موز",
+    "عنب"
+   ],
    "sourceUrl": "https://alwaalalbari.com/ar/برونانا-brunana/p1616761120",
    "extras": {
     "region": "أرمينيا",
@@ -20202,7 +20516,7 @@
    "nameEn": "COLOMBIA PEACH",
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "خوخ",
@@ -20235,7 +20549,7 @@
    "nameEn": "BRAZIL RICO",
    "originName": "البرازيل",
    "originCode": "BR",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "بندق",
@@ -20374,7 +20688,7 @@
    "nameEn": "COLOMBIA CANTALOUPE CANDY",
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "شمام وكاندى"
@@ -20785,7 +21099,11 @@
    "originCode": "SA",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فواكه حمراء",
+    "توت",
+    "كرز"
+   ],
    "sourceUrl": "https://sulalat.com/products/alraheeq-natural-saudi-arabia",
    "extras": {
     "brewMethods": [
@@ -21007,7 +21325,11 @@
    "originCode": "CO",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت",
+    "تفاح",
+    "جوافة"
+   ],
    "sourceUrl": "https://sulalat.com/products/rio-bamisa-sl-28-colombia",
    "extras": {
     "brewMethods": [
@@ -21036,7 +21358,9 @@
    "originCode": null,
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "سمسم"
+   ],
    "sourceUrl": "https://sulalat.com/products/wajnaa-blond-decaf",
    "extras": {
     "brewMethods": [
@@ -21063,7 +21387,9 @@
    "originCode": "ET",
    "process": "HONEY",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كاكاو"
+   ],
    "sourceUrl": "https://sulalat.com/products/exit-13-espresso-blend",
    "extras": {
     "brewMethods": [
@@ -21210,7 +21536,10 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت أسود",
+    "خوخ"
+   ],
    "sourceUrl": "https://kiffa.sa/products/بونا-تيرا",
    "extras": {
     "brewMethods": [
@@ -21239,7 +21568,11 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كرز",
+    "توت",
+    "خوخ"
+   ],
    "sourceUrl": "https://kiffa.sa/products/وديسا",
    "extras": {
     "brewMethods": [
@@ -21268,7 +21601,9 @@
    "originCode": "PE",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "مشمش"
+   ],
    "sourceUrl": "https://kiffa.sa/products/جراسياس",
    "extras": {
     "brewMethods": [
@@ -21419,8 +21754,8 @@
    "sourceConfidence": 0.85,
    "name": "بيكو سلفادور + 2 كوب هدية",
    "nameEn": null,
-   "originName": null,
-   "originCode": null,
+   "originName": "السلفادور",
+   "originCode": "SV",
    "process": "WASHED",
    "roastLevel": null,
    "flavorNotes": [
@@ -21727,7 +22062,10 @@
    "originCode": "SV",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل",
+    "تفاح"
+   ],
    "sourceUrl": "https://hoy8store.com/zolxPlx",
    "extras": {
     "brewMethods": [
@@ -21869,7 +22207,11 @@
    "originCode": "CO",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "خوخ",
+    "عسل",
+    "زهور"
+   ],
    "sourceUrl": "https://hoy8store.com/PDbxVpr",
    "extras": {
     "brewMethods": [
@@ -21899,7 +22241,12 @@
    "originCode": "CO",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فراولة",
+    "توت بري",
+    "رمان",
+    "كاكاو"
+   ],
    "sourceUrl": "https://hoy8store.com/rRdQenR",
    "extras": {
     "brewMethods": [
@@ -21929,7 +22276,11 @@
    "originCode": "ET",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "عنب",
+    "تفاح",
+    "جوافة"
+   ],
    "sourceUrl": "https://hoy8store.com/ABEzDYn",
    "extras": {
     "brewMethods": [
@@ -21959,7 +22310,11 @@
    "originCode": "CR",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كاكاو",
+    "توت",
+    "كراميل"
+   ],
    "sourceUrl": "https://hoy8store.com/pAdlqNX",
    "extras": {
     "brewMethods": [
@@ -21989,7 +22344,11 @@
    "originCode": "UG",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فراولة",
+    "مشمش",
+    "توت أحمر"
+   ],
    "sourceUrl": "https://hoy8store.com/azAEaOl",
    "extras": {
     "brewMethods": [
@@ -22019,7 +22378,10 @@
    "originCode": null,
    "process": "HONEY",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "بندق",
+    "كراميل"
+   ],
    "sourceUrl": "https://hoy8store.com/jZKyyxa",
    "extras": {
     "brewMethods": [
@@ -22186,8 +22548,8 @@
    "sourceConfidence": 0.85,
    "name": "مجفف لاهوائي",
    "nameEn": null,
-   "originName": null,
-   "originCode": null,
+   "originName": "السلفادور",
+   "originCode": "SV",
    "process": "ANAEROBIC",
    "roastLevel": null,
    "flavorNotes": [
@@ -22262,7 +22624,12 @@
    "originCode": "CO",
    "process": "ANAEROBIC",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "عنب",
+    "زبيب",
+    "فواكه مجففة",
+    "أناناس"
+   ],
    "sourceUrl": "https://aqahi.com/ar/V60KRM250-كَرْم-|-قهوة-فاكهية-|-معالجة-لاهوائية",
    "extras": {
     "variety": [
@@ -22295,7 +22662,12 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "موز",
+    "كراميل",
+    "تفاح أخضر",
+    "فراولة"
+   ],
    "sourceUrl": "https://aqahi.com/ar/250V60BUNNA-بُنَّا-|-قهوة-إثيوبية-هامبيلا-|-مجففة",
    "extras": {
     "variety": [
@@ -22767,7 +23139,9 @@
    "originCode": "YE",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "يوسفي"
+   ],
    "sourceUrl": "https://ananasroastery.com/products/جنى-حراز-250G",
    "extras": {
     "brewMethods": [
@@ -22797,7 +23171,10 @@
    "originCode": null,
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "برتقال",
+    "قرفة"
+   ],
    "sourceUrl": "https://ananasroastery.com/products/أفضل-محصول-نبيذ-سينامون",
    "extras": {
     "brewMethods": [
@@ -22827,7 +23204,10 @@
    "originCode": "BR",
    "process": "ANAEROBIC",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل",
+    "شوكولاتة"
+   ],
    "sourceUrl": "https://ananasroastery.com/products/شوكوليطه-برازيلي-لاهوائي-ويفر-250G",
    "extras": {
     "brewMethods": [
@@ -22855,9 +23235,11 @@
    "nameEn": null,
    "originName": null,
    "originCode": null,
-   "process": null,
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "ليتشي"
+   ],
    "sourceUrl": "https://ananasroastery.com/products/أفضل-انفيوجن-لوليبوب",
    "extras": {
     "brewMethods": [
@@ -22887,7 +23269,9 @@
    "originCode": null,
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كرز"
+   ],
    "sourceUrl": "https://ananasroastery.com/products/Karaza-125G",
    "extras": {
     "brewMethods": [
@@ -22915,9 +23299,11 @@
    "nameEn": null,
    "originName": null,
    "originCode": null,
-   "process": null,
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "زبيب"
+   ],
    "sourceUrl": "https://ananasroastery.com/products/أفضل-محصول-انفيوجن-زبيب-رم",
    "extras": {
     "brewMethods": [
@@ -22977,7 +23363,9 @@
    "originCode": null,
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "تفاح"
+   ],
    "sourceUrl": "https://ananasroastery.com/products/يلو-ايكاتو-250g",
    "extras": {
     "brewMethods": [
@@ -23005,9 +23393,11 @@
    "nameEn": null,
    "originName": null,
    "originCode": null,
-   "process": null,
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "عنب"
+   ],
    "sourceUrl": "https://ananasroastery.com/products/سلاف-افضل-انفيوجن-عنب-125جم",
    "extras": {
     "brewMethods": [
@@ -23065,9 +23455,11 @@
    "nameEn": null,
    "originName": null,
    "originCode": null,
-   "process": null,
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فراولة"
+   ],
    "sourceUrl": "https://ananasroastery.com/products/مربى-محصول-انفيوجن-فاخرة",
    "extras": {
     "brewMethods": [
@@ -23097,7 +23489,11 @@
    "originCode": "CO",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت",
+    "برقوق",
+    "شوكولاتة"
+   ],
    "sourceUrl": "https://ananasroastery.com/products/ملك-كولومبي---كولومبيا",
    "extras": {
     "brewMethods": [
@@ -23123,11 +23519,13 @@
    "sourceConfidence": 0.85,
    "name": "ماجدة",
    "nameEn": null,
-   "originName": null,
-   "originCode": null,
+   "originName": "السلفادور",
+   "originCode": "SV",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "بندق"
+   ],
    "sourceUrl": "https://ananasroastery.com/products/ماجدة-250g",
    "extras": {
     "brewMethods": [
@@ -23157,7 +23555,11 @@
    "originCode": null,
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فواكه استوائية",
+    "جوافة",
+    "شوكولاتة داكنة"
+   ],
    "sourceUrl": "https://ananasroastery.com/products/بالما-250g",
    "extras": {
     "brewMethods": [
@@ -23217,7 +23619,13 @@
    "originCode": null,
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "أناناس",
+    "بطيخ",
+    "نعناع",
+    "ليمون",
+    "شوكولاتة"
+   ],
    "sourceUrl": "https://ananasroastery.com/products/jahi-watermelon-coffee",
    "extras": {
     "brewMethods": [
@@ -23243,11 +23651,13 @@
    "sourceConfidence": 0.85,
    "name": "جوز هند",
    "nameEn": null,
-   "originName": null,
-   "originCode": null,
+   "originName": "الهند",
+   "originCode": "IN",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "جوز الهند"
+   ],
    "sourceUrl": "https://ananasroastery.com/products/أفضل-محصول-كوكونت-نارجيل",
    "extras": {
     "brewMethods": [
@@ -23277,7 +23687,10 @@
    "originCode": "SV",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فواكه استوائية",
+    "جوز الهند"
+   ],
    "sourceUrl": "https://ananasroastery.com/products/ANR-SMRA-250G",
    "extras": {
     "brewMethods": [
@@ -23307,7 +23720,9 @@
    "originCode": null,
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "قرنفل"
+   ],
    "sourceUrl": "https://ananasroastery.com/products/مهيله",
    "extras": {
     "brewMethods": [
@@ -23337,7 +23752,10 @@
    "originCode": null,
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "ورد",
+    "زهور"
+   ],
    "sourceUrl": "https://ananasroastery.com/products/فلاورز-الفاخر-125g",
    "extras": {
     "brewMethods": [
@@ -23482,9 +23900,13 @@
    "nameEn": "Summer Slice Colombia",
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": null,
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "مانجو",
+    "أناناس",
+    "باشن فروت"
+   ],
    "sourceUrl": "https://outoflineksa.com/products/سمر-سلايس-كولومبيا-summer-slice-colombia",
    "extras": {
     "brewMethods": [
@@ -23511,7 +23933,7 @@
    "nameEn": "Taif Rose Colombia",
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": null,
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [],
    "sourceUrl": "https://outoflineksa.com/products/الورد-الطائفي-taifrose",
@@ -23542,7 +23964,10 @@
    "originCode": "CO",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "عسل",
+    "لوز"
+   ],
    "sourceUrl": "https://outoflineksa.com/products/اكسيلسو-كولومبيا",
    "extras": {
     "brewMethods": [
@@ -23692,7 +24117,12 @@
    "originCode": "YE",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "عنب",
+    "فواكه حمراء",
+    "قرنفل",
+    "زهور"
+   ],
    "sourceUrl": "https://oro-sa.com/ar/wAYDKrX",
    "extras": {
     "brewMethods": [
@@ -23722,7 +24152,12 @@
    "originCode": "CO",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "ورد",
+    "ياسمين",
+    "عنب",
+    "لافندر"
+   ],
    "sourceUrl": "https://oro-sa.com/ar/znZqbd",
    "extras": {
     "brewMethods": [
@@ -23786,7 +24221,10 @@
    "originCode": "ET",
    "process": "OTHER",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "مانجو",
+    "فواكه استوائية"
+   ],
    "sourceUrl": "https://oro-sa.com/ar/PDDbRNm",
    "extras": {
     "variety": [
@@ -23822,7 +24260,10 @@
    "originCode": "CR",
    "process": "OTHER",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "مانجو",
+    "فواكه استوائية"
+   ],
    "sourceUrl": "https://oro-sa.com/ar/lGYVXjg",
    "extras": {
     "variety": [
@@ -23859,7 +24300,10 @@
    "originCode": "BR",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "مكسرات",
+    "شوكولاتة"
+   ],
    "sourceUrl": "https://oro-sa.com/ar/bQppKj",
    "extras": {
     "brewMethods": [
@@ -23925,7 +24369,11 @@
    "originCode": "CO",
    "process": "OTHER",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "شوكولاتة",
+    "بندق",
+    "سكر بني"
+   ],
    "sourceUrl": "https://oro-sa.com/ar/ZqjwRwO",
    "extras": {
     "variety": [
@@ -24031,7 +24479,10 @@
    "originCode": "SV",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فواكه استوائية",
+    "مانجو"
+   ],
    "sourceUrl": "https://oro-sa.com/ar/XzoOYgA",
    "extras": {
     "variety": [
@@ -24170,7 +24621,11 @@
    "originCode": "SA",
    "process": "ANAEROBIC",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "تين",
+    "توت",
+    "برقوق"
+   ],
    "sourceUrl": "https://oro-sa.com/ar/ydNYWrR",
    "extras": {
     "brewMethods": [
@@ -24405,7 +24860,7 @@
    "nameEn": "Blueberry",
    "originName": "إندونيسيا",
    "originCode": "ID",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "توت أزرق",
@@ -24444,7 +24899,7 @@
    "nameEn": "Mojito",
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "نعناع",
@@ -24604,7 +25059,10 @@
    "originCode": "RW",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "برتقال",
+    "تفاح"
+   ],
    "sourceUrl": "https://idmicoffee.com/ar/راواندا-،-قيشا-موف-rwanda-gishmuv/p655884917",
    "extras": {
     "brewMethods": [
@@ -24634,7 +25092,10 @@
    "originCode": "ID",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت",
+    "قرفة"
+   ],
    "sourceUrl": "https://idmicoffee.com/ar/اندونيسيا-،-جافا-مجففة-indonesia-java/p1666130263",
    "extras": {
     "brewMethods": [
@@ -24664,7 +25125,11 @@
    "originCode": "BR",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "شوكولاتة داكنة",
+    "ياسمين",
+    "يوسفي"
+   ],
    "sourceUrl": "https://idmicoffee.com/ar/البرازيل-موجيانا-brazil-mogiana/p1839042467",
    "extras": {
     "region": "موجيانا",
@@ -24803,7 +25268,9 @@
    "originCode": null,
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "قرنفل"
+   ],
    "sourceUrl": "https://idmicoffee.com/ar/أجاْ-قهوة-سعودية-درجة-تحميص-شمالية-aja-saudi-coffee-ramadan-edition-500g/p1850862382",
    "extras": {
     "brewMethods": [
@@ -25311,7 +25778,7 @@
    "nameEn": null,
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "موز",
@@ -25376,7 +25843,10 @@
    "originCode": null,
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فواكه استوائية",
+    "أناناس"
+   ],
    "sourceUrl": "https://www.batchroastery.com/shop/مانانانسي-250ج-1417",
    "extras": {
     "brewMethods": [
@@ -25405,7 +25875,12 @@
    "originCode": null,
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فراولة",
+    "عنب",
+    "جوافة",
+    "قرفة"
+   ],
    "sourceUrl": "https://www.batchroastery.com/shop/لافريسا-250ج-1421",
    "extras": {
     "brewMethods": [
@@ -25434,7 +25909,11 @@
    "originCode": "SA",
    "process": "ANAEROBIC",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "تين",
+    "زبيب",
+    "شاي أسود"
+   ],
    "sourceUrl": "https://breehant.com/ar/mQNYEKW",
    "extras": {
     "brewMethods": [
@@ -25463,7 +25942,12 @@
    "originCode": null,
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "زهور",
+    "شمام",
+    "ياسمين",
+    "أناناس"
+   ],
    "sourceUrl": "https://breehant.com/ar/OqOzWmz",
    "extras": {
     "brewMethods": [
@@ -25527,7 +26011,10 @@
    "originCode": "ET",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "مشمش",
+    "توت أحمر"
+   ],
    "sourceUrl": "https://geisha.sa/بانكو-قوتيتي-اثيوبيا/p1505658313",
    "extras": {
     "brewMethods": [
@@ -25587,7 +26074,10 @@
    "originCode": null,
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل",
+    "كرز"
+   ],
    "sourceUrl": "https://hasil-r.com/products/محصول-كراميل",
    "extras": {
     "brewMethods": [
@@ -25616,7 +26106,10 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت أزرق",
+    "فراولة"
+   ],
    "sourceUrl": "https://hasil-r.com/products/اثيوبيا-هامبيلا",
    "extras": {
     "brewMethods": [
@@ -25645,7 +26138,10 @@
    "originCode": "CO",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كشمش",
+    "فواكه استوائية"
+   ],
    "sourceUrl": "https://hasil-r.com/products/كولومبيا-ويلا",
    "extras": {
     "brewMethods": [
@@ -25671,7 +26167,7 @@
    "nameEn": null,
    "originName": "المكسيك",
    "originCode": "MX",
-   "process": "OTHER",
+   "process": "ANAEROBIC",
    "roastLevel": null,
    "flavorNotes": [
     "تين",
@@ -25706,7 +26202,10 @@
    "originCode": "CO",
    "process": "HONEY",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فراولة",
+    "رمان"
+   ],
    "sourceUrl": "https://hasil-r.com/products/كولومبيا-فروتيلا",
    "extras": {
     "brewMethods": [
@@ -25732,11 +26231,15 @@
    "sourceConfidence": 0.85,
    "name": "سـلفـادور - بـونـا فيـستـا",
    "nameEn": null,
-   "originName": null,
-   "originCode": null,
+   "originName": "السلفادور",
+   "originCode": "SV",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل",
+    "شوكولاتة داكنة",
+    "سكر بني"
+   ],
    "sourceUrl": "https://hasil-r.com/products/سـلفـادور-بـونـا-فيـستـا",
    "extras": {
     "brewMethods": [
@@ -25760,11 +26263,14 @@
    "sourceConfidence": 0.85,
    "name": "صيني",
    "nameEn": null,
-   "originName": null,
-   "originCode": null,
+   "originName": "الصين",
+   "originCode": "CN",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "عنب أحمر",
+    "سكر بني"
+   ],
    "sourceUrl": "https://hasil-r.com/products/صيني",
    "extras": {
     "brewMethods": [
@@ -25790,9 +26296,13 @@
    "nameEn": null,
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": null,
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "عنب",
+    "مشمش",
+    "زبيب"
+   ],
    "sourceUrl": "https://hasil-r.com/products/كولومبيا-عنب",
    "extras": {
     "brewMethods": [
@@ -25821,7 +26331,10 @@
    "originCode": "CO",
    "process": "ANAEROBIC",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "لافندر",
+    "جريب فروت"
+   ],
    "sourceUrl": "https://hasil-r.com/products/لاڤندر",
    "extras": {
     "brewMethods": [
@@ -25847,9 +26360,12 @@
    "nameEn": null,
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": null,
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "أناناس",
+    "خوخ"
+   ],
    "sourceUrl": "https://hasil-r.com/products/كولومبيا-أناناس",
    "extras": {
     "brewMethods": [
@@ -25877,7 +26393,10 @@
    "originCode": "ID",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فراولة",
+    "موز"
+   ],
    "sourceUrl": "https://hasil-r.com/products/اندونيسيا-بالي",
    "extras": {
     "brewMethods": [
@@ -25902,9 +26421,12 @@
    "nameEn": null,
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": null,
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "أناناس",
+    "بسكويت"
+   ],
    "sourceUrl": "https://hasil-r.com/products/كولومبيا-كوكنت",
    "extras": {
     "brewMethods": [
@@ -25932,7 +26454,9 @@
    "originCode": "CO",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "باشن فروت"
+   ],
    "sourceUrl": "https://hasil-r.com/products/كولومبيا-باشن-فروت",
    "extras": {
     "brewMethods": [
@@ -26061,7 +26585,9 @@
    "originCode": "PA",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كرز"
+   ],
    "sourceUrl": "https://slope.coffee/بنما-فينكا-ريفيلا-250غ/p1000894709",
    "extras": {
     "brewMethods": [
@@ -26091,7 +26617,9 @@
    "originCode": "CO",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "خوخ"
+   ],
    "sourceUrl": "https://slope.coffee/كولومبيا-هويلا-ميلو-يلو-250غ/p1087636730",
    "extras": {
     "brewMethods": [
@@ -26121,7 +26649,9 @@
    "originCode": "YE",
    "process": "ANAEROBIC",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فواكه استوائية"
+   ],
    "sourceUrl": "https://slope.coffee/اليمن-حراز-عبدالله-حسن-250غ/p355589973",
    "extras": {
     "brewMethods": [
@@ -26151,7 +26681,10 @@
    "originCode": "SV",
    "process": "ANAEROBIC",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت أحمر",
+    "كاكاو"
+   ],
    "sourceUrl": "https://slope.coffee/السلفادور-تيكابا-روميرو-250غ/p589830164",
    "extras": {
     "brewMethods": [
@@ -26181,7 +26714,10 @@
    "originCode": "CO",
    "process": "HONEY",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "فراولة",
+    "فواكه حمراء"
+   ],
    "sourceUrl": "https://slope.coffee/كولومبيا-توليما-فريسا-250غ/p1893888930",
    "extras": {
     "brewMethods": [
@@ -26211,7 +26747,9 @@
    "originCode": "CR",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل"
+   ],
    "sourceUrl": "https://slope.coffee/كوستاريكا-سان-اغناسيو-250غ/p1434154634",
    "extras": {
     "brewMethods": [
@@ -26241,7 +26779,10 @@
    "originCode": "CO",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "عنب",
+    "توت"
+   ],
    "sourceUrl": "https://slope.coffee/كولومبيا-توليما-كلوديا-250غ/p1983755269",
    "extras": {
     "brewMethods": [
@@ -26272,7 +26813,11 @@
    "originCode": "CO",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "عنب أحمر",
+    "كرز",
+    "فانيلا"
+   ],
    "sourceUrl": "https://slope.coffee/كولومبيا-انتيوكيا-سويدا-250غ/p1141577464",
    "extras": {
     "brewMethods": [
@@ -26302,7 +26847,10 @@
    "originCode": "PE",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "أناناس",
+    "كرز"
+   ],
    "sourceUrl": "https://slope.coffee/البيرو-ليما-250غ/p1610424859",
    "extras": {
     "brewMethods": [
@@ -26332,7 +26880,10 @@
    "originCode": "CO",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "شوكولاتة داكنة",
+    "كراميل"
+   ],
    "sourceUrl": "https://slope.coffee/كولومبيا-انتيوكيا-اروكا-250غ/p1128000109",
    "extras": {
     "brewMethods": [
@@ -26362,7 +26913,11 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت أسود",
+    "كرز",
+    "عنب"
+   ],
    "sourceUrl": "https://slope.coffee/اثيوبيا-نانسيبو-250غ/p1682126655",
    "extras": {
     "brewMethods": [
@@ -26392,7 +26947,11 @@
    "originCode": "CR",
    "process": "HONEY",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "برقوق",
+    "توت",
+    "زبيب"
+   ],
    "sourceUrl": "https://slope.coffee/كوستاريكا-لاتوري-جيشا-125غ/p2142728622",
    "extras": {
     "brewMethods": [
@@ -26422,7 +26981,10 @@
    "originCode": "SA",
    "process": "ANAEROBIC",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "عنب أسود",
+    "برقوق"
+   ],
    "sourceUrl": "https://slope.coffee/السعودية-جبال-العارضة/p634772233",
    "extras": {
     "brewMethods": [
@@ -27192,7 +27754,9 @@
    "originCode": "CO",
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "عنب"
+   ],
    "sourceUrl": "https://doharoasters.com/products/grape",
    "extras": {
     "brewMethods": [
@@ -27219,7 +27783,7 @@
    "nameEn": null,
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "HONEY",
    "roastLevel": null,
    "flavorNotes": [],
    "sourceUrl": "https://doharoasters.com/products/بنما-جيشا-محصول-فاخر",
@@ -27460,7 +28024,10 @@
    "originCode": "ET",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "برتقال",
+    "يوسفي"
+   ],
    "sourceUrl": "https://abla.sa/ar/ethiopia-banko-250g/p1567002072",
    "extras": {
     "brewMethods": [
@@ -27874,8 +28441,8 @@
    "sourceConfidence": 0.85,
    "name": "الهندوراس سان كارلوس",
    "nameEn": null,
-   "originName": null,
-   "originCode": null,
+   "originName": "هندوراس",
+   "originCode": "HN",
    "process": "WASHED",
    "roastLevel": null,
    "flavorNotes": [
@@ -28577,9 +29144,9 @@
    "sourceConfidence": 0.85,
    "name": "مونتي كارلوس",
    "nameEn": null,
-   "originName": null,
-   "originCode": null,
-   "process": "OTHER",
+   "originName": "السلفادور",
+   "originCode": "SV",
+   "process": "ANAEROBIC",
    "roastLevel": null,
    "flavorNotes": [
     "فاكهية",
@@ -28617,7 +29184,7 @@
    "nameEn": null,
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "شوكلاته داكنة",
@@ -28714,7 +29281,7 @@
    "nameEn": null,
    "originName": "السعودية",
    "originCode": "SA",
-   "process": "OTHER",
+   "process": "ANAEROBIC",
    "roastLevel": null,
    "flavorNotes": [
     "عجوة تمر",
@@ -28831,7 +29398,7 @@
    "nameEn": null,
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "حبيبات الفاكهة",
@@ -28872,7 +29439,7 @@
    "nameEn": null,
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "مشمش",
@@ -28912,7 +29479,7 @@
    "nameEn": null,
    "originName": null,
    "originCode": null,
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "شوكلاتة",
@@ -29170,7 +29737,7 @@
    "nameEn": null,
    "originName": "السعودية",
    "originCode": "SA",
-   "process": "OTHER",
+   "process": "ANAEROBIC",
    "roastLevel": null,
    "flavorNotes": [
     "ورد طائفي",
@@ -29208,7 +29775,7 @@
    "nameEn": null,
    "originName": "السعودية",
    "originCode": "SA",
-   "process": "OTHER",
+   "process": "ANAEROBIC",
    "roastLevel": null,
    "flavorNotes": [
     "شمام",
@@ -29246,7 +29813,7 @@
    "nameEn": null,
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "مانجو",
@@ -29470,7 +30037,10 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "عنب",
+    "فانيلا"
+   ],
    "sourceUrl": "https://tcoffeef.com/إثيوبيا-نانسيبو-ethiopia-nensebo-250g/p261249784",
    "extras": {
     "region": "سيدامو",
@@ -29504,7 +30074,9 @@
    "originCode": null,
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كاكاو"
+   ],
    "sourceUrl": "https://tcoffeef.com/بابوا-غينيا-جاك-سبارو-papua-guinea-jack-sparrow-250g/p2096769270",
    "extras": {
     "region": "جواكيا",
@@ -30118,7 +30690,7 @@
    "nameEn": null,
    "originName": "اليمن",
    "originCode": "YE",
-   "process": null,
+   "process": "ANAEROBIC",
    "roastLevel": null,
    "flavorNotes": [],
    "sourceUrl": "https://mlnlab.com/محصول-يمني/p1981760255",
@@ -30184,7 +30756,11 @@
    "originCode": null,
    "process": null,
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "عنب",
+    "فراولة",
+    "بطيخ"
+   ],
    "sourceUrl": "https://yoof.co/ar/azOAAyg",
    "extras": {
     "brewMethods": [
@@ -30212,7 +30788,7 @@
    "nameEn": null,
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "فرولة",
@@ -30350,7 +30926,7 @@
    "nameEn": null,
    "originName": "كولومبيا",
    "originCode": "CO",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
    "flavorNotes": [
     "فواكه صفراء",
@@ -30634,7 +31210,11 @@
    "originCode": "SV",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت",
+    "عنب",
+    "شوكولاتة داكنة"
+   ],
    "sourceUrl": "https://asante-store.com/products/سانتا-روز---سيلڤادور",
    "extras": {
     "brewMethods": [
@@ -30693,7 +31273,10 @@
    "originCode": "CR",
    "process": "HONEY",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "شوكولاتة",
+    "فواكه مجففة"
+   ],
    "sourceUrl": "https://asante-store.com/products/كوستاريكا-كارلوس",
    "extras": {
     "brewMethods": [
@@ -30884,7 +31467,10 @@
    "originCode": "BR",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "شوكولاتة",
+    "لوز"
+   ],
    "sourceUrl": "https://asante-store.com/products/برازيلي-بوربون",
    "extras": {
     "brewMethods": [
@@ -31042,7 +31628,11 @@
    "originCode": "CO",
    "process": "ANAEROBIC",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "عنب",
+    "توت",
+    "لافندر"
+   ],
    "sourceUrl": "https://soutroastery.com/ngyAlYq",
    "extras": {
     "brewMethods": [
@@ -31176,9 +31766,12 @@
    "nameEn": null,
    "originName": "إندونيسيا",
    "originCode": "ID",
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "خوخ",
+    "باشن فروت"
+   ],
    "sourceUrl": "https://soutroastery.com/lvWayby",
    "extras": {
     "brewMethods": [
@@ -31204,11 +31797,13 @@
    "sourceConfidence": 0.85,
    "name": "موهيتو",
    "nameEn": null,
-   "originName": null,
-   "originCode": null,
-   "process": "OTHER",
+   "originName": "الهند",
+   "originCode": "IN",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "جوز الهند"
+   ],
    "sourceUrl": "https://soutroastery.com/lvWaldj",
    "extras": {
     "brewMethods": [
@@ -31236,9 +31831,11 @@
    "nameEn": null,
    "originName": null,
    "originCode": null,
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "بطيخ"
+   ],
    "sourceUrl": "https://soutroastery.com/ngabpZy",
    "extras": {
     "brewMethods": [
@@ -31266,9 +31863,11 @@
    "nameEn": null,
    "originName": null,
    "originCode": null,
-   "process": "OTHER",
+   "process": "EXPERIMENTAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "باشن فروت"
+   ],
    "sourceUrl": "https://soutroastery.com/vAYQlOz",
    "extras": {
     "brewMethods": [
@@ -31368,7 +31967,13 @@
    "originCode": "ET",
    "process": "HONEY",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت أزرق",
+    "مانجو",
+    "خوخ",
+    "لافندر",
+    "فواكه استوائية"
+   ],
    "sourceUrl": "https://soutroastery.com/YzjGvoq",
    "extras": {
     "brewMethods": [
@@ -31399,7 +32004,11 @@
    "originCode": "CO",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل",
+    "سكر بني",
+    "لوز"
+   ],
    "sourceUrl": "https://soutroastery.com/XzZYnoD",
    "extras": {
     "brewMethods": [
@@ -31497,7 +32106,9 @@
    "originCode": "CO",
    "process": "OTHER",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كاكاو"
+   ],
    "sourceUrl": "https://soutroastery.com/XebeDOv",
    "extras": {
     "brewMethods": [
@@ -31555,7 +32166,7 @@
    "nameEn": null,
    "originName": null,
    "originCode": null,
-   "process": "OTHER",
+   "process": "ANAEROBIC",
    "roastLevel": null,
    "flavorNotes": [
     "قريب فروت",
@@ -31590,7 +32201,11 @@
    "originCode": "CO",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل",
+    "ليمون",
+    "شوكولاتة"
+   ],
    "sourceUrl": "https://soutroastery.com/xArVOpa",
    "extras": {
     "brewMethods": [
@@ -31656,7 +32271,9 @@
    "originCode": "BR",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "شوكولاتة"
+   ],
    "sourceUrl": "https://soutroastery.com/alOmWW",
    "extras": {
     "brewMethods": [
@@ -31686,7 +32303,11 @@
    "originCode": "CR",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت",
+    "مشمش",
+    "لوز"
+   ],
    "sourceUrl": "https://soutroastery.com/AzvoRRe",
    "extras": {
     "brewMethods": [
@@ -31745,7 +32366,11 @@
    "originCode": "UG",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "قصب السكر",
+    "شوكولاتة داكنة",
+    "برقوق"
+   ],
    "sourceUrl": "https://soutroastery.com/wlOemg",
    "extras": {
     "brewMethods": [
@@ -31774,7 +32399,11 @@
    "originCode": null,
    "process": "OTHER",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "مكسرات",
+    "كراميل",
+    "شوكولاتة"
+   ],
    "sourceUrl": "https://soutroastery.com/NKWXoOb",
    "extras": {
     "brewMethods": [
@@ -31803,7 +32432,10 @@
    "originCode": "ET",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "جريب فروت",
+    "كيوي"
+   ],
    "sourceUrl": "https://soutroastery.com/ylGjDD",
    "extras": {
     "brewMethods": [
@@ -31833,7 +32465,13 @@
    "originCode": null,
    "process": "OTHER",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "كراميل",
+    "مكسرات",
+    "قصب السكر",
+    "شوكولاتة",
+    "برقوق"
+   ],
    "sourceUrl": "https://soutroastery.com/nEdbAKe",
    "extras": {
     "brewMethods": [
@@ -31858,11 +32496,15 @@
    "sourceConfidence": 0.85,
    "name": "كيبوكو",
    "nameEn": null,
-   "originName": null,
-   "originCode": null,
+   "originName": "رواندا",
+   "originCode": "RW",
    "process": "NATURAL",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "عنب",
+    "قصب السكر",
+    "كاكاو"
+   ],
    "sourceUrl": "https://soutroastery.com/mQeRAYE",
    "extras": {
     "brewMethods": [
@@ -31891,7 +32533,10 @@
    "originCode": "RW",
    "process": "WASHED",
    "roastLevel": null,
-   "flavorNotes": [],
+   "flavorNotes": [
+    "توت",
+    "فراولة"
+   ],
    "sourceUrl": "https://soutroastery.com/ZYyQNvD",
    "extras": {
     "brewMethods": [
