@@ -137,17 +137,25 @@ function group(cards: { roaster: string; missing: Missing[]; imageUrl: string | 
   return [...by.values()].sort((a, b) => b.count - a.count || a.roaster.localeCompare(b.roaster, "ar"));
 }
 
-/** What waits, roaster by roaster. Pending rows carry no picture (signing hundreds would be slow). */
-export async function queueRoasters(prisma: PrismaClient, kind: QueueKind): Promise<RoasterGroup[]> {
+/** What waits, roaster by roaster; for suggestions, one photo signed per roaster (not hundreds). */
+export async function queueRoasters(prisma: PrismaClient, kind: QueueKind, store: PhotoStore | null = null): Promise<RoasterGroup[]> {
   if (kind === "pending") {
     const rows = await prisma.mobileCoffeeSubmission.findMany({
       where: { status: "PENDING" },
       select: { roasterName: true, originName: true, process: true, flavorNotes: true, photoPath: true },
     });
-    return group(rows.map((r) => ({
+    const groups = group(rows.map((r) => ({
       roaster: r.roasterName, imageUrl: null,
       missing: missingOf({ originCode: null, originName: r.originName, process: r.process, flavorNotes: r.flavorNotes, hasPhoto: !!r.photoPath }),
     })));
+    if (!store) return groups;
+    const photoOf = new Map<string, string>();
+    for (const r of rows) if (r.photoPath && !photoOf.has(r.roasterName)) photoOf.set(r.roasterName, r.photoPath);
+    await Promise.all(groups.map(async (g) => {
+      const path = photoOf.get(g.roaster);
+      if (path) g.imageUrl = await store.signedUrl(path).catch(() => null);
+    }));
+    return groups;
   }
   const lots = await prisma.coffeeLot.findMany({ where: INCOMPLETE_LOT, select: LOT_SELECT });
   return group(lots.map((l) => {

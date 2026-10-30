@@ -25,6 +25,12 @@ describe("queueRoasters", () => {
     const groups = await queueRoasters(prisma, "pending");
     expect(groups.map((g) => g.roaster)).toEqual(["أودن", "محمصة دبليو"]);
     expect(groups[0]).toMatchObject({ count: 2, noOrigin: 1, noProcess: 1, noNotes: 1, noPhoto: 1 });
+    expect(groups[0].imageUrl).toBeNull();
+
+    const store = { put: vi.fn(), publish: vi.fn(), signedUrl: vi.fn(async (p: string) => `https://signed/${p}`) };
+    const withPhotos = await queueRoasters(prisma, "pending", store);
+    expect(withPhotos.map((g) => g.imageUrl)).toEqual([`https://signed/${sub().photoPath}`, `https://signed/${sub().photoPath}`]);
+    expect(store.signedUrl).toHaveBeenCalledTimes(2);
   });
 
   it("counts a blend origin and an OTHER process as missing on published coffees", async () => {
