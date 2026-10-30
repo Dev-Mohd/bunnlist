@@ -56,7 +56,10 @@ export interface QueueCard {
   name: string;
   nameEn: string | null;
   roasterName: string;
+  roasterNameEn: string | null;
   imageUrl: string | null;
+  /** A suggestion whose photo was edited or deleted, with its original kept to restore. */
+  hasOriginalPhoto: boolean;
   originName: string | null;
   originCode: string | null;
   process: string | null;
@@ -89,33 +92,34 @@ function missingOf(c: { originCode: string | null; originName: string | null; pr
 
 const LOT_SELECT = {
   id: true, nameAr: true, name: true, imageUrl: true, process: true, roastLevel: true, flavorNotes: true, descriptionAr: true,
-  roaster: { select: { nameAr: true } }, originCountry: { select: { isoCode: true, nameAr: true } },
+  roaster: { select: { nameAr: true, name: true } }, originCountry: { select: { isoCode: true, nameAr: true } },
 } as const;
 
 type LotRow = {
   id: string; nameAr: string; name: string; imageUrl: string | null; process: string; roastLevel: string | null; flavorNotes: string[];
-  descriptionAr: string | null; roaster: { nameAr: string } | null; originCountry: { isoCode: string; nameAr: string } | null;
+  descriptionAr: string | null; roaster: { nameAr: string; name: string } | null; originCountry: { isoCode: string; nameAr: string } | null;
 };
 
 function lotCard(l: LotRow): QueueCard {
   const card = {
     kind: "lot" as const, id: l.id, name: l.nameAr, nameEn: l.name, roasterName: l.roaster?.nameAr ?? "",
-    imageUrl: l.imageUrl, originName: l.originCountry?.nameAr ?? null, originCode: l.originCountry?.isoCode ?? null,
+    roasterNameEn: l.roaster?.name || null, imageUrl: l.imageUrl, hasOriginalPhoto: false, originName: l.originCountry?.nameAr ?? null, originCode: l.originCountry?.isoCode ?? null,
     process: l.process, roastLevel: l.roastLevel, flavorNotes: l.flavorNotes, descriptionAr: l.descriptionAr, sourceUrl: null,
   };
   return { ...card, missing: missingOf({ ...card, hasPhoto: !!l.imageUrl }) };
 }
 
 type SubmissionRow = {
-  id: string; name: string; nameEn: string | null; roasterName: string; originName: string | null; process: string | null;
+  id: string; name: string; nameEn: string | null; roasterName: string; roasterNameEn: string | null; originName: string | null; process: string | null;
   roastLevel: string | null; flavorNotes: string[]; photoPath: string | null; sourceUrl: string | null; extras: unknown;
 };
 
 async function submissionCard(s: SubmissionRow, store: PhotoStore | null): Promise<QueueCard> {
   const extras = readExtras(s.extras);
   const card = {
-    kind: "submission" as const, id: s.id, name: s.name, nameEn: s.nameEn, roasterName: s.roasterName,
+    kind: "submission" as const, id: s.id, name: s.name, nameEn: s.nameEn, roasterName: s.roasterName, roasterNameEn: s.roasterNameEn,
     imageUrl: s.photoPath && store ? await store.signedUrl(s.photoPath).catch(() => null) : null,
+    hasOriginalPhoto: typeof (s.extras as { originalPhotoPath?: unknown } | null)?.originalPhotoPath === "string",
     originName: s.originName, originCode: null, process: s.process, roastLevel: s.roastLevel, flavorNotes: s.flavorNotes,
     descriptionAr: extras.descriptionAr ?? null, sourceUrl: s.sourceUrl,
   };
