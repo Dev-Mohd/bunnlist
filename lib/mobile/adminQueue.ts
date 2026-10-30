@@ -1,0 +1,258 @@
+import Anthropic from "@anthropic-ai/sdk";
+import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
+import type { Prisma, PrismaClient } from "@prisma/client";
+import { z } from "zod";
+import { readExtras } from "./admin";
+import { BAG_SCAN_MODEL } from "./bagScan";
+import { ApiError } from "./errors";
+import { SUBMISSION_PROCESSES } from "./submissions";
+import type { PhotoStore } from "./suggestionPhotos";
+
+// The admin's work queue: what waits for review (suggestions) and published coffees
+// missing details, counted, grouped by roaster, and served one card at a time.
+// Suggestions for the missing details are read from the coffee's own description
+// by Claude (text only; photos are never touched), and nothing is saved until the
+// admin taps one.
+
+export const QUEUE_KINDS = ["pending", "incomplete"] as const;
+export type QueueKind = (typeof QUEUE_KINDS)[number];
+export type Missing = "origin" | "process" | "notes" | "photo";
+
+/** A blend's origin is stored as XB; a process nobody named is OTHER. */
+const BLEND = "XB";
+
+export interface QueueCounts {
+  pending: number;
+  incomplete: number;
+  noOrigin: number;
+  noProcess: number;
+  noNotes: number;
+  noPhoto: number;
+  reports: number;
+}
+
+const INCOMPLETE_LOT: Prisma.CoffeeLotWhereInput = {
+  publishedAt: { not: null },
+  OR: [{ originCountry: { isoCode: BLEND } }, { process: "OTHER" }, { flavorNotes: { isEmpty: true } }],
+};
+
+export async function queueCounts(prisma: PrismaClient): Promise<QueueCounts> {
+  const published = { publishedAt: { not: null } };
+  const [pending, incomplete, noOrigin, noProcess, noNotes, noPhoto, reports] = await Promise.all([
+    prisma.mobileCoffeeSubmission.count({ where: { status: "PENDING" } }),
+    prisma.coffeeLot.count({ where: INCOMPLETE_LOT }),
+    prisma.coffeeLot.count({ where: { ...published, originCountry: { isoCode: BLEND } } }),
+    prisma.coffeeLot.count({ where: { ...published, process: "OTHER" } }),
+    prisma.coffeeLot.count({ where: { ...published, flavorNotes: { isEmpty: true } } }),
+    prisma.coffeeLot.count({ where: { ...published, imageUrl: null } }),
+    prisma.mobileReport.count({ where: { status: "open" } }),
+  ]);
+  return { pending, incomplete, noOrigin, noProcess, noNotes, noPhoto, reports };
+}
+
+export interface QueueCard {
+  kind: "submission" | "lot";
+  id: string;
+  name: string;
+  nameEn: string | null;
+  roasterName: string;
+  imageUrl: string | null;
+  originName: string | null;
+  originCode: string | null;
+  process: string | null;
+  roastLevel: string | null;
+  flavorNotes: string[];
+  descriptionAr: string | null;
+  sourceUrl: string | null;
+  missing: Missing[];
+}
+
+export interface RoasterGroup {
+  roaster: string;
+  count: number;
+  noOrigin: number;
+  noProcess: number;
+  noNotes: number;
+  noPhoto: number;
+  /** A bag from this roaster, for the row's picture. */
+  imageUrl: string | null;
+}
+
+function missingOf(c: { originCode: string | null; originName: string | null; process: string | null; flavorNotes: string[]; hasPhoto: boolean }): Missing[] {
+  const out: Missing[] = [];
+  if (!c.originName || c.originCode === BLEND) out.push("origin");
+  if (!c.process || c.process === "OTHER") out.push("process");
+  if (c.flavorNotes.length === 0) out.push("notes");
+  if (!c.hasPhoto) out.push("photo");
+  return out;
+}
+
+const LOT_SELECT = {
+  id: true, nameAr: true, name: true, imageUrl: true, process: true, roastLevel: true, flavorNotes: true, descriptionAr: true,
+  roaster: { select: { nameAr: true } }, originCountry: { select: { isoCode: true, nameAr: true } },
+} as const;
+
+type LotRow = {
+  id: string; nameAr: string; name: string; imageUrl: string | null; process: string; roastLevel: string | null; flavorNotes: string[];
+  descriptionAr: string | null; roaster: { nameAr: string } | null; originCountry: { isoCode: string; nameAr: string } | null;
+};
+
+function lotCard(l: LotRow): QueueCard {
+  const card = {
+    kind: "lot" as const, id: l.id, name: l.nameAr, nameEn: l.name, roasterName: l.roaster?.nameAr ?? "",
+    imageUrl: l.imageUrl, originName: l.originCountry?.nameAr ?? null, originCode: l.originCountry?.isoCode ?? null,
+    process: l.process, roastLevel: l.roastLevel, flavorNotes: l.flavorNotes, descriptionAr: l.descriptionAr, sourceUrl: null,
+  };
+  return { ...card, missing: missingOf({ ...card, hasPhoto: !!l.imageUrl }) };
+}
+
+type SubmissionRow = {
+  id: string; name: string; nameEn: string | null; roasterName: string; originName: string | null; process: string | null;
+  roastLevel: string | null; flavorNotes: string[]; photoPath: string | null; sourceUrl: string | null; extras: unknown;
+};
+
+async function submissionCard(s: SubmissionRow, store: PhotoStore | null): Promise<QueueCard> {
+  const extras = readExtras(s.extras);
+  const card = {
+    kind: "submission" as const, id: s.id, name: s.name, nameEn: s.nameEn, roasterName: s.roasterName,
+    imageUrl: s.photoPath && store ? await store.signedUrl(s.photoPath).catch(() => null) : null,
+    originName: s.originName, originCode: null, process: s.process, roastLevel: s.roastLevel, flavorNotes: s.flavorNotes,
+    descriptionAr: extras.descriptionAr ?? null, sourceUrl: s.sourceUrl,
+  };
+  return { ...card, missing: missingOf({ ...card, hasPhoto: !!s.photoPath }) };
+}
+
+function group(cards: { roaster: string; missing: Missing[]; imageUrl: string | null }[]): RoasterGroup[] {
+  const by = new Map<string, RoasterGroup>();
+  for (const c of cards) {
+    const g = by.get(c.roaster) ?? { roaster: c.roaster, count: 0, noOrigin: 0, noProcess: 0, noNotes: 0, noPhoto: 0, imageUrl: null };
+    g.count += 1;
+    if (c.missing.includes("origin")) g.noOrigin += 1;
+    if (c.missing.includes("process")) g.noProcess += 1;
+    if (c.missing.includes("notes")) g.noNotes += 1;
+    if (c.missing.includes("photo")) g.noPhoto += 1;
+    g.imageUrl ??= c.imageUrl;
+    by.set(c.roaster, g);
+  }
+  return [...by.values()].sort((a, b) => b.count - a.count || a.roaster.localeCompare(b.roaster, "ar"));
+}
+
+/** What waits, roaster by roaster. Pending rows carry no picture (signing hundreds would be slow). */
+export async function queueRoasters(prisma: PrismaClient, kind: QueueKind): Promise<RoasterGroup[]> {
+  if (kind === "pending") {
+    const rows = await prisma.mobileCoffeeSubmission.findMany({
+      where: { status: "PENDING" },
+      select: { roasterName: true, originName: true, process: true, flavorNotes: true, photoPath: true },
+    });
+    return group(rows.map((r) => ({
+      roaster: r.roasterName, imageUrl: null,
+      missing: missingOf({ originCode: null, originName: r.originName, process: r.process, flavorNotes: r.flavorNotes, hasPhoto: !!r.photoPath }),
+    })));
+  }
+  const lots = await prisma.coffeeLot.findMany({ where: INCOMPLETE_LOT, select: LOT_SELECT });
+  return group(lots.map((l) => {
+    const c = lotCard(l as unknown as LotRow);
+    return { roaster: c.roasterName, missing: c.missing, imageUrl: c.imageUrl };
+  }));
+}
+
+/** The cards of one roaster (or every roaster when none is given), oldest first. */
+export async function queueItems(
+  prisma: PrismaClient, store: PhotoStore | null, kind: QueueKind, roaster: string | null,
+): Promise<QueueCard[]> {
+  if (kind === "pending") {
+    const rows = await prisma.mobileCoffeeSubmission.findMany({
+      where: { status: "PENDING", ...(roaster ? { roasterName: roaster } : {}) }, orderBy: { createdAt: "asc" }, take: 100,
+    });
+    return Promise.all(rows.map((r) => submissionCard(r as unknown as SubmissionRow, store)));
+  }
+  const lots = await prisma.coffeeLot.findMany({
+    where: { ...INCOMPLETE_LOT, ...(roaster ? { roaster: { nameAr: roaster } } : {}) }, orderBy: { createdAt: "asc" }, take: 100,
+    select: LOT_SELECT,
+  });
+  return lots.map((l) => lotCard(l as unknown as LotRow));
+}
+
+// MARK: Suggestions from the description
+
+export interface DetailSuggestion {
+  process: (typeof SUBMISSION_PROCESSES)[number] | null;
+  originCode: string | null;
+  originNameAr: string | null;
+  flavorNotes: string[];
+  roastLevel: "light" | "medium" | "dark" | null;
+}
+
+export interface DetailReader {
+  read(text: string): Promise<DetailSuggestion>;
+}
+
+const SuggestionShape = z.object({
+  process: z.enum(SUBMISSION_PROCESSES).nullable(),
+  originCode: z.string().nullable(),
+  originNameAr: z.string().nullable(),
+  flavorNotes: z.array(z.string()),
+  roastLevel: z.enum(["light", "medium", "dark"]).nullable(),
+});
+
+/** Claude reads the coffee's own words; it says null for anything they don't state. */
+export function claudeDetailReader(apiKey: string): DetailReader {
+  const client = new Anthropic({ apiKey });
+  return {
+    async read(text) {
+      const response = await client.messages.parse({
+        model: BAG_SCAN_MODEL,
+        max_tokens: 1000,
+        output_config: { effort: "low", format: zodOutputFormat(SuggestionShape) },
+        system: `You read a specialty coffee's product text (Arabic, sometimes English) and pull out only what it states.
+- process: NATURAL (مجففة/طبيعية), WASHED (مغسولة), HONEY (عسلية), ANAEROBIC (لاهوائية), CARBONIC_MACERATION (كربوني), WET_HULLED, EXPERIMENTAL (infused/co-ferment), or null if the text doesn't say.
+- originCode: the ISO 3166 two-letter code of the single growing country, originNameAr its Arabic name (e.g. ET / إثيوبيا). null for blends of several countries or when not stated. A Saudi-style roast is not a Saudi origin.
+- flavorNotes: the tasting notes in Arabic, short (one to three words each), at most 6, in the text's order. Leave out body, acidity, sweetness levels and brewing advice.
+- roastLevel: light, medium or dark only if the text says so (شقراء/فاتحة = light, متوسطة = medium, غامقة/داكنة = dark), else null.
+Never guess from the coffee's name alone when the text is silent; null is the right answer then.`,
+        messages: [{ role: "user", content: text.slice(0, 4000) }],
+      });
+      const out = response.parsed_output;
+      if (response.stop_reason === "refusal" || !out) throw new Error("suggest: no usable output");
+      return out;
+    },
+  };
+}
+
+/** Cleans what the reader said: valid codes only, short notes, nothing invented for empty text. */
+export function tidySuggestion(raw: DetailSuggestion): DetailSuggestion {
+  const code = raw.originCode && /^[A-Za-z]{2}$/.test(raw.originCode) && raw.originCode.toUpperCase() !== BLEND ? raw.originCode.toUpperCase() : null;
+  return {
+    process: raw.process && (SUBMISSION_PROCESSES as readonly string[]).includes(raw.process) ? raw.process : null,
+    originCode: code,
+    originNameAr: code ? raw.originNameAr?.trim() || null : null,
+    flavorNotes: [...new Set(raw.flavorNotes.map((n) => n.trim()).filter((n) => n.length > 1 && n.length <= 30))].slice(0, 6),
+    roastLevel: raw.roastLevel,
+  };
+}
+
+const EMPTY: DetailSuggestion = { process: null, originCode: null, originNameAr: null, flavorNotes: [], roastLevel: null };
+
+/** Suggestions for one card from its name and description; empty when there's no text to read. */
+export async function suggestDetails(
+  prisma: PrismaClient, reader: DetailReader | null, kind: "submission" | "lot", id: string,
+): Promise<DetailSuggestion> {
+  let name = "", description = "";
+  if (kind === "submission") {
+    const s = await prisma.mobileCoffeeSubmission.findUnique({ where: { id }, select: { name: true, extras: true, note: true } });
+    if (!s) throw ApiError.unprocessable("submission_not_found");
+    name = s.name;
+    description = [readExtras(s.extras).descriptionAr, s.note].filter(Boolean).join("\n");
+  } else {
+    const l = await prisma.coffeeLot.findUnique({ where: { id }, select: { nameAr: true, descriptionAr: true } });
+    if (!l) throw ApiError.unprocessable("lot_not_found");
+    name = l.nameAr;
+    description = l.descriptionAr ?? "";
+  }
+  if (!reader || description.trim().length < 15) return EMPTY;
+  try {
+    return tidySuggestion(await reader.read(`الاسم: ${name}\nالوصف: ${description}`));
+  } catch {
+    return EMPTY;
+  }
+}
