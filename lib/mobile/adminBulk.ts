@@ -63,13 +63,20 @@ const REASON_AR: Record<string, string> = {
 
 export async function bulkReview(
   prisma: PrismaClient, store: PhotoStore | null, req: BulkReviewRequest, namer: LatinNamer | null = null,
+  /** Stop after this many ms (the route's time limit); the rest come back as not done. */
+  budgetMs = Infinity,
 ): Promise<BulkReviewResult> {
+  const startedAt = Date.now();
   const rows = await prisma.mobileCoffeeSubmission.findMany({ where: { id: { in: req.ids } } });
   const byId = new Map(rows.map((r) => [r.id, r]));
   const result: BulkReviewResult = { done: [], failed: [] };
   // One at a time: each approval may create a roaster the next one reuses.
   for (const id of req.ids) {
     const row = byId.get(id);
+    if (Date.now() - startedAt > budgetMs) {
+      result.failed.push({ id, name: row?.name ?? id, reason: "ما لحقنا عليها، اضغطها مرة ثانية" });
+      continue;
+    }
     try {
       if (!row) throw ApiError.unprocessable("submission_not_found");
       if (req.action === "approve") await approveSubmission(prisma, store, id, await approvalFor(prisma, row), namer);

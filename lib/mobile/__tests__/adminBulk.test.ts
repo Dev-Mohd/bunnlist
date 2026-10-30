@@ -109,3 +109,13 @@ describe("bulkDeleteLots", () => {
     expect(r.failed).toEqual([{ id: "L2", name: "ب", reason: "لها تقييمات أو تحضيرات، أخفها بدال الحذف" }]);
   });
 });
+
+describe("bulk review time budget", () => {
+  it("hands back what it had no time for", async () => {
+    const { prisma, m } = db([row(), row({ id: "s2" })]);
+    const r = await bulkReview(prisma, null, { ids: ["s1", "s2"], action: "approve" }, null, -1);
+    expect(r.done).toEqual([]);
+    expect(r.failed.map((f) => f.id)).toEqual(["s1", "s2"]);
+    expect(m.coffeeLot.create).not.toHaveBeenCalled();
+  });
+});

@@ -11,6 +11,7 @@ import bunistaPhotos from "./data/bunista-photos.json";
 import shovelPhotos from "./data/shovel-photos.json";
 import roastingHousePhotos from "./data/roasting-house-photos.json";
 import camelStepPhotos from "./data/camel-step-photos.json";
+import yahimPhotos from "./data/yahim-photos.json";
 
 // Curated batches (scraped roastery catalogs, cleaned) enter as pending
 // suggestions from the "catalog" account, so every coffee is reviewed in the app's
@@ -49,6 +50,7 @@ export const BUNDLED_BATCHES: Record<string, { data: unknown; photos: Record<str
       ...(shovelPhotos as Record<string, string>),
       ...(roastingHousePhotos as Record<string, string>),
       ...(camelStepPhotos as Record<string, string>),
+      ...(yahimPhotos as Record<string, string>),
     },
   },
 };
@@ -76,7 +78,10 @@ function fields(item: z.infer<typeof Item>) {
 
 export async function importBatch(
   prisma: PrismaClient, raw: unknown, photos: Record<string, string> = {}, store: PhotoStore | null = null,
-): Promise<{ created: number; alreadyImported: number; alreadyInCatalog: number; photos: number; photoErrors: number }> {
+  /** Stop taking new items after this many ms (the route's time limit); the rest wait for the next run. */
+  budgetMs = Infinity,
+): Promise<{ created: number; alreadyImported: number; alreadyInCatalog: number; photos: number; photoErrors: number; remaining: number }> {
+  const startedAt = Date.now();
   const { items } = Batch.parse(raw);
   const existingRows = await prisma.mobileCoffeeSubmission.findMany({
     where: { importKey: { in: items.map((i) => i.importKey) } }, select: { id: true, importKey: true, status: true, photoPath: true, approvedLotId: true },
@@ -109,11 +114,13 @@ export async function importBatch(
     `${norm(l.roaster?.nameAr)}|${norm(l.nameAr)}`, `${norm(l.roaster?.name)}|${norm(l.name)}`,
   ]));
 
-  let created = 0, alreadyImported = 0, alreadyInCatalog = 0, photoErrors = 0;
+  let created = 0, alreadyImported = 0, alreadyInCatalog = 0, photoErrors = 0, remaining = 0;
   // A few items at a time: each one waits on storage, and the whole run has to
   // finish inside the route's time limit.
   await eachLimited(items, 6, async (item) => {
     const prior = existing.get(item.importKey);
+    // Out of time: new coffees wait for the next run (already-imported ones are cheap to pass).
+    if (!prior && Date.now() - startedAt > budgetMs) { remaining += 1; return; }
     if (prior) {
       alreadyImported += 1;
       if (prior.status === "PENDING") {
@@ -163,7 +170,7 @@ export async function importBatch(
     });
     created += 1;
   });
-  return { created, alreadyImported, alreadyInCatalog, photos: photoCount, photoErrors };
+  return { created, alreadyImported, alreadyInCatalog, photos: photoCount, photoErrors, remaining };
 }
 
 /** Runs `fn` over the items with at most `limit` in flight. */

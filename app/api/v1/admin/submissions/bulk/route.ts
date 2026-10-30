@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     await requireAdmin(prisma, accountId);
     const input = parseBody(BulkReviewRequest, await readJson(req));
     const apiKey = process.env.ANTHROPIC_API_KEY;
-    const result = await bulkReview(prisma, optionalPhotoStore(), input, apiKey ? claudeLatinNamer(apiKey) : null);
+    const result = await bulkReview(prisma, optionalPhotoStore(), input, apiKey ? claudeLatinNamer(apiKey) : null, 45_000);
     const authored = await prisma.mobileCoffeeSubmission.findMany({
       where: { id: { in: result.done }, accountId: { notIn: UNCREDITED_ACCOUNTS } }, select: { accountId: true, name: true },
     });
