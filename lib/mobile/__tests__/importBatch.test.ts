@@ -55,6 +55,27 @@ describe("importBatch", () => {
     expect(m.mobileCoffeeSubmission.update.mock.calls[0][0].data).toMatchObject({ name: "ميلورا", photoPath: expect.stringMatching(/^imports\/bk-x-[0-9a-f]{8}\.jpg$/) });
   });
 
+  it("passes over a pending import that already matches, and leaves work past the time limit for the next run", async () => {
+    const same = { ...item("k1", "ميلورا"), extras: { b: 1, a: [1] } };
+    const changed = item("k2", "قيدب");
+    const rows = [
+      { id: "s1", importKey: "k1", status: "PENDING", photoPath: null, name: "ميلورا", nameEn: same.nameEn, roasterName: same.roasterName,
+        roasterNameEn: same.roasterNameEn ?? null, originName: same.originName ?? null, process: same.process ?? null, roastLevel: same.roastLevel,
+        flavorNotes: same.flavorNotes, sourceUrl: same.sourceUrl ?? null, sourceConfidence: same.sourceConfidence ?? null, extras: { a: [1], b: 1 } },
+      { id: "s2", importKey: "k2", status: "PENDING", photoPath: null, name: "قديم" },
+    ];
+    const m = {
+      mobileCoffeeSubmission: { findMany: vi.fn().mockResolvedValue(rows), update: vi.fn().mockResolvedValue({}), create: vi.fn() },
+      coffeeLot: { findMany: vi.fn().mockResolvedValue([]) },
+    };
+    const late = await importBatch(m as unknown as PrismaClient, { batch: "t", items: [same, changed] }, {}, null, -1);
+    expect(m.mobileCoffeeSubmission.update).not.toHaveBeenCalled();
+    expect(late.remaining).toBe(1);
+    await importBatch(m as unknown as PrismaClient, { batch: "t", items: [same, changed] });
+    expect(m.mobileCoffeeSubmission.update).toHaveBeenCalledTimes(1);
+    expect(m.mobileCoffeeSubmission.update.mock.calls[0][0].where).toEqual({ id: "s2" });
+  });
+
   it("turns extras into lot tags", () => {
     expect(tagsFrom({ isLuxury: true, isDecaf: true })).toEqual(["luxury", "decaf"]);
     expect(tagsFrom({})).toEqual([]);

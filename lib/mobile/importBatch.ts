@@ -94,7 +94,11 @@ export async function importBatch(
   const startedAt = Date.now();
   const { items } = Batch.parse(raw);
   const existingRows = await prisma.mobileCoffeeSubmission.findMany({
-    where: { importKey: { in: items.map((i) => i.importKey) } }, select: { id: true, importKey: true, status: true, photoPath: true, approvedLotId: true },
+    where: { importKey: { in: items.map((i) => i.importKey) } }, select: {
+      id: true, importKey: true, status: true, photoPath: true, approvedLotId: true, name: true, nameEn: true, roasterName: true,
+      roasterNameEn: true, originName: true, process: true, roastLevel: true, flavorNotes: true, sourceUrl: true,
+      sourceConfidence: true, extras: true,
+    },
   });
   const existing = new Map(existingRows.map((r) => [r.importKey, r]));
   let photoCount = 0;
@@ -132,18 +136,24 @@ export async function importBatch(
   // finish inside the route's time limit.
   await eachLimited(items, 6, async (item) => {
     const prior = existing.get(item.importKey);
-    // Out of time: new coffees wait for the next run (already-imported ones are cheap to pass).
-    if (!prior && Date.now() - startedAt > budgetMs) { remaining += 1; return; }
+    // Out of time: whatever still needs work waits for the next run.
+    const outOfTime = Date.now() - startedAt > budgetMs;
+    if (!prior && outOfTime) { remaining += 1; return; }
     if (prior) {
       alreadyImported += 1;
       if (prior.status === "PENDING") {
         // Still under review: bring it up to date (newer batch data, a newer photo).
-        const photoPath = prior.photoPath === photoOf(item)?.path ? null : await uploadPhoto(item);
+        // One that already matches the batch is passed over, so a re-run stays quick.
+        const photoCurrent = !photoOf(item) || prior.photoPath === photoOf(item)?.path;
+        if (photoCurrent && sameFields(prior, item)) return;
+        if (outOfTime) { remaining += 1; return; }
+        const photoPath = photoCurrent ? null : await uploadPhoto(item);
         await prisma.mobileCoffeeSubmission.update({
           where: { id: prior.id },
           data: { ...fields(item), ...(photoPath ? { photoPath } : {}) },
         });
       } else if (prior.status === "APPROVED" && prior.approvedLotId) {
+        if (outOfTime) return;
         const published = approvedLots.get(prior.approvedLotId);
         if (published) {
           try {
@@ -192,6 +202,24 @@ export async function importBatch(
     created += 1;
   });
   return { created, alreadyImported, alreadyInCatalog, photos: photoCount, photoErrors, remaining, filled };
+}
+
+/** Key-order-independent JSON, for comparing stored JSON columns. */
+function stable(v: unknown): string {
+  if (Array.isArray(v)) return `[${v.map(stable).join(",")}]`;
+  if (v && typeof v === "object") {
+    return `{${Object.keys(v).sort().flatMap((k) => {
+      const x = (v as Record<string, unknown>)[k];
+      return x === undefined ? [] : [`${JSON.stringify(k)}:${stable(x)}`];
+    }).join(",")}}`;
+  }
+  return JSON.stringify(v ?? null);
+}
+
+/** True when a pending suggestion already holds the item's fields. */
+function sameFields(row: Record<string, unknown>, item: z.infer<typeof Item>): boolean {
+  const want = fields(item);
+  return (Object.keys(want) as (keyof typeof want)[]).every((k) => stable(row[k] ?? (k === "extras" ? {} : null)) === stable(want[k]));
 }
 
 /** Runs `fn` over the items with at most `limit` in flight. */
