@@ -21,7 +21,7 @@ describe("importBatch", () => {
     const result = await importBatch(m as unknown as PrismaClient, {
       batch: "t", items: [item("k1", "قديمة"), item("k2", "جبل السودة"), item("k3", "جديدة")],
     });
-    expect(result).toEqual({ created: 1, alreadyImported: 1, alreadyInCatalog: 1, photos: 0, photoErrors: 0, remaining: 0 });
+    expect(result).toEqual({ created: 1, alreadyImported: 1, alreadyInCatalog: 1, photos: 0, photoErrors: 0, remaining: 0, filled: 0 });
     expect(m.mobileCoffeeSubmission.create.mock.calls[0][0].data).toMatchObject({ accountId: "catalog", importKey: "k3", extras: { isLuxury: true } });
   });
 
@@ -33,8 +33,8 @@ describe("importBatch", () => {
     const store = { put: vi.fn().mockResolvedValue(undefined), signedUrl: vi.fn(), publish: vi.fn() };
     const bundle = BUNDLED_BATCHES["roasteries-2026-05"];
     const result = await importBatch(m as unknown as PrismaClient, bundle.data, bundle.photos, store);
-    expect(result.created).toBe(569);
-    expect(result.photos).toBe(410); // 24 Black Knight + 16 Arriyadh Roaster + 22 Bunista + 23 ASH + 11 SHOVEL + 20 Roasting House + 13 Camel Step + 281 Yahim Cups
+    expect(result.created).toBe(909);
+    expect(result.photos).toBe(751); // 24 Black Knight + 16 Arriyadh Roaster + 22 Bunista + 23 ASH + 11 SHOVEL + 20 Roasting House + 13 Camel Step + 132 Yahim Cups + 490 from the roasters' own stores
     expect(store.put).toHaveBeenCalledWith(expect.stringMatching(/^imports\/bk-milora-[0-9a-f]{8}\.jpg$/), expect.any(Buffer));
     expect(store.put).toHaveBeenCalledWith(expect.stringMatching(/^imports\/ar-shmaisy-street-[0-9a-f]{8}\.jpg$/), expect.any(Buffer));
   });
@@ -125,5 +125,23 @@ describe("importBatch", () => {
     const result = await importBatch(m as unknown as PrismaClient, { batch: "t", items: [item("k1", "أولى"), item("k2", "ثانية")] }, {}, null, -1);
     expect(result).toMatchObject({ created: 0, remaining: 2 });
     expect(m.mobileCoffeeSubmission.create).not.toHaveBeenCalled();
+  });
+
+  it("fills a published coffee's missing details, and leaves what's set", async () => {
+    const lot = {
+      id: "L1", slug: "x", imageUrl: null, imageType: "NONE", process: "OTHER", flavorNotes: ["كراميل"], descriptionAr: null,
+      regionAr: null, region: null, variety: "كاتورا", roastLevel: null, originCountry: { isoCode: "ET" },
+    };
+    const m = {
+      mobileCoffeeSubmission: { findMany: vi.fn().mockResolvedValue([{ id: "s1", importKey: "k1", status: "APPROVED", photoPath: null, approvedLotId: "L1" }]) },
+      coffeeLot: { findMany: vi.fn().mockResolvedValueOnce([lot]).mockResolvedValue([]), update: vi.fn().mockResolvedValue({}) },
+    };
+    const newer = { ...item("k1", "شيلشلي"), process: "NATURAL" as const, flavorNotes: ["توت"],
+      extras: { descriptionAr: "مجففة بإيحاءات التوت", region: "يرقاتشيف", variety: ["هيرلوم"] } };
+    const result = await importBatch(m as unknown as PrismaClient, { batch: "t", items: [newer] }, {}, null);
+    expect(result.filled).toBe(1);
+    expect(m.coffeeLot.update).toHaveBeenCalledWith({
+      where: { id: "L1" }, data: { process: "NATURAL", descriptionAr: "مجففة بإيحاءات التوت", regionAr: "يرقاتشيف", roastLevel: "فاتح" },
+    });
   });
 });

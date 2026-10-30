@@ -2,6 +2,8 @@ import { createHash } from "node:crypto";
 import type { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { CATALOG_ACCOUNT, SUBMISSION_PROCESSES } from "./submissions";
+import { readExtras } from "./admin";
+import { approvalFor } from "./adminBulk";
 import type { PhotoStore } from "./suggestionPhotos";
 import batch from "./data/roastery-batch-2026-05.json";
 import arriyadhPhotos from "./data/arriyadh-photos.json";
@@ -12,6 +14,7 @@ import shovelPhotos from "./data/shovel-photos.json";
 import roastingHousePhotos from "./data/roasting-house-photos.json";
 import camelStepPhotos from "./data/camel-step-photos.json";
 import yahimPhotos from "./data/yahim-photos.json";
+import officialPhotos from "./data/official-photos.json";
 
 // Curated batches (scraped roastery catalogs, cleaned) enter as pending
 // suggestions from the "catalog" account, so every coffee is reviewed in the app's
@@ -51,6 +54,7 @@ export const BUNDLED_BATCHES: Record<string, { data: unknown; photos: Record<str
       ...(roastingHousePhotos as Record<string, string>),
       ...(camelStepPhotos as Record<string, string>),
       ...(yahimPhotos as Record<string, string>),
+      ...(officialPhotos as Record<string, string>),
     },
   },
 };
@@ -80,7 +84,11 @@ export async function importBatch(
   prisma: PrismaClient, raw: unknown, photos: Record<string, string> = {}, store: PhotoStore | null = null,
   /** Stop taking new items after this many ms (the route's time limit); the rest wait for the next run. */
   budgetMs = Infinity,
-): Promise<{ created: number; alreadyImported: number; alreadyInCatalog: number; photos: number; photoErrors: number; remaining: number }> {
+): Promise<{
+  created: number; alreadyImported: number; alreadyInCatalog: number; photos: number; photoErrors: number; remaining: number;
+  /** Published coffees whose missing details the batch filled in. */
+  filled: number;
+}> {
   const startedAt = Date.now();
   const { items } = Batch.parse(raw);
   const existingRows = await prisma.mobileCoffeeSubmission.findMany({
@@ -105,7 +113,10 @@ export async function importBatch(
   };
   const approvedLots = new Map((await prisma.coffeeLot.findMany({
     where: { id: { in: existingRows.flatMap((r) => (r.status === "APPROVED" && r.approvedLotId ? [r.approvedLotId] : [])) } },
-    select: { id: true, slug: true, imageUrl: true, imageType: true },
+    select: {
+      id: true, slug: true, imageUrl: true, imageType: true, process: true, flavorNotes: true, descriptionAr: true,
+      regionAr: true, region: true, variety: true, roastLevel: true, originCountry: { select: { isoCode: true } },
+    },
   })).map((l) => [l.id, l]));
   const lots = await prisma.coffeeLot.findMany({
     select: { name: true, nameAr: true, roaster: { select: { name: true, nameAr: true } } },
@@ -114,7 +125,7 @@ export async function importBatch(
     `${norm(l.roaster?.nameAr)}|${norm(l.nameAr)}`, `${norm(l.roaster?.name)}|${norm(l.name)}`,
   ]));
 
-  let created = 0, alreadyImported = 0, alreadyInCatalog = 0, photoErrors = 0, remaining = 0;
+  let created = 0, alreadyImported = 0, alreadyInCatalog = 0, photoErrors = 0, remaining = 0, filled = 0;
   // A few items at a time: each one waits on storage, and the whole run has to
   // finish inside the route's time limit.
   await eachLimited(items, 6, async (item) => {
@@ -131,6 +142,14 @@ export async function importBatch(
           data: { ...fields(item), ...(photoPath ? { photoPath } : {}) },
         });
       } else if (prior.status === "APPROVED" && prior.approvedLotId) {
+        const published = approvedLots.get(prior.approvedLotId);
+        if (published) {
+          try {
+            if (await fillMissing(prisma, published, item)) filled += 1;
+          } catch (e) {
+            console.error("import fill failed", published.slug, e);
+          }
+        }
         // Already published with an import photo: swap in the newer photo. A lot
         // whose picture was since replaced on the website is left alone, and so is
         // one published from this very photo (approval names its file by time, not
@@ -170,7 +189,7 @@ export async function importBatch(
     });
     created += 1;
   });
-  return { created, alreadyImported, alreadyInCatalog, photos: photoCount, photoErrors, remaining };
+  return { created, alreadyImported, alreadyInCatalog, photos: photoCount, photoErrors, remaining, filled };
 }
 
 /** Runs `fn` over the items with at most `limit` in flight. */
@@ -180,4 +199,44 @@ async function eachLimited<T>(items: T[], limit: number, fn: (item: T) => Promis
     while (next < items.length) await fn(items[next++]);
   };
   await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+}
+
+type PublishedLot = {
+  id: string; process: string; flavorNotes: string[]; descriptionAr: string | null; regionAr: string | null; region: string | null;
+  variety: string | null; roastLevel: string | null; originCountry: { isoCode: string } | null;
+};
+const ROAST_AR: Record<string, string> = { light: "فاتح", medium: "متوسط", dark: "غامق" };
+
+/**
+ * Fills a published coffee's missing details from a newer batch: a blend origin, an
+ * OTHER process, no notes, no description, region, variety or roast. Whatever the
+ * admin already set is left as it is. True when something was filled.
+ */
+async function fillMissing(prisma: PrismaClient, lot: PublishedLot, item: z.infer<typeof Item>): Promise<boolean> {
+  const extras = readExtras(item.extras);
+  const data: Record<string, unknown> = {};
+  if (lot.originCountry?.isoCode === "XB" && item.originName) {
+    try {
+      const form = await approvalFor(prisma, {
+        name: item.name, nameEn: item.nameEn ?? null, roasterName: item.roasterName, roasterNameEn: item.roasterNameEn ?? null,
+        originName: item.originName, process: item.process ?? null, roastLevel: item.roastLevel ?? null, flavorNotes: item.flavorNotes,
+      });
+      if (form.originCode !== "XB") {
+        const origin = await prisma.originCountry.findUnique({ where: { isoCode: form.originCode } })
+          ?? await prisma.originCountry.create({ data: { isoCode: form.originCode, nameAr: form.originNameAr } });
+        data.originCountryId = origin.id;
+      }
+    } catch {
+      // An origin we can't place stays a blend.
+    }
+  }
+  if (lot.process === "OTHER" && item.process && item.process !== "OTHER") data.process = item.process;
+  if (lot.flavorNotes.length === 0 && item.flavorNotes.length) data.flavorNotes = item.flavorNotes;
+  if (!lot.descriptionAr && extras.descriptionAr) data.descriptionAr = extras.descriptionAr;
+  if (!lot.regionAr && !lot.region && extras.region) data.regionAr = extras.region;
+  if (!lot.variety && extras.variety?.length) data.variety = extras.variety.join("، ");
+  if (!lot.roastLevel && item.roastLevel) data.roastLevel = ROAST_AR[item.roastLevel];
+  if (Object.keys(data).length === 0) return false;
+  await prisma.coffeeLot.update({ where: { id: lot.id }, data });
+  return true;
 }
