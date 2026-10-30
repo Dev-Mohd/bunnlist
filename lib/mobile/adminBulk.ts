@@ -61,6 +61,8 @@ const REASON_AR: Record<string, string> = {
   submission_not_found: "ما لقيناها",
 };
 
+const OUT_OF_TIME = "ما لحقنا عليها، اضغطها مرة ثانية";
+
 export async function bulkReview(
   prisma: PrismaClient, store: PhotoStore | null, req: BulkReviewRequest, namer: LatinNamer | null = null,
   /** Stop after this many ms (the route's time limit); the rest come back as not done. */
@@ -74,7 +76,7 @@ export async function bulkReview(
   for (const id of req.ids) {
     const row = byId.get(id);
     if (Date.now() - startedAt > budgetMs) {
-      result.failed.push({ id, name: row?.name ?? id, reason: "ما لحقنا عليها، اضغطها مرة ثانية" });
+      result.failed.push({ id, name: row?.name ?? id, reason: OUT_OF_TIME });
       continue;
     }
     try {
@@ -89,6 +91,31 @@ export async function bulkReview(
     }
   }
   return result;
+}
+
+export const ApproveAllRequest = z.object({
+  /** One roaster's suggestions only; all of them when left out. */
+  roaster: z.string().trim().min(1).optional(),
+  /** Ids that failed in an earlier run (unknown origin and the like), so the run moves past them. */
+  skip: z.array(z.string().min(1)).max(2000).default([]),
+});
+export type ApproveAllRequest = z.infer<typeof ApproveAllRequest>;
+
+/**
+ * Publishes waiting suggestions as they stand, oldest first, until the time
+ * budget runs out; `remaining` says how many are left for the next run.
+ */
+export async function approveAll(
+  prisma: PrismaClient, store: PhotoStore | null, req: ApproveAllRequest, namer: LatinNamer | null = null, budgetMs = Infinity,
+): Promise<BulkReviewResult & { remaining: number }> {
+  const where = { status: "PENDING", ...(req.roaster ? { roasterName: req.roaster } : {}), id: { notIn: req.skip } };
+  const rows = await prisma.mobileCoffeeSubmission.findMany({ where, select: { id: true }, orderBy: { createdAt: "asc" }, take: 100 });
+  if (rows.length === 0) return { done: [], failed: [], remaining: 0 };
+  const result = await bulkReview(prisma, store, { ids: rows.map((r) => r.id), action: "approve" }, namer, budgetMs);
+  // Ones the clock cut off aren't failures: they're picked up next run.
+  const failed = result.failed.filter((f) => f.reason !== OUT_OF_TIME);
+  const remaining = await prisma.mobileCoffeeSubmission.count({ where: { ...where, id: { notIn: [...req.skip, ...failed.map((f) => f.id)] } } });
+  return { done: result.done, failed, remaining };
 }
 
 /** Takes a rejected suggestion off every list; the row stays so a re-import knows it. */

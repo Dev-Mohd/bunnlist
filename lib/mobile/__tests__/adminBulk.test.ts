@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import type { PrismaClient } from "@prisma/client";
-import { approvalFor, bulkDeleteLots, bulkReview, deleteLot } from "../adminBulk";
+import { approvalFor, approveAll, ApproveAllRequest, bulkDeleteLots, bulkReview, deleteLot } from "../adminBulk";
 
 const row = (over: Record<string, unknown> = {}) => ({
   id: "s1", status: "PENDING", name: "كولومبيا ويلا", nameEn: "Colombia Huila", roasterName: "بونيستا", roasterNameEn: "Bunista",
@@ -17,7 +17,7 @@ function db(rows: ReturnType<typeof row>[], origins: Record<string, string> = { 
     mobileCoffeeSubmission: {
       findMany: vi.fn().mockResolvedValue(rows),
       findUnique: vi.fn().mockImplementation(({ where }: { where: { id: string } }) => rows.find((r) => r.id === where.id)),
-      update: vi.fn().mockResolvedValue({}), updateMany: vi.fn(),
+      update: vi.fn().mockResolvedValue({}), updateMany: vi.fn(), count: vi.fn().mockResolvedValue(0),
     },
     roaster: { findFirst: vi.fn().mockResolvedValue({ id: "r1", name: "Bunista" }), findUnique: vi.fn(), create: vi.fn() },
     coffeeLot: {
@@ -117,5 +117,24 @@ describe("bulk review time budget", () => {
     expect(r.done).toEqual([]);
     expect(r.failed.map((f) => f.id)).toEqual(["s1", "s2"]);
     expect(m.coffeeLot.create).not.toHaveBeenCalled();
+  });
+});
+
+describe("approveAll", () => {
+  it("publishes the waiting ones, reports failures, and says how many are left past the skipped", async () => {
+    const { prisma, m } = db([row(), row({ id: "s2", name: "غريبة", originName: "أطلانتس" })]);
+    const r = await approveAll(prisma, null, ApproveAllRequest.parse({ skip: ["old"] }));
+    expect(r.done).toEqual(["s1"]);
+    expect(r.failed.map((f) => f.id)).toEqual(["s2"]);
+    expect(r.remaining).toBe(0);
+    expect(m.mobileCoffeeSubmission.findMany.mock.calls[0][0].where).toMatchObject({ status: "PENDING", id: { notIn: ["old"] } });
+    expect(m.mobileCoffeeSubmission.count.mock.calls[0][0].where.id).toEqual({ notIn: ["old", "s2"] });
+  });
+
+  it("doesn't count the ones the clock cut off as failures", async () => {
+    const { prisma, m } = db([row(), row({ id: "s2" })]);
+    m.mobileCoffeeSubmission.count.mockResolvedValue(2);
+    const r = await approveAll(prisma, null, ApproveAllRequest.parse({ roaster: "بونيستا" }), null, -1);
+    expect(r).toEqual({ done: [], failed: [], remaining: 2 });
   });
 });
