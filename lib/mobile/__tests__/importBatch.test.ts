@@ -34,7 +34,7 @@ describe("importBatch", () => {
     const bundle = BUNDLED_BATCHES["roasteries-2026-05"];
     const result = await importBatch(m as unknown as PrismaClient, bundle.data, bundle.photos, store);
     expect(result.created).toBe(953);
-    expect(result.photos).toBe(814); // 20 Doha bags (7 coffees new to a photo) + 14 Sulalat official artwork + 24 Black Knight + 16 Arriyadh Roaster + 22 Bunista + 23 ASH + 11 SHOVEL + 20 Roasting House + 13 Camel Step + 132 Yahim Cups + 490 from the roasters' own stores + 42 Sout and Asante
+    expect(result.photos).toBe(838); // 24 bag photos from the product pages + 20 Doha bags (7 coffees new to a photo) + 14 Sulalat official artwork + 24 Black Knight + 16 Arriyadh Roaster + 22 Bunista + 23 ASH + 11 SHOVEL + 20 Roasting House + 13 Camel Step + 132 Yahim Cups + 490 from the roasters' own stores + 42 Sout and Asante
     expect(store.put).toHaveBeenCalledWith(expect.stringMatching(/^imports\/bk-milora-[0-9a-f]{8}\.jpg$/), expect.any(Buffer));
     expect(store.put).toHaveBeenCalledWith(expect.stringMatching(/^imports\/ar-shmaisy-street-[0-9a-f]{8}\.jpg$/), expect.any(Buffer));
   });
