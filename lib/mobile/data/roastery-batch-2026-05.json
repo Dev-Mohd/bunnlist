@@ -17049,7 +17049,9 @@
     "isDecaf": true,
     "region": "ميناس – الرازيل",
     "altitudeM": "1450 م",
-    "descriptionAr": "تفاصيل المنتج: الوزن: 250g المنطقة: ميناس – الرازيل الارتفاع: 1450 م المعالجة: ديكاف (Decaffeination) الإيحاءات: شوكولاتة , قرفة , كراميل الاستخدام:"
+    "descriptionAr": "تفاصيل المنتج: الوزن: 250g المنطقة: ميناس – الرازيل الارتفاع: 1450 م المعالجة: ديكاف (Decaffeination) الإيحاءات: شوكولاتة , قرفة , كراميل الاستخدام:",
+    "photo": "dh-decaf",
+    "photoFromRoaster": true
    }
   },
   {
@@ -17077,7 +17079,9 @@
     "sourceNote": "من متجر ياهيم كبز",
     "isLuxury": false,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "dh-tawfiq",
+    "photoFromRoaster": true
    }
   },
   {
@@ -17111,7 +17115,8 @@
     "isInfused": false,
     "isDecaf": false,
     "descriptionAr": "محصول متميز ياتي بثلاث أنواع بن ممزوجة مع بعضها البعض بطريقة إحترافية يعكس خبرتنا من خمس سنوات باستخراج اجمل مافي القهوة وهو محصول كلاسيكي بأمتياز وبدون تعقيد وبحلاوة بارزة ومناسبة لمشوربات التقطير والاسبريسو مزيج (سمو) طريقة المعالجة : مجففة + مغسولة الإيحاءات : مكسرات , كراميل , عسل ملائمة للإسبريسو والقهوة المقطرة حبوب القهوة تأتي (غير مطحونة) للحفاظ عليها طازجة",
-    "photo": "of-Blend250g-202126"
+    "photo": "dh-sumou",
+    "photoFromRoaster": true
    }
   },
   {
@@ -17170,9 +17175,10 @@
     "isLuxury": false,
     "isInfused": false,
     "isDecaf": false,
-    "photo": "yh-1682746804",
+    "photo": "dh-kitkat",
     "altitudeM": "1200 متر",
-    "descriptionAr": "من منطقة كارديو في البرازيل، وعلى ارتفاع 1200 متر، تنمو حبوب هذه القهوة في بيئة مناسبة، غنية بالأمطار والتربة البركانية الحمراء. معالجة انفيوجن اناروبيك مجفف تب"
+    "descriptionAr": "من منطقة كارديو في البرازيل، وعلى ارتفاع 1200 متر، تنمو حبوب هذه القهوة في بيئة مناسبة، غنية بالأمطار والتربة البركانية الحمراء. معالجة انفيوجن اناروبيك مجفف تب",
+    "photoFromRoaster": true
    }
   },
   {
@@ -17202,7 +17208,8 @@
     "isLuxury": false,
     "isInfused": false,
     "isDecaf": false,
-    "photo": "of-huila250-202126"
+    "photo": "dh-huila",
+    "photoFromRoaster": true
    }
   },
   {
@@ -17235,8 +17242,9 @@
     "isLuxury": false,
     "isInfused": false,
     "isDecaf": false,
-    "photo": "of-Guji250g-202126",
-    "descriptionAr": "إثيوبيا (قوجي) طريقة المعالجة : مجففة الإيحاءات : توت أحمر , فانيلا , كراميل ملائمة للإسبريسو والقهوة المقطرة حبوب القهوة تأتي (غير مطحونة) للحفاظ عليها طازجة"
+    "photo": "dh-guji",
+    "descriptionAr": "إثيوبيا (قوجي) طريقة المعالجة : مجففة الإيحاءات : توت أحمر , فانيلا , كراميل ملائمة للإسبريسو والقهوة المقطرة حبوب القهوة تأتي (غير مطحونة) للحفاظ عليها طازجة",
+    "photoFromRoaster": true
    }
   },
   {
@@ -17266,7 +17274,8 @@
     "isLuxury": false,
     "isInfused": false,
     "isDecaf": false,
-    "photo": "yh-701740228"
+    "photo": "dh-villarica",
+    "photoFromRoaster": true
    }
   },
   {
@@ -17295,7 +17304,9 @@
     "sourceNote": "من متجر ياهيم كبز",
     "isLuxury": false,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "dh-strawberry",
+    "photoFromRoaster": true
    }
   },
   {
@@ -17325,7 +17336,8 @@
     "isLuxury": false,
     "isInfused": false,
     "isDecaf": false,
-    "photo": "yh-1294839283"
+    "photo": "dh-diamond",
+    "photoFromRoaster": true
    }
   },
   {
@@ -17355,7 +17367,8 @@
     "isLuxury": false,
     "isInfused": false,
     "isDecaf": false,
-    "photo": "of-Haleemah250g-202126"
+    "photo": "dh-halima",
+    "photoFromRoaster": true
    }
   },
   {
@@ -17385,7 +17398,8 @@
     "isLuxury": false,
     "isInfused": false,
     "isDecaf": false,
-    "photo": "yh-2070001338"
+    "photo": "dh-chelchele",
+    "photoFromRoaster": true
    }
   },
   {
@@ -17415,7 +17429,8 @@
     "isLuxury": false,
     "isInfused": false,
     "isDecaf": false,
-    "photo": "yh-1922500818"
+    "photo": "dh-chelbesa",
+    "photoFromRoaster": true
    }
   },
   {
@@ -17473,7 +17488,9 @@
     "sourceNote": "من متجر ياهيم كبز",
     "isLuxury": false,
     "isInfused": false,
-    "isDecaf": false
+    "isDecaf": false,
+    "photo": "dh-peach",
+    "photoFromRoaster": true
    }
   },
   {
@@ -27787,7 +27804,9 @@
     "isInfused": false,
     "isDecaf": false,
     "isLuxury": false,
-    "luxuryReason": null
+    "luxuryReason": null,
+    "photo": "dh-strawberry",
+    "photoFromRoaster": true
    }
   },
   {
@@ -27850,7 +27869,9 @@
     "isInfused": false,
     "isDecaf": false,
     "isLuxury": false,
-    "luxuryReason": null
+    "luxuryReason": null,
+    "photo": "dh-peach",
+    "photoFromRoaster": true
    }
   },
   {
@@ -27879,7 +27900,8 @@
     "isDecaf": false,
     "isLuxury": false,
     "luxuryReason": null,
-    "photo": "of-chilcille250g-202126"
+    "photo": "dh-chelchele",
+    "photoFromRoaster": true
    }
   },
   {
@@ -27907,7 +27929,9 @@
     "isInfused": false,
     "isDecaf": false,
     "isLuxury": false,
-    "luxuryReason": null
+    "luxuryReason": null,
+    "photo": "dh-tawfiq",
+    "photoFromRoaster": true
    }
   },
   {
@@ -27935,7 +27959,8 @@
     "isDecaf": false,
     "isLuxury": false,
     "luxuryReason": null,
-    "photo": "of-Diamond250g-202126"
+    "photo": "dh-diamond",
+    "photoFromRoaster": true
    }
   },
   {
@@ -27992,7 +28017,8 @@
     "isDecaf": false,
     "isLuxury": false,
     "luxuryReason": null,
-    "photo": "of-Villarica250g-202126"
+    "photo": "dh-villarica",
+    "photoFromRoaster": true
    }
   },
   {
@@ -28021,7 +28047,8 @@
     "isDecaf": false,
     "isLuxury": false,
     "luxuryReason": null,
-    "photo": "of-Yemen250-202126"
+    "photo": "dh-haraz",
+    "photoFromRoaster": true
    }
   },
   {
