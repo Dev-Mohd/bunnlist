@@ -6,12 +6,14 @@ import { requireAdmin } from "@/lib/mobile/admin";
 import { handle, readJson } from "@/lib/mobile/respond";
 import { parseBody } from "@/lib/mobile/schemas";
 import { claudeDetailReader, suggestDetails } from "@/lib/mobile/adminQueue";
+import { productImages } from "@/lib/mobile/productImages";
 
 // POST /api/v1/admin/queue/suggest {kind, id} — admins only: process, origin, notes and roast
-// read from the coffee's own description (text only). Nothing is saved here.
+// read from the coffee's own description and the text printed on its store page's
+// photos (an info card, the bag's label). Nothing is saved here.
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 const Body = z.object({ kind: z.enum(["submission", "lot"]), id: z.string().min(1) });
 
@@ -20,6 +22,6 @@ export async function POST(req: Request) {
     await requireAdmin(prisma, await authenticate(req, requireAccessSecret()));
     const { kind, id } = parseBody(Body, await readJson(req));
     const apiKey = process.env.ANTHROPIC_API_KEY;
-    return suggestDetails(prisma, apiKey ? claudeDetailReader(apiKey) : null, kind, id);
+    return suggestDetails(prisma, apiKey ? claudeDetailReader(apiKey) : null, kind, id, (url) => productImages(url));
   });
 }

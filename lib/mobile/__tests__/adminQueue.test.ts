@@ -9,7 +9,7 @@ const sub = (over: Record<string, unknown> = {}) => ({
 
 function fake() {
   const m = {
-    mobileCoffeeSubmission: { findMany: vi.fn().mockResolvedValue([]), findUnique: vi.fn() },
+    mobileCoffeeSubmission: { findMany: vi.fn().mockResolvedValue([]), findUnique: vi.fn(), findFirst: vi.fn().mockResolvedValue(null) },
     coffeeLot: { findMany: vi.fn().mockResolvedValue([]), findUnique: vi.fn() },
   };
   return { prisma: m as unknown as PrismaClient, m };
@@ -73,5 +73,17 @@ describe("suggestions", () => {
     m.coffeeLot.findUnique.mockResolvedValue({ nameAr: "مزيج", descriptionAr: null });
     expect(await suggestDetails(prisma, reader, "lot", "l1")).toEqual({ process: null, originCode: null, originNameAr: null, flavorNotes: [], roastLevel: null });
     expect(reader.read).toHaveBeenCalledOnce();
+  });
+
+  it("reads the photos on a published coffee's store page, even with no description", async () => {
+    const { prisma, m } = fake();
+    const reader = { read: vi.fn().mockResolvedValue({ process: "NATURAL", originCode: "ET", originNameAr: "إثيوبيا", flavorNotes: ["ياسمين"], roastLevel: null }) };
+    m.coffeeLot.findUnique.mockResolvedValue({ nameAr: "اوراقا", descriptionAr: null });
+    m.mobileCoffeeSubmission.findFirst.mockResolvedValue({ sourceUrl: "https://kuf.sa/ar/x/p1" });
+    const card = Buffer.from("jpeg");
+    const images = vi.fn().mockResolvedValue([card]);
+    expect(await suggestDetails(prisma, reader, "lot", "l1", images)).toMatchObject({ process: "NATURAL", flavorNotes: ["ياسمين"] });
+    expect(images).toHaveBeenCalledWith("https://kuf.sa/ar/x/p1");
+    expect(reader.read.mock.calls[0][1]).toEqual([card]);
   });
 });
