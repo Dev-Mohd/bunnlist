@@ -1,4 +1,5 @@
 import type { PrismaClient } from "@prisma/client";
+import { tidyDescription } from "./describe";
 import { z } from "zod";
 import { ApiError } from "./errors";
 import { CATALOG_ACCOUNT, SUBMISSION_PROCESSES, UNCREDITED_ACCOUNTS } from "./submissions";
@@ -186,7 +187,7 @@ export async function approveSubmission(
       process: input.process,
       roastLevel: input.roastLevel ? ROAST_AR[input.roastLevel] : null,
       flavorNotes: input.flavorNotes,
-      descriptionAr: input.descriptionAr || extras.descriptionAr || null,
+      descriptionAr: input.descriptionAr || tidyDescription(extras.descriptionAr),
       ...(extras.region ? { region: extras.region } : {}),
       ...(extras.farm ? { farm: extras.farm } : {}),
       ...(extras.producer ? { producer: extras.producer } : {}),

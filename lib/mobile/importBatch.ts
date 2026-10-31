@@ -269,8 +269,9 @@ const ROAST_AR: Record<string, string> = { light: "فاتح", medium: "متوس�
 
 /**
  * Fills a published coffee's missing details from a newer batch: a blend origin, an
- * OTHER process, no notes, no description, region, variety or roast. Whatever the
- * admin already set is left as it is. True when something was filled.
+ * OTHER process, no notes, region, variety or roast. Not the description: one an admin
+ * cleared (wrong or unreadable) would come back. Whatever the admin already set is left
+ * as it is. True when something was filled.
  */
 async function fillMissing(prisma: PrismaClient, lot: PublishedLot, item: z.infer<typeof Item>): Promise<boolean> {
   const extras = readExtras(item.extras);
@@ -292,7 +293,6 @@ async function fillMissing(prisma: PrismaClient, lot: PublishedLot, item: z.infe
   }
   if (lot.process === "OTHER" && item.process && item.process !== "OTHER") data.process = item.process;
   if (lot.flavorNotes.length === 0 && item.flavorNotes.length) data.flavorNotes = item.flavorNotes;
-  if (!lot.descriptionAr && extras.descriptionAr) data.descriptionAr = extras.descriptionAr;
   if (!lot.regionAr && !lot.region && extras.region) data.regionAr = extras.region;
   if (!lot.variety && extras.variety?.length) data.variety = extras.variety.join("، ");
   if (!lot.roastLevel && item.roastLevel) data.roastLevel = ROAST_AR[item.roastLevel];
