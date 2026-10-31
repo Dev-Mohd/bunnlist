@@ -172,7 +172,8 @@ export async function importBatch(
         const lot = approvedLots.get(prior.approvedLotId);
         const photo = photoOf(item);
         const current = prior.photoPath === photo?.path || !!(photo && lot?.imageUrl?.endsWith(`-${photo.version}.jpg`));
-        if (lot && photo && store && lot.imageType === "USER_UPLOADED" && !current) {
+        const editedByAdmin = !!readAdmin(prior.extras).photoEdited;
+        if (lot && photo && store && lot.imageType === "USER_UPLOADED" && !current && !editedByAdmin) {
           // A photo that won't go up leaves the lot's current one; the rest of the batch carries on.
           try {
             const path = await uploadPhoto(item);
