@@ -15,6 +15,7 @@ import shovelPhotos from "./data/shovel-photos.json";
 import roastingHousePhotos from "./data/roasting-house-photos.json";
 import camelStepPhotos from "./data/camel-step-photos.json";
 import yahimPhotos from "./data/yahim-photos.json";
+import sulalatPhotos from "./data/sulalat-photos.json";
 import officialPhotos from "./data/official-photos.json";
 import soutAsantePhotos from "./data/sout-asante-photos.json";
 
@@ -56,6 +57,7 @@ export const BUNDLED_BATCHES: Record<string, { data: unknown; photos: Record<str
       ...(roastingHousePhotos as Record<string, string>),
       ...(camelStepPhotos as Record<string, string>),
       ...(yahimPhotos as Record<string, string>),
+      ...(sulalatPhotos as Record<string, string>),
       ...(officialPhotos as Record<string, string>),
       ...(soutAsantePhotos as Record<string, string>),
     },
@@ -173,13 +175,15 @@ export async function importBatch(
         const photo = photoOf(item);
         const current = prior.photoPath === photo?.path || !!(photo && lot?.imageUrl?.endsWith(`-${photo.version}.jpg`));
         const editedByAdmin = !!readAdmin(prior.extras).photoEdited;
-        if (lot && photo && store && lot.imageType === "USER_UPLOADED" && !current && !editedByAdmin) {
+        // A coffee published without a picture gets the batch's (unless an admin deleted it on purpose).
+        const replaceable = lot?.imageType === "USER_UPLOADED" || (lot?.imageType === "NONE" && !lot.imageUrl);
+        if (lot && photo && store && replaceable && !current && !editedByAdmin) {
           // A photo that won't go up leaves the lot's current one; the rest of the batch carries on.
           try {
             const path = await uploadPhoto(item);
             const imageUrl = await store.publish(path as string, `lots/${lot.slug}-${photo.version}.jpg`);
             await prisma.coffeeLot.update({
-              where: { id: lot.id }, data: { imageUrl, storedImageUrl: imageUrl, imageStoredAt: new Date() },
+              where: { id: lot.id }, data: { imageUrl, storedImageUrl: imageUrl, imageType: "USER_UPLOADED", imageStoredAt: new Date() },
             });
             await prisma.mobileCoffeeSubmission.update({ where: { id: prior.id }, data: { photoPath: path } });
           } catch (e) {
