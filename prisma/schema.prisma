@@ -713,3 +713,21 @@ model MobileTrendingOverride {
   createdBy String
   createdAt DateTime @default(now())
 }
+
+/// Two coffees an admin said are different (kept in id order: lotA < lotB), so the duplicate finder skips them.
+model MobileDuplicateDismissal {
+  lotA      String
+  lotB      String
+  createdAt DateTime @default(now())
+
+  @@id([lotA, lotB])
+}
+
+/// The slug of a coffee merged into another; old links resolve to the one that stayed.
+model MobileLotRedirect {
+  fromSlug  String   @id
+  toLotId   String
+  createdAt DateTime @default(now())
+
+  @@index([toLotId])
+}
