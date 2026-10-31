@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import type { PrismaClient } from "@prisma/client";
-import { queueItems, queueRoasters, suggestDetails, tidySuggestion } from "../adminQueue";
+import { isBlend, queueItems, queueRoasters, suggestDetails, tidySuggestion } from "../adminQueue";
 
 const sub = (over: Record<string, unknown> = {}) => ({
   id: "s1", name: "شيلشلي", nameEn: null, roasterName: "محمصة دبليو", originName: "إثيوبيا", process: "NATURAL", roastLevel: null,
@@ -33,10 +33,10 @@ describe("queueRoasters", () => {
     expect(store.signedUrl).toHaveBeenCalledTimes(2);
   });
 
-  it("counts a blend origin and an OTHER process as missing on published coffees", async () => {
+  it("counts a «مزيج» origin on a single-origin coffee and an OTHER process as missing", async () => {
     const { prisma, m } = fake();
     m.coffeeLot.findMany.mockResolvedValue([{
-      id: "l1", nameAr: "مزيج", name: "Blend", imageUrl: "https://x/a.jpg", process: "OTHER", roastLevel: null, flavorNotes: [],
+      id: "l1", nameAr: "هويلا", name: "Huila", imageUrl: "https://x/a.jpg", process: "OTHER", roastLevel: null, flavorNotes: [],
       descriptionAr: null, roaster: { nameAr: "سويل" }, originCountry: { isoCode: "XB", nameAr: "مزيج" },
     }]);
     const [g] = await queueRoasters(prisma, "incomplete");
@@ -52,6 +52,25 @@ describe("queueItems", () => {
     const [card] = await queueItems(prisma, store, "pending", "محمصة دبليو");
     expect(m.mobileCoffeeSubmission.findMany.mock.calls[0][0].where).toEqual({ status: "PENDING", roasterName: "محمصة دبليو" });
     expect(card).toMatchObject({ kind: "submission", imageUrl: "https://signed", missing: ["notes"], descriptionAr: "مجففة بإيحاءات التوت" });
+  });
+});
+
+describe("blends", () => {
+  it("counts «مزيج» as a missing origin only on a coffee that isn't a blend", async () => {
+    const { prisma, m } = fake();
+    const lot = (over: Record<string, unknown>) => ({
+      id: "l", nameAr: "x", name: "x", imageUrl: "https://x/a.jpg", process: "NATURAL", roastLevel: null, flavorNotes: ["توت"],
+      descriptionAr: null, roaster: { nameAr: "سويل", name: "Soil" }, originCountry: { isoCode: "XB", nameAr: "مزيج" }, ...over,
+    });
+    m.coffeeLot.findMany.mockResolvedValue([
+      lot({ id: "a", nameAr: "مزيج سمو", name: "Sumou Blend" }),
+      lot({ id: "b", nameAr: "كاندي لاند", name: "Candy Land", process: "MIXED" }),
+      lot({ id: "c", nameAr: "هويلا", name: "Huila" }),
+    ]);
+    const cards = await queueItems(prisma, null, "incomplete", null);
+    expect(cards.map((c) => c.missing.includes("origin"))).toEqual([false, false, true]);
+    expect(isBlend({ name: "خلطة القدية" })).toBe(true);
+    expect(isBlend({ name: "هويلا", process: "WASHED" })).toBe(false);
   });
 });
 
