@@ -114,6 +114,26 @@ describe("importBatch", () => {
     expect((await run({ photoEdited: true })).some((d) => "imageUrl" in d)).toBe(false);
   });
 
+  it("puts a photo the roaster sent over an admin's edit once, and makes it the original", async () => {
+    const lot = { id: "L1", slug: "olala-konga", imageUrl: "https://x/lots/olala-konga-old.jpg", imageType: "USER_UPLOADED", process: "NATURAL",
+      flavorNotes: ["x"], descriptionAr: "d", regionAr: "r", region: null, variety: "v", roastLevel: "فاتح", originCountry: { isoCode: "ET" } };
+    const m = {
+      mobileCoffeeSubmission: {
+        findMany: vi.fn().mockResolvedValue([{ id: "s1", importKey: "k1", status: "APPROVED", photoPath: "imports/of-1.jpg", approvedLotId: "L1",
+          extras: { photoEdited: true, originalPhotoPath: "imports/of-1.jpg", descriptionAr: "d" } }]),
+        update: vi.fn(),
+      },
+      coffeeLot: { findMany: vi.fn().mockResolvedValueOnce([lot]).mockResolvedValue([]), update: vi.fn() },
+    };
+    const store = { put: vi.fn(), signedUrl: vi.fn(), publish: vi.fn().mockResolvedValue("https://x/lots/olala-konga-new.jpg") };
+    const konga = { ...item("k1", "كونجا"), extras: { photo: "ol-1", photoFromRoaster: true } };
+    await importBatch(m as unknown as PrismaClient, { batch: "t", items: [konga] }, { "ol-1": "AAAA" }, store);
+    expect(m.coffeeLot.update.mock.calls.map((c) => c[0].data)).toContainEqual(expect.objectContaining({ imageUrl: "https://x/lots/olala-konga-new.jpg" }));
+    const subData = m.mobileCoffeeSubmission.update.mock.calls.map((c) => c[0].data).find((d) => d.photoPath);
+    expect(subData.photoPath).toMatch(/^imports\/ol-1-[0-9a-f]{8}\.jpg$/);
+    expect(subData.extras).toEqual({ descriptionAr: "d" });
+  });
+
   it("turns extras into lot tags", () => {
     expect(tagsFrom({ isLuxury: true, isDecaf: true })).toEqual(["luxury", "decaf"]);
     expect(tagsFrom({})).toEqual([]);

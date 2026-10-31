@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import type { PrismaClient } from "@prisma/client";
+import type { Prisma, PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { CATALOG_ACCOUNT, SUBMISSION_PROCESSES } from "./submissions";
 import { readExtras } from "./admin";
@@ -16,6 +16,7 @@ import roastingHousePhotos from "./data/roasting-house-photos.json";
 import camelStepPhotos from "./data/camel-step-photos.json";
 import yahimPhotos from "./data/yahim-photos.json";
 import sulalatPhotos from "./data/sulalat-photos.json";
+import olalaPhotos from "./data/olala-photos.json";
 import officialPhotos from "./data/official-photos.json";
 import soutAsantePhotos from "./data/sout-asante-photos.json";
 
@@ -58,6 +59,7 @@ export const BUNDLED_BATCHES: Record<string, { data: unknown; photos: Record<str
       ...(camelStepPhotos as Record<string, string>),
       ...(yahimPhotos as Record<string, string>),
       ...(sulalatPhotos as Record<string, string>),
+      ...(olalaPhotos as Record<string, string>),
       ...(officialPhotos as Record<string, string>),
       ...(soutAsantePhotos as Record<string, string>),
     },
@@ -175,9 +177,12 @@ export async function importBatch(
         const photo = photoOf(item);
         const current = prior.photoPath === photo?.path || !!(photo && lot?.imageUrl?.endsWith(`-${photo.version}.jpg`));
         const editedByAdmin = !!readAdmin(prior.extras).photoEdited;
+        // A photo the roaster sent us replaces an admin's edit once; edits made after it stay
+        // (the suggestion then points at this photo, so it counts as current).
+        const fromRoaster = item.extras.photoFromRoaster === true;
         // A coffee published without a picture gets the batch's (unless an admin deleted it on purpose).
         const replaceable = lot?.imageType === "USER_UPLOADED" || (lot?.imageType === "NONE" && !lot.imageUrl);
-        if (lot && photo && store && replaceable && !current && !editedByAdmin) {
+        if (lot && photo && store && replaceable && !current && (!editedByAdmin || fromRoaster)) {
           // A photo that won't go up leaves the lot's current one; the rest of the batch carries on.
           try {
             const path = await uploadPhoto(item);
@@ -185,7 +190,12 @@ export async function importBatch(
             await prisma.coffeeLot.update({
               where: { id: lot.id }, data: { imageUrl, storedImageUrl: imageUrl, imageType: "USER_UPLOADED", imageStoredAt: new Date() },
             });
-            await prisma.mobileCoffeeSubmission.update({ where: { id: prior.id }, data: { photoPath: path } });
+            // The roaster's photo becomes the original the photo tools start from.
+            const extras = { ...readAdmin(prior.extras) };
+            if (fromRoaster) { delete extras.photoEdited; delete extras.photoCutFailed; delete extras.originalPhotoPath; }
+            await prisma.mobileCoffeeSubmission.update({
+              where: { id: prior.id }, data: { photoPath: path, ...(fromRoaster ? { extras: extras as Prisma.InputJsonValue } : {}) },
+            });
           } catch (e) {
             console.error("import photo swap failed", lot.slug, e);
             photoErrors += 1;
