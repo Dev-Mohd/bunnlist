@@ -99,6 +99,8 @@ export async function importBatch(
   created: number; alreadyImported: number; alreadyInCatalog: number; photos: number; photoErrors: number; remaining: number;
   /** Published coffees whose missing details the batch filled in. */
   filled: number;
+  /** New items left out for being a bag over 300 g (a kilo, 500 g). */
+  heavy: number;
 }> {
   const startedAt = Date.now();
   const { items } = Batch.parse(raw);
@@ -140,7 +142,7 @@ export async function importBatch(
     `${norm(l.roaster?.nameAr)}|${norm(l.nameAr)}`, `${norm(l.roaster?.name)}|${norm(l.name)}`,
   ]));
 
-  let created = 0, alreadyImported = 0, alreadyInCatalog = 0, photoErrors = 0, remaining = 0, filled = 0;
+  let created = 0, alreadyImported = 0, alreadyInCatalog = 0, photoErrors = 0, remaining = 0, filled = 0, heavy = 0;
   // A few items at a time: each one waits on storage, and the whole run has to
   // finish inside the route's time limit.
   await eachLimited(items, 6, async (item) => {
@@ -208,6 +210,8 @@ export async function importBatch(
       }
       return;
     }
+    // The guide lists the bags people buy to try (up to 300 g); kilo and 500 g bags stay out.
+    if (overWeight(item)) { heavy += 1; return; }
     if (inCatalog.has(`${norm(item.roasterName)}|${norm(item.name)}`)
       || (item.nameEn && item.roasterNameEn && inCatalog.has(`${norm(item.roasterNameEn)}|${norm(item.nameEn)}`))) {
       alreadyInCatalog += 1;
@@ -223,7 +227,7 @@ export async function importBatch(
     });
     created += 1;
   });
-  return { created, alreadyImported, alreadyInCatalog, photos: photoCount, photoErrors, remaining, filled };
+  return { created, alreadyImported, alreadyInCatalog, photos: photoCount, photoErrors, remaining, filled, heavy };
 }
 
 /** Key-order-independent JSON, for comparing stored JSON columns. */
@@ -252,6 +256,18 @@ function keepAdminEdits(row: Record<string, unknown>, want: ReturnType<typeof fi
 /** True when a pending suggestion already holds these fields. */
 function sameFields(row: Record<string, unknown>, want: ReturnType<typeof fields>): boolean {
   return (Object.keys(want) as (keyof typeof want)[]).every((k) => stable(row[k] ?? (k === "extras" ? {} : null)) === stable(want[k]));
+}
+
+const HEAVY = /(^|[^\d.])(1(\.0)?\s*-?\s*(kg|كج|كجم|كغ|كيلو)|1000\s*-?\s*(g|gm|جرام|غرام|جم|غ)|(400|450|500|750)\s*-?\s*(g|gm|جرام|غرام|جم|غ))(?![\p{L}])/iu;
+
+/**
+ * A bag over 300 g, by what its name or link says (the store's own weight field is
+ * left alone: it often holds the largest of several sizes on one page).
+ */
+export function overWeight(item: { name: string; nameEn?: string | null; sourceUrl?: string | null }): boolean {
+  let url = item.sourceUrl ?? "";
+  try { url = decodeURIComponent(url); } catch { /* keep as is */ }
+  return HEAVY.test(`${item.name} ${item.nameEn ?? ""} ${url.replace(/[-_]/g, " ")}`);
 }
 
 /** Runs `fn` over the items with at most `limit` in flight. */

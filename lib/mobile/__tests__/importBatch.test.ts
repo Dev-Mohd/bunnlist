@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import type { PrismaClient } from "@prisma/client";
-import { BUNDLED_BATCHES, importBatch } from "../importBatch";
+import { BUNDLED_BATCHES, importBatch, overWeight } from "../importBatch";
 import { tagsFrom } from "../admin";
 
 const item = (key: string, name: string, roaster = "محمصة الرياض") => ({
@@ -21,7 +21,7 @@ describe("importBatch", () => {
     const result = await importBatch(m as unknown as PrismaClient, {
       batch: "t", items: [item("k1", "قديمة"), item("k2", "جبل السودة"), item("k3", "جديدة")],
     });
-    expect(result).toEqual({ created: 1, alreadyImported: 1, alreadyInCatalog: 1, photos: 0, photoErrors: 0, remaining: 0, filled: 0 });
+    expect(result).toEqual({ created: 1, alreadyImported: 1, alreadyInCatalog: 1, photos: 0, photoErrors: 0, remaining: 0, filled: 0, heavy: 0 });
     expect(m.mobileCoffeeSubmission.create.mock.calls[0][0].data).toMatchObject({ accountId: "catalog", importKey: "k3", extras: { isLuxury: true } });
   });
 
@@ -33,8 +33,8 @@ describe("importBatch", () => {
     const store = { put: vi.fn().mockResolvedValue(undefined), signedUrl: vi.fn(), publish: vi.fn() };
     const bundle = BUNDLED_BATCHES["roasteries-2026-05"];
     const result = await importBatch(m as unknown as PrismaClient, bundle.data, bundle.photos, store);
-    expect(result.created).toBe(953);
-    expect(result.photos).toBe(838); // 24 bag photos from the product pages + 20 Doha bags (7 coffees new to a photo) + 14 Sulalat official artwork + 24 Black Knight + 16 Arriyadh Roaster + 22 Bunista + 23 ASH + 11 SHOVEL + 20 Roasting House + 13 Camel Step + 132 Yahim Cups + 490 from the roasters' own stores + 42 Sout and Asante
+    expect(result.created).toBe(926); // 953 in the batch, 27 of them kilo or 500 g bags left out
+    expect(result.photos).toBe(812); // (26 belong to bags over 300 g, left out) 24 bag photos from the product pages + 20 Doha bags (7 coffees new to a photo) + 14 Sulalat official artwork + 24 Black Knight + 16 Arriyadh Roaster + 22 Bunista + 23 ASH + 11 SHOVEL + 20 Roasting House + 13 Camel Step + 132 Yahim Cups + 490 from the roasters' own stores + 42 Sout and Asante
     expect(store.put).toHaveBeenCalledWith(expect.stringMatching(/^imports\/bk-milora-[0-9a-f]{8}\.jpg$/), expect.any(Buffer));
     expect(store.put).toHaveBeenCalledWith(expect.stringMatching(/^imports\/ar-shmaisy-street-[0-9a-f]{8}\.jpg$/), expect.any(Buffer));
   });
@@ -132,6 +132,17 @@ describe("importBatch", () => {
     const subData = m.mobileCoffeeSubmission.update.mock.calls.map((c) => c[0].data).find((d) => d.photoPath);
     expect(subData.photoPath).toMatch(/^imports\/ol-1-[0-9a-f]{8}\.jpg$/);
     expect(subData.extras).toEqual({ descriptionAr: "d" });
+  });
+
+  it("leaves out bags over 300 g by their name or link", () => {
+    expect(overWeight({ name: "إثيوبيا ترتيرا (1 كج)" })).toBe(true);
+    expect(overWeight({ name: "اوغندي - ما ناناسي 1KG" })).toBe(true);
+    expect(overWeight({ name: "كولومبي- ويلا", sourceUrl: "https://kuf.sa/ar/%D9%83%D9%88%D9%84%D9%88%D9%85%D8%A8%D9%8A-%D9%88%D9%8A%D9%84%D8%A7-1kg/p1" })).toBe(true);
+    expect(overWeight({ name: "هامبيلا", sourceUrl: "https://yahimcups.com/قهوة-دبليو-هامبيلا-1-كيلو/p1" })).toBe(true);
+    expect(overWeight({ name: "أجا", sourceUrl: "https://idmicoffee.com/ar/aja-saudi-coffee-500g/p1" })).toBe(true);
+    expect(overWeight({ name: "كولومبيا ويلا 250 جرام" })).toBe(false);
+    expect(overWeight({ name: "قوجي", sourceUrl: "https://breehant.com/ar/XeyxPPy" })).toBe(false);
+    expect(overWeight({ name: "محصول 1500 متر" })).toBe(false);
   });
 
   it("turns extras into lot tags", () => {
