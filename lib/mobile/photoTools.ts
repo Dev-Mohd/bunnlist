@@ -215,7 +215,11 @@ export const PhotoToolRequest = z.discriminatedUnion("action", [
   }),
   PhotoTarget.extend({ action: z.literal("delete") }),
   PhotoTarget.extend({ action: z.literal("restore") }),
-  z.object({ action: z.literal("roaster"), roaster: z.string().trim().min(1), sensitivity: z.number().min(0).max(100).default(50) }),
+  z.object({
+    action: z.literal("roaster"), roaster: z.string().trim().min(1), sensitivity: z.number().min(0).max(100).default(50),
+    /** submission: the roaster's waiting suggestions; lot: its published coffees. */
+    kind: z.enum(["submission", "lot"]).default("submission"),
+  }),
 ]);
 export type PhotoToolRequest = z.infer<typeof PhotoToolRequest>;
 
@@ -228,22 +232,51 @@ async function download(url: string): Promise<Buffer> {
   return Buffer.from(await res.arrayBuffer());
 }
 
-/** The photo to work from: a suggestion's original upload (so edits never stack), or a lot's current picture. */
+type Linked = { id: string; photoPath: string | null; extras: Prisma.JsonValue | null };
+
+/** The suggestion a published coffee came from (it keeps the original photo), if any. */
+const linked = (prisma: PrismaClient, lotId: string): Promise<Linked | null> =>
+  prisma.mobileCoffeeSubmission.findFirst({ where: { approvedLotId: lotId }, select: { id: true, photoPath: true, extras: true } });
+
+/** A suggestion's original photo path: kept aside once edited, else its current one. */
+function originalPath(s: { photoPath: string | null; extras: Prisma.JsonValue | null }): string | null {
+  const extras = asExtras(s.extras);
+  return (typeof extras.originalPhotoPath === "string" ? extras.originalPhotoPath : null) ?? s.photoPath;
+}
+
+async function privatePhoto(store: PhotoStore, path: string): Promise<Buffer> {
+  const url = await store.signedUrl(path);
+  if (!url) throw ApiError.unprocessable("photo_unavailable");
+  return download(url);
+}
+
+/** The photo to work from: always the original upload when there is one, so edits never stack. */
 async function source(prisma: PrismaClient, store: PhotoStore, t: PhotoTarget): Promise<Buffer> {
   if (t.kind === "submission") {
     const s = await prisma.mobileCoffeeSubmission.findUnique({ where: { id: t.id }, select: { photoPath: true, extras: true } });
     if (!s) throw ApiError.unprocessable("submission_not_found");
-    const extras = asExtras(s.extras);
-    const path = (typeof extras.originalPhotoPath === "string" ? extras.originalPhotoPath : null) ?? s.photoPath;
+    const path = originalPath(s);
     if (!path) throw ApiError.unprocessable("no_photo");
-    const url = await store.signedUrl(path);
-    if (!url) throw ApiError.unprocessable("photo_unavailable");
-    return download(url);
+    return privatePhoto(store, path);
   }
   const lot = await prisma.coffeeLot.findUnique({ where: { id: t.id }, select: { imageUrl: true } });
   if (!lot) throw ApiError.unprocessable("lot_not_found");
+  const sub = await linked(prisma, t.id);
+  const path = sub && originalPath(sub);
+  if (path) return privatePhoto(store, path);
   if (!lot.imageUrl) throw ApiError.unprocessable("no_photo");
   return download(lot.imageUrl);
+}
+
+/** Notes on a published coffee's suggestion that its photo was edited (so imports and roaster runs leave it). */
+async function markLotEdited(prisma: PrismaClient, lotId: string): Promise<void> {
+  const sub = await linked(prisma, lotId);
+  if (!sub) return;
+  const extras = asExtras(sub.extras);
+  await prisma.mobileCoffeeSubmission.update({
+    where: { id: sub.id },
+    data: { extras: { ...extras, photoEdited: true, photoCutFailed: false, originalPhotoPath: extras.originalPhotoPath ?? sub.photoPath ?? null } as Prisma.InputJsonValue },
+  });
 }
 
 const version = (b: Buffer) => createHash("sha1").update(b).digest("hex").slice(0, 8);
@@ -274,6 +307,7 @@ async function save(prisma: PrismaClient, store: PhotoStore, t: PhotoTarget, jpe
       imageSource: "USER_UPLOAD", imageStorageProvider: "supabase", imageStoredAt: new Date(), imageApprovedAt: new Date(),
     },
   });
+  await markLotEdited(prisma, t.id);
   return imageUrl;
 }
 
@@ -316,10 +350,11 @@ export async function photoTool(
         const lot = await prisma.coffeeLot.findUnique({ where: { id: req.id }, select: { id: true } });
         if (!lot) throw ApiError.unprocessable("lot_not_found");
         await prisma.coffeeLot.update({ where: { id: req.id }, data: { imageUrl: null, storedImageUrl: null, imageType: "NONE" } });
+        await markLotEdited(prisma, req.id);
       }
       return { imageUrl: null };
     case "restore": {
-      if (req.kind !== "submission") throw ApiError.unprocessable("restore_unavailable");
+      if (req.kind === "lot") return restoreLot(prisma, store, req.id);
       const s = await prisma.mobileCoffeeSubmission.findUnique({ where: { id: req.id }, select: { extras: true } });
       if (!s) throw ApiError.unprocessable("submission_not_found");
       const rest = asExtras(s.extras);
@@ -332,43 +367,84 @@ export async function photoTool(
       return { imageUrl: await store.signedUrl(originalPhotoPath) };
     }
     case "roaster":
-      return roasterCutouts(prisma, store, req.roaster, req.sensitivity, budgetMs);
+      return roasterCutouts(prisma, store, req.roaster, req.sensitivity, req.kind, budgetMs);
   }
 }
 
+/** Puts a published coffee's original photo (from its suggestion) back as its picture. */
+async function restoreLot(prisma: PrismaClient, store: PhotoStore, lotId: string): Promise<{ imageUrl: string }> {
+  const lot = await prisma.coffeeLot.findUnique({ where: { id: lotId }, select: { slug: true } });
+  if (!lot) throw ApiError.unprocessable("lot_not_found");
+  const sub = await linked(prisma, lotId);
+  const path = sub && originalPath(sub);
+  if (!sub || !path) throw ApiError.unprocessable("no_original");
+  const imageUrl = await store.publish(path, `lots/${lot.slug}-original.jpg`);
+  await prisma.coffeeLot.update({
+    where: { id: lotId },
+    data: { imageUrl, storedImageUrl: imageUrl, imageType: "USER_UPLOADED", imagePermissionStatus: "APPROVED", imageStoredAt: new Date() },
+  });
+  const extras = asExtras(sub.extras);
+  delete extras.photoEdited; delete extras.photoCutFailed;
+  await prisma.mobileCoffeeSubmission.update({ where: { id: sub.id }, data: { extras: extras as Prisma.InputJsonValue } });
+  return { imageUrl };
+}
+
+/** One photo for a roaster-wide run: what to cut, and the suggestion that records how it went. */
+type CutJob = { target: PhotoTarget; name: string; markId: string; extras: Prisma.JsonValue | null };
+
+/** A roaster's photos not edited (or given up on) yet: its waiting suggestions, or its published coffees. */
+async function cutJobs(prisma: PrismaClient, roaster: string, kind: "submission" | "lot"): Promise<CutJob[]> {
+  const fresh = (extras: Prisma.JsonValue | null) => { const e = asExtras(extras); return !e.photoEdited && !e.photoCutFailed; };
+  if (kind === "submission") {
+    return (await prisma.mobileCoffeeSubmission.findMany({
+      where: { status: "PENDING", roasterName: roaster, photoPath: { not: null } },
+      select: { id: true, name: true, extras: true }, orderBy: { createdAt: "asc" },
+    })).filter((r) => fresh(r.extras)).map((r) => ({ target: { kind, id: r.id }, name: r.name, markId: r.id, extras: r.extras }));
+  }
+  // Published coffees: only those from a suggestion, which keeps the original and the record of the run.
+  const lots = await prisma.coffeeLot.findMany({
+    where: { publishedAt: { not: null }, roaster: { nameAr: roaster } }, select: { id: true, nameAr: true }, orderBy: { nameAr: "asc" },
+  });
+  const subs = await prisma.mobileCoffeeSubmission.findMany({
+    where: { approvedLotId: { in: lots.map((l) => l.id) } }, select: { id: true, approvedLotId: true, photoPath: true, extras: true },
+  });
+  const byLot = new Map(subs.map((s) => [s.approvedLotId, s]));
+  return lots.flatMap((l) => {
+    const s = byLot.get(l.id);
+    return s && originalPath(s) && fresh(s.extras) ? [{ target: { kind, id: l.id }, name: l.nameAr, markId: s.id, extras: s.extras }] : [];
+  });
+}
+
 /**
- * Lifts the backdrop off every waiting suggestion of one roaster that wasn't
- * edited yet. A photo the cut can't do cleanly (empty, or a scene) is marked and
- * left as it was, so the next run moves on to the rest.
+ * Lifts the backdrop off every photo of one roaster that wasn't edited yet. A
+ * photo the cut can't do cleanly (empty, or a scene) is marked and left as it
+ * was, so the next run moves on to the rest.
  */
 async function roasterCutouts(
-  prisma: PrismaClient, store: PhotoStore, roaster: string, sensitivity: number, budgetMs: number,
+  prisma: PrismaClient, store: PhotoStore, roaster: string, sensitivity: number, kind: "submission" | "lot", budgetMs: number,
 ): Promise<{ done: number; failed: { id: string; name: string; reason: string }[]; remaining: number }> {
   const startedAt = Date.now();
-  const rows = (await prisma.mobileCoffeeSubmission.findMany({
-    where: { status: "PENDING", roasterName: roaster, photoPath: { not: null } },
-    select: { id: true, name: true, extras: true }, orderBy: { createdAt: "asc" },
-  })).filter((r) => { const e = asExtras(r.extras); return !e.photoEdited && !e.photoCutFailed; });
+  const rows = await cutJobs(prisma, roaster, kind);
   const result = { done: 0, failed: [] as { id: string; name: string; reason: string }[], remaining: 0 };
   let next = 0;
   const worker = async () => {
     while (next < rows.length) {
       const row = rows[next++];
       if (Date.now() - startedAt > budgetMs) { result.remaining += 1; continue; }
-      const t = { kind: "submission" as const, id: row.id };
+      const t = row.target;
       try {
         const r = await cutout(await source(prisma, store, t), { sensitivity, removeBackground: true });
         if (r.warningAr) {
-          result.failed.push({ id: row.id, name: row.name, reason: r.warningAr });
-          await markFailed(prisma, row.id, row.extras);
+          result.failed.push({ id: t.id, name: row.name, reason: r.warningAr });
+          await markFailed(prisma, row.markId, row.extras);
           continue;
         }
         await save(prisma, store, t, r.jpeg);
         result.done += 1;
       } catch (e) {
         const code = e instanceof ApiError ? e.reason ?? e.code : "error";
-        result.failed.push({ id: row.id, name: row.name, reason: FAIL_AR[code] ?? "تعذّر" });
-        await markFailed(prisma, row.id, row.extras);
+        result.failed.push({ id: t.id, name: row.name, reason: FAIL_AR[code] ?? "تعذّر" });
+        await markFailed(prisma, row.markId, row.extras);
       }
     }
   };

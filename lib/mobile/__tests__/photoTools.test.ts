@@ -74,3 +74,43 @@ describe("photoTool", () => {
     expect(extras).toEqual({ descriptionAr: "x" });
   });
 });
+
+describe("photoTool on published coffees", () => {
+  const store = () => ({
+    put: vi.fn(), signedUrl: vi.fn(async (p: string) => `https://s/${p}`),
+    publish: vi.fn(async (_p: string, d: string) => `https://pub/${d}`), putPublic: vi.fn(async (d: string) => `https://pub/${d}`),
+  });
+
+  it("brings a published coffee's original photo back from its suggestion", async () => {
+    const update = vi.fn();
+    const subUpdate = vi.fn();
+    const prisma = {
+      coffeeLot: { findUnique: vi.fn().mockResolvedValue({ slug: "sout-joker" }), update },
+      mobileCoffeeSubmission: {
+        findFirst: vi.fn().mockResolvedValue({ id: "s1", photoPath: "imports/x.jpg", extras: { photoEdited: true, originalPhotoPath: "imports/orig.jpg" } }),
+        update: subUpdate,
+      },
+    } as unknown as PrismaClient;
+    const st = store();
+    expect(await photoTool(prisma, st, { action: "restore", kind: "lot", id: "L1" })).toEqual({ imageUrl: "https://pub/lots/sout-joker-original.jpg" });
+    expect(st.publish).toHaveBeenCalledWith("imports/orig.jpg", "lots/sout-joker-original.jpg");
+    expect(update.mock.calls[0][0].data.imageUrl).toBe("https://pub/lots/sout-joker-original.jpg");
+    expect(subUpdate.mock.calls[0][0].data.extras).toEqual({ originalPhotoPath: "imports/orig.jpg" });
+  });
+
+  it("cuts a roaster's published coffees that come from a suggestion and weren't edited", async () => {
+    const prisma = {
+      coffeeLot: { findMany: vi.fn().mockResolvedValue([{ id: "L1", nameAr: "أ" }, { id: "L2", nameAr: "ب" }, { id: "L3", nameAr: "ج" }]) },
+      mobileCoffeeSubmission: {
+        findMany: vi.fn().mockResolvedValue([
+          { id: "s1", approvedLotId: "L1", photoPath: "imports/1.jpg", extras: {} },
+          { id: "s2", approvedLotId: "L2", photoPath: "imports/2.jpg", extras: { photoEdited: true } },
+        ]),
+        update: vi.fn(),
+      },
+    } as unknown as PrismaClient;
+    // Out of time at once: only says how many are left, which shows which ones it would cut.
+    const r = await photoTool(prisma, store(), { action: "roaster", roaster: "صوت", sensitivity: 50, kind: "lot" }, -1);
+    expect(r).toEqual({ done: 0, failed: [], remaining: 1 });
+  });
+});

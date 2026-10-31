@@ -14,7 +14,8 @@ import type { PhotoStore } from "./suggestionPhotos";
 // by Claude (text only; photos are never touched), and nothing is saved until the
 // admin taps one.
 
-export const QUEUE_KINDS = ["pending", "incomplete"] as const;
+/** photos: every published coffee, for going over the pictures roaster by roaster. */
+export const QUEUE_KINDS = ["pending", "incomplete", "photos"] as const;
 export type QueueKind = (typeof QUEUE_KINDS)[number];
 export type Missing = "origin" | "process" | "notes" | "photo";
 
@@ -29,6 +30,8 @@ export interface QueueCounts {
   noNotes: number;
   noPhoto: number;
   reports: number;
+  /** Published coffees (the photo review covers all of them). */
+  published: number;
 }
 
 const INCOMPLETE_LOT: Prisma.CoffeeLotWhereInput = {
@@ -38,7 +41,7 @@ const INCOMPLETE_LOT: Prisma.CoffeeLotWhereInput = {
 
 export async function queueCounts(prisma: PrismaClient): Promise<QueueCounts> {
   const published = { publishedAt: { not: null } };
-  const [pending, incomplete, noOrigin, noProcess, noNotes, noPhoto, reports] = await Promise.all([
+  const [pending, incomplete, noOrigin, noProcess, noNotes, noPhoto, reports, publishedCount] = await Promise.all([
     prisma.mobileCoffeeSubmission.count({ where: { status: "PENDING" } }),
     prisma.coffeeLot.count({ where: INCOMPLETE_LOT }),
     prisma.coffeeLot.count({ where: { ...published, originCountry: { isoCode: BLEND } } }),
@@ -46,8 +49,9 @@ export async function queueCounts(prisma: PrismaClient): Promise<QueueCounts> {
     prisma.coffeeLot.count({ where: { ...published, flavorNotes: { isEmpty: true } } }),
     prisma.coffeeLot.count({ where: { ...published, imageUrl: null } }),
     prisma.mobileReport.count({ where: { status: "open" } }),
+    prisma.coffeeLot.count({ where: published }),
   ]);
-  return { pending, incomplete, noOrigin, noProcess, noNotes, noPhoto, reports };
+  return { pending, incomplete, noOrigin, noProcess, noNotes, noPhoto, reports, published: publishedCount };
 }
 
 export interface QueueCard {
@@ -161,7 +165,8 @@ export async function queueRoasters(prisma: PrismaClient, kind: QueueKind, store
     }));
     return groups;
   }
-  const lots = await prisma.coffeeLot.findMany({ where: INCOMPLETE_LOT, select: LOT_SELECT });
+  const where = kind === "photos" ? { publishedAt: { not: null } } : INCOMPLETE_LOT;
+  const lots = await prisma.coffeeLot.findMany({ where, select: LOT_SELECT });
   return group(lots.map((l) => {
     const c = lotCard(l as unknown as LotRow);
     return { roaster: c.roasterName, missing: c.missing, imageUrl: c.imageUrl };
@@ -178,11 +183,18 @@ export async function queueItems(
     });
     return Promise.all(rows.map((r) => submissionCard(r as unknown as SubmissionRow, store)));
   }
+  const photos = kind === "photos";
   const lots = await prisma.coffeeLot.findMany({
-    where: { ...INCOMPLETE_LOT, ...(roaster ? { roaster: { nameAr: roaster } } : {}) }, orderBy: { createdAt: "asc" }, take: 100,
+    where: { ...(photos ? { publishedAt: { not: null } } : INCOMPLETE_LOT), ...(roaster ? { roaster: { nameAr: roaster } } : {}) },
+    orderBy: photos ? { nameAr: "asc" } : { createdAt: "asc" }, take: photos ? 300 : 100,
     select: LOT_SELECT,
   });
-  return lots.map((l) => lotCard(l as unknown as LotRow));
+  // A published coffee's original photo is kept on the suggestion it came from.
+  const originals = new Set((await prisma.mobileCoffeeSubmission.findMany({
+    where: { approvedLotId: { in: lots.map((l) => l.id) } }, select: { approvedLotId: true, photoPath: true, extras: true },
+  })).filter((s) => s.photoPath || typeof (s.extras as { originalPhotoPath?: unknown } | null)?.originalPhotoPath === "string")
+    .map((s) => s.approvedLotId));
+  return lots.map((l) => ({ ...lotCard(l as unknown as LotRow), hasOriginalPhoto: originals.has(l.id) }));
 }
 
 // MARK: Suggestions from the description
