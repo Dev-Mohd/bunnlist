@@ -34,9 +34,31 @@ export interface QueueCounts {
   published: number;
 }
 
+/** Words that name a blend: its «مزيج» origin is right, not missing. */
+const BLEND_WORDS = ["مزيج", "خلطة", "خليط", "بلند", "blend"];
+const BLEND_NAME = new RegExp(BLEND_WORDS.join("|"), "i");
+
+/** A coffee filed as a blend that really is one (by name, or a mixed process). */
+export function isBlend(c: { name?: string | null; nameEn?: string | null; process?: string | null }): boolean {
+  return c.process === "MIXED" || BLEND_NAME.test(`${c.name ?? ""} ${c.nameEn ?? ""}`);
+}
+
+/** «مزيج» as an origin is missing only on a coffee that isn't a blend. */
+const UNKNOWN_ORIGIN: Prisma.CoffeeLotWhereInput = {
+  originCountry: { isoCode: BLEND },
+  NOT: {
+    OR: [
+      { process: "MIXED" },
+      ...BLEND_WORDS.flatMap((w) => [
+        { nameAr: { contains: w, mode: "insensitive" as const } }, { name: { contains: w, mode: "insensitive" as const } },
+      ]),
+    ],
+  },
+};
+
 const INCOMPLETE_LOT: Prisma.CoffeeLotWhereInput = {
   publishedAt: { not: null },
-  OR: [{ originCountry: { isoCode: BLEND } }, { process: "OTHER" }, { flavorNotes: { isEmpty: true } }],
+  OR: [UNKNOWN_ORIGIN, { process: "OTHER" }, { flavorNotes: { isEmpty: true } }],
 };
 
 export async function queueCounts(prisma: PrismaClient): Promise<QueueCounts> {
@@ -44,7 +66,7 @@ export async function queueCounts(prisma: PrismaClient): Promise<QueueCounts> {
   const [pending, incomplete, noOrigin, noProcess, noNotes, noPhoto, reports, publishedCount] = await Promise.all([
     prisma.mobileCoffeeSubmission.count({ where: { status: "PENDING" } }),
     prisma.coffeeLot.count({ where: INCOMPLETE_LOT }),
-    prisma.coffeeLot.count({ where: { ...published, originCountry: { isoCode: BLEND } } }),
+    prisma.coffeeLot.count({ where: { ...published, ...UNKNOWN_ORIGIN } }),
     prisma.coffeeLot.count({ where: { ...published, process: "OTHER" } }),
     prisma.coffeeLot.count({ where: { ...published, flavorNotes: { isEmpty: true } } }),
     prisma.coffeeLot.count({ where: { ...published, imageUrl: null } }),
@@ -85,9 +107,12 @@ export interface RoasterGroup {
   imageUrl: string | null;
 }
 
-function missingOf(c: { originCode: string | null; originName: string | null; process: string | null; flavorNotes: string[]; hasPhoto: boolean }): Missing[] {
+function missingOf(c: {
+  originCode: string | null; originName: string | null; process: string | null; flavorNotes: string[]; hasPhoto: boolean; blend: boolean;
+}): Missing[] {
   const out: Missing[] = [];
-  if (!c.originName || c.originCode === BLEND) out.push("origin");
+  const blendOrigin = c.originCode === BLEND || c.originName === "مزيج";
+  if (!c.originName || (blendOrigin && !c.blend)) out.push("origin");
   if (!c.process || c.process === "OTHER") out.push("process");
   if (c.flavorNotes.length === 0) out.push("notes");
   if (!c.hasPhoto) out.push("photo");
@@ -110,7 +135,7 @@ function lotCard(l: LotRow): QueueCard {
     roasterNameEn: l.roaster?.name || null, imageUrl: l.imageUrl, hasOriginalPhoto: false, originName: l.originCountry?.nameAr ?? null, originCode: l.originCountry?.isoCode ?? null,
     process: l.process, roastLevel: l.roastLevel, flavorNotes: l.flavorNotes, descriptionAr: l.descriptionAr, sourceUrl: null,
   };
-  return { ...card, missing: missingOf({ ...card, hasPhoto: !!l.imageUrl }) };
+  return { ...card, missing: missingOf({ ...card, hasPhoto: !!l.imageUrl, blend: isBlend({ name: l.nameAr, nameEn: l.name, process: l.process }) }) };
 }
 
 type SubmissionRow = {
@@ -127,7 +152,7 @@ async function submissionCard(s: SubmissionRow, store: PhotoStore | null): Promi
     originName: s.originName, originCode: null, process: s.process, roastLevel: s.roastLevel, flavorNotes: s.flavorNotes,
     descriptionAr: extras.descriptionAr ?? null, sourceUrl: s.sourceUrl,
   };
-  return { ...card, missing: missingOf({ ...card, hasPhoto: !!s.photoPath }) };
+  return { ...card, missing: missingOf({ ...card, hasPhoto: !!s.photoPath, blend: isBlend({ name: s.name, nameEn: s.nameEn, process: s.process }) }) };
 }
 
 function group(cards: { roaster: string; missing: Missing[]; imageUrl: string | null }[]): RoasterGroup[] {
@@ -150,11 +175,14 @@ export async function queueRoasters(prisma: PrismaClient, kind: QueueKind, store
   if (kind === "pending") {
     const rows = await prisma.mobileCoffeeSubmission.findMany({
       where: { status: "PENDING" },
-      select: { roasterName: true, originName: true, process: true, flavorNotes: true, photoPath: true },
+      select: { roasterName: true, name: true, nameEn: true, originName: true, process: true, flavorNotes: true, photoPath: true },
     });
     const groups = group(rows.map((r) => ({
       roaster: r.roasterName, imageUrl: null,
-      missing: missingOf({ originCode: null, originName: r.originName, process: r.process, flavorNotes: r.flavorNotes, hasPhoto: !!r.photoPath }),
+      missing: missingOf({
+        originCode: null, originName: r.originName, process: r.process, flavorNotes: r.flavorNotes, hasPhoto: !!r.photoPath,
+        blend: isBlend({ name: r.name, nameEn: r.nameEn, process: r.process }),
+      }),
     })));
     if (!store) return groups;
     const photoOf = new Map<string, string>();
@@ -230,7 +258,7 @@ export function claudeDetailReader(apiKey: string): DetailReader {
         max_tokens: 1000,
         output_config: { effort: "low", format: zodOutputFormat(SuggestionShape) },
         system: `You read a specialty coffee's product text (Arabic, sometimes English) and pull out only what it states.
-- process: NATURAL (مجففة/طبيعية), WASHED (مغسولة), HONEY (عسلية), ANAEROBIC (لاهوائية), CARBONIC_MACERATION (كربوني), WET_HULLED, EXPERIMENTAL (infused/co-ferment), or null if the text doesn't say.
+- process: NATURAL (مجففة/طبيعية), WASHED (مغسولة), HONEY (عسلية), ANAEROBIC (لاهوائية), CARBONIC_MACERATION (كربوني), WET_HULLED, EXPERIMENTAL (infused/co-ferment), MIXED (a blend of differently processed coffees, e.g. «مجفف ومغسول»), or null if the text doesn't say.
 - originCode: the ISO 3166 two-letter code of the single growing country, originNameAr its Arabic name (e.g. ET / إثيوبيا). null for blends of several countries or when not stated. A Saudi-style roast is not a Saudi origin.
 - flavorNotes: the tasting notes in Arabic, short (one to three words each), at most 6, in the text's order. Leave out body, acidity, sweetness levels and brewing advice.
 - roastLevel: light, medium or dark only if the text says so (شقراء/فاتحة = light, متوسطة = medium, غامقة/داكنة = dark), else null.
