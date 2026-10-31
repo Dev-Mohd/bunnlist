@@ -33,6 +33,7 @@ function fakePrisma(opts: { status?: string; photoPath?: string | null; slugTake
     },
     user: { findUnique: vi.fn(), findMany: vi.fn().mockResolvedValue([]) },
     mobileProfile: { findMany: vi.fn().mockResolvedValue([]) },
+    mobileRoasterRecipe: { createMany: vi.fn().mockResolvedValue({ count: 0 }) },
   };
   return { db: m as unknown as PrismaClient, m };
 }
@@ -78,6 +79,23 @@ describe("approveSubmission", () => {
     await approveSubmission(db, s, "s1", approve);
     expect(s.publish).not.toHaveBeenCalled();
     expect(prisma.coffeeLot.create.mock.calls[0][0].data.imageUrl).toBeUndefined();
+  });
+
+  it("keeps the roaster's recipe from the page text", async () => {
+    const { db, m: prisma } = fakePrisma({ photoPath: null });
+    prisma.mobileCoffeeSubmission.findUnique.mockResolvedValue({
+      id: "s1", status: "PENDING", photoPath: null,
+      extras: { descriptionAr: "وصفة تقطير: الأداة: V60 كمية القهوة: 18 جرام حرارة الماء: 93 كمية الماء: 270 مل وقت التحضير: 2:10" },
+    });
+    await approveSubmission(db, store(), "s1", approve);
+    const [row] = prisma.mobileRoasterRecipe.createMany.mock.calls[0][0].data;
+    expect(row).toMatchObject({ lotId: "lot1", position: 0, method: "V60", doseG: 18, waterMl: 270, tempC: 93, timeSec: 130 });
+  });
+
+  it("adds no recipe when the page has none", async () => {
+    const { db, m: prisma } = fakePrisma();
+    await approveSubmission(db, store(), "s1", approve);
+    expect(prisma.mobileRoasterRecipe.createMany).not.toHaveBeenCalled();
   });
 
   it("refuses a suggestion that was already reviewed", async () => {

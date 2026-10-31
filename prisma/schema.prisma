@@ -159,8 +159,8 @@ model OriginCountry {
 }
 
 model CoffeeLot {
-  id                     String        @id @default(cuid())
-  slug                   String        @unique
+  id                     String                @id @default(cuid())
+  slug                   String                @unique
   name                   String
   nameAr                 String
   roasterId              String
@@ -177,25 +177,25 @@ model CoffeeLot {
   flavorNotes            String[]
   recommendedBrewMethods BrewMethod[]
   imagePath              String?
-  imageUrl               String?                 @db.Text
-  imageType              CoffeeImageType         @default(NONE)
-  imagePermissionStatus  ImagePermissionStatus   @default(PLACEHOLDER_ONLY)
-  imageSource            CoffeeImageSource       @default(PLACEHOLDER)
+  imageUrl               String?               @db.Text
+  imageType              CoffeeImageType       @default(NONE)
+  imagePermissionStatus  ImagePermissionStatus @default(PLACEHOLDER_ONLY)
+  imageSource            CoffeeImageSource     @default(PLACEHOLDER)
   imageCredit            String?
-  imageSourceUrl         String?                 @db.Text
-  imagePermissionNote    String?                 @db.Text
+  imageSourceUrl         String?               @db.Text
+  imagePermissionNote    String?               @db.Text
   imageApprovedAt        DateTime?
-  originalImageUrl       String?                 @db.Text
-  storedImageUrl         String?                 @db.Text
+  originalImageUrl       String?               @db.Text
+  storedImageUrl         String?               @db.Text
   imageStorageProvider   String?
   imageStoredAt          DateTime?
-  description            String?       @db.Text
-  descriptionAr          String?       @db.Text
-  averageRating          Decimal       @default(0) @db.Decimal(3, 2)
-  reviewCount            Int           @default(0)
+  description            String?               @db.Text
+  descriptionAr          String?               @db.Text
+  averageRating          Decimal               @default(0) @db.Decimal(3, 2)
+  reviewCount            Int                   @default(0)
   publishedAt            DateTime?
-  createdAt              DateTime      @default(now())
-  updatedAt              DateTime      @updatedAt
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @updatedAt
   createdById            String?
 
   roaster       Roaster             @relation(fields: [roasterId], references: [id], onDelete: Restrict)
@@ -372,33 +372,33 @@ model MobileCollectionEntry {
 
 /// A user-submitted coffee suggestion from the app (pending review).
 model MobileCoffeeSubmission {
-  id          String   @id @default(cuid())
-  accountId   String
-  name        String
-  roasterName String
-  originName  String?
-  nameEn      String?
-  roasterNameEn String?
-  process     String?
-  roastLevel  String?
-  flavorNotes String[] @default([])
+  id               String    @id @default(cuid())
+  accountId        String
+  name             String
+  roasterName      String
+  originName       String?
+  nameEn           String?
+  roasterNameEn    String?
+  process          String?
+  roastLevel       String?
+  flavorNotes      String[]  @default([])
   /// Object path in the private "suggestion-images" bucket (a background-removed product photo).
-  photoPath   String?
-  note        String?  @db.Text
+  photoPath        String?
+  note             String?   @db.Text
   /// Shown publicly with the lot once approved ("ملاحظة المكتشف").
-  publicNote  String?  @db.Text
+  publicNote       String?   @db.Text
   /// Curated batch imports (accountId "catalog"): idempotency key, source page,
   /// extraction confidence, and lot details carried over on approval.
-  importKey        String?  @unique
-  sourceUrl        String?  @db.Text
+  importKey        String?   @unique
+  sourceUrl        String?   @db.Text
   sourceConfidence Float?
   extras           Json?
-  status      String   @default("PENDING")
+  status           String    @default("PENDING")
   /// Set on approval: the published lot this suggestion became.
-  approvedLotId String?
-  reviewNote  String?
-  reviewedAt  DateTime?
-  createdAt   DateTime @default(now())
+  approvedLotId    String?
+  reviewNote       String?
+  reviewedAt       DateTime?
+  createdAt        DateTime  @default(now())
 
   @@index([accountId])
   @@index([status])
@@ -410,18 +410,18 @@ model MobileCoffeeSubmission {
 /// lifecycle draft -> published <-> unpublished, deleted is final. clientId makes
 /// creation idempotent per account.
 model MobileBrewExperience {
-  id         String   @id @default(cuid())
-  accountId  String
-  clientId   String
-  lotId      String
-  methodCode String
-  stars      Int
-  brewedAt   DateTime
-  note       String   @default("") @db.Text
-  state      String   @default("draft")
-  revision   Int      @default(0)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id           String   @id @default(cuid())
+  accountId    String
+  clientId     String
+  lotId        String
+  methodCode   String
+  stars        Int
+  brewedAt     DateTime
+  note         String   @default("") @db.Text
+  state        String   @default("draft")
+  revision     Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   /// «حضّر»'s brew log, all optional: the recipe followed (id, title, where it came
   /// from), the grind actually used on which guide grinder, the numbers, the time
   /// brewed, and how it tasted (sour/bitter/weak/strong/balanced).
@@ -445,44 +445,44 @@ model MobileBrewExperience {
 /// draft -> published <-> unpublished, deleted is final; publishing is validated.
 /// Edits bump version; a copy records its source and the version it copied.
 model MobileRecipe {
-  id             String   @id @default(cuid())
-  accountId      String
-  clientId       String
-  lotId          String?
-  title          String
-  methodCode     String
-  temperature    String   @default("hot")
-  doseGrams      Float?
-  hotWaterGrams  Float?
-  iceGrams       Float?
-  yieldGrams     Float?
-  waterTempC     Float?
-  grinder        String   @default("")
-  grindSetting   String   @default("")
-  grinderModel   String?
-  grindLevel     String?
-  grindMicrons   Int?
-  brewer         String   @default("")
-  filterType     String?
-  roastLevel     String?
-  restDays       Int?
-  waterType      String?
-  waterBrand     String   @default("")
-  waterTdsPpm    Int?
-  beverageTds    Float?
-  milkDrink      String?
-  milkType       String?
-  milkGrams      Float?
-  notes          String   @default("") @db.Text
-  steps          Json     @default("[]")
-  sourceId       String?
-  sourceVersion  Int?
-  version        Int      @default(1)
-  state          String   @default("draft")
-  revision       Int      @default(0)
-  publishedAt    DateTime?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id            String    @id @default(cuid())
+  accountId     String
+  clientId      String
+  lotId         String?
+  title         String
+  methodCode    String
+  temperature   String    @default("hot")
+  doseGrams     Float?
+  hotWaterGrams Float?
+  iceGrams      Float?
+  yieldGrams    Float?
+  waterTempC    Float?
+  grinder       String    @default("")
+  grindSetting  String    @default("")
+  grinderModel  String?
+  grindLevel    String?
+  grindMicrons  Int?
+  brewer        String    @default("")
+  filterType    String?
+  roastLevel    String?
+  restDays      Int?
+  waterType     String?
+  waterBrand    String    @default("")
+  waterTdsPpm   Int?
+  beverageTds   Float?
+  milkDrink     String?
+  milkType      String?
+  milkGrams     Float?
+  notes         String    @default("") @db.Text
+  steps         Json      @default("[]")
+  sourceId      String?
+  sourceVersion Int?
+  version       Int       @default(1)
+  state         String    @default("draft")
+  revision      Int       @default(0)
+  publishedAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   @@unique([accountId, clientId])
   @@index([accountId])
@@ -506,23 +506,23 @@ model MobileAiScan {
 /// shown instead of the raw account id), display name, bio and avatar, and when
 /// the first-run setup was finished.
 model MobileProfile {
-  accountId   String    @id
-  username    String?   @unique
-  displayName String?
-  bio         String?
-  avatarPath  String?
-  onboardedAt DateTime?
-  hideFromLeaderboard Boolean @default(false)
+  accountId           String    @id
+  username            String?   @unique
+  displayName         String?
+  bio                 String?
+  avatarPath          String?
+  onboardedAt         DateTime?
+  hideFromLeaderboard Boolean   @default(false)
   /// "everyone" | "followers" | "me" — see lib/mobile/profile.ts VISIBILITY.
-  followersVisibility String  @default("everyone")
-  followingVisibility String  @default("everyone")
-  activityVisibility  String  @default("everyone")
+  followersVisibility String    @default("everyone")
+  followingVisibility String    @default("everyone")
+  activityVisibility  String    @default("everyone")
   /// A private account approves each follower; its activity is for followers only.
-  isPrivate           Boolean @default(false)
+  isPrivate           Boolean   @default(false)
   /// «مطحنتي»: a MobileGrinder id, for grind conversions.
   grinderId           String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 }
 
 /// The points ledger. One row per rewarded action (unique per account, kind and
@@ -731,4 +731,24 @@ model MobileLotRedirect {
   createdAt DateTime @default(now())
 
   @@index([toLotId])
+}
+
+/// A roaster's own brew recipe for a coffee, read from its product page text.
+model MobileRoasterRecipe {
+  id        String   @id @default(cuid())
+  lotId     String
+  position  Int      @default(0)
+  /// V60 | ESPRESSO | CHEMEX | AEROPRESS
+  method    String
+  tool      String?
+  doseG     Float
+  waterMl   Int?
+  tempC     Int?
+  timeSec   Int?
+  grind     String?
+  ratio     Float?
+  steps     String[] @default([])
+  createdAt DateTime @default(now())
+
+  @@index([lotId])
 }
