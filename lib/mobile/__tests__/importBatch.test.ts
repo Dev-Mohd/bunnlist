@@ -220,7 +220,7 @@ describe("importBatch", () => {
     const result = await importBatch(m as unknown as PrismaClient, { batch: "t", items: [newer] }, {}, null);
     expect(result.filled).toBe(1);
     expect(m.coffeeLot.update).toHaveBeenCalledWith({
-      where: { id: "L1" }, data: { process: "NATURAL", descriptionAr: "مجففة بإيحاءات التوت", regionAr: "يرقاتشيف", roastLevel: "فاتح" },
+      where: { id: "L1" }, data: { process: "NATURAL", regionAr: "يرقاتشيف", roastLevel: "فاتح" },
     });
   });
 });
