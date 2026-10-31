@@ -2,6 +2,7 @@ import type { PrismaClient } from "@prisma/client";
 import { lotCommunity, lotDiscoverer, type LotCommunity, type LotDiscoverer } from "./lotCommunity";
 import { displayNames } from "./profile";
 import { CATALOG_ACCOUNT } from "./submissions";
+import { buyLink, type BuyLink, type RecipeMethod, type RoasterRecipe } from "./roasterRecipe";
 
 // Read-only catalog feed for the mobile app. Returns the published coffee lots as a
 // flat, display-oriented DTO (Arabic-first), independent of the website's richer page
@@ -94,6 +95,11 @@ export interface MobileLotDetail extends MobileLot {
   community?: LotCommunity;
   /** "luxury" | "infused" | "decaf", with an optional note (why it's luxury). */
   tags?: { tag: string; note: string | null }[];
+  altitudeMeters?: number | null;
+  /** Where to buy it: the roaster's own product page, or a shop that sells it. */
+  buy?: BuyLink | null;
+  /** The roaster's own recipes from its product page, filter first. */
+  roasterRecipes?: RoasterRecipe[];
 }
 
 export function mapLotDetail(row: CoffeeLotDetailRow): MobileLotDetail {
@@ -174,16 +180,20 @@ export async function getPublishedLot(prisma: PrismaClient, slug: string): Promi
     select: {
       id: true, slug: true, name: true, nameAr: true, process: true, processLabel: true,
       flavorNotes: true, roastLevel: true, averageRating: true, reviewCount: true, imageUrl: true,
-      descriptionAr: true, regionAr: true, variety: true, recommendedBrewMethods: true,
+      descriptionAr: true, regionAr: true, variety: true, recommendedBrewMethods: true, altitudeMeters: true,
       roaster: { select: { nameAr: true, name: true } },
       originCountry: { select: { nameAr: true, isoCode: true } },
       brewStats: { select: { brewMethod: true, averageRating: true, reviewCount: true, wouldBuyAgain: true } },
     },
   });
   if (!row) return null;
-  const [discoverer, community, tags] = await Promise.all([
+  const [discoverer, community, tags, source, recipes] = await Promise.all([
     lotDiscoverer(prisma, row.id), lotCommunity(prisma, row.id),
     prisma.mobileLotTag.findMany({ where: { lotId: row.id }, select: { tag: true, note: true }, orderBy: { tag: "asc" } }),
+    prisma.mobileCoffeeSubmission.findFirst({
+      where: { approvedLotId: row.id, sourceUrl: { not: null } }, orderBy: { reviewedAt: "desc" }, select: { sourceUrl: true },
+    }),
+    prisma.mobileRoasterRecipe.findMany({ where: { lotId: row.id }, orderBy: { position: "asc" } }),
   ]);
   return {
     ...mapLotDetail(row as unknown as CoffeeLotDetailRow),
@@ -192,6 +202,12 @@ export async function getPublishedLot(prisma: PrismaClient, slug: string): Promi
     discoverer,
     community,
     tags,
+    altitudeMeters: (row as { altitudeMeters?: number | null }).altitudeMeters ?? null,
+    buy: buyLink(source?.sourceUrl),
+    roasterRecipes: recipes.map((r) => ({
+      method: r.method as RecipeMethod, tool: r.tool, doseG: r.doseG, waterMl: r.waterMl, tempC: r.tempC,
+      timeSec: r.timeSec, grind: r.grind, ratio: r.ratio, steps: r.steps,
+    })),
   };
 }
 

@@ -1,3 +1,4 @@
+import { parseRoasterRecipes } from "./roasterRecipe";
 import type { PrismaClient } from "@prisma/client";
 import { tidyDescription } from "./describe";
 import { z } from "zod";
@@ -213,6 +214,11 @@ export async function approveSubmission(
       data: tags.map((tag) => ({ lotId: lot.id, tag, note: tag === "luxury" ? extras.luxuryReason ?? null : null })),
       skipDuplicates: true,
     });
+  }
+  // The roaster's own recipe from its page text, shown on the coffee page.
+  const recipes = parseRoasterRecipes(extras.descriptionAr);
+  if (recipes.length) {
+    await prisma.mobileRoasterRecipe.createMany({ data: recipes.map((r, position) => ({ ...r, lotId: lot.id, position })) });
   }
   if (!UNCREDITED_ACCOUNTS.includes(submission.accountId)) await award(prisma, submission.accountId, "discovery", id);
   return { lotSlug: lot.slug };
