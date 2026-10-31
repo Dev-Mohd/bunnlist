@@ -34,7 +34,7 @@ describe("importBatch", () => {
     const bundle = BUNDLED_BATCHES["roasteries-2026-05"];
     const result = await importBatch(m as unknown as PrismaClient, bundle.data, bundle.photos, store);
     expect(result.created).toBe(953);
-    expect(result.photos).toBe(793); // 24 Black Knight + 16 Arriyadh Roaster + 22 Bunista + 23 ASH + 11 SHOVEL + 20 Roasting House + 13 Camel Step + 132 Yahim Cups + 490 from the roasters' own stores + 42 Sout and Asante
+    expect(result.photos).toBe(807); // 14 Sulalat official artwork + 24 Black Knight + 16 Arriyadh Roaster + 22 Bunista + 23 ASH + 11 SHOVEL + 20 Roasting House + 13 Camel Step + 132 Yahim Cups + 490 from the roasters' own stores + 42 Sout and Asante
     expect(store.put).toHaveBeenCalledWith(expect.stringMatching(/^imports\/bk-milora-[0-9a-f]{8}\.jpg$/), expect.any(Buffer));
     expect(store.put).toHaveBeenCalledWith(expect.stringMatching(/^imports\/ar-shmaisy-street-[0-9a-f]{8}\.jpg$/), expect.any(Buffer));
   });
@@ -95,6 +95,23 @@ describe("importBatch", () => {
     const data = m.mobileCoffeeSubmission.update.mock.calls[0][0].data;
     expect(data).toMatchObject({ name: "ميلورا", originName: "كينيا", extras: { photo: "bk-x", photoEdited: true, adminEdited: ["originName"] } });
     expect(data.photoPath).toBeUndefined();
+  });
+
+  it("gives a coffee published without a picture the batch's photo, but not one whose photo an admin deleted", async () => {
+    const lot = { id: "L1", slug: "sulalat-el-sile", imageUrl: null, imageType: "NONE", process: "NATURAL", flavorNotes: ["x"],
+      descriptionAr: "d", regionAr: "r", region: null, variety: "v", roastLevel: "فاتح", originCountry: { isoCode: "HN" } };
+    const prior = { id: "s1", importKey: "k1", status: "APPROVED", photoPath: null, approvedLotId: "L1", extras: {} };
+    const run = async (extras: Record<string, unknown>) => {
+      const m = {
+        mobileCoffeeSubmission: { findMany: vi.fn().mockResolvedValue([{ ...prior, extras }]), update: vi.fn() },
+        coffeeLot: { findMany: vi.fn().mockResolvedValueOnce([lot]).mockResolvedValue([]), update: vi.fn() },
+      };
+      const store = { put: vi.fn(), signedUrl: vi.fn(), publish: vi.fn().mockResolvedValue("https://x/lots/sulalat-el-sile-1.jpg") };
+      await importBatch(m as unknown as PrismaClient, { batch: "t", items: [{ ...item("k1", "إل سيلي"), extras: { photo: "sl-1" } }] }, { "sl-1": "AAAA" }, store);
+      return m.coffeeLot.update.mock.calls.map((c) => c[0].data);
+    };
+    expect(await run({})).toContainEqual(expect.objectContaining({ imageUrl: "https://x/lots/sulalat-el-sile-1.jpg", imageType: "USER_UPLOADED" }));
+    expect((await run({ photoEdited: true })).some((d) => "imageUrl" in d)).toBe(false);
   });
 
   it("turns extras into lot tags", () => {
