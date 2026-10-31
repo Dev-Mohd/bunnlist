@@ -27,6 +27,7 @@ export interface TasteMatch {
 const PROCESS_AR: Record<string, string> = {
   NATURAL: "المجففة", WASHED: "المغسولة", HONEY: "العسلية", ANAEROBIC: "اللاهوائية",
   WET_HULLED: "المقشورة رطبة", CARBONIC_MACERATION: "النقع الكربوني", EXPERIMENTAL: "التجريبية",
+  MIXED: "المعالجات المختلطة",
 };
 
 type Feature = { key: string; weight: number; text: string };

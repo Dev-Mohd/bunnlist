@@ -22,7 +22,7 @@ export const BagScanRequest = z.object({
 export type BagScanRequest = z.infer<typeof BagScanRequest>;
 
 const PROCESS_CODES = [
-  "NATURAL", "WASHED", "HONEY", "ANAEROBIC", "WET_HULLED", "CARBONIC_MACERATION", "EXPERIMENTAL", "OTHER",
+  "NATURAL", "WASHED", "HONEY", "ANAEROBIC", "WET_HULLED", "CARBONIC_MACERATION", "EXPERIMENTAL", "MIXED", "OTHER",
 ] as const;
 const BREW_CODES = ["ESPRESSO", "V60", "CHEMEX", "AEROPRESS", "FRENCH_PRESS", "COLD_BREW", "OTHER"] as const;
 

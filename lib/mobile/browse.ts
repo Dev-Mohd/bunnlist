@@ -10,7 +10,7 @@ import { FLAVOR_FAMILIES, flavorFamily } from "./flavorFamilies";
 // favorites). Flavor notes are free text, so the family filter runs in memory
 // over the database-filtered set; the catalog is small enough for that.
 
-const PROCESSES = ["NATURAL", "WASHED", "HONEY", "ANAEROBIC", "WET_HULLED", "CARBONIC_MACERATION", "EXPERIMENTAL", "OTHER"] as const;
+const PROCESSES = ["NATURAL", "WASHED", "HONEY", "ANAEROBIC", "WET_HULLED", "CARBONIC_MACERATION", "EXPERIMENTAL", "MIXED", "OTHER"] as const;
 const METHODS = ["ESPRESSO", "V60", "CHEMEX", "AEROPRESS", "FRENCH_PRESS", "COLD_BREW", "OTHER"] as const;
 export const BROWSE_SORTS = ["rating_desc", "rating_asc", "newest", "oldest", "name_asc", "name_desc"] as const;
 const MAX_SCAN = 3000;
