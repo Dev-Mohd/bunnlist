@@ -208,7 +208,8 @@ export interface DetailSuggestion {
 }
 
 export interface DetailReader {
-  read(text: string): Promise<DetailSuggestion>;
+  /** `images`: JPEGs from the coffee's store page, whose printed text (a label, an info card) counts too. */
+  read(text: string, images?: Buffer[]): Promise<DetailSuggestion>;
 }
 
 const SuggestionShape = z.object({
@@ -223,7 +224,7 @@ const SuggestionShape = z.object({
 export function claudeDetailReader(apiKey: string): DetailReader {
   const client = new Anthropic({ apiKey });
   return {
-    async read(text) {
+    async read(text, images = []) {
       const response = await client.messages.parse({
         model: BAG_SCAN_MODEL,
         max_tokens: 1000,
@@ -233,8 +234,15 @@ export function claudeDetailReader(apiKey: string): DetailReader {
 - originCode: the ISO 3166 two-letter code of the single growing country, originNameAr its Arabic name (e.g. ET / إثيوبيا). null for blends of several countries or when not stated. A Saudi-style roast is not a Saudi origin.
 - flavorNotes: the tasting notes in Arabic, short (one to three words each), at most 6, in the text's order. Leave out body, acidity, sweetness levels and brewing advice.
 - roastLevel: light, medium or dark only if the text says so (شقراء/فاتحة = light, متوسطة = medium, غامقة/داكنة = dark), else null.
-Never guess from the coffee's name alone when the text is silent; null is the right answer then.`,
-        messages: [{ role: "user", content: text.slice(0, 4000) }],
+Never guess from the coffee's name alone when the text is silent; null is the right answer then.
+Photos from the coffee's store page may come with the text: read what is printed on them (an info card, the bag's label) and treat it like the text. They can also be unrelated (gift boxes, cups, certificates, brewing recipes, other coffees): ignore those. When the text and a photo disagree, prefer the photo of this coffee's own card or label.`,
+        messages: [{
+          role: "user",
+          content: [
+            ...images.map((b) => ({ type: "image" as const, source: { type: "base64" as const, media_type: "image/jpeg" as const, data: b.toString("base64") } })),
+            { type: "text" as const, text: text.slice(0, 4000) },
+          ],
+        }],
       });
       const out = response.parsed_output;
       if (response.stop_reason === "refusal" || !out) throw new Error("suggest: no usable output");
@@ -257,25 +265,33 @@ export function tidySuggestion(raw: DetailSuggestion): DetailSuggestion {
 
 const EMPTY: DetailSuggestion = { process: null, originCode: null, originNameAr: null, flavorNotes: [], roastLevel: null };
 
-/** Suggestions for one card from its name and description; empty when there's no text to read. */
+/**
+ * Suggestions for one card from its name, description and the photos on its store
+ * page (where roasters often print the details); empty when there's nothing to read.
+ */
 export async function suggestDetails(
   prisma: PrismaClient, reader: DetailReader | null, kind: "submission" | "lot", id: string,
+  images: (pageUrl: string) => Promise<Buffer[]> = async () => [],
 ): Promise<DetailSuggestion> {
-  let name = "", description = "";
+  let name = "", description = "", sourceUrl: string | null = null;
   if (kind === "submission") {
-    const s = await prisma.mobileCoffeeSubmission.findUnique({ where: { id }, select: { name: true, extras: true, note: true } });
+    const s = await prisma.mobileCoffeeSubmission.findUnique({ where: { id }, select: { name: true, extras: true, note: true, sourceUrl: true } });
     if (!s) throw ApiError.unprocessable("submission_not_found");
     name = s.name;
     description = [readExtras(s.extras).descriptionAr, s.note].filter(Boolean).join("\n");
+    sourceUrl = s.sourceUrl;
   } else {
     const l = await prisma.coffeeLot.findUnique({ where: { id }, select: { nameAr: true, descriptionAr: true } });
     if (!l) throw ApiError.unprocessable("lot_not_found");
     name = l.nameAr;
     description = l.descriptionAr ?? "";
+    sourceUrl = (await prisma.mobileCoffeeSubmission.findFirst({ where: { approvedLotId: id }, select: { sourceUrl: true } }))?.sourceUrl ?? null;
   }
-  if (!reader || description.trim().length < 15) return EMPTY;
+  if (!reader) return EMPTY;
+  const photos = sourceUrl ? await images(sourceUrl).catch(() => []) : [];
+  if (photos.length === 0 && description.trim().length < 15) return EMPTY;
   try {
-    return tidySuggestion(await reader.read(`الاسم: ${name}\nالوصف: ${description}`));
+    return tidySuggestion(await reader.read(`الاسم: ${name}\nالوصف: ${description || "(لا يوجد)"}`, photos));
   } catch {
     return EMPTY;
   }
