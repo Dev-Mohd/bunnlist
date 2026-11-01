@@ -13,6 +13,7 @@ export const POINTS = {
   experience: 5,   // a brew logged (up to EXPERIENCE_DAILY_CAP per day)
   recipe: 20,      // a recipe published (once per recipe)
   discovery: 50,   // a suggestion approved into the catalog
+  challenge: 50,   // a weekly challenge finished (the challenge sets its own points)
   streak7: 25,     // every seventh day in a row
   activity: 0,     // marks an active day for the streak
 } as const;
@@ -56,11 +57,12 @@ async function insert(prisma: PrismaClient, accountId: string, kind: PointKind, 
 /** Rewards an action and records the active day; a seventh day in a row adds the streak bonus. */
 export async function award(
   prisma: PrismaClient, accountId: string, kind: Exclude<PointKind, "activity" | "streak7">, refId: string, now = new Date(),
+  pointsOverride?: number,
 ): Promise<void> {
   if (!accountId || accountId === "deleted") return;
   try {
     const day = riyadhDay(now);
-    let points: number = POINTS[kind];
+    let points: number = pointsOverride ?? POINTS[kind];
     if (kind === "experience") {
       const today = await prisma.mobilePointEvent.count({ where: { accountId, kind: "experience", day, points: { gt: 0 } } });
       if (today >= EXPERIENCE_DAILY_CAP) points = 0;

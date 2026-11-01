@@ -4,6 +4,7 @@ import { LOT_LIST_SELECT, mapLot, type CoffeeLotRow, type MobileLot } from "./ca
 import { mapExperience, type MobileExperience } from "./experiences";
 import { activityLevel, avatarUrl, displayNames } from "./profile";
 import { canSee } from "./social";
+import { commentCounts, type CommentTarget } from "./comments";
 import { UNCREDITED_ACCOUNTS } from "./submissions";
 
 // The app's home: what's trending this week (coffees, roasters, recipes), the
@@ -245,6 +246,9 @@ export interface PulseItem {
   doseGrams?: number | null;
   waterGrams?: number | null;
   brewSeconds?: number | null;
+  /** The brew's id, for its comments (recipes use recipeId). */
+  brewId?: string | null;
+  commentCount?: number;
 }
 
 /** The latest public activity: published brews, published recipes and discoveries.
@@ -258,7 +262,7 @@ export async function pulse(
   const [brews, recipes, discoveries, follows] = await Promise.all([
     prisma.mobileBrewExperience.findMany({
       where: { state: "published", createdAt: { gte: since }, ...who }, orderBy: { createdAt: "desc" }, take: from ? 80 : 40,
-      select: { accountId: true, lotId: true, methodCode: true, stars: true, note: true, createdAt: true, doseGrams: true, waterGrams: true, brewSeconds: true },
+      select: { id: true, accountId: true, lotId: true, methodCode: true, stars: true, note: true, createdAt: true, doseGrams: true, waterGrams: true, brewSeconds: true },
     }),
     prisma.mobileRecipe.findMany({
       where: { state: "published", publishedAt: { gte: since }, ...who }, orderBy: { publishedAt: "desc" }, take: from ? 40 : 20,
@@ -277,7 +281,7 @@ export async function pulse(
   const raw: Raw[] = [
     ...brews.map((b) => ({ kind: "brew" as const, accountId: b.accountId, lotId: b.lotId, at: b.createdAt.toISOString(),
       recipeId: null, recipeTitle: null, methodCode: b.methodCode, stars: b.stars, note: b.note.slice(0, 160) || null,
-      doseGrams: b.doseGrams, waterGrams: b.waterGrams, brewSeconds: b.brewSeconds })),
+      doseGrams: b.doseGrams, waterGrams: b.waterGrams, brewSeconds: b.brewSeconds, brewId: b.id })),
     ...recipes.map((r) => ({ kind: "recipe" as const, accountId: r.accountId, lotId: r.lotId, at: r.publishedAt!.toISOString(),
       recipeId: r.id, recipeTitle: r.title, methodCode: r.methodCode, stars: null, note: null })),
     ...discoveries.map((d) => ({ kind: "discovery" as const, accountId: d.accountId, lotId: d.approvedLotId, at: d.reviewedAt!.toISOString(),
@@ -299,12 +303,14 @@ export async function pulse(
     .sort((a, b) => Number(following.has(b.accountId)) - Number(following.has(a.accountId)) || b.at.localeCompare(a.at))
     .filter((r) => { const k = `${r.accountId}|${r.kind}|${r.lotId ?? r.recipeId}`; if (seen.has(k)) return false; seen.add(k); return true; })
     .slice(0, limit);
-  const [names, lots] = await Promise.all([
+  const [names, lots, comments] = await Promise.all([
     displayNames(prisma, picked.map((p) => p.accountId)),
     prisma.coffeeLot.findMany({
       where: { id: { in: picked.flatMap((p) => (p.lotId ? [p.lotId] : [])) } },
       select: { id: true, slug: true, nameAr: true, imageUrl: true, roaster: { select: { nameAr: true } }, originCountry: { select: { isoCode: true } } },
     }),
+    commentCounts(prisma, picked.flatMap((p): { type: CommentTarget; id: string }[] => p.kind === "brew" && p.brewId ? [{ type: "brew", id: p.brewId }]
+      : p.kind === "recipe" && p.recipeId ? [{ type: "recipe", id: p.recipeId }] : [])),
   ]);
   const lot = new Map(lots.map((l) => [l.id, l]));
   return picked.map(({ accountId, lotId, ...item }) => ({
@@ -317,6 +323,8 @@ export async function pulse(
     imageUrl: lotId ? lot.get(lotId)?.imageUrl ?? null : null,
     roasterNameAr: lotId ? lot.get(lotId)?.roaster?.nameAr ?? null : null,
     originCode: lotId ? lot.get(lotId)?.originCountry?.isoCode ?? null : null,
+    commentCount: item.kind === "brew" && item.brewId ? comments.get(`brew|${item.brewId}`) ?? 0
+      : item.kind === "recipe" && item.recipeId ? comments.get(`recipe|${item.recipeId}`) ?? 0 : 0,
   }));
 }
 

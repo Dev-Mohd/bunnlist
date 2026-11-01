@@ -10,7 +10,7 @@ import { refreshReviewStats } from "./reviews";
 // recipe, clear the note or the profile's text). Either way every open report on
 // the same thing closes with it.
 
-export const REPORT_TARGETS = ["review", "recipe", "note", "profile"] as const;
+export const REPORT_TARGETS = ["review", "recipe", "note", "profile", "comment"] as const;
 export const REPORT_REASONS = ["spam", "offensive", "wrong", "other"] as const;
 export type ReportTarget = (typeof REPORT_TARGETS)[number];
 
@@ -48,6 +48,10 @@ async function target(
     case "profile": {
       const p = await prisma.mobileProfile.findUnique({ where: { accountId: id }, select: { username: true, displayName: true, bio: true } });
       return p && { ownerId: id, title: `ملف @${p.username ?? "—"}`, text: [p.displayName, p.bio].filter(Boolean).join("\n") || null };
+    }
+    case "comment": {
+      const c = await prisma.mobileComment.findFirst({ where: { id, deletedAt: null }, select: { accountId: true, body: true } });
+      return c && { ownerId: c.accountId, title: "تعليق", text: c.body };
     }
   }
 }
@@ -134,6 +138,9 @@ async function removeTarget(prisma: PrismaClient, type: ReportTarget, id: string
       return;
     case "profile":
       await prisma.mobileProfile.updateMany({ where: { accountId: id }, data: { displayName: null, bio: null, avatarPath: null } });
+      return;
+    case "comment":
+      await prisma.mobileComment.updateMany({ where: { id, deletedAt: null }, data: { deletedAt: new Date() } });
       return;
   }
 }

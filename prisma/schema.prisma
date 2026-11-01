@@ -601,6 +601,8 @@ model MobileNotificationSettings {
   weeklySummary      Boolean  @default(true)
   /// News from the BunnList team (admin broadcasts).
   announcements      Boolean  @default(true)
+  /// Someone commented on my brew or recipe.
+  comments           Boolean  @default(true)
   updatedAt          DateTime @updatedAt
 }
 
@@ -756,4 +758,53 @@ model MobileRoasterRecipe {
   createdAt DateTime @default(now())
 
   @@index([lotId])
+}
+
+/// The weekly challenge an admin sets: do an action (brew, rate or collect) on
+/// `target` different coffees matching the filters, between startsAt and endsAt.
+model MobileChallenge {
+  id           String   @id @default(cuid())
+  titleAr      String
+  subtitleAr   String?
+  emoji        String?
+  /// brew | rate | collect
+  action       String
+  originCode   String?
+  process      String?
+  roasterSlug  String?
+  flavorFamily String?
+  target       Int      @default(1)
+  points       Int      @default(50)
+  startsAt     DateTime
+  endsAt       DateTime
+  createdBy    String
+  createdAt    DateTime @default(now())
+
+  @@index([startsAt, endsAt])
+}
+
+/// Someone who finished a challenge (rewarded once).
+model MobileChallengeCompletion {
+  challengeId String
+  accountId   String
+  completedAt DateTime @default(now())
+
+  @@id([challengeId, accountId])
+  @@index([challengeId])
+}
+
+/// A comment on a published brew or recipe. Soft-deleted by its author, the
+/// post's owner or an admin.
+model MobileComment {
+  id         String    @id @default(cuid())
+  /// brew | recipe
+  targetType String
+  targetId   String
+  accountId  String
+  body       String    @db.Text
+  createdAt  DateTime  @default(now())
+  deletedAt  DateTime?
+
+  @@index([targetType, targetId, createdAt])
+  @@index([accountId, createdAt])
 }
