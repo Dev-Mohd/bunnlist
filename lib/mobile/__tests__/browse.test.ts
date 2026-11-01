@@ -37,7 +37,7 @@ describe("browseLots", () => {
   });
 
   it("needs an account for shelf filters", async () => {
-    const query = parseBrowseQuery(new URLSearchParams("shelf=owned"));
+    const query = parseBrowseQuery(new URLSearchParams("shelf=owned&sort=rating_desc"));
     await expect(browseLots(fake([]).db, query, null)).rejects.toMatchObject({ code: "unauthorized" });
     const { db, m } = fake([]);
     await browseLots(db, query, "acc");

@@ -1,6 +1,7 @@
 import type { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { ApiError } from "./errors";
+import { FLAVOR_FAMILIES } from "./flavorFamilies";
 
 // Public @usernames for app accounts. Shown wherever the app names a person
 // (discoverer credit, recipe authors, reviews) instead of the raw account id.
@@ -97,6 +98,9 @@ export function activityLevel(profile: { activityVisibility?: string | null; isP
   return profile?.isPrivate && level === "everyone" ? "followers" : level;
 }
 
+/** Brew methods one can pick at signup. */
+export const BREW_PREFS = ["ESPRESSO", "V60", "CHEMEX", "AEROPRESS", "FRENCH_PRESS", "COLD_BREW"] as const;
+
 export const ProfileUpdate = z.object({
   displayName: z.string().trim().min(1).max(40).optional(),
   bio: z.string().trim().max(160).optional(),
@@ -105,6 +109,8 @@ export const ProfileUpdate = z.object({
   followingVisibility: z.enum(VISIBILITY).optional(),
   activityVisibility: z.enum(VISIBILITY).optional(),
   isPrivate: z.boolean().optional(),
+  tastePrefs: z.array(z.enum(FLAVOR_FAMILIES)).max(12).optional(),
+  brewPrefs: z.array(z.enum(BREW_PREFS)).max(6).optional(),
 });
 export type ProfileUpdate = z.infer<typeof ProfileUpdate>;
 
@@ -122,6 +128,9 @@ export interface MobileProfileView {
   isPrivate: boolean;
   /// «مطحنتي», a MobileGrinder id.
   grinderId: string | null;
+  /// What they said they like at signup; empty when skipped.
+  tastePrefs: string[];
+  brewPrefs: string[];
 }
 
 /** Public URL of an avatar object, or null without a configured Supabase URL. */
@@ -149,6 +158,8 @@ export async function getProfile(prisma: PrismaClient, accountId: string): Promi
     activityVisibility: asVisibility(profile?.activityVisibility),
     isPrivate: profile?.isPrivate ?? false,
     grinderId: profile?.grinderId ?? null,
+    tastePrefs: profile?.tastePrefs ?? [],
+    brewPrefs: profile?.brewPrefs ?? [],
   };
 }
 
@@ -161,6 +172,8 @@ export async function updateProfile(prisma: PrismaClient, accountId: string, pat
     ...(patch.followingVisibility ? { followingVisibility: patch.followingVisibility } : {}),
     ...(patch.activityVisibility ? { activityVisibility: patch.activityVisibility } : {}),
     ...(patch.isPrivate !== undefined ? { isPrivate: patch.isPrivate } : {}),
+    ...(patch.tastePrefs ? { tastePrefs: [...new Set(patch.tastePrefs)] } : {}),
+    ...(patch.brewPrefs ? { brewPrefs: [...new Set(patch.brewPrefs)] } : {}),
   };
   await prisma.mobileProfile.upsert({ where: { accountId }, update: data, create: { accountId, ...data } });
   // Going public lets everyone who asked in.
