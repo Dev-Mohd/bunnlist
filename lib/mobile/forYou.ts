@@ -19,6 +19,8 @@ export interface DailyPick {
   score: number | null;
   /** Why it fits, in Arabic. */
   reason: string;
+  /** How many coffees they rated (the pick follows their taste from MIN_RATINGS). */
+  rated: number;
 }
 
 export interface ResumeItem { lot: MobileLot; since: string }
@@ -101,7 +103,7 @@ async function dailyPick(prisma: PrismaClient, accountId: string, now: Date): Pr
     const scored = candidates.filter((c) => c.flavorNotes.length > 0)
       .map((c) => ({ id: c.id, row: c, score: Number(c.averageRating ?? 0) * 10 + Math.min(c.reviewCount, 20) }));
     const pick = pickOfTheDay(scored, accountId, day);
-    return pick ? { lot: mapLot(pick.row as unknown as CoffeeLotRow), score: null, reason: "من الأعلى تقييمًا عند الناس، قيّم ٣ قهاوي ونختار لك على ذوقك" } : null;
+    return pick ? { lot: mapLot(pick.row as unknown as CoffeeLotRow), score: null, reason: "من الأعلى تقييمًا عند الناس", rated: rated.length } : null;
   }
   const scored = candidates.map((c) => {
     const m = scoreMatch(rated, { notes: c.flavorNotes, process: c.process, origin: c.originCountry?.isoCode ?? null }, c.originCountry?.nameAr ?? null);
@@ -110,7 +112,7 @@ async function dailyPick(prisma: PrismaClient, accountId: string, now: Date): Pr
   const pick = pickOfTheDay(scored, accountId, day);
   if (!pick) return null;
   const why = pick.reasons.filter((r) => r.positive).map((r) => r.text).slice(0, 2).join("، ");
-  return { lot: mapLot(pick.row as unknown as CoffeeLotRow), score: pick.score, reason: why || "قريبة من القهاوي اللي قيّمتها عالي" };
+  return { lot: mapLot(pick.row as unknown as CoffeeLotRow), score: pick.score, reason: why || "قريبة من القهاوي اللي قيّمتها عالي", rated: rated.length };
 }
 
 async function resume(prisma: PrismaClient, accountId: string): Promise<ResumeItem[]> {
