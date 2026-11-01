@@ -22,11 +22,11 @@ function fakePrisma(approved: { approvedLotId: string; accountId: string }[], ne
 }
 
 describe("newDiscoveries", () => {
-  it("lists community discoveries first, in review order, with their discoverer", async () => {
+  it("lists approved suggestions first, in review order, without naming who suggested them", async () => {
     const { db } = fakePrisma([{ approvedLotId: "a", accountId: "u1" }, { approvedLotId: "b", accountId: "deleted" }], ["c"]);
     const lots = await newDiscoveries(db, 3);
     expect(lots.map((l) => l.id)).toEqual(["a", "b", "c"]);
-    expect(lots[0].discoveredBy).toBe("@mohd");
+    expect(lots[0].discoveredBy).toBeNull();
     expect(lots[1].discoveredBy).toBeNull();
     expect(lots[2].discoveredBy).toBeNull();
   });

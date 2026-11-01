@@ -1,6 +1,5 @@
 import type { PrismaClient } from "@prisma/client";
-import { lotCommunity, lotDiscoverer, type LotCommunity, type LotDiscoverer } from "./lotCommunity";
-import { displayNames } from "./profile";
+import { lotCommunity, type LotCommunity, type LotDiscoverer } from "./lotCommunity";
 import { CATALOG_ACCOUNT } from "./submissions";
 import { buyLink, type BuyLink, type RecipeMethod, type RoasterRecipe } from "./roasterRecipe";
 
@@ -187,8 +186,10 @@ export async function getPublishedLot(prisma: PrismaClient, slug: string): Promi
     },
   });
   if (!row) return null;
-  const [discoverer, community, tags, source, recipes] = await Promise.all([
-    lotDiscoverer(prisma, row.id), lotCommunity(prisma, row.id),
+  // No more "discovered by": suggestions are just suggestions now.
+  const discoverer: LotDiscoverer | null = null;
+  const [community, tags, source, recipes] = await Promise.all([
+    lotCommunity(prisma, row.id),
     prisma.mobileLotTag.findMany({ where: { lotId: row.id }, select: { tag: true, note: true }, orderBy: { tag: "asc" } }),
     prisma.mobileCoffeeSubmission.findFirst({
       where: { approvedLotId: row.id, sourceUrl: { not: null } }, orderBy: { reviewedAt: "desc" }, select: { sourceUrl: true },
@@ -197,8 +198,8 @@ export async function getPublishedLot(prisma: PrismaClient, slug: string): Promi
   ]);
   return {
     ...mapLotDetail(row as unknown as CoffeeLotDetailRow),
-    discoveredBy: discoverer?.name ?? null,
-    discoveredByUsername: discoverer?.username ?? null,
+    discoveredBy: null,
+    discoveredByUsername: null,
     discoverer,
     community,
     tags,
@@ -226,7 +227,6 @@ export async function newDiscoveries(prisma: PrismaClient, limit = 10): Promise<
     select: { approvedLotId: true, accountId: true },
   });
   const authorByLot = new Map(approved.map((a) => [a.approvedLotId as string, a.accountId]));
-  const names = await displayNames(prisma, [...authorByLot.values()].filter((id) => id !== "deleted"));
 
   const discovered = authorByLot.size
     ? await prisma.coffeeLot.findMany({
@@ -236,7 +236,7 @@ export async function newDiscoveries(prisma: PrismaClient, limit = 10): Promise<
   const order = [...authorByLot.keys()];
   const fromCommunity = discovered
     .sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id))
-    .map((row) => ({ ...mapLot(row as unknown as CoffeeLotRow), discoveredBy: names.get(authorByLot.get(row.id) ?? "") ?? null }));
+    .map((row) => ({ ...mapLot(row as unknown as CoffeeLotRow), discoveredBy: null }));
 
   if (fromCommunity.length >= limit) return fromCommunity;
   const newest = await prisma.coffeeLot.findMany({
