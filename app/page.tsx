@@ -1,8 +1,9 @@
 import Image from "next/image";
 import { ComingSoon, PhoneFrame, SiteFooter, SiteNav } from "@/components/site/Chrome";
-import { AdvisorSection, CommunitySection, DailySection, DrawnShelf, ListsSection, MapSection } from "@/components/site/Features";
-import { BrewClip, CountUp, Reveal, Steam, Story, type StoryStep } from "@/components/site/Motion";
+import { NewStory } from "@/components/site/Features";
+import { BagShelf, BrewClip, CountUp, Reveal, Steam, Story, type StoryStep } from "@/components/site/Motion";
 import { CONTACT_EMAIL } from "@/lib/site";
+import { SHELF_LOTS } from "@/lib/site-bags";
 
 // The BunnList site: one page that introduces the app, laid out in Apple's
 // manner in BunnList's own colors, with motion that follows the scroll.
@@ -175,27 +176,24 @@ export default function Home() {
           </div>
         </section>
 
-        {/* New: the advisor */}
-        <AdvisorSection />
-
         {/* The story: discover, keep, brew, rate */}
         <section id="discover" className="scroll-mt-12 bg-[var(--bg-alt)] px-5 py-10 sm:py-16">
           <Story steps={story} />
         </section>
 
-        {/* Today's coffee and «لك» */}
-        <DailySection />
+        {/* What's new, told like the story */}
+        <NewStory />
 
         {/* The shelf */}
         <section className="overflow-hidden bg-[var(--bg)] py-20 sm:py-28">
           <Reveal className="mx-auto max-w-[720px] px-5 text-center">
             <h2 className="text-[34px] font-bold leading-[1.15] tracking-tight sm:text-[48px]">رفّ يكبر كل أسبوع.</h2>
             <p className="mt-4 text-[19px] leading-relaxed text-[var(--ink-2)]">
-              أكثر من ٧٠٠ محصول من محامص سعودية، بمنشئها ومعالجتها ونكهاتها، ويزيد الدليل كل أسبوع.
+              أكثر من ٧٠٠ محصول من محامص سعودية، بصور أكياسها كما وصلت من محامصها، ويزيد الدليل كل أسبوع.
             </p>
           </Reveal>
           <div className="mt-12">
-            <DrawnShelf />
+            <BagShelf lots={SHELF_LOTS} />
           </div>
         </section>
 
@@ -220,11 +218,6 @@ export default function Home() {
             ))}
           </div>
         </section>
-
-        {/* Map, community, lists */}
-        <MapSection />
-        <CommunitySection />
-        <ListsSection />
 
         {/* Features, as a bento grid */}
         <section id="features" className="scroll-mt-12 bg-[var(--bg-alt)] px-5 py-20 sm:py-28">

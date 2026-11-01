@@ -1,78 +1,25 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
-import { PhoneFrame } from "./Chrome";
-import { useInView } from "./Motion";
+import Image from "next/image";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { LAND_DOTS, MAP_PROJ } from "@/lib/site-map";
+import { lotByFile, type ShelfLot } from "@/lib/site-bags";
 
-// The newer parts of the app, each with a small animated scene: the advisor
-// («ساعدني أختار»), today's coffee and «لك», the producing-countries map and
-// passport, the community and «قوائمي». Bags here are drawn, never a roaster's
-// packaging: the site promotes the app, not any brand.
+// «جديد في BunnList»: the newer parts of the app told like the story above. On
+// wide screens one phone stays while the text scrolls and its screen plays the
+// step in view; on phones each step brings its own. The coffees on the screens
+// are real ones from the guide, shown the way the app shows them.
 
+const AR = (n: number) => n.toLocaleString("ar-SA");
 const FAM: Record<string, string> = {
-  berry: "#B83345", citrus: "#F2BD33", stone: "#ED945C", floral: "#C28FDB", choc: "#5C3826",
-  caramel: "#C78540", nutty: "#A3784D", honey: "#E3B040", tea: "#85A854", dried: "#8C454D",
+  berry: "#B83345", citrus: "#F2BD33", stone: "#ED945C", floral: "#C28FDB", choc: "#5C3826", caramel: "#C78540",
+  honey: "#E3B040", tea: "#85A854", tropical: "#FA9E26",
 };
-
-/** A plain stand-up pouch with only the origin on it. */
-export function DrawnBag({ color, origin, width = 120 }: { color: string; origin: string; width?: number }) {
-  return (
-    <svg width={width} height={width * 1.35} viewBox="0 0 150 203" aria-hidden="true">
-      <defs>
-        <linearGradient id={`sh-${origin}`} x1="0" x2="1">
-          <stop offset="0" stopColor="#000" stopOpacity=".18" /><stop offset=".35" stopColor="#fff" stopOpacity=".14" />
-          <stop offset=".7" stopColor="#000" stopOpacity="0" /><stop offset="1" stopColor="#000" stopOpacity=".22" />
-        </linearGradient>
-      </defs>
-      <path d="M18 14 H132 L138 190 Q75 200 12 190 Z" fill={color} />
-      <rect x="18" y="8" width="114" height="16" rx="3" fill={color} style={{ filter: "brightness(.8)" }} />
-      <path d="M18 14 H132 L138 190 Q75 200 12 190 Z" fill={`url(#sh-${origin})`} />
-      <rect x="34" y="78" width="82" height="70" rx="10" fill="#F7F1E8" />
-      <ellipse cx="75" cy="100" rx="9" ry="12" fill="#4A3428" />
-      <path d="M75 89 Q70 100 75 111" stroke="#F7F1E8" strokeWidth="2" fill="none" />
-      <text x="75" y="134" textAnchor="middle" fontWeight="700" fontSize="15" fill="#171411" fontFamily="inherit">{origin}</text>
-    </svg>
-  );
-}
-
-function Ring({ value, play, size = 84, stroke = 8, color = "var(--accent)" }: { value: number; play: boolean; size?: number; stroke?: number; color?: string }) {
-  const r = (size - stroke) / 2, c = 2 * Math.PI * r;
-  return (
-    <div className="relative" style={{ width: size, height: size }}>
-      <svg width={size} height={size} style={{ transform: "rotate(-90deg)" }} aria-hidden="true">
-        <circle cx={size / 2} cy={size / 2} r={r} stroke="var(--line)" strokeWidth={stroke} fill="none" />
-        <circle cx={size / 2} cy={size / 2} r={r} stroke={color} strokeWidth={stroke} fill="none" strokeLinecap="round"
-          strokeDasharray={c} strokeDashoffset={play ? c * (1 - value / 100) : c} style={{ transition: "stroke-dashoffset 1.3s cubic-bezier(.2,.8,.2,1)" }} />
-      </svg>
-      <span className="absolute inset-0 flex items-center justify-center font-bold" style={{ color, fontSize: size * 0.24 }} dir="ltr">{value}%</span>
-    </div>
-  );
-}
-
-/** Text on one side, the scene on the other; `flip` swaps sides on wide screens. */
-function Split({ id, kicker, title, body, children, flip = false, dark = false, alt = false }: {
-  id?: string; kicker: string; title: string; body: ReactNode; children: ReactNode; flip?: boolean; dark?: boolean; alt?: boolean;
-}) {
-  const [ref, shown] = useInView<HTMLDivElement>(0.25);
-  return (
-    <section id={id} className={`scroll-mt-12 overflow-hidden px-5 py-20 sm:py-28 ${dark ? "bg-[var(--dark)] text-[var(--bg)]" : alt ? "bg-[var(--bg-alt)]" : "bg-[var(--bg)]"}`}>
-      <div ref={ref} data-shown={shown} className={`reveal mx-auto grid max-w-[1024px] items-center gap-12 lg:grid-cols-2 ${flip ? "lg:[&>*:first-child]:order-2" : ""}`}>
-        <div className="text-center lg:text-start">
-          <p className={`text-[17px] font-semibold ${dark ? "text-[var(--gold-light)]" : "text-[var(--accent)]"}`}>{kicker}</p>
-          <h2 className="mt-2 text-[34px] font-bold leading-[1.15] tracking-tight sm:text-[48px]">{title}</h2>
-          <div className={`mx-auto mt-5 max-w-[38ch] text-[19px] leading-relaxed lg:mx-0 ${dark ? "text-[var(--dark-ink-2)]" : "text-[var(--ink-2)]"}`}>{body}</div>
-        </div>
-        <div className="flex justify-center">{children}</div>
-      </div>
-    </section>
-  );
-}
 
 function useLoop(steps: number, ms: number, run: boolean) {
   const [i, setI] = useState(0);
   useEffect(() => {
-    if (!run) return;
+    if (!run) { setI(0); return; }
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setI(steps - 1); return; }
     const t = setInterval(() => setI((x) => (x + 1) % steps), ms);
     return () => clearInterval(t);
@@ -80,297 +27,397 @@ function useLoop(steps: number, ms: number, run: boolean) {
   return i;
 }
 
-// MARK: «ساعدني أختار»
-
-const MOODS = [["☀️", "أبي أصحصح"], ["🛋️", "روقان"], ["👥", "عندي ضيوف"], ["🧭", "شي جديد"]];
-const PICKS = [
-  { color: "#2f3b5c", origin: "إثيوبيا", name: "إثيوبيا: قوجي", why: "توت وياسمين، بدون مرارة", score: 94 },
-  { color: "#b5654a", origin: "رواندا", name: "رواندا: نياماشيكي", why: "خوخ وشاي، منعشة على الثلج", score: 89 },
-  { color: "#3f6e6a", origin: "كولومبيا", name: "كولومبيا: أنيروبك", why: "فراولة وكرز، تجربة جديدة", score: 85 },
-];
-
-function AdvisorPhone() {
-  // 0 mood, 1 mood picked, 2 flavours, 3 hot/iced, 4 thinking, 5 results
-  const [ref, shown] = useInView<HTMLDivElement>(0.3);
-  const step = useLoop(8, 1500, shown);
-  const s = Math.min(step, 5);
+function Bag({ lot, className = "", size = 80 }: { lot: ShelfLot; className?: string; size?: number }) {
   return (
-    <div ref={ref}>
-    <PhoneFrame>
-      <div className="absolute inset-0 bg-[var(--bg)] px-4 pt-12 text-[var(--ink)]">
-        {s <= 1 && (
-          <div key="mood" className="scene-in">
-            <Bar n={1} />
-            <p className="mt-4 text-[22px] font-bold">وش جوّك اليوم؟</p>
-            <div className="mt-4 grid grid-cols-2 gap-2.5">
-              {MOODS.map(([e, t], i) => (
-                <div key={t} className={`rounded-[18px] bg-[var(--card)] py-4 text-center transition-all duration-300 ${s === 1 && i === 1 ? "scale-105 ring-2 ring-[var(--accent)]" : ""}`}>
-                  <div className="text-[30px]">{e}</div><div className="mt-1 text-[14px] font-bold">{t}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-        {s === 2 && (
-          <div key="fl" className="scene-in">
-            <Bar n={3} />
-            <p className="mt-4 text-[22px] font-bold">وش يشدّك في الطعم؟</p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {[["توت", "berry", true], ["شوكولاتة", "choc", false], ["زهري", "floral", true], ["حمضيات", "citrus", false], ["كراميل", "caramel", false], ["عسل", "honey", false]].map(([t, f, on]) => (
-                <span key={t as string} className="rounded-full px-3.5 py-2 text-[14px] font-bold transition-all"
-                  style={on ? { background: FAM[f as string], color: "#fff", transform: "scale(1.06)" } : { background: "var(--card)" }}>{t as string}</span>
-              ))}
-            </div>
-          </div>
-        )}
-        {s === 3 && (
-          <div key="sv" className="scene-in">
-            <Bar n={4} />
-            <p className="mt-4 text-[22px] font-bold">حار ولا بارد؟</p>
-            <div className="mt-4 flex h-[260px] gap-2.5">
-              <div className="flex flex-1 scale-95 flex-col items-center justify-center rounded-[22px] bg-gradient-to-b from-[#f6d7b8] to-[#e9a86e] opacity-40"><span className="text-[46px]">☕</span><b>حار</b></div>
-              <div className="flex flex-1 scale-105 flex-col items-center justify-center rounded-[22px] bg-gradient-to-b from-[#dcecf2] to-[#9cc7d9] shadow-lg"><span className="text-[46px]">🧊</span><b>بارد</b></div>
-            </div>
-          </div>
-        )}
-        {s === 4 && (
-          <div key="th" className="scene-in flex h-[80%] flex-col items-center justify-center">
-            <div className="spin relative h-[120px] w-[120px]">
-              {[0, 72, 144, 216, 288].map((d) => (
-                <span key={d} className="absolute left-[50px] top-0 h-[24px] w-[18px] rounded-full bg-[var(--brown,#4A3428)]" style={{ transform: `rotate(${d}deg)`, transformOrigin: "9px 60px" }} />
-              ))}
-            </div>
-            <p className="mt-6 text-[17px] font-bold">نختار لك…</p>
-          </div>
-        )}
-        {s === 5 && (
-          <div key="rs" className="scene-in">
-            <p className="text-center text-[13px] font-bold text-[var(--gold)]">✨ قهوتك اليوم</p>
-            <p className="text-center text-[20px] font-bold">لقينا لك ٣ تناسبك</p>
-            <div className="mt-3 space-y-2.5">
-              {PICKS.map((p, i) => (
-                <div key={p.name} className={`flex items-center gap-2.5 rounded-[18px] bg-[var(--card)] p-2.5 ${i === 0 ? "ring-2 ring-[var(--gold)]" : ""}`}
-                  style={{ animation: `rise .6s cubic-bezier(.2,.9,.3,1.2) ${i * 0.15}s both` }}>
-                  <DrawnBag color={p.color} origin={p.origin} width={40} />
-                  <div className="min-w-0 flex-1"><b className="block truncate text-[13px]">{p.name}</b><span className="text-[11px] text-[var(--accent)]">{p.why}</span></div>
-                  <Ring value={p.score} play size={48} stroke={5} />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </PhoneFrame>
+    <div className={`relative ${className}`} style={{ width: size, height: size * 1.2 }}>
+      <Image src={`/site/bags/${lot.file}.jpg`} alt="" fill sizes={`${size * 2}px`} className="object-contain mix-blend-multiply" />
     </div>
   );
 }
 
-function Bar({ n }: { n: number }) {
+function Ring({ value, play, size = 56, stroke = 6, color = "#536344", label = true }: { value: number; play: boolean; size?: number; stroke?: number; color?: string; label?: boolean }) {
+  const r = (size - stroke) / 2, c = 2 * Math.PI * r;
   return (
-    <div className="flex items-center gap-2">
-      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[var(--line)]"><div className="h-full rounded-full bg-[var(--accent)] transition-all duration-500" style={{ width: `${n * 20}%` }} /></div>
-      <span className="text-[11px] text-[var(--ink-2)]">{n} من ٥</span>
+    <div className="relative shrink-0" style={{ width: size, height: size }}>
+      <svg width={size} height={size} style={{ transform: "rotate(-90deg)" }} aria-hidden="true">
+        <circle cx={size / 2} cy={size / 2} r={r} stroke="rgba(74,52,40,.12)" strokeWidth={stroke} fill="none" />
+        <circle cx={size / 2} cy={size / 2} r={r} stroke={color} strokeWidth={stroke} fill="none" strokeLinecap="round"
+          strokeDasharray={c} strokeDashoffset={play ? c * (1 - value / 100) : c} style={{ transition: "stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)" }} />
+      </svg>
+      {label && <span className="absolute inset-0 flex items-center justify-center font-bold" style={{ color, fontSize: size * 0.26 }}>{AR(value)}٪</span>}
     </div>
   );
 }
 
-export function AdvisorSection() {
-  return (
-    <Split id="advisor" kicker="✨ جديد" title="ما تدري وش تشرب؟ نختار لك."
-      body={<>جاوب كم سؤال: وش جوّك، وش بتستخدم، وش يشدّك في الطعم، حار ولا بارد. وتقدر تكتب اللي في بالك بكلامك. ونطلع لك ثلاث قهاوي تناسبك، ونقول لك ليش.</>}>
-      <AdvisorPhone />
-    </Split>
-  );
-}
+const TABS: [string, string][] = [["⌂", "اكتشف"], ["▤", "مجموعتي"], ["☕", "حضّر"], ["◎", "المجتمع"], ["●", "حسابي"]];
 
-// MARK: Today's coffee and «لك»
-
-export function DailySection() {
-  const [ref, shown] = useInView<HTMLDivElement>(0.4);
+/** The app's status bar, screen background and, inside the tabs, the tab bar. */
+function Screen({ children, dark = false, tab, footer }: { children: ReactNode; dark?: boolean; tab?: number; footer?: ReactNode }) {
   return (
-    <Split kicker="قهوة اليوم" title="كل يوم، قهوة على ذوقك." flip alt
-      body={<>من أول ما تسجّل تقول لنا وش تحب، ونرتّب لك القهاوي على ذوقك وتتجدد كل يوم. وكل ما قيّمت أكثر، صارت «قهوة اليوم» أدق.</>}>
-      <div ref={ref} className="relative flex h-[440px] w-full max-w-[420px] items-center justify-center">
-        <div className="float"><DrawnBag color="#2f3b5c" origin="إثيوبيا" width={170} /></div>
-        {[["توت أزرق", "berry", "10%", "right", "4%"], ["ياسمين", "floral", "30%", "left", "2%"], ["خوخ", "stone", "62%", "right", "0%"]].map(([t, f, top, side, off], i) => (
-          <span key={t} className="note absolute rounded-full bg-[var(--card)] px-4 py-2 text-[16px] font-bold shadow-md"
-            style={{ top, [side]: off, color: FAM[f], animationDelay: `${i * 0.6}s` }}>{t}</span>
-        ))}
-        <div className="absolute bottom-2 left-6 rounded-[24px] bg-[var(--card)] p-3 shadow-lg">
-          <Ring value={92} play={shown} />
-          <p className="mt-1 text-center text-[12px] font-semibold text-[var(--ink-2)]">توافق مع ذوقك</p>
+    <div className={`absolute inset-0 overflow-hidden ${dark ? "bg-[#1c140f] text-[#f7f1e8]" : "bg-[#f7f1e8] text-[#171411]"}`} dir="rtl">
+      <div className="flex justify-between px-6 pt-3 text-[11px] font-semibold" dir="ltr"><span>9:41</span><span>●●● ▮</span></div>
+      <div className="px-3.5 pt-3">{children}</div>
+      {footer && <div className="absolute inset-x-3.5 bottom-6">{footer}</div>}
+      {tab !== undefined && (
+        <div className={`absolute inset-x-0 bottom-0 flex justify-around border-t px-2 pb-4 pt-2 backdrop-blur ${dark ? "border-white/10 bg-[#1c140f]/90" : "border-black/5 bg-[#f7f1e8]/95"}`}>
+          {TABS.map(([icon, label], i) => (
+            <span key={label} className={`flex flex-col items-center text-[9px] font-semibold ${i === tab ? "text-[#536344]" : "opacity-45"}`}>
+              <span className="text-[15px] leading-5">{icon}</span>{label}
+            </span>
+          ))}
         </div>
-      </div>
-    </Split>
+      )}
+    </div>
   );
 }
 
-// MARK: Map and passport
+// MARK: Screens
 
-const AR = (n: number) => n.toLocaleString("ar-SA");
-// code, name, lat, lon, coffees in the guide (snapshot)
-const ORIGINS: [string, string, number, number, number][] = [
-  ["CO", "كولومبيا", 4.6, -75.6, 214], ["ET", "إثيوبيا", 7.0, 38.6, 157], ["BR", "البرازيل", -19.5, -45.5, 59], ["CR", "كوستاريكا", 9.9, -84.0, 43],
-  ["SV", "السلفادور", 13.8, -89.2, 41], ["YE", "اليمن", 15.3, 43.9, 35], ["UG", "أوغندا", 1.0, 32.4, 34], ["ID", "إندونيسيا", -2.5, 112.0, 27],
-  ["SA", "السعودية", 18.2, 42.5, 20], ["GT", "غواتيمالا", 14.8, -91.0, 16], ["PE", "بيرو", -9.2, -75.2, 8], ["PA", "بنما", 8.8, -80.4, 7],
-  ["IN", "الهند", 12.4, 75.7, 6], ["RW", "رواندا", -1.9, 29.9, 5], ["CN", "الصين", 22.8, 100.9, 5], ["KE", "كينيا", -0.4, 37.0, 2],
+const ADVISOR_PICKS: [string, number, string][] = [
+  ["kof-ethiopia-shakiso", 94, "ياسمين وتفاح أخضر، بدون مرارة"],
+  ["mahmasa-oolala-blueberry", 89, "توت أزرق وفانيلا، منعشة على الثلج"],
+  ["ash-grape-colombia", 85, "عنب وعسل، تجربة جديدة 🚀"],
 ];
-const TRIED = new Set(["ET", "CO", "YE", "BR", "KE", "PA", "RW"]);
-const project = (lat: number, lon: number) => ({
-  x: ((lon - MAP_PROJ.LON0) / (MAP_PROJ.LON1 - MAP_PROJ.LON0)) * 100,
-  y: ((MAP_PROJ.LAT0 - lat) / (MAP_PROJ.LAT0 - MAP_PROJ.LAT1)) * 100,
-});
 
-export function MapSection() {
-  const [ref, shown] = useInView<HTMLDivElement>(0.4);
-  const [lit, setLit] = useState(0);
-  const order = ORIGINS.filter(([c]) => TRIED.has(c));
-  useEffect(() => {
-    if (!shown) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setLit(order.length); return; }
-    const t = setInterval(() => setLit((n) => (n >= order.length + 3 ? 0 : n + 1)), 800);
-    return () => clearInterval(t);
-  }, [shown, order.length]);
-  const litSet = new Set(order.slice(0, Math.min(lit, order.length)).map(([c]) => c));
+function AdvisorScreen({ active }: { active: boolean }) {
+  const t = useLoop(9, 1300, active);
+  const step = t < 2 ? 0 : t < 3 ? 1 : t < 4 ? 2 : t < 5 ? 3 : 4;
+  const footer = (
+    <div className="rounded-full bg-[#536344] py-3 text-center text-[14px] font-bold text-[#f7f1e8]">
+      {step === 4 ? "أضفها لقائمة" : step === 3 ? "طلّع لي قهوتي ✨" : "التالي"}
+    </div>
+  );
   return (
-    <Split kicker="خريطة المناطق" title="قهوتك من كل مكان." dark
-      body={<>شوف من وين تجي قهاوي الدليل. كل دولة تجرّب منها تخضرّ على الخريطة وتنختم في جوازك، واضغط على أي دولة تشوف طعمها ومناطقها.</>}>
-      <div ref={ref} className="w-full max-w-[560px]">
-        <div className="relative w-full rounded-[28px] bg-[#2a201a] p-3 sm:p-5" dir="ltr">
-          <div className="relative" style={{ aspectRatio: `${MAP_PROJ.W} / ${MAP_PROJ.H}` }}>
-            <svg viewBox={`0 0 ${MAP_PROJ.W} ${MAP_PROJ.H}`} className="absolute inset-0 h-full w-full" aria-hidden="true">
-              <path d={LAND_DOTS} stroke="rgba(247,241,232,.22)" strokeWidth="2.6" strokeLinecap="round" />
-            </svg>
-            {ORIGINS.map(([code, name, lat, lon, n]) => {
-              const { x, y } = project(lat, lon);
-              const on = litSet.has(code);
-              const size = Math.min(30, 9 + Math.sqrt(n) * 1.4);
+    <Screen footer={footer}>
+      {step < 4 && (
+        <div className="flex items-center gap-2">
+          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[rgba(152,112,36,.18)]">
+            <div className="h-full rounded-full bg-[#536344] transition-all duration-500" style={{ width: `${[20, 60, 80, 100][step]}%` }} />
+          </div>
+          <span className="text-[10px] font-bold text-[#7a6a5c]">{step === 3 ? "✨" : `${AR([1, 3, 4][step])} من ٥`}</span>
+        </div>
+      )}
+      {step === 0 && (
+        <div key="a" className="scene-in">
+          <p className="mt-4 text-[21px] font-bold">وش جوّك اليوم؟</p>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            {[["☀️", "أبي أصحصح"], ["🛋️", "روقان"], ["👥", "عندي ضيوف"], ["🧭", "شي جديد"]].map(([e, l], i) => (
+              <div key={l} className={`rounded-[16px] bg-white py-7 text-center transition-all duration-300 ${t === 1 && i === 1 ? "scale-105 ring-2 ring-[#536344]" : ""}`}>
+                <div className="text-[28px]">{e}</div><div className="mt-1 text-[13px] font-bold">{l}</div>
+                {i === 1 && <div className="text-[10px] text-[#7a6a5c]">أبي أهدأ</div>}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      {step === 1 && (
+        <div key="b" className="scene-in">
+          <p className="mt-4 text-[21px] font-bold">وش يشدّك في الطعم؟</p>
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {[["توت", "berry", 1], ["شوكولاتة", "choc", 0], ["زهري", "floral", 1], ["حمضيات", "citrus", 0], ["كراميل", "caramel", 0], ["عسل", "honey", 0], ["شاي", "tea", 0]].map(([l, f, on]) => (
+              <span key={l as string} className="rounded-full px-3 py-1.5 text-[13px] font-bold" style={on ? { background: FAM[f as string], color: "#fff" } : { background: "#fff" }}>{l as string}</span>
+            ))}
+          </div>
+        </div>
+      )}
+      {step === 2 && (
+        <div key="c" className="scene-in">
+          <p className="mt-4 text-[21px] font-bold">حار ولا بارد؟</p>
+          <div className="mt-3 flex h-[300px] gap-2">
+            <div className="flex flex-1 scale-95 flex-col items-center justify-center rounded-[20px] bg-gradient-to-b from-[#f6d7b8] to-[#e9a86e] opacity-40"><span className="text-[40px]">☕</span><b>حار</b></div>
+            <div className="flex flex-1 scale-[1.03] flex-col items-center justify-center rounded-[20px] bg-gradient-to-b from-[#dcecf2] to-[#9cc7d9] shadow-lg"><span className="text-[40px]">🧊</span><b>بارد</b></div>
+          </div>
+        </div>
+      )}
+      {step === 3 && (
+        <div key="d" className="scene-in">
+          <p className="mt-4 text-[21px] font-bold">تبي تقول شي زيادة؟</p>
+          <div className="mt-3 rounded-[16px] border-2 border-[#536344] bg-white p-3 text-[13px] leading-relaxed">أبي شي يشبه قهوة جربتها في مقهى، طعمها توت وما فيها مرارة</div>
+          <p className="mt-3 text-[12px] font-bold text-[#987024]">✨ فهمنا منك:</p>
+          <div className="mt-1.5 flex flex-wrap gap-1.5">
+            {[["توت", "#B83345"], ["بدون مرارة", "#4A3428"], ["خفيفة", "#987024"]].map(([l, c], i) => (
+              <span key={l} className="rounded-full px-2.5 py-1 text-[12px] font-bold text-white" style={{ background: c, animation: `rise .5s ${i * 0.15}s both` }}>{l}</span>
+            ))}
+          </div>
+        </div>
+      )}
+      {step === 4 && (
+        <div key="e" className="scene-in">
+          <p className="mt-1 text-center text-[11px] font-bold text-[#987024]">✨ قهوتك اليوم</p>
+          <p className="text-center text-[19px] font-bold">لقينا لك ٣ تناسبك</p>
+          <div className="mt-2 space-y-2">
+            {ADVISOR_PICKS.map(([file, score, why], i) => {
+              const lot = lotByFile(file);
               return (
-                <div key={code} className="absolute -translate-x-1/2 -translate-y-1/2" style={{ left: `${x}%`, top: `${y}%` }}>
-                  <div className="flex items-center justify-center rounded-full text-[9px] font-bold text-white transition-all duration-500"
-                    style={{ width: size, height: size, background: on ? "var(--accent)" : "var(--gold-light)", opacity: on ? 1 : 0.85,
-                      boxShadow: on ? "0 0 0 5px rgba(83,99,68,.35)" : "0 0 0 3px rgba(200,154,62,.18)", transform: on ? "scale(1.12)" : "none" }}>
-                    {on ? "✓" : ""}
+                <div key={file} className={`flex items-center gap-2 rounded-[16px] bg-white p-2 ${i === 0 ? "ring-2 ring-[#987024]" : ""}`} style={{ animation: `rise .55s cubic-bezier(.2,.9,.3,1.2) ${i * 0.15}s both` }}>
+                  <Bag lot={lot} size={46} />
+                  <div className="min-w-0 flex-1">
+                    {i === 0 && <span className="rounded-full bg-[#987024] px-2 py-0.5 text-[9px] font-bold text-white">الأنسب لك</span>}
+                    <b className="block truncate text-[13px]">{lot.name}</b>
+                    <span className="block truncate text-[10px] font-semibold text-[#536344]">{why}</span>
                   </div>
-                  {n >= 30 && <span className="absolute left-1/2 top-full mt-0.5 -translate-x-1/2 whitespace-nowrap text-[9px] text-[rgba(247,241,232,.7)] sm:text-[10px]">{name}</span>}
+                  <Ring value={score} play={active} size={44} stroke={5} />
                 </div>
               );
             })}
           </div>
         </div>
-        <div className="mt-4 flex items-center justify-center gap-5 text-[13px] text-[var(--dark-ink-2)]">
-          <span className="flex items-center gap-1.5"><i className="inline-block h-2.5 w-2.5 rounded-full bg-[var(--accent)]" />جرّبت منها</span>
-          <span className="flex items-center gap-1.5"><i className="inline-block h-2.5 w-2.5 rounded-full bg-[var(--gold-light)]" />لسّا</span>
-          <span className="rounded-full bg-[rgba(247,241,232,.1)] px-3 py-1 font-bold text-[var(--bg)]">جرّبت من {AR(litSet.size)} دول من {AR(ORIGINS.length)}</span>
-        </div>
-      </div>
-    </Split>
+      )}
+    </Screen>
   );
 }
 
-// MARK: Community
-
-export function CommunitySection() {
-  const [ref, shown] = useInView<HTMLDivElement>(0.4);
-  const t = useLoop(9, 1000, shown);
+function DailyScreen({ active }: { active: boolean }) {
+  const pick = lotByFile("mamtad-roastery-manahasi-uganda");
+  const forYou = ["alwaal-albari-shelshely-chelchele", "mahmasa-slop-colombia-sweida-250g"].map(lotByFile);
   return (
-    <Split kicker="المجتمع" title="القهوة أحلى مع ناسها."
-      body={<>تحدي كل أسبوع تكسب فيه نقاط، وتعليقات على تجارب الناس وتقييماتهم، وتابع اللي ذوقهم قريب منك، و«توأم الذوق» يعرّفك عليهم.</>}>
-      <div ref={ref} className="w-full max-w-[420px] space-y-4">
-        <div className="rounded-[24px] bg-[var(--dark)] p-5 text-[var(--bg)]">
-          <p className="text-[13px] font-semibold text-[var(--gold-light)]">تحدي الأسبوع 🏆</p>
-          <p className="mt-1 text-[20px] font-bold">جرّب ٣ قهاوي إثيوبية</p>
-          <div className="mt-4 h-3 overflow-hidden rounded-full bg-[rgba(247,241,232,.15)]">
-            <div className="h-full rounded-full bg-[var(--gold-light)] transition-all duration-700" style={{ width: `${Math.min(3, t) * 33.4}%` }} />
-          </div>
-          <p className="mt-2 text-[13px] text-[var(--dark-ink-2)]">{Math.min(3, t) >= 3 ? "خلّصته! +٥٠ نقطة 🎉" : `${AR(Math.min(3, t))} من ٣ · +٥٠ نقطة`}</p>
+    <Screen tab={0}>
+      <p className="text-[19px] font-bold">مساء الخير، سارة ☕</p>
+      <div className="relative mt-3 overflow-hidden rounded-[22px] bg-gradient-to-br from-[#4A3428] to-[#536344] p-3.5 text-[#f7f1e8]">
+        <p className="text-[11px] font-bold text-[#c89a3e]">قهوة اليوم</p>
+        <p className="text-[17px] font-bold">{pick.name}</p>
+        <p className="text-[11px] opacity-80">{pick.origin} · {pick.process}</p>
+        <div className="mt-2 flex items-end justify-between">
+          <div className="rounded-[16px] bg-[#f7f1e8] p-1.5"><Ring value={92} play={active} size={54} /></div>
+          <div className="float rounded-[16px] bg-white/90 p-1"><Bag lot={pick} size={78} /></div>
         </div>
-        <div className="rounded-[24px] bg-[var(--card)] p-4 shadow-[0_1px_0_var(--line)]">
-          <p className="text-[14px] font-bold">سارة قيّمت «إثيوبيا: قوجي» ★★★★★</p>
-          <div className="mt-3 space-y-2">
-            {[["نورة", "جربتها باردة؟ 🧊"], ["سارة", "إيه، رهيبة على الثلج"], ["محمد", "أضفتها لقائمتي ☕"]].map(([n, c], i) => (
-              <div key={c} className="flex gap-2 text-[14px] transition-all duration-500" style={{ opacity: t > i + 1 ? 1 : 0, transform: t > i + 1 ? "none" : "translateY(8px)" }}>
-                <b>{n}</b><span className="rounded-[14px] bg-[var(--bg-alt)] px-3 py-1">{c}</span>
+        <p className="mt-2 text-[11px] opacity-90">لأنك تحب الفواكه الاستوائية والخوخ والمشمش</p>
+        {active && ["مانجو", "مشمش"].map((n, i) => (
+          <span key={n} className="note absolute rounded-full bg-white px-2 py-0.5 text-[10px] font-bold" style={{ top: i ? "44%" : "18%", left: i ? "40%" : "36%", color: i ? FAM.stone : FAM.tropical, animationDelay: `${i * 0.7}s` }}>{n}</span>
+        ))}
+      </div>
+      <p className="mt-4 text-[15px] font-bold">لك <span className="text-[11px] font-normal text-[#7a6a5c]">على ذوقك، تتجدد كل يوم</span></p>
+      <div className="mt-2 grid grid-cols-2 gap-2">
+        {forYou.map((l, i) => (
+          <div key={l.file} className="rounded-[16px] bg-white p-1.5" style={{ animation: active ? `rise .6s ${0.3 + i * 0.15}s both` : undefined }}>
+            <div className="flex h-[92px] items-center justify-center rounded-[12px] bg-[rgba(194,143,219,.12)]"><Bag lot={l} size={66} /></div>
+            <b className="mt-1 block truncate text-[12px]">{l.name}</b>
+            <span className="block truncate text-[10px] text-[#7a6a5c]">{l.notes.slice(0, 2).join(" · ")}</span>
+          </div>
+        ))}
+      </div>
+    </Screen>
+  );
+}
+
+const ORIGINS: [string, number, number, number][] = [
+  ["CO", 4.6, -75.6, 214], ["ET", 7.0, 38.6, 157], ["BR", -19.5, -45.5, 59], ["CR", 9.9, -84.0, 43], ["SV", 13.8, -89.2, 41],
+  ["YE", 15.3, 43.9, 35], ["UG", 1.0, 32.4, 34], ["ID", -2.5, 112.0, 27], ["SA", 18.2, 42.5, 20], ["GT", 14.8, -91.0, 16],
+  ["PE", -9.2, -75.2, 8], ["PA", 8.8, -80.4, 7], ["IN", 12.4, 75.7, 6], ["RW", -1.9, 29.9, 5], ["KE", -0.4, 37.0, 2],
+];
+const TRIED = ["ET", "CO", "YE", "BR", "PA", "RW"];
+const proj = (lat: number, lon: number) => ({
+  x: ((lon - MAP_PROJ.LON0) / (MAP_PROJ.LON1 - MAP_PROJ.LON0)) * 100,
+  y: ((MAP_PROJ.LAT0 - lat) / (MAP_PROJ.LAT0 - MAP_PROJ.LAT1)) * 100,
+});
+
+function MapScreen({ active }: { active: boolean }) {
+  const t = useLoop(TRIED.length + 6, 700, active);
+  const lit = new Set(TRIED.slice(0, Math.min(t, TRIED.length)));
+  const sheet = t >= TRIED.length + 1;
+  const eth = ["kof-ethiopia-shakiso", "black-knight-chelchele", "jesha-roastery-gogi-ethiopia"].map(lotByFile);
+  return (
+    <Screen dark>
+      <p className="text-[19px] font-bold">خريطة المناطق</p>
+      <p className="text-[12px] text-[#c89a3e]">جرّبت من {AR(lit.size)} دول من {AR(ORIGINS.length)}</p>
+      <div className="-mx-3.5 mt-3 overflow-hidden" dir="ltr">
+      <div className={`relative w-[210%] ${active ? "map-pan" : ""}`} style={{ aspectRatio: `${MAP_PROJ.W} / ${MAP_PROJ.H}` }}>
+        <svg viewBox={`0 0 ${MAP_PROJ.W} ${MAP_PROJ.H}`} className="absolute inset-0 h-full w-full" aria-hidden="true">
+          <path d={LAND_DOTS} stroke="rgba(247,241,232,.25)" strokeWidth="3" strokeLinecap="round" />
+        </svg>
+        {ORIGINS.map(([code, lat, lon, n]) => {
+          const { x, y } = proj(lat, lon);
+          const on = lit.has(code);
+          const size = Math.min(22, 8 + Math.sqrt(n) * 1.1);
+          return (
+            <span key={code} className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-500"
+              style={{ left: `${x}%`, top: `${y}%`, width: size, height: size, background: on ? "#6f8a5a" : "#c89a3e",
+                boxShadow: on ? "0 0 0 4px rgba(111,138,90,.35)" : "none", outline: sheet && code === "ET" ? "2px solid #fff" : "none" }} />
+          );
+        })}
+      </div>
+      </div>
+      <div className="absolute inset-x-0 bottom-0 rounded-t-[24px] bg-[#f7f1e8] p-3.5 text-[#171411] transition-transform duration-700"
+        style={{ transform: sheet ? "translateY(0)" : "translateY(105%)" }}>
+        <div className="mx-auto mb-2 h-1 w-9 rounded-full bg-[#d8ccb8]" />
+        <div className="flex items-baseline justify-between"><b className="text-[19px]">إثيوبيا 🇪🇹</b><span className="text-[11px] font-bold text-[#536344]">✓ جرّبت ٣</span></div>
+        <div className="mt-2 grid grid-cols-3 gap-1.5 text-center">
+          {[["١٥٧", "قهوة"], ["٢١", "محمصة"], ["مجففة", "غالبًا"]].map(([v, l]) => (
+            <div key={l} className="rounded-[12px] bg-white py-1.5"><b className="block text-[14px] text-[#4A3428]">{v}</b><span className="text-[9px] text-[#7a6a5c]">{l}</span></div>
+          ))}
+        </div>
+        <div className="mt-2 flex gap-1">
+          {[["توت", "berry"], ["زهري", "floral"], ["حمضيات", "citrus"]].map(([l, f]) => <span key={l} className="rounded-full px-2 py-0.5 text-[10px] font-bold text-white" style={{ background: FAM[f] }}>{l}</span>)}
+        </div>
+        <div className="mt-2 flex justify-between">{eth.map((l) => <div key={l.file} className="rounded-[10px] bg-white p-1"><Bag lot={l} size={48} /></div>)}</div>
+      </div>
+    </Screen>
+  );
+}
+
+function CommunityScreen({ active }: { active: boolean }) {
+  const t = useLoop(8, 1000, active);
+  const post = lotByFile("arriyadh-roaster-qasr-al-souh-panama");
+  const done = Math.min(3, t);
+  return (
+    <Screen tab={3}>
+      <div className="flex gap-1 rounded-full bg-[rgba(74,52,40,.08)] p-1 text-center text-[11px] font-bold">
+        {["لك", "أتابعهم", "المتصدرين"].map((l, i) => <span key={l} className={`flex-1 rounded-full py-1 ${i === 0 ? "bg-white shadow-sm" : "text-[#7a6a5c]"}`}>{l}</span>)}
+      </div>
+      <div className="mt-3 rounded-[18px] bg-[#1c140f] p-3 text-[#f7f1e8]">
+        <p className="text-[10px] font-bold text-[#c89a3e]">تحدي الأسبوع 🏆</p>
+        <p className="text-[15px] font-bold">جرّب ٣ قهاوي إثيوبية</p>
+        <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/15"><div className="h-full rounded-full bg-[#c89a3e] transition-all duration-700" style={{ width: `${done * 33.4}%` }} /></div>
+        <p className="mt-1 text-[10px] opacity-80">{done >= 3 ? "خلّصته! +٥٠ نقطة 🎉" : `${AR(done)} من ٣ · ١٢٨ مشارك`}</p>
+      </div>
+      <div className="mt-3 rounded-[18px] bg-white p-2.5">
+        <div className="flex items-center gap-2">
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#C28FDB] text-[12px] font-bold text-white">س</span>
+          <div className="flex-1"><b className="text-[12px]">سارة</b><span className="block text-[10px] text-[#7a6a5c]">حضّرت {post.name} · V60 بارد</span></div>
+          <span className="text-[11px] text-[#987024]">★★★★★</span>
+        </div>
+        <div className="mt-2 flex items-center gap-2 rounded-[12px] bg-[#f3ece1] p-1.5"><Bag lot={post} size={40} /><span className="text-[11px]">«حلاوة كمثرى ونهاية شاي، رهيبة على الثلج»</span></div>
+        <div className="mt-2 space-y-1.5">
+          {[["نورة", "جربتها حارة؟"], ["سارة", "إيه، بس الباردة أحلى 🧊"], ["محمد", "أضفتها لقائمتي ☕"]].map(([n, c], i) => (
+            <div key={c} className="flex items-start gap-1.5 text-[11px] transition-all duration-500" style={{ opacity: t > i + 2 ? 1 : 0, transform: t > i + 2 ? "none" : "translateY(6px)" }}>
+              <b>{n}</b><span className="rounded-[10px] bg-[#f3ece1] px-2 py-0.5">{c}</span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-2 flex gap-3 text-[11px] text-[#7a6a5c]"><span>💬 {AR(Math.max(0, Math.min(3, t - 2)))}</span><span>👍 مفيد ١٢</span></div>
+      </div>
+    </Screen>
+  );
+}
+
+function ListsScreen({ active }: { active: boolean }) {
+  const t = useLoop(7, 1100, active);
+  const open = t >= 3;
+  const lists = [
+    { title: "للضيوف", emoji: "🎁", files: ["mahmasa-masna-al-qahwa-al-brazil-al-thahira", "asante-roastery-farida-khan", "bunista-peru-valle-dorado"] },
+    { title: "قهاوي الصيف", emoji: "☀️", files: ["mahmasa-oolala-blueberry", "camel-step-colombia-descanso", "admi-roastery-rwanda-kiesha-muf"] },
+  ];
+  return (
+    <Screen tab={1}>
+      {!open ? (
+        <div key="grid" className="scene-in">
+          <p className="text-[19px] font-bold">قوائمي</p>
+          <div className="mt-3 grid grid-cols-2 gap-2.5">
+            {lists.map((l, i) => (
+              <div key={l.title} style={{ animation: `rise .55s ${i * 0.15}s both` }} className={`transition-transform ${t === 2 && i === 0 ? "scale-105" : ""}`}>
+                <div className="grid grid-cols-2 gap-1 rounded-[16px] bg-[rgba(152,112,36,.12)] p-1.5">
+                  {l.files.map((f) => <div key={f} className="flex justify-center rounded-[8px] bg-white/70"><Bag lot={lotByFile(f)} size={44} /></div>)}
+                  <div className="flex items-center justify-center text-[24px]">{l.emoji}</div>
+                </div>
+                <b className="mt-1 block text-[13px]">{l.title}</b><span className="text-[10px] text-[#7a6a5c]">{AR(3)} قهاوي</span>
               </div>
             ))}
+            <div className="flex aspect-square items-center justify-center rounded-[16px] border-2 border-dashed border-[#536344]/50 text-[26px] text-[#536344]">＋</div>
           </div>
         </div>
-        <div className="flex items-center justify-center gap-3 rounded-[24px] bg-[var(--card)] p-4 shadow-[0_1px_0_var(--line)]">
-          <span className="text-[30px] transition-transform duration-700" style={{ transform: t >= 5 ? "translateX(-10px)" : "translateX(10px)" }}>☕</span>
-          <span className="text-[22px] transition-all duration-500" style={{ opacity: t >= 5 ? 1 : 0, transform: t >= 5 ? "scale(1)" : "scale(.4)" }}>❤️</span>
-          <span className="text-[30px] transition-transform duration-700" style={{ transform: t >= 5 ? "translateX(10px)" : "translateX(-10px)" }}>☕</span>
-          <p className="text-[14px] font-bold">توأم ذوقك: ذوقه ٨٧٪ مثلك</p>
+      ) : (
+        <div key="detail" className="scene-in">
+          <p className="text-[20px] font-bold">🎁 للضيوف</p>
+          <p className="text-[11px] text-[#7a6a5c]">قهاوي ترضي الكل، تنفع مع الحليب</p>
+          <div className="mt-2 space-y-2">
+            {lists[0].files.map((f, i) => {
+              const l = lotByFile(f);
+              return (
+                <div key={f} className="flex items-center gap-2 rounded-[14px] bg-white p-1.5" style={{ animation: `rise .5s ${i * 0.12}s both` }}>
+                  <Bag lot={l} size={40} />
+                  <div className="min-w-0 flex-1"><b className="block truncate text-[12px]">{l.name}</b><span className="text-[10px] text-[#7a6a5c]">“{["حلوة مع الحليب", "يحبها أبوي", "خفيفة للعصر"][i]}”</span></div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="mt-3 flex items-center justify-center gap-1.5 rounded-full bg-[#536344] py-2 text-[12px] font-bold text-[#f7f1e8] transition-all duration-500" style={{ opacity: t >= 5 ? 1 : 0, transform: t >= 5 ? "none" : "scale(.9)" }} dir="ltr">
+            bunnlist.com/lists/… 🔗
+          </div>
         </div>
-      </div>
-    </Split>
+      )}
+    </Screen>
   );
 }
 
-// MARK: Lists
+// MARK: The story
 
-const LISTS = [
-  { emoji: "☀️", title: "قهاوي الصيف", bags: [["#2f3b5c", "إثيوبيا"], ["#b5654a", "رواندا"], ["#c9a24a", "بنما"]] },
-  { emoji: "🎁", title: "للضيوف", bags: [["#4A3428", "اليمن"], ["#6b5440", "البرازيل"], ["#9c3d2e", "كولومبيا"]] },
+interface NewStep { kicker: string; title: string; body: string; screen: (active: boolean) => ReactNode }
+
+const STEPS: NewStep[] = [
+  { kicker: "ساعدني أختار", title: "محتار؟ نختار لك.", body: "جاوب كم سؤال، أو اكتب اللي في بالك بكلامك، ونطلع لك ثلاث قهاوي تناسبك ونقول لك ليش.", screen: (a) => <AdvisorScreen active={a} /> },
+  { kicker: "على ذوقك", title: "كل يوم، قهوة لك.", body: "تقول لنا وش تحب أول ما تسجّل، وتترتّب القهاوي على ذوقك وتتجدد كل يوم. وكل ما قيّمت أكثر، صارت «قهوة اليوم» أدق.", screen: (a) => <DailyScreen active={a} /> },
+  { kicker: "خريطة المناطق", title: "من وين قهوتك؟", body: "كل دولة على الخريطة بقهاويها وطعمها ومناطقها، وتخضرّ لما تجرّب منها وتنختم في جوازك.", screen: (a) => <MapScreen active={a} /> },
+  { kicker: "المجتمع", title: "القهوة أحلى مع ناسها.", body: "تحدي كل أسبوع بنقاط، وتعليقات على تجارب الناس وتقييماتهم، وتابع اللي ذوقهم قريب منك.", screen: (a) => <CommunityScreen active={a} /> },
+  { kicker: "قوائمي", title: "قوائمك، بأسمائك.", body: "«للضيوف» و«قهاوي الصيف»: اكتب على كل قهوة ملاحظتك، وشارك القائمة برابط مع أي أحد.", screen: (a) => <ListsScreen active={a} /> },
 ];
 
-export function ListsSection() {
-  const [ref, shown] = useInView<HTMLDivElement>(0.4);
-  const t = useLoop(6, 1100, shown);
+function Phone({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <Split kicker="قوائمي" title="قوائمك، بأسمائك." flip alt
-      body={<>سوِّ قائمة مثل «قهاوي الصيف» أو «للضيوف»، اكتب على كل قهوة ملاحظتك، وشاركها برابط مع أي أحد.</>}>
-      <div ref={ref} className="relative flex w-full max-w-[440px] flex-col items-center gap-4">
-        <div className="flex gap-4">
-          {LISTS.map((l, i) => (
-            <div key={l.title} className="w-[180px] rounded-[24px] bg-[var(--card)] p-3 shadow-md transition-all duration-700"
-              style={{ transform: shown ? "none" : "translateY(30px) rotate(-4deg)", opacity: shown ? 1 : 0, transitionDelay: `${i * 250}ms` }}>
-              <div className="grid grid-cols-2 gap-1.5 rounded-[16px] bg-[rgba(152,112,36,.1)] p-2" dir="ltr">
-                {l.bags.map(([c, o]) => <div key={o} className="flex justify-center"><DrawnBag color={c} origin={o} width={58} /></div>)}
-                <div className="flex items-center justify-center text-[30px]">{l.emoji}</div>
-              </div>
-              <p className="mt-2 text-[16px] font-bold">{l.title}</p>
-              <p className="text-[13px] text-[var(--ink-2)]">{AR(l.bags.length)} قهاوي</p>
-            </div>
-          ))}
-        </div>
-        <div className="flex items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3 text-[15px] font-bold text-[var(--bg)] transition-all duration-500"
-          style={{ opacity: t >= 2 ? 1 : 0, transform: t >= 2 ? "none" : "scale(.85)" }} dir="ltr">
-          bunnlist.com/lists/… <span>🔗</span>
-        </div>
+    <div className={`relative aspect-[393/852] overflow-hidden rounded-[46px] bg-[#171411] p-[9px] shadow-[0_30px_80px_rgba(0,0,0,0.45)] ring-1 ring-white/10 ${className}`}>
+      <div className="relative h-full w-full overflow-hidden rounded-[38px]">
+        {children}
+        <div className="absolute left-1/2 top-2 h-[22px] w-[86px] -translate-x-1/2 rounded-full bg-[#171411]" />
       </div>
-    </Split>
-  );
-}
-
-// MARK: A shelf of drawn bags
-
-const SHELF: [string, string, string, string[]][] = [
-  ["#2f3b5c", "إثيوبيا", "قوجي", ["توت", "ياسمين"]], ["#9c3d2e", "كولومبيا", "هويلا", ["كراميل", "تفاح"]],
-  ["#536344", "كينيا", "نييري", ["كشمش", "جريب فروت"]], ["#4A3428", "اليمن", "حراز", ["زبيب", "كاكاو"]],
-  ["#c9a24a", "بنما", "قيشا", ["ياسمين", "برغموت"]], ["#b5654a", "رواندا", "نياماشيكي", ["خوخ", "شاي"]],
-  ["#6b5440", "البرازيل", "سيرادو", ["شوكولاتة", "بندق"]], ["#3f6e6a", "كوستاريكا", "تارازو", ["عسل", "مشمش"]],
-  ["#7a4b6b", "السلفادور", "سانتا آنا", ["عنب", "سكر بني"]], ["#5f6f8a", "إندونيسيا", "سومطرة", ["بهارات", "كاكاو"]],
-];
-
-export function DrawnShelf() {
-  const rows = [SHELF.slice(0, 5), SHELF.slice(5)];
-  return (
-    <div className="shelf relative space-y-5 overflow-hidden py-3" dir="ltr" aria-label="أمثلة من الدليل">
-      {rows.map((row, r) => (
-        <div key={r} className="flex w-max gap-4" style={{ animation: `shelf ${row.length * 6}s linear infinite ${r ? "reverse" : ""}` }}>
-          {[...row, ...row, ...row, ...row].map(([c, o, n, notes], i) => (
-            <div key={`${o}-${i}`} aria-hidden={i >= row.length} className="w-[170px] shrink-0 overflow-hidden rounded-[22px] bg-[var(--card)] shadow-[0_1px_0_var(--line)]" dir="rtl">
-              <div className="flex h-[150px] items-center justify-center bg-gradient-to-b from-[#f3e9da] to-[#ead9bf]"><DrawnBag color={c} origin={o} width={92} /></div>
-              <div className="p-3">
-                <b className="text-[15px]">{o}: {n}</b>
-                <div className="mt-2 flex gap-1">{notes.map((t) => <span key={t} className="rounded-full bg-[var(--bg-alt)] px-2 py-0.5 text-[11px]">{t}</span>)}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      ))}
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-[var(--bg)] to-transparent sm:w-32" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[var(--bg)] to-transparent sm:w-32" />
     </div>
+  );
+}
+
+export function NewStory() {
+  const [active, setActive] = useState(0);
+  const [inSection, setInSection] = useState(false);
+  const refs = useRef<(HTMLDivElement | null)[]>([]);
+  const section = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) setActive(Number((e.target as HTMLElement).dataset.index)); }),
+      { rootMargin: "-45% 0px -45% 0px" },
+    );
+    refs.current.forEach((el) => el && io.observe(el));
+    const s = new IntersectionObserver(([e]) => setInSection(e.isIntersecting), { threshold: 0.05 });
+    if (section.current) s.observe(section.current);
+    return () => { io.disconnect(); s.disconnect(); };
+  }, []);
+
+  return (
+    <section id="new" ref={section} className="relative scroll-mt-12 overflow-clip bg-[var(--dark)] px-5 pb-10 pt-24 text-[var(--bg)] sm:pt-32">
+      <div className="pointer-events-none absolute -top-40 left-1/2 h-[520px] w-[820px] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(200,154,62,.28),transparent)]" />
+      <div className="relative mx-auto max-w-[1024px] text-center">
+        <p className="text-[17px] font-semibold text-[var(--gold-light)]">✨ جديد في BunnList</p>
+        <h2 className="shine mx-auto mt-3 max-w-[14ch] text-[44px] font-bold leading-[1.08] tracking-tight sm:text-[72px]">قهوتك تعرفك أكثر.</h2>
+        <p className="mx-auto mt-5 max-w-[40ch] text-[19px] leading-relaxed text-[var(--dark-ink-2)] sm:text-[21px]">نختار لك على ذوقك، ونوريك من وين تجي قهوتك، ونجمعك مع ناسها.</p>
+      </div>
+      <div className="relative mx-auto mt-6 grid max-w-[1024px] gap-10 md:grid-cols-2">
+        <div>
+          {STEPS.map((s, i) => (
+            <div key={s.title} ref={(el) => { refs.current[i] = el; }} data-index={i} className="flex min-h-[80vh] flex-col justify-center py-10 md:min-h-[90vh]">
+              <div className={`transition-opacity duration-500 ${active === i ? "opacity-100" : "md:opacity-25"}`}>
+                <p className="text-[17px] font-semibold text-[var(--gold-light)]">
+                  <span className="me-2 inline-grid h-7 w-7 place-items-center rounded-full bg-[var(--gold-light)] text-[13px] text-[var(--dark)]">{AR(i + 1)}</span>
+                  {s.kicker}
+                </p>
+                <h3 className="mt-3 text-[34px] font-bold leading-[1.12] tracking-tight sm:text-[48px]">{s.title}</h3>
+                <p className="mt-4 max-w-[34ch] text-[19px] leading-relaxed text-[var(--dark-ink-2)]">{s.body}</p>
+                <div className="mx-auto mt-8 w-[260px] md:hidden"><Phone>{s.screen(active === i && inSection)}</Phone></div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="hidden md:block">
+          <div className="sticky top-[10vh] flex h-[80vh] items-center justify-center">
+            <div className="relative h-full max-h-[660px]" style={{ aspectRatio: "393 / 852" }}>
+              <div className="absolute -inset-10 rounded-full bg-[radial-gradient(closest-side,rgba(111,138,90,.35),transparent)] blur-2xl transition-opacity duration-700" />
+              <Phone className="h-full">
+                {STEPS.map((s, i) => (
+                  <div key={s.title} className={`absolute inset-0 transition-all duration-700 ease-out ${active === i ? "scale-100 opacity-100" : "pointer-events-none scale-[1.04] opacity-0"}`}>
+                    {s.screen(active === i && inSection)}
+                  </div>
+                ))}
+              </Phone>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
