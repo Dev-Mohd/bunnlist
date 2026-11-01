@@ -117,3 +117,17 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; }
 }
+
+/* The newer scenes: phone steps slide in, bags float, notes drift, beans spin. */
+.scene-in { animation: scene-in 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; }
+@keyframes scene-in { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: none; } }
+@keyframes rise { from { opacity: 0; transform: translateY(24px) scale(0.96); } to { opacity: 1; transform: none; } }
+.float { animation: float 4s ease-in-out infinite; }
+@keyframes float { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-14px) rotate(2deg); } }
+.note { animation: note 3.6s ease-in-out infinite; }
+@keyframes note { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.spin { animation: spin 2.2s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .scene-in, .float, .note, .spin { animation: none; }
+}

@@ -10,7 +10,7 @@ import { AppLotCard } from "./AppLotCard";
 // numbers count up. Plain IntersectionObserver and CSS; everything holds still
 // for people who ask their device for reduced motion.
 
-function useInView<T extends Element>(threshold = 0.2, once = true) {
+export function useInView<T extends Element>(threshold = 0.2, once = true) {
   const ref = useRef<T>(null);
   const [inView, setInView] = useState(false);
   useEffect(() => {
