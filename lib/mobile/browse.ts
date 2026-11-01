@@ -4,6 +4,7 @@ import { LOT_LIST_SELECT, mapLot, type CoffeeLotRow, type MobileLot } from "./ca
 import { LOT_TAGS } from "./adminConsole";
 import { ApiError } from "./errors";
 import { FLAVOR_FAMILIES, flavorFamily } from "./flavorFamilies";
+import { forYouOrder, viewerSignal } from "./forYouOrder";
 
 // Search & filters for the app's search tab: text, sort, origin, roaster, process,
 // brew method, flavor family, tag (luxury / infused / decaf), and the caller's own shelf (owned / not yet /
@@ -12,7 +13,7 @@ import { FLAVOR_FAMILIES, flavorFamily } from "./flavorFamilies";
 
 const PROCESSES = ["NATURAL", "WASHED", "HONEY", "ANAEROBIC", "WET_HULLED", "CARBONIC_MACERATION", "EXPERIMENTAL", "MIXED", "OTHER"] as const;
 const METHODS = ["ESPRESSO", "V60", "CHEMEX", "AEROPRESS", "FRENCH_PRESS", "COLD_BREW", "OTHER"] as const;
-export const BROWSE_SORTS = ["rating_desc", "rating_asc", "newest", "oldest", "name_asc", "name_desc"] as const;
+export const BROWSE_SORTS = ["for_you", "rating_desc", "rating_asc", "newest", "oldest", "name_asc", "name_desc"] as const;
 const MAX_SCAN = 3000;
 
 const csv = <T extends z.ZodType<string, string>>(item: T) =>
@@ -21,7 +22,7 @@ const csv = <T extends z.ZodType<string, string>>(item: T) =>
 
 export const BrowseQuery = z.object({
   q: z.string().trim().max(80).optional(),
-  sort: z.enum(BROWSE_SORTS).default("rating_desc"),
+  sort: z.enum(BROWSE_SORTS).default("for_you"),
   origins: csv(z.string().max(3)),
   roasters: csv(z.string().max(120)),
   processes: csv(z.enum(PROCESSES)),
@@ -44,6 +45,8 @@ export function parseBrowseQuery(params: URLSearchParams): BrowseQuery {
 }
 
 const ORDER: Record<(typeof BROWSE_SORTS)[number], Prisma.CoffeeLotOrderByWithRelationInput[]> = {
+  // Reordered in memory (forYouOrder); the database order only breaks ties.
+  for_you: [],
   rating_desc: [{ averageRating: "desc" }, { reviewCount: "desc" }],
   rating_asc: [{ averageRating: "asc" }, { reviewCount: "desc" }],
   newest: [{ publishedAt: "desc" }],
@@ -87,12 +90,17 @@ export async function browseLots(
   }
 
   const rows = await prisma.coffeeLot.findMany({
-    where: { AND: and }, orderBy: [...ORDER[query.sort], { id: "asc" }], take: MAX_SCAN, select: LOT_LIST_SELECT,
+    where: { AND: and }, orderBy: [...ORDER[query.sort], { id: "asc" }], take: MAX_SCAN,
+    select: query.sort === "for_you" ? { ...LOT_LIST_SELECT, recommendedBrewMethods: true } : LOT_LIST_SELECT,
   });
   const families = new Set<string>(query.flavors);
-  const matching = families.size
+  let matching = families.size
     ? rows.filter((r) => r.flavorNotes.some((n) => families.has(flavorFamily(n))))
     : rows;
+  if (query.sort === "for_you") {
+    const { signal, seed } = await viewerSignal(prisma, accountId);
+    matching = forYouOrder(matching as (typeof matching[number] & { recommendedBrewMethods?: string[] })[], signal, seed);
+  }
   return {
     total: matching.length,
     lots: matching.slice(query.offset, query.offset + query.limit).map((r) => mapLot(r as unknown as CoffeeLotRow)),

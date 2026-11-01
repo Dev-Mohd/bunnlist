@@ -521,6 +521,10 @@ model MobileProfile {
   isPrivate           Boolean   @default(false)
   /// «مطحنتي»: a MobileGrinder id, for grind conversions.
   grinderId           String?
+  /// Flavour families picked at signup («وش تحب في قهوتك؟»), lib/mobile/flavorFamilies.ts codes.
+  tastePrefs          String[]  @default([])
+  /// Brew methods picked at signup (BREW_PREFS in lib/mobile/profile.ts).
+  brewPrefs           String[]  @default([])
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
 }
