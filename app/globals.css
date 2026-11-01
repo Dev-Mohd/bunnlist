@@ -131,3 +131,16 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .scene-in, .float, .note, .spin { animation: none; }
 }
+/* A slow sheen across the «جديد» headline. */
+.shine {
+  background: linear-gradient(100deg, #f7f1e8 30%, #e9c77a 45%, #f7f1e8 60%) 0 0 / 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 5s ease-in-out infinite;
+}
+@keyframes shine { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+@media (prefers-reduced-motion: reduce) { .shine { animation: none; } }
+.map-pan { animation: map-pan 9s ease-in-out infinite alternate; }
+@keyframes map-pan { from { transform: translateX(0); } to { transform: translateX(-52%); } }
+@media (prefers-reduced-motion: reduce) { .map-pan { animation: none; } }
