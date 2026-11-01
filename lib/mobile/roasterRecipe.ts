@@ -2,13 +2,18 @@
 // (labels such as «كمية القهوة: 19 جرام»), never guessed: a recipe is kept only
 // when it names the coffee dose and the water or the time.
 
-export type RecipeMethod = "V60" | "ESPRESSO" | "CHEMEX" | "AEROPRESS";
+export type RecipeMethod = "V60" | "ESPRESSO" | "CHEMEX" | "AEROPRESS" | "XBLOOM";
 
 export interface RoasterRecipe {
   method: RecipeMethod;
+  /** "ICED" for a cold recipe (over ice, «بارد»), otherwise "HOT". */
+  serve: "HOT" | "ICED";
+  /** An xBloom machine recipe lives on xBloom's site: its share link. */
+  link: string | null;
   /** The tool as the roaster wrote it ("عين تايمور V60"), when given. */
   tool: string | null;
-  doseG: number;
+  /** Null only for an xBloom link, whose numbers live on xBloom's page. */
+  doseG: number | null;
   waterMl: number | null;
   tempC: number | null;
   timeSec: number | null;
@@ -64,7 +69,9 @@ function steps(seg: string): string[] {
   const body = seg.slice(start).replace(/^(?:الخطوات|طريقة التحضير)\s*:?/, "")
     .split(/تناسب|يناسب|ملاحظة|ينصح|نقترح|ننصح|استمتع|وصفة|ينتهي/)[0];
   let parts = body.split(/(?:^|\n|\s)\d\s*[-–.)]\s*/).map((p) => p.trim());
-  if (parts.filter(Boolean).length < 2) parts = body.split(/(?=الصبة|تصب|صب الماء|الترطيب|آخر صب)/).map((p) => p.trim());
+  if (parts.filter(Boolean).length < 2) {
+    parts = body.split(/(?=الصبة|تصب|صب الماء|الترطيب|آخر صب|أكمل|اكمل)|(?<=^|\s)(?=صب\s)/).map((p) => p.trim());
+  }
   const out = parts
     .map((p) => p.replace(/\n+/g, " ").replace(/\s+/g, " ").replace(/[،,.\s]+$/, ""))
     .filter((p) => p.length >= 4 && p.length <= 110 && /\d/.test(p));
@@ -78,7 +85,7 @@ function parseSegment(seg: string, hint: RecipeMethod | null): RoasterRecipe | n
   ])?.[1]), 7, 30);
   if (dose === null) return null;
 
-  let water = within(n(seg.match(/(?:كمية الماء|الماء|الاستخلاص|الإستخلاص|المخرج|كمية المشروب)\s*:?\s*(\d+)\s*(?:مل|ml)/i)?.[1]), 15, 600);
+  let water = within(n(seg.match(/(?:كمية الماء|الماء|الاستخلاص|الإستخلاص|المخرج|كمية المشروب)\s*:?\s*(\d+)(?:\s*-\s*\d+)?\s*(?:مل|ml)/i)?.[1]), 15, 600);
   if (water === null) {
     const all = [...seg.matchAll(/(\d+)\s*(?:مل|ml)/gi)].map((m) => Number(m[1])).filter((v) => v >= 150 && v <= 600);
     if (all.length) water = Math.max(...all);
@@ -87,7 +94,7 @@ function parseSegment(seg: string, hint: RecipeMethod | null): RoasterRecipe | n
     /(?:درجة حرارة الماء|حرارة الماء|درجة الحرارة|الحرارة)\s*:?\s*(\d{2})/,
     /(\d{2})\s*(?:°|درجة مئوية|درجة)/,
   ])?.[1]), 80, 100);
-  const time = within(seconds(seg.match(/(?:وقت التحضير|مدة التحضير|وقت الإستخلاص|وقت الاستخلاص|مدة الاستخلاص|مدة الإستخلاص)\s*:?\s*(\d{1,2}:\d{2}|\d{2,3}(?:\s*-\s*\d{2,3})?\s*ثاني)/)?.[1]), 15, 420);
+  const time = within(seconds(seg.match(/(?:إجمالي الوقت|اجمالي الوقت|وقت التحضير|مدة التحضير|وقت الإستخلاص|وقت الاستخلاص|مدة الاستخلاص|مدة الإستخلاص)\s*:?\s*(\d{1,2}:\d{2}|\d{2,3}(?:\s*-\s*\d{2,3})?\s*ثاني)/)?.[1]), 15, 420);
   if (water === null && time === null) return null;
 
   const grind = seg.match(/(?:درجة الطحنة|الطحنة|الطحن)\s*:?\s*(ناعمة جد[اًا]|متوسطة النعومة|متوسطة ناعمة|متوسطة الخشونة|متوسطة خشنة|متوسطة|ناعمة|خشنة)/)?.[1] ?? null;
@@ -101,15 +108,41 @@ function parseSegment(seg: string, hint: RecipeMethod | null): RoasterRecipe | n
 
   const written = within(n(seg.match(/(?:الريشو|النسبة|نسبة)\s*:?\s*(?:1\s*[:/]\s*)?(\d{1,2}(?:\.\d)?)(?!\d)/)?.[1]), 1.5, 20);
   const ratio = written ?? (water !== null ? Math.round((water / dose) * 10) / 10 : null);
-  return { method, tool, doseG: dose, waterMl: water, tempC: temp, timeSec: time, grind, ratio, steps: method === "ESPRESSO" ? [] : steps(seg) };
+  return {
+    method, serve: iced(header) ? "ICED" : "HOT", link: null, tool, doseG: dose, waterMl: water, tempC: temp, timeSec: time,
+    grind, ratio, steps: method === "ESPRESSO" ? [] : steps(seg),
+  };
 }
 
-/** The recipes in a product description, filter recipes first; empty when there are none. */
+const ICED = /بارد|باردة|مثلج|ثلج|آيس|ايس|iced?\b|cold/i;
+const iced = (label: string) => ICED.test(label);
+
+const XBLOOM_LINK = /https:\/\/share-h5\.xbloom\.com\/[A-Za-z0-9\-._~/?#@!$&*+,;=%]+/g;
+
+/** xBloom machine recipes: their share links, hot or iced by the words just before each. */
+function xbloomRecipes(raw: string): RoasterRecipe[] {
+  const out: RoasterRecipe[] = [];
+  for (const m of raw.matchAll(XBLOOM_LINK)) {
+    const link = m[0].replace(/[.,،]+$/, "");
+    if (out.some((r) => r.link === link)) continue;
+    const label = raw.slice(Math.max(0, (m.index ?? 0) - 70), m.index).split(XBLOOM_LINK).pop() ?? "";
+    out.push({
+      method: "XBLOOM", serve: iced(label) ? "ICED" : "HOT", link, tool: "xBloom",
+      doseG: null, waterMl: null, tempC: null, timeSec: null, grind: null, ratio: null, steps: [],
+    });
+  }
+  return out;
+}
+
+const ORDER: Record<RecipeMethod, number> = { V60: 0, CHEMEX: 0, AEROPRESS: 0, ESPRESSO: 2, XBLOOM: 3 };
+const rank = (r: RoasterRecipe) => ORDER[r.method] + (r.serve === "ICED" ? 1 : 0);
+
+/** The recipes in a product description: hand-brew first, then iced, espresso and xBloom links. */
 export function parseRoasterRecipes(text: string | null | undefined): RoasterRecipe[] {
   if (!text) return [];
-  const t = normalize(text);
+  const machine = xbloomRecipes(text);
+  const t = normalize(text.replace(XBLOOM_LINK, " "));
   const starts = [...t.matchAll(/(?:ال)?وصفة|الأداة\s*:/g)].map((m) => m.index ?? 0);
-  if (!starts.length) return [];
   const out: RoasterRecipe[] = [];
   let hint: RecipeMethod | null = null;
   starts.forEach((s, i) => {
@@ -123,7 +156,7 @@ export function parseRoasterRecipes(text: string | null | undefined): RoasterRec
       hint = methodOf(seg.slice(0, 60)) ?? hint;
     }
   });
-  return out.sort((a, b) => Number(a.method === "ESPRESSO") - Number(b.method === "ESPRESSO"));
+  return [...out, ...machine].sort((a, b) => rank(a) - rank(b));
 }
 
 /** Stores that sell many roasters' coffee: their links are not the roaster's own page. */

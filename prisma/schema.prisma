@@ -738,10 +738,15 @@ model MobileRoasterRecipe {
   id        String   @id @default(cuid())
   lotId     String
   position  Int      @default(0)
-  /// V60 | ESPRESSO | CHEMEX | AEROPRESS
+  /// V60 | ESPRESSO | CHEMEX | AEROPRESS | XBLOOM
   method    String
+  /// HOT | ICED
+  serve     String   @default("HOT")
+  /// An xBloom recipe's share link (its numbers live on xBloom's page).
+  link      String?
   tool      String?
-  doseG     Float
+  /// Null only for an xBloom link.
+  doseG     Float?
   waterMl   Int?
   tempC     Int?
   timeSec   Int?

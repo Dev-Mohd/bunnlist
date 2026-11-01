@@ -30,6 +30,26 @@ describe("parseRoasterRecipes", () => {
     expect(r).toMatchObject({ method: "ESPRESSO", doseG: 18, waterMl: 32, tempC: 90, timeSec: 30 });
   });
 
+  it("keeps xBloom recipes as links, hot or iced by their label, after the hand-brew ones", () => {
+    const text = "وصفة مقترحة للتقطير:كمية القهوة: 19 جرامالطحنة: متوسطة النعومةدرجة حرارة الماء: 91 درجة مئويةكمية الماء: 285 ملمدة التحضير: 2:40 دقيقةالخطوات:صب 40 مل (ترطيب) – انتظر 40 ثانيةأكمل الصب حتى 162 مل – انتظر 10 ثوانيأكمل الصب حتى 285 ملوصفة مقترحة للاكسبلوم Xbloom (حار):https://share-h5.xbloom.com/?id=AAA%3D%3Dوصفة مقترحة للاكسبلوم Xbloom (بارد):https://share-h5.xbloom.com/?id=BBB%3D%3D";
+    const [v60, hot, cold] = parseRoasterRecipes(text);
+    expect(v60).toMatchObject({ method: "V60", serve: "HOT", doseG: 19, waterMl: 285, tempC: 91, timeSec: 160 });
+    expect(v60.steps).toEqual(["صب 40 مل (ترطيب) – انتظر 40 ثانية", "أكمل الصب حتى 162 مل – انتظر 10 ثواني", "أكمل الصب حتى 285 مل"]);
+    expect(hot).toMatchObject({ method: "XBLOOM", serve: "HOT", link: "https://share-h5.xbloom.com/?id=AAA%3D%3D", doseG: null });
+    expect(cold).toMatchObject({ method: "XBLOOM", serve: "ICED", link: "https://share-h5.xbloom.com/?id=BBB%3D%3D" });
+  });
+
+  it("reads an espresso yield written as a range", () => {
+    const [r] = parseRoasterRecipes("وصفة مقترحة للاسبريسو:كمية القهوة: 20 جرامإجمالي الاستخلاص: 33-35 ملالنسبة: 1:1.75درجة الحرارة: 89 درجةإجمالي الوقت: 30-35 ثانية");
+    expect(r).toMatchObject({ method: "ESPRESSO", doseG: 20, waterMl: 33, tempC: 89, timeSec: 30 });
+  });
+
+  it("marks an iced hand-brew recipe", () => {
+    const [hot, cold] = parseRoasterRecipes("وصفة V60 بارد: كمية القهوة: 20 جرام كمية الماء: 150 مل وقت التحضير: 2:00 وصفة V60 حار: كمية القهوة: 18 جرام كمية الماء: 270 مل وقت التحضير: 2:30");
+    expect(hot).toMatchObject({ serve: "HOT", doseG: 18 });
+    expect(cold).toMatchObject({ serve: "ICED", doseG: 20, waterMl: 150 });
+  });
+
   it("finds nothing in plain descriptions, bag weights or machine-only recipes", () => {
     expect(parseRoasterRecipes("قهوة من حراز على ارتفاع 2200 متر. الوزن 250g. تحفظ في درجة حرارة بين 15 و25 درجة مئوية.")).toEqual([]);
     expect(parseRoasterRecipes("وصفة تحضير على جهاز الاكسبلوم")).toEqual([]);
