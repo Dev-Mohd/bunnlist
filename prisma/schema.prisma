@@ -812,3 +812,13 @@ model MobileComment {
   @@index([targetType, targetId, createdAt])
   @@index([accountId, createdAt])
 }
+
+/// Following a roaster: its new coffees show in «جديد المحامص» on the home.
+model MobileRoasterFollow {
+  accountId String
+  roasterId String
+  createdAt DateTime @default(now())
+
+  @@id([accountId, roasterId])
+  @@index([roasterId])
+}

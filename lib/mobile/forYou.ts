@@ -139,13 +139,20 @@ async function resume(prisma: PrismaClient, accountId: string): Promise<ResumeIt
 }
 
 async function roasterNews(prisma: PrismaClient, accountId: string, now: Date): Promise<RoasterNews[]> {
-  const entries = await prisma.mobileCollectionEntry.findMany({ where: { accountId }, select: { lotId: true } });
-  if (!entries.length) return [];
+  const [entries, follows] = await Promise.all([
+    prisma.mobileCollectionEntry.findMany({ where: { accountId }, select: { lotId: true } }),
+    prisma.mobileRoasterFollow.findMany({ where: { accountId }, select: { roasterId: true } }),
+  ]);
+  if (!entries.length && !follows.length) return [];
   const mine = entries.map((e) => e.lotId);
-  const roasters = await prisma.coffeeLot.findMany({ where: { id: { in: mine } }, select: { roasterId: true }, distinct: ["roasterId"] });
+  const collected = mine.length
+    ? await prisma.coffeeLot.findMany({ where: { id: { in: mine } }, select: { roasterId: true }, distinct: ["roasterId"] })
+    : [];
+  // Roasters they collect from, and the ones they follow.
+  const roasterIds = [...new Set([...collected.map((r) => r.roasterId), ...follows.map((f) => f.roasterId)])];
   const rows = await prisma.coffeeLot.findMany({
     where: {
-      roasterId: { in: roasters.map((r) => r.roasterId) }, id: { notIn: mine },
+      roasterId: { in: roasterIds }, id: { notIn: mine },
       publishedAt: { gte: new Date(now.getTime() - NEWS_DAYS * DAY) },
     },
     select: { slug: true, nameAr: true, imageUrl: true, publishedAt: true, roaster: { select: { nameAr: true } } },
