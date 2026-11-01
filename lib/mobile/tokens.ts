@@ -11,6 +11,10 @@ import { ApiError } from "./errors";
 
 export const REFRESH_TTL_MS = 1000 * 60 * 60 * 24 * 30; // 30 days
 export const ACCESS_TTL_SEC = 60 * 15; // 15 minutes
+/** Two requests from one phone can refresh at once; the slower one presents the
+ *  token the faster one just used. Within this window that's refused, not treated
+ *  as theft (the family stays alive). */
+export const REUSE_GRACE_MS = 60 * 1000;
 
 export function hashToken(token: string): string {
   return "sha256:" + createHash("sha256").update(token).digest("hex");
@@ -62,6 +66,11 @@ export function rotateRefresh(
       revoked: false,
     };
     return { state: next, newToken };
+  }
+
+  const previous = state.consumedHashes[state.consumedHashes.length - 1];
+  if (previous && constantTimeEqual(presented, previous) && now - state.issuedAt <= REUSE_GRACE_MS) {
+    throw ApiError.unauthorized("refresh_superseded");
   }
 
   if (state.consumedHashes.some((h) => constantTimeEqual(presented, h))) {

@@ -31,13 +31,30 @@ describe("refresh rotation", () => {
     // presenting the original (consumed) token again is reuse
     let caught: unknown;
     try {
-      rotateRefresh(r1.state, "t0", t0 + 30, () => "tx");
+      // (after the one-minute grace for a phone's own overlapping requests)
+      rotateRefresh(r1.state, "t0", t0 + 10 + 120_000, () => "tx");
     } catch (e) {
       caught = e;
     }
     expect(caught).toBeInstanceOf(ReuseDetectedError);
     expect((caught as ReuseDetectedError).revokedState.revoked).toBe(true);
     expect((caught as ReuseDetectedError).reason).toBe("refresh_reuse_detected");
+  });
+
+  it("refuses, without revoking, the token just replaced when presented within a minute", () => {
+    const fam = createRefreshFamily("t0", t0);
+    const r1 = rotateRefresh(fam, "t0", t0 + 10, () => "t1");
+    // a second request from the same phone, a moment later, still holding t0
+    expect(() => rotateRefresh(r1.state, "t0", t0 + 5_000, () => "tx")).toThrowError(/unauthorized/);
+    expect(() => rotateRefresh(r1.state, "t0", t0 + 5_000, () => "tx")).not.toThrowError(ReuseDetectedError);
+    // the family is fine: t1 still rotates
+    expect(rotateRefresh(r1.state, "t1", t0 + 6_000, () => "t2").newToken).toBe("t2");
+  });
+
+  it("still treats the replaced token as reuse after the minute", () => {
+    const fam = createRefreshFamily("t0", t0);
+    const r1 = rotateRefresh(fam, "t0", t0 + 10, () => "t1");
+    expect(() => rotateRefresh(r1.state, "t0", t0 + 10 + 61_000, () => "tx")).toThrowError(ReuseDetectedError);
   });
 
   it("rejects a revoked family", () => {
