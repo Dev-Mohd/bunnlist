@@ -5,7 +5,6 @@ import { z } from "zod";
 import { ApiError } from "./errors";
 import { CATALOG_ACCOUNT, SUBMISSION_PROCESSES, UNCREDITED_ACCOUNTS } from "./submissions";
 import { latinNames, type LatinNamer } from "./latinNames";
-import { award } from "./points";
 import { displayNames } from "./profile";
 import type { PhotoStore } from "./suggestionPhotos";
 
@@ -220,7 +219,6 @@ export async function approveSubmission(
   if (recipes.length) {
     await prisma.mobileRoasterRecipe.createMany({ data: recipes.map((r, position) => ({ ...r, lotId: lot.id, position })) });
   }
-  if (!UNCREDITED_ACCOUNTS.includes(submission.accountId)) await award(prisma, submission.accountId, "discovery", id);
   return { lotSlug: lot.slug };
 }
 

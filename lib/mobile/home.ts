@@ -284,7 +284,8 @@ export async function pulse(
       doseGrams: b.doseGrams, waterGrams: b.waterGrams, brewSeconds: b.brewSeconds, brewId: b.id })),
     ...recipes.map((r) => ({ kind: "recipe" as const, accountId: r.accountId, lotId: r.lotId, at: r.publishedAt!.toISOString(),
       recipeId: r.id, recipeTitle: r.title, methodCode: r.methodCode, stars: null, note: null })),
-    ...discoveries.map((d) => ({ kind: "discovery" as const, accountId: d.accountId, lotId: d.approvedLotId, at: d.reviewedAt!.toISOString(),
+    // Approved suggestions are no longer shown as "discoveries".
+    ...discoveries.filter(() => false).map((d) => ({ kind: "discovery" as const, accountId: d.accountId, lotId: d.approvedLotId, at: d.reviewedAt!.toISOString(),
       recipeId: null, recipeTitle: null, methodCode: null, stars: null, note: null })),
   ];
   const ids = [...new Set(raw.map((r) => r.accountId))];
