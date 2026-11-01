@@ -237,6 +237,14 @@ export interface PulseItem {
   methodCode: string | null;
   stars: number | null;
   note: string | null;
+  /** The coffee's bag, roaster and origin, for a post card. */
+  imageUrl?: string | null;
+  roasterNameAr?: string | null;
+  originCode?: string | null;
+  /** A brew's own numbers, when logged. */
+  doseGrams?: number | null;
+  waterGrams?: number | null;
+  brewSeconds?: number | null;
 }
 
 /** The latest public activity: published brews, published recipes and discoveries.
@@ -250,7 +258,7 @@ export async function pulse(
   const [brews, recipes, discoveries, follows] = await Promise.all([
     prisma.mobileBrewExperience.findMany({
       where: { state: "published", createdAt: { gte: since }, ...who }, orderBy: { createdAt: "desc" }, take: from ? 80 : 40,
-      select: { accountId: true, lotId: true, methodCode: true, stars: true, note: true, createdAt: true },
+      select: { accountId: true, lotId: true, methodCode: true, stars: true, note: true, createdAt: true, doseGrams: true, waterGrams: true, brewSeconds: true },
     }),
     prisma.mobileRecipe.findMany({
       where: { state: "published", publishedAt: { gte: since }, ...who }, orderBy: { publishedAt: "desc" }, take: from ? 40 : 20,
@@ -265,10 +273,11 @@ export async function pulse(
     }),
     viewerId ? prisma.mobileFollow.findMany({ where: { followerId: viewerId }, select: { followeeId: true } }) : [],
   ]);
-  type Raw = Omit<PulseItem, "name" | "username" | "avatarUrl" | "lotSlug" | "lotNameAr"> & { accountId: string; lotId: string | null };
+  type Raw = Omit<PulseItem, "name" | "username" | "avatarUrl" | "lotSlug" | "lotNameAr" | "imageUrl" | "roasterNameAr" | "originCode"> & { accountId: string; lotId: string | null };
   const raw: Raw[] = [
     ...brews.map((b) => ({ kind: "brew" as const, accountId: b.accountId, lotId: b.lotId, at: b.createdAt.toISOString(),
-      recipeId: null, recipeTitle: null, methodCode: b.methodCode, stars: b.stars, note: b.note.slice(0, 80) || null })),
+      recipeId: null, recipeTitle: null, methodCode: b.methodCode, stars: b.stars, note: b.note.slice(0, 160) || null,
+      doseGrams: b.doseGrams, waterGrams: b.waterGrams, brewSeconds: b.brewSeconds })),
     ...recipes.map((r) => ({ kind: "recipe" as const, accountId: r.accountId, lotId: r.lotId, at: r.publishedAt!.toISOString(),
       recipeId: r.id, recipeTitle: r.title, methodCode: r.methodCode, stars: null, note: null })),
     ...discoveries.map((d) => ({ kind: "discovery" as const, accountId: d.accountId, lotId: d.approvedLotId, at: d.reviewedAt!.toISOString(),
@@ -293,7 +302,8 @@ export async function pulse(
   const [names, lots] = await Promise.all([
     displayNames(prisma, picked.map((p) => p.accountId)),
     prisma.coffeeLot.findMany({
-      where: { id: { in: picked.flatMap((p) => (p.lotId ? [p.lotId] : [])) } }, select: { id: true, slug: true, nameAr: true },
+      where: { id: { in: picked.flatMap((p) => (p.lotId ? [p.lotId] : [])) } },
+      select: { id: true, slug: true, nameAr: true, imageUrl: true, roaster: { select: { nameAr: true } }, originCountry: { select: { isoCode: true } } },
     }),
   ]);
   const lot = new Map(lots.map((l) => [l.id, l]));
@@ -304,6 +314,9 @@ export async function pulse(
     avatarUrl: avatarUrl(profile.get(accountId)?.avatarPath ?? null),
     lotSlug: lotId ? lot.get(lotId)?.slug ?? null : null,
     lotNameAr: lotId ? lot.get(lotId)?.nameAr ?? null : null,
+    imageUrl: lotId ? lot.get(lotId)?.imageUrl ?? null : null,
+    roasterNameAr: lotId ? lot.get(lotId)?.roaster?.nameAr ?? null : null,
+    originCode: lotId ? lot.get(lotId)?.originCountry?.isoCode ?? null : null,
   }));
 }
 

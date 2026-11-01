@@ -22,6 +22,8 @@ export interface PersonCard {
   requested: boolean;
   /** Why they're suggested, in Arabic ("جربتوا ٤ قهاوي نفسها"); null in search. */
   reasonAr: string | null;
+  /** For taste twins: the share of the viewer's coffees they have too (0–100). */
+  sharedPercent?: number | null;
 }
 
 type ProfileRow = { accountId: string; username: string | null; displayName: string | null; avatarPath: string | null; isPrivate: boolean };
@@ -72,6 +74,12 @@ function arabicCount(n: number, one: string, two: string, few: string, many: str
 
 export interface SuggestedPeople { similar: PersonCard[]; active: PersonCard[] }
 
+/** How much of the viewer's collection someone shares, kept under 100 and shy with few coffees. */
+export function sharedPercent(shared: number, mine: number): number {
+  if (mine <= 0 || shared <= 0) return 0;
+  return Math.min(99, Math.round((100 * shared) / Math.max(mine, 5)));
+}
+
 /**
  * People to follow: those with the most coffees in common with the viewer, and the
  * week's most active. Never the viewer, people they follow or asked, or private accounts.
@@ -117,9 +125,12 @@ export async function suggestedPeople(prisma: PrismaClient, viewerId: string, no
   const open = new Map(profiles.filter((p) => canSee(activityLevel(p), false, false)).map((p) => [p.accountId, p]));
   const pick = (ids: string[]) => ids.flatMap((id) => (open.has(id) ? [open.get(id)!] : [])).slice(0, 10);
 
-  const similar = await cards(prisma, viewerId, pick([...sharedBy.keys()]), (id) => {
+  const similar = (await cards(prisma, viewerId, pick([...sharedBy.keys()]), (id) => {
     const n = sharedBy.get(id) ?? 0;
     return `جربتوا ${arabicCount(n, "قهوة وحدة", "قهوتين", "قهاوي", "قهوة")} نفسها`;
+  })).map((card) => {
+    const id = [...open.values()].find((p) => p.username === card.username)?.accountId;
+    return { ...card, sharedPercent: id ? sharedPercent(sharedBy.get(id) ?? 0, mine.length) : null };
   });
   const shownSimilar = new Set(similar.map((s) => s.username));
   const active = (await cards(prisma, viewerId, pick(activeIds), (id) => {
