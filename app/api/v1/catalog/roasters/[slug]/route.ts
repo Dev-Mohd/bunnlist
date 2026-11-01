@@ -13,6 +13,6 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
   const { slug } = await params;
   return handle(async () => {
     const viewer = req.headers.get("authorization") ? await authenticate(req, requireAccessSecret()).catch(() => null) : null;
-    return roasterPage(prisma, slug, viewer);
+    return roasterPage(prisma, slug, viewer, new URL(req.url).origin);
   });
 }

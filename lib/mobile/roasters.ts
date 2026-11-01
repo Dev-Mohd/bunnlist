@@ -2,6 +2,7 @@ import type { PrismaClient } from "@prisma/client";
 import { LOT_LIST_SELECT, mapLot, type CoffeeLotRow, type MobileLot } from "./catalog";
 import { ApiError } from "./errors";
 import { flavorFamily } from "./flavorFamilies";
+import { roasterLogoUrl } from "./roasterLogos";
 
 // Roaster pages: every roaster with published coffees, and one roaster's page with
 // its coffees, how people rate them, what it leans to (origins, processes,
@@ -12,6 +13,8 @@ export interface RoasterCard {
   nameAr: string;
   name: string;
   cityAr: string | null;
+  /** From the roaster's own site; null when we don't have one. */
+  logoUrl: string | null;
   lots: number;
   /** Rating averaged over all reviews of its coffees; 0 without any. */
   averageRating: number;
@@ -57,12 +60,12 @@ export function tally(values: string[], limit = 6): Share[] {
 
 function card(
   r: { slug: string; nameAr: string; name: string; cityAr: string | null },
-  lots: Lot[], followers: number,
+  lots: Lot[], followers: number, origin: string | null = null,
 ): RoasterCard {
   const { rating, reviews } = weightedRating(lots);
   const images = [...lots].sort((a, b) => b.reviewCount - a.reviewCount || a.id.localeCompare(b.id))
     .flatMap((l) => (l.imageUrl ? [l.imageUrl] : [])).slice(0, 3);
-  return { slug: r.slug, nameAr: r.nameAr, name: r.name, cityAr: r.cityAr, lots: lots.length, averageRating: rating, reviews, images, followers };
+  return { slug: r.slug, nameAr: r.nameAr, name: r.name, cityAr: r.cityAr, logoUrl: roasterLogoUrl(r.slug, origin), lots: lots.length, averageRating: rating, reviews, images, followers };
 }
 
 async function followerCounts(prisma: PrismaClient, roasterIds: string[]): Promise<Map<string, number>> {
@@ -72,7 +75,7 @@ async function followerCounts(prisma: PrismaClient, roasterIds: string[]): Promi
 }
 
 /** Every roaster with published coffees, most coffees first. */
-export async function listRoasters(prisma: PrismaClient, viewerId: string | null): Promise<{ roasters: RoasterCard[]; following: string[] }> {
+export async function listRoasters(prisma: PrismaClient, viewerId: string | null, origin: string | null = null): Promise<{ roasters: RoasterCard[]; following: string[] }> {
   const rows = await prisma.roaster.findMany({
     where: { coffeeLots: { some: { publishedAt: { not: null } } } },
     select: {
@@ -86,13 +89,13 @@ export async function listRoasters(prisma: PrismaClient, viewerId: string | null
   ]);
   const followed = new Set(mine.map((m) => m.roasterId));
   return {
-    roasters: rows.map((r) => card(r, r.coffeeLots, followers.get(r.id) ?? 0))
+    roasters: rows.map((r) => card(r, r.coffeeLots, followers.get(r.id) ?? 0, origin))
       .sort((a, b) => b.lots - a.lots || a.nameAr.localeCompare(b.nameAr, "ar")),
     following: rows.filter((r) => followed.has(r.id)).map((r) => r.slug),
   };
 }
 
-export async function roasterPage(prisma: PrismaClient, slug: string, viewerId: string | null): Promise<RoasterPage> {
+export async function roasterPage(prisma: PrismaClient, slug: string, viewerId: string | null, origin: string | null = null): Promise<RoasterPage> {
   const r = await prisma.roaster.findUnique({ where: { slug }, select: { id: true, slug: true, nameAr: true, name: true, cityAr: true } });
   if (!r) throw ApiError.unprocessable("roaster_not_found");
   const rows = await prisma.coffeeLot.findMany({
@@ -109,7 +112,7 @@ export async function roasterPage(prisma: PrismaClient, slug: string, viewerId: 
   const lots = rows.map((row) => mapLot(row as unknown as CoffeeLotRow));
   const bySlug = new Map(lots.map((l) => [l.slug, l]));
   return {
-    roaster: card(r, rows, followers),
+    roaster: card(r, rows, followers, origin),
     isFollowing: !!follow,
     origins: tally(rows.flatMap((l) => (l.originCountry && l.originCountry.isoCode !== "XB" ? [l.originCountry.nameAr] : []))),
     processes: tally(rows.map((l) => l.process).filter((p) => p !== "OTHER")),
