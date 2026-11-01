@@ -19,7 +19,7 @@ export interface CoffeeLotRow {
   averageRating: unknown; // Prisma Decimal | string | number depending on the driver
   reviewCount: number;
   imageUrl: string | null;
-  roaster: { nameAr: string; name: string } | null;
+  roaster: { nameAr: string; name: string; slug?: string } | null;
   originCountry: { nameAr: string; isoCode: string } | null;
 }
 
@@ -29,6 +29,8 @@ export interface MobileLot {
   name: string;
   nameAr: string;
   roasterNameAr: string;
+  /** Opens the roaster page; missing on older rows. */
+  roasterSlug?: string;
   originNameAr: string | null;
   originCode: string | null;
   process: string;
@@ -47,6 +49,7 @@ export function mapLot(row: CoffeeLotRow): MobileLot {
     name: row.name,
     nameAr: row.nameAr,
     roasterNameAr: row.roaster?.nameAr ?? "",
+    ...(row.roaster?.slug ? { roasterSlug: row.roaster.slug } : {}),
     originNameAr: row.originCountry?.nameAr ?? null,
     originCode: row.originCountry?.isoCode ?? null,
     process: row.process,
@@ -124,7 +127,7 @@ export const CATALOG_PAGE_SIZE = 50;
 export const LOT_LIST_SELECT = {
   id: true, slug: true, name: true, nameAr: true, process: true, processLabel: true,
   flavorNotes: true, roastLevel: true, averageRating: true, reviewCount: true, imageUrl: true,
-  roaster: { select: { nameAr: true, name: true } },
+  roaster: { select: { nameAr: true, name: true, slug: true } },
   originCountry: { select: { nameAr: true, isoCode: true } },
 } as const;
 
@@ -180,7 +183,7 @@ export async function getPublishedLot(prisma: PrismaClient, slug: string): Promi
       id: true, slug: true, name: true, nameAr: true, process: true, processLabel: true,
       flavorNotes: true, roastLevel: true, averageRating: true, reviewCount: true, imageUrl: true,
       descriptionAr: true, regionAr: true, variety: true, recommendedBrewMethods: true, altitudeMeters: true,
-      roaster: { select: { nameAr: true, name: true } },
+      roaster: { select: { nameAr: true, name: true, slug: true } },
       originCountry: { select: { nameAr: true, isoCode: true } },
       brewStats: { select: { brewMethod: true, averageRating: true, reviewCount: true, wouldBuyAgain: true } },
     },
