@@ -31,11 +31,12 @@ describe("roasters", () => {
         findMany: vi.fn().mockResolvedValue([{ roasterId: "2" }]),
       },
     } as unknown as PrismaClient;
-    const res = await listRoasters(db, "acc");
+    const res = await listRoasters(db, "acc", "https://bunnlist.com");
     expect(res.roasters.map((r) => r.slug)).toEqual(["a", "b"]);
     expect(res.roasters[0]).toMatchObject({ lots: 2, averageRating: 4, reviews: 2, images: ["https://x/x.png"], followers: 0 });
     expect(res.roasters[1].followers).toBe(3);
     expect(res.following).toEqual(["b"]);
+    expect(res.roasters[0].logoUrl).toBeNull();
   });
 
   it("builds a roaster page", async () => {
@@ -92,5 +93,15 @@ describe("originsMap", () => {
     const guest = await originsMap(db, null);
     expect(guest.origins[0].tried).toBeNull();
     expect(guest.triedCountries).toBeNull();
+  });
+});
+
+describe("roasterLogoUrl", () => {
+  it("points at the bundled file", async () => {
+    const { roasterLogoUrl, ROASTER_LOGOS } = await import("../roasterLogos");
+    expect(Object.keys(ROASTER_LOGOS).length).toBeGreaterThan(30);
+    expect(roasterLogoUrl("kof", "https://bunnlist.com/")).toBe("https://bunnlist.com/roasters/kof.png");
+    expect(roasterLogoUrl("nope", "https://bunnlist.com")).toBeNull();
+    expect(roasterLogoUrl("kof", null)).toBeNull();
   });
 });

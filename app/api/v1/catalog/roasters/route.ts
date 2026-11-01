@@ -12,6 +12,6 @@ export const dynamic = "force-dynamic";
 export async function GET(req: Request) {
   return handle(async () => {
     const viewer = req.headers.get("authorization") ? await authenticate(req, requireAccessSecret()).catch(() => null) : null;
-    return listRoasters(prisma, viewer);
+    return listRoasters(prisma, viewer, new URL(req.url).origin);
   });
 }
