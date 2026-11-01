@@ -3,6 +3,7 @@ import { BunnListLogo } from "@/components/Logo";
 import { AVAILABILITY, CONTACT_EMAIL } from "@/lib/site";
 
 const links = [
+  { href: "/#advisor", label: "ساعدني أختار" },
   { href: "/#discover", label: "اكتشف" },
   { href: "/#brew", label: "حضّر" },
   { href: "/#features", label: "المزايا" },

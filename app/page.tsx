@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { ComingSoon, PhoneFrame, SiteFooter, SiteNav } from "@/components/site/Chrome";
-import { BagShelf, BrewClip, CountUp, Reveal, Steam, Story, type StoryStep } from "@/components/site/Motion";
+import { AdvisorSection, CommunitySection, DailySection, DrawnShelf, ListsSection, MapSection } from "@/components/site/Features";
+import { BrewClip, CountUp, Reveal, Steam, Story, type StoryStep } from "@/components/site/Motion";
 import { CONTACT_EMAIL } from "@/lib/site";
-import { SHELF_LOTS } from "@/lib/site-bags";
 
 // The BunnList site: one page that introduces the app, laid out in Apple's
 // manner in BunnList's own colors, with motion that follows the scroll.
@@ -43,8 +43,15 @@ const story: StoryStep[] = [
 
 const features: { title: string; body: string; icon: string; wide?: boolean; dark?: boolean }[] = [
   {
+    title: "ساعدني أختار",
+    body: "جاوب كم سؤال، أو اكتب اللي في بالك بكلامك، ونطلع لك ثلاث قهاوي تناسبك ونقول لك ليش.",
+    icon: "M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9l4.2-1.4L12 3ZM18 15l.9 2.1L21 18l-2.1.9L18 21l-.9-2.1L15 18l2.1-.9L18 15Z",
+    wide: true,
+    dark: true,
+  },
+  {
     title: "على ذوقك",
-    body: "اختر النكهة التي تحبها، من التوت إلى الشوكولاتة، فتظهر محاصيلها أمامك مباشرة.",
+    body: "تقول لنا وش تحب أول ما تسجّل، ونرتّب لك القهاوي على ذوقك وتتجدد كل يوم.",
     icon: "M12 3c3 3 6 5.5 6 9.5A6 6 0 0 1 6 12.5C6 8.5 9 6 12 3Z",
   },
   {
@@ -53,10 +60,30 @@ const features: { title: string; body: string; icon: string; wide?: boolean; dar
     icon: "M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M9 12a3 3 0 1 0 6 0 3 3 0 0 0-6 0",
   },
   {
+    title: "قوائمي",
+    body: "قوائم بأسمائك مثل «للضيوف» أو «قهاوي الصيف»، بملاحظة على كل قهوة، وتشاركها برابط.",
+    icon: "M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01",
+  },
+  {
+    title: "خريطة المناطق",
+    body: "من وين تجي القهوة؟ كل دولة على الخريطة بقهاويها وطعمها ومناطقها، وتخضرّ لما تجرّب منها.",
+    icon: "M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Zm0 0v14m6-12v14",
+  },
+  {
     title: "كوبك القادم أفضل",
     body: "خرجت القهوة حامضة أو مُرّة أو خفيفة؟ أخبر التطبيق بالطعم، فيقترح عليك تعديلًا واحدًا تجرّبه في المرة القادمة.",
     icon: "M5 19 19 5M15 5h4v4M7 13l-2 2 4 4 2-2",
     wide: true,
+  },
+  {
+    title: "تحدي الأسبوع",
+    body: "كل أسبوع تحدي جديد، مثل «جرّب ٣ قهاوي إثيوبية»، وتكسب نقاط لما تخلصه.",
+    icon: "M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4ZM7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4",
+  },
+  {
+    title: "مجتمع القهوة",
+    body: "تابع الناس، وعلّق على تجاربهم وتقييماتهم، وتعرّف على «توأم ذوقك».",
+    icon: "M4 17l5-5 4 3 7-7M15 8h5v5",
   },
   {
     title: "دليل المطاحن",
@@ -70,30 +97,21 @@ const features: { title: string; body: string; icon: string; wide?: boolean; dar
     icon: "M6 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6V3Zm4 7a2 2 0 1 0 4 0 2 2 0 0 0-4 0m-1 6h6",
   },
   {
-    title: "مجموعتي",
-    body: "ما عندك، وما جرّبته، وما تحبه، وما تنوي تجربته. كلٌّ في رفّه.",
-    icon: "M4 8l8-4 8 4-8 4-8-4Zm0 4 8 4 8-4M4 16l8 4 8-4",
-  },
-  {
     title: "الوصفات",
-    body: "دوّن وصفتك بخطواتها وأوزانها، وشاركها مع غيرك، أو انطلق من وصفة أعجبتك وعدّلها.",
+    body: "وصفات المحامص نفسها، حارة وباردة، ووصفتك أنت بخطواتها وأوزانها تشاركها مع غيرك.",
     icon: "M6 4h9l3 3v13H6V4Zm3 6h6M9 14h6",
   },
   {
-    title: "مجتمع القهوة",
-    body: "تعرّف على أكثر القهوات تحضيرًا هذا الأسبوع، وتابع جديد من تتابعهم، ونافس على الصدارة.",
-    icon: "M4 17l5-5 4 3 7-7M15 8h5v5",
-    wide: true,
-  },
-  {
     title: "خصوصيتك لك",
-    body: "تجاربك خاصة ما لم تنشرها، وأنت من يحدد من يرى نشاطك. ويمكنك حذف حسابك متى شئت.",
+    body: "تجاربك خاصة ما لم تنشرها، وتقدر تخلّي حسابك خاصًا وتوافق على متابعيك، وتحذف حسابك متى شئت.",
     icon: "M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6l-7-3Zm-3 9 2 2 4-4",
+    wide: true,
   },
   {
     title: "أيقونة لكل مناسبة",
     body: "تتبدّل أيقونة التطبيق في رمضان والعيدين ويوم التأسيس واليوم الوطني.",
     icon: "M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9Z",
+    wide: true,
   },
 ];
 
@@ -105,11 +123,16 @@ const specs: [string, string][] = [
   ["الحساب", "الدخول عبر Apple أو Google أو برمز يصل إلى بريدك. ويمكنك التصفّح دون حساب."],
   ["طرق التحضير", "V60 الساخن والمثلّج، وكيمكس، وإيروبريس، وفرنش برس، وإسبريسو، وكولد برو، والقهوة العربية."],
   ["التحضير خطوة بخطوة", "رسوم متحركة لـ V60 وإيروبريس والإسبريسو والقهوة العربية، ومؤقّت يتبع خطوات وصفتك، وتنبيه بالاهتزاز قبل كل خطوة، مع إبقاء الشاشة مضاءة."],
-  ["الدليل", "محاصيل من محامص سعودية بصور أكياسها الأصلية، مع المنشأ والمعالجة والنكهات."],
+  ["الدليل", "أكثر من ٧٠٠ محصول من محامص سعودية بصور أكياسها الأصلية، مع المنشأ والمعالجة والنكهات ووصفات المحامص الحارة والباردة."],
+  ["ساعدني أختار", "أسئلة سريعة عن جوّك وأداتك وذوقك، وحار أو بارد، وتقدر تكتب بكلامك؛ وتطلع لك ثلاث قهاوي مع نسبة التوافق وسببها."],
+  ["على ذوقك", "تختار نكهاتك وأدواتك عند التسجيل، وتترتّب القهاوي على ذوقك وتتجدد يوميًا، مع «قهوة اليوم» و«قهاوي تشبهها»."],
   ["البحث والتصفية", "حسب المنشأ والمحمصة والمعالجة وطريقة التحضير ونوع النكهة، والقهوة منزوعة الكافيين، وما في مجموعتك."],
+  ["المحامص والخريطة", "صفحة لكل محمصة بقهاويها وتقييمها وتقدر تتابعها، وخريطة لدول المنشأ بطعم كل دولة ومناطقها."],
+  ["القوائم", "قوائم بأسمائك، عامة أو خاصة، مع ملاحظة على كل قهوة، وتشاركها برابط."],
+  ["المجتمع", "متابعة، وحسابات خاصة بطلبات متابعة، وتعليقات على التجارب والتقييمات، وتحدي أسبوعي بنقاط، وقوائم صدارة."],
   ["سجلّ التحضير", "الوصفة، والمطحنة ودرجة الطحن، والأوزان، والوقت، والطعم، مع اقتراح للمرة القادمة."],
   ["دليل المطاحن", "١٢٣ مطحنة، منها ٩١ بمواصفات ومصادر، مع تحويل تقريبي لدرجات الطحن."],
-  ["الإشعارات", "المتابعون الجدد، والإعجابات، وملخّص أسبوعي، وتذكير يومي، وكلها قابلة للإيقاف."],
+  ["الإشعارات", "المتابعون الجدد، والإعجابات، والتعليقات، وجديد المحامص اللي تتابعها، وملخّص أسبوعي، وتذكير يومي، وكلها قابلة للإيقاف."],
   ["المظهر", "فاتح أو داكن أو تلقائي، مع أيقونات خاصة بالمناسبات."],
   ["إمكانية الوصول", "يدعم VoiceOver والخطوط الكبيرة (Dynamic Type)."],
   ["الخصوصية", "تتحكّم في من يرى نشاطك ومتابعيك، ويمكنك الاختفاء من قوائم الصدارة وحذف حسابك من داخل التطبيق."],
@@ -140,7 +163,7 @@ export default function Home() {
             قهوتك الجاية، هنا.
           </h1>
           <p className="hero-in hero-in-3 mx-auto mt-5 max-w-[32ch] px-5 text-[19px] leading-relaxed text-[var(--ink-2)] sm:text-[24px]">
-            اكتشف محاصيل تناسب ذوقك، وحضّرها خطوة بخطوة، واجعل كل كوب أطيب من سابقه.
+            اكتشف محاصيل تناسب ذوقك، وإذا احترت نختار لك، وحضّرها خطوة بخطوة.
           </p>
           <div className="hero-in hero-in-4 mt-8">
             <ComingSoon />
@@ -152,21 +175,27 @@ export default function Home() {
           </div>
         </section>
 
+        {/* New: the advisor */}
+        <AdvisorSection />
+
         {/* The story: discover, keep, brew, rate */}
         <section id="discover" className="scroll-mt-12 bg-[var(--bg-alt)] px-5 py-10 sm:py-16">
           <Story steps={story} />
         </section>
+
+        {/* Today's coffee and «لك» */}
+        <DailySection />
 
         {/* The shelf */}
         <section className="overflow-hidden bg-[var(--bg)] py-20 sm:py-28">
           <Reveal className="mx-auto max-w-[720px] px-5 text-center">
             <h2 className="text-[34px] font-bold leading-[1.15] tracking-tight sm:text-[48px]">رفّ يكبر كل أسبوع.</h2>
             <p className="mt-4 text-[19px] leading-relaxed text-[var(--ink-2)]">
-              محاصيل من محامص سعودية، بصور أكياسها كما وصلت من محامصها. هذه من بلاك نايت.
+              أكثر من ٧٠٠ محصول من محامص سعودية، بمنشئها ومعالجتها ونكهاتها، ويزيد الدليل كل أسبوع.
             </p>
           </Reveal>
           <div className="mt-12">
-            <BagShelf lots={SHELF_LOTS} />
+            <DrawnShelf />
           </div>
         </section>
 
@@ -192,6 +221,11 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Map, community, lists */}
+        <MapSection />
+        <CommunitySection />
+        <ListsSection />
+
         {/* Features, as a bento grid */}
         <section id="features" className="scroll-mt-12 bg-[var(--bg-alt)] px-5 py-20 sm:py-28">
           <div className="mx-auto max-w-[1024px]">
@@ -199,7 +233,7 @@ export default function Home() {
               <h2 className="text-center text-[34px] font-bold tracking-tight sm:text-[48px]">من الحبّة إلى الفنجال.</h2>
             </Reveal>
             <Reveal delay={100} className="mx-auto mt-10 grid max-w-[720px] grid-cols-3 gap-4 text-center">
-              {([[123, "مطحنة في الدليل"], [91, "بمواصفات موثّقة"], [7, "طرق تحضير"]] as const).map(([n, label]) => (
+              {([[700, "محصول وأكثر"], [41, "محمصة سعودية"], [123, "مطحنة في الدليل"]] as const).map(([n, label]) => (
                 <div key={label}>
                   <p className="text-[40px] font-bold tracking-tight text-[var(--accent)] sm:text-[56px]"><CountUp to={n} /></p>
                   <p className="text-[15px] text-[var(--ink-2)]">{label}</p>
