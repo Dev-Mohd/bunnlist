@@ -847,3 +847,16 @@ model MobileListItem {
   @@id([listId, lotId])
   @@index([lotId])
 }
+
+/// One «ساعدني أختار» run: the answers, whether Claude read their sentence (for the
+/// daily cap) and the coffees shown.
+model MobileAdvisorRun {
+  id        String   @id @default(cuid())
+  accountId String
+  answers   Json
+  usedAi    Boolean  @default(false)
+  picks     String[]
+  createdAt DateTime @default(now())
+
+  @@index([accountId, createdAt])
+}
