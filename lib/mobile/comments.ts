@@ -6,11 +6,11 @@ import { ApiError } from "./errors";
 import { activityLevel, avatarUrl, displayNames } from "./profile";
 import { canSee } from "./social";
 
-// Comments on published brews and recipes. Anyone who can see the post can read
+// Comments on published brews, recipes and reviews. Anyone who can see the post can read
 // them; signed-in people who can post may comment (a few a minute at most). The
 // author, the post's owner and admins can remove one.
 
-export const COMMENT_TARGETS = ["brew", "recipe"] as const;
+export const COMMENT_TARGETS = ["brew", "recipe", "review"] as const;
 export type CommentTarget = (typeof COMMENT_TARGETS)[number];
 export const COMMENT_MAX = 500;
 export const COMMENTS_PER_WINDOW = 6;
@@ -45,13 +45,16 @@ export async function postOwner(
       const lot = await prisma.coffeeLot.findUnique({ where: { id: b.lotId }, select: { nameAr: true } });
       owner = { ownerId: b.accountId, title: lot?.nameAr ?? "قهوة" };
     }
-  } else {
+  } else if (type === "recipe") {
     const r = await prisma.mobileRecipe.findFirst({ where: { id, state: "published" }, select: { accountId: true, title: true } });
     if (r) owner = { ownerId: r.accountId, title: r.title };
+  } else {
+    const r = await prisma.review.findFirst({ where: { id, status: "PUBLISHED" }, select: { userId: true, coffeeLot: { select: { nameAr: true } } } });
+    if (r) owner = { ownerId: r.userId, title: r.coffeeLot.nameAr };
   }
   if (!owner) return null;
-  if (type === "brew" && owner.ownerId !== viewerId) {
-    // A brew shows only to whom its owner shares activity with.
+  if ((type === "brew" || type === "review") && owner.ownerId !== viewerId) {
+    // A brew, and who wrote a review, show only to whom its owner shares activity with.
     const [profile, follows] = await Promise.all([
       prisma.mobileProfile.findUnique({ where: { accountId: owner.ownerId }, select: { activityVisibility: true, isPrivate: true } }),
       viewerId
