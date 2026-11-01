@@ -14,7 +14,7 @@ const KEYWORDS: Record<(typeof FLAVOR_FAMILIES)[number], string[]> = {
   stoneFruit: ["خوخ", "مشمش", "دراق", "نكتارين", "برقوق", "peach", "apricot", "nectarine", "plum", "stone fruit"],
   tropical: ["مانجو", "أناناس", "اناناس", "استوائ", "باشن", "بابايا", "جوافة", "ليتشي", "mango", "pineapple", "tropical", "passion", "papaya", "guava", "lychee"],
   driedFruit: ["زبيب", "تمر", "تين", "مجفف", "raisin", "date", "fig", "dried", "prune"],
-  floral: ["زهر", "ياسمين", "ورد", "لافند", "بنفسج", "floral", "jasmine", "rose", "lavender", "violet", "hibiscus", "blossom"],
+  floral: ["زهر", "زهور", "ياسمين", "ورد", "لافند", "بنفسج", "floral", "jasmine", "rose", "lavender", "violet", "hibiscus", "blossom"],
   chocolate: ["شوكولا", "كاكاو", "chocolate", "cocoa", "cacao"],
   caramel: ["كراميل", "سكر", "توفي", "فانيل", "caramel", "sugar", "toffee", "vanilla", "molasses", "butterscotch"],
   nutty: ["مكسرات", "لوز", "بندق", "جوز", "فستق", "nut", "almond", "hazelnut", "walnut", "pistachio", "peanut"],
