@@ -205,7 +205,7 @@ export async function getPublishedLot(prisma: PrismaClient, slug: string): Promi
     altitudeMeters: (row as { altitudeMeters?: number | null }).altitudeMeters ?? null,
     buy: buyLink(source?.sourceUrl),
     roasterRecipes: recipes.map((r) => ({
-      method: r.method as RecipeMethod, tool: r.tool, doseG: r.doseG, waterMl: r.waterMl, tempC: r.tempC,
+      method: r.method as RecipeMethod, serve: r.serve === "ICED" ? "ICED" : "HOT", link: r.link, tool: r.tool, doseG: r.doseG, waterMl: r.waterMl, tempC: r.tempC,
       timeSec: r.timeSec, grind: r.grind, ratio: r.ratio, steps: r.steps,
     })),
   };
