@@ -1,5 +1,6 @@
 import { BrewMethod, ReviewStatus, type PrismaClient } from "@prisma/client";
 import { z } from "zod";
+import { commentCounts } from "./comments";
 import { ApiError } from "./errors";
 import { award } from "./points";
 import { likeStates } from "./likes";
@@ -128,6 +129,7 @@ export interface MobileReviewListItem {
   markedHelpful?: boolean;
   isMine?: boolean;
   authorUsername?: string | null;
+  commentCount?: number;
 }
 
 export function mapReview(row: ReviewRow): MobileReviewListItem {
@@ -158,11 +160,12 @@ export async function listReviews(
     },
   });
   const userIds = rows.map((r) => r.userId);
-  const [names, likes, handles, visible] = await Promise.all([
+  const [names, likes, handles, visible, comments] = await Promise.all([
     displayNames(prisma, userIds),
     likeStates(prisma, "review", rows.map((r) => r.id), viewerId),
     prisma.mobileProfile.findMany({ where: { accountId: { in: userIds } }, select: { accountId: true, username: true } }),
     activityVisibleTo(prisma, viewerId, userIds),
+    commentCounts(prisma, rows.map((r) => ({ type: "review" as const, id: r.id }))),
   ]);
   const handle = new Map(handles.map((h) => [h.accountId, h.username]));
   // A private account's rating still counts; who wrote it, and what, is for their followers.
@@ -174,6 +177,8 @@ export async function listReviews(
     markedHelpful: likes.get(r.id)?.liked ?? false,
     isMine: viewerId !== null && r.userId === viewerId,
     authorUsername: visible.has(r.userId) ? handle.get(r.userId) ?? null : null,
+    // Comments are hidden with the author: no thread on a review you can't see.
+    commentCount: visible.has(r.userId) ? comments.get(`review|${r.id}`) ?? 0 : 0,
   }));
 }
 

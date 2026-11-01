@@ -7,7 +7,7 @@ import { addComment, CommentRequest, commentTarget, listComments } from "@/lib/m
 import { displayNames } from "@/lib/mobile/profile";
 import { notify } from "@/lib/mobile/push";
 
-// GET lists, POST adds a comment on /api/v1/comments/brew|recipe/[id].
+// GET lists, POST adds a comment on /api/v1/comments/brew|recipe|review/[id].
 // A new comment notifies the post's owner.
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -32,7 +32,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ type: s
       const name = (await displayNames(prisma, [accountId])).get(accountId) ?? "شخص";
       await notify(prisma, ownerId, "comments", {
         title: "تعليق جديد 💬",
-        body: `${name} علّق على ${kind === "brew" ? "تحضيرك لـ" : "وصفتك "}«${title}»: ${body.slice(0, 80)}`,
+        body: `${name} علّق على ${kind === "brew" ? "تحضيرك لـ" : kind === "review" ? "تقييمك لـ" : "وصفتك "}«${title}»: ${body.slice(0, 80)}`,
         data: { target: kind, id },
       });
     });
