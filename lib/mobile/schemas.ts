@@ -8,9 +8,13 @@ export const AuthProvider = z.enum(["apple", "google", "email"]);
 export type AuthProvider = z.infer<typeof AuthProvider>;
 
 /** POST /api/v1/auth/exchange — trade a verified provider credential for tokens. */
+// Only Apple and Google here. Email sign-in goes through /api/v1/auth/email/verify,
+// which checks the one-time code and then calls exchange() itself; accepting
+// "email" here would hand out tokens for any address without a code.
+export const ExchangeProvider = z.enum(["apple", "google"]);
 export const ExchangeRequest = z.object({
-  provider: AuthProvider,
-  // Apple/Google identity token (JWT) or, for email, the one-time code already verified in a prior step.
+  provider: ExchangeProvider,
+  // Apple/Google identity token (JWT), checked against the provider's keys.
   credential: z.string().min(1),
   // Opaque device id for binding a session; never a secret.
   deviceId: z.string().min(1).max(200),

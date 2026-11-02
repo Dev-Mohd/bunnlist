@@ -10,6 +10,8 @@ describe("schemas", () => {
 
   it("rejects an unknown provider", () => {
     const r = ExchangeRequest.safeParse({ provider: "facebook", credential: "x", deviceId: "d" });
+    // Email must never be exchangeable directly: that would skip the one-time code.
+    expect(ExchangeRequest.safeParse({ provider: "email", credential: "victim@example.com", deviceId: "d" }).success).toBe(false);
     expect(r.success).toBe(false);
   });
 
@@ -36,5 +38,12 @@ describe("error contract", () => {
   it("hides the reason unless explicitly set", () => {
     expect(ApiError.unauthorized().toBody()).toEqual({ error: "unauthorized" });
     expect(ApiError.conflict("payload_mismatch").toBody()).toEqual({ error: "conflict", reason: "payload_mismatch" });
+  });
+});
+
+describe("exchange route body", () => {
+  it("parseBody refuses an email exchange (it would skip the one-time code)", async () => {
+    const { parseBody } = await import("../schemas");
+    expect(() => parseBody(ExchangeRequest, { provider: "email", credential: "victim@example.com", deviceId: "d" })).toThrow();
   });
 });
