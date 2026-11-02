@@ -5,7 +5,7 @@ import type { ShelfLot } from "@/lib/site-bags";
 // A coffee as the app shows it in «اكتشف» (DiscoverLotCard + LotPhotoWell): the bag
 // multiplied over a soft wash of its main flavor's color, with a light shadow
 // under it; then the name, flag, origin and process, three flavor dots, and the
-// real rating or an invitation to rate.
+// real rating, or its notes before anyone rated it (as the app does now).
 
 const FAMILY_RGB: Record<FlavorFamily, [number, number, number]> = {
   berry: [0.72, 0.2, 0.27], citrus: [0.95, 0.74, 0.2], stoneFruit: [0.93, 0.58, 0.36], tropical: [0.98, 0.62, 0.15],
@@ -70,8 +70,8 @@ export function AppLotCard({ lot, hidden = false }: { lot: ShelfLot; hidden?: bo
             <span key={f} className="h-[9px] w-[9px] rounded-full" style={{ background: rgba(f) }} />
           ))}
         </div>
-        <p className="mt-1 text-[12px] font-semibold" style={{ color: rated ? GOLD : "var(--accent)" }}>
-          {rated ? `★ ${lot.rating.toFixed(1)} · ${lot.reviews} تقييم` : "كن أول من يقيّمها"}
+        <p className="mt-1 line-clamp-1 text-[12px] font-semibold" style={{ color: rated ? GOLD : "var(--ink-2)" }}>
+          {rated ? `★ ${lot.rating.toFixed(1)} · ${lot.reviews} تقييم` : lot.notes.slice(0, 3).join(" · ")}
         </p>
       </div>
     </article>
