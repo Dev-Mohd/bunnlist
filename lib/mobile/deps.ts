@@ -8,6 +8,7 @@ import { createResendMailer } from "./mailer";
 import { createPrismaAccountDeletionStore } from "./accountStore";
 import { supabaseAvatarStore } from "./avatars";
 import { createAppleRevoker } from "./appleRevoke";
+import { countRecent, LIMITS, record } from "./rateLimit";
 import type { AuthDeps } from "./ports";
 import type { EmailDeps } from "./emailService";
 import type { AccountDeps } from "./accountService";
@@ -63,6 +64,10 @@ export function buildEmailDeps(): EmailDeps {
     otp: createPrismaOtpStore(prisma),
     mailer: createResendMailer(),
     auth: buildAuthDeps(),
+    failures: {
+      tooMany: async (email) => (await countRecent(prisma, LIMITS.otpFailEmail, email)) >= LIMITS.otpFailEmail.limit,
+      recordFailure: (email) => record(prisma, LIMITS.otpFailEmail, email),
+    },
   };
 }
 

@@ -28,11 +28,18 @@ export interface Mailer {
   sendOtp(email: string, code: string): Promise<void>;
 }
 
+/** Caps wrong codes per email across every code sent to it (a new code resets per-code attempts). */
+export interface OtpFailureLimiter {
+  tooMany(email: string): Promise<boolean>;
+  recordFailure(email: string): Promise<void>;
+}
+
 export interface EmailDeps {
   otp: OtpStore;
   mailer: Mailer;
   auth: AuthDeps;
   makeCode?: () => string;
+  failures?: OtpFailureLimiter;
 }
 
 function normalize(email: string): string {
@@ -62,6 +69,7 @@ export async function verifyOtp(
   now: number,
 ): Promise<TokenResponse> {
   const email = normalize(input.email);
+  if (deps.failures && (await deps.failures.tooMany(email))) throw ApiError.rateLimited("too_many_attempts");
   const record = await deps.otp.get(email);
   const outcome = evaluateOtp(record, email, input.code, now);
 
@@ -71,6 +79,7 @@ export async function verifyOtp(
       return exchange({ provider: "email", credential: email, deviceId: input.deviceId }, deps.auth, now);
     case "mismatch":
       await deps.otp.incrementAttempts(email);
+      await deps.failures?.recordFailure(email);
       throw ApiError.unauthorized("code_invalid");
     case "tooManyAttempts":
       throw ApiError.rateLimited("too_many_attempts");
