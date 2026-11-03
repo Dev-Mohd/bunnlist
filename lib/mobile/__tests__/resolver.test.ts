@@ -57,4 +57,12 @@ describe("identity resolver", () => {
     expect(await createPrismaIdentityResolver(prisma).resolve(google({ email: "new@example.com" }))).toEqual({ accountId: "new", isNew: true });
     expect(m.user.create.mock.calls[0][0].data.email).toBe("new@example.com");
   });
+
+  it("never adopts an unverified address, even when nobody holds it", async () => {
+    const { prisma, m } = fake();
+    await createPrismaIdentityResolver(prisma).resolve(google({ email: "victim@example.com", emailVerified: false }));
+    // Otherwise the real owner's later email login would land in this account.
+    expect(m.user.create.mock.calls[0][0].data.email).toBeNull();
+    expect(m.user.create.mock.calls[0][0].data.emailVerified).toBeNull();
+  });
 });

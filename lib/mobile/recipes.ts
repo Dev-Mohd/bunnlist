@@ -379,6 +379,7 @@ export async function saveRecipe(prisma: PrismaClient, accountId: string, input:
     const from = existing.state as RecipeState;
     if (from === "deleted") throw ApiError.conflict("recipe_deleted");
     const publishing = input.publish && canTransition(from, "published");
+    if (publishing) await assertNotTakenDown(prisma, existing.id);
     // A published recipe must stay valid; drafts may be saved incomplete.
     if ((publishing || from === "published") && problems.length) throw notPublishable(problems);
     row = await prisma.mobileRecipe.update({
@@ -396,6 +397,12 @@ export async function saveRecipe(prisma: PrismaClient, accountId: string, input:
   return mapped;
 }
 
+/** A recipe an admin removed after a report stays down; its author can't re-publish it. */
+async function assertNotTakenDown(prisma: PrismaClient, id: string): Promise<void> {
+  const removed = await prisma.mobileReport.findFirst({ where: { targetType: "recipe", targetId: id, status: "removed" }, select: { id: true } });
+  if (removed) throw ApiError.conflict("recipe_removed");
+}
+
 export async function changeRecipeState(
   prisma: PrismaClient, accountId: string, id: string, to: RecipeState,
 ): Promise<MobileRecipe> {
@@ -404,6 +411,7 @@ export async function changeRecipeState(
   if (!existing || existing.accountId !== accountId) throw ApiError.unprocessable("recipe_not_found");
   if (!canTransition(existing.state as RecipeState, to)) throw ApiError.conflict("invalid_transition");
   if (to === "published") {
+    await assertNotTakenDown(prisma, id);
     const problems = validateRecipe({
       ...existing, steps: normalizeSteps(existing.steps),
     });

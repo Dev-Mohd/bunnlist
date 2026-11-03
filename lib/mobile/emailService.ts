@@ -2,9 +2,10 @@ import { exchange } from "./authService";
 import { ApiError } from "./errors";
 import {
   canSend,
-  evaluateOtp,
+  codeMatches,
   generateCode,
   hashCode,
+  MAX_ATTEMPTS,
   OTP_TTL_MS,
   type OtpRecord,
 } from "./emailOtp";
@@ -20,8 +21,14 @@ import type { TokenResponse } from "./schemas";
 export interface OtpStore {
   get(email: string): Promise<OtpRecord | undefined>;
   upsert(record: OtpRecord): Promise<void>;
-  incrementAttempts(email: string): Promise<void>;
-  delete(email: string): Promise<void>;
+  /**
+   * Atomically spends one attempt on the code `codeHash` for `email`, only while
+   * fewer than `max` were spent. False when the cap is reached or the code changed.
+   * Must be a single conditional write so parallel guesses can't all pass a check.
+   */
+  claimAttempt(email: string, codeHash: string, max: number): Promise<boolean>;
+  /** Atomically removes the code `codeHash` for `email`; true for exactly one caller. */
+  consume(email: string, codeHash: string): Promise<boolean>;
 }
 
 export interface Mailer {
@@ -71,21 +78,16 @@ export async function verifyOtp(
   const email = normalize(input.email);
   if (deps.failures && (await deps.failures.tooMany(email))) throw ApiError.rateLimited("too_many_attempts");
   const record = await deps.otp.get(email);
-  const outcome = evaluateOtp(record, email, input.code, now);
-
-  switch (outcome) {
-    case "ok":
-      await deps.otp.delete(email);
-      return exchange({ provider: "email", credential: email, deviceId: input.deviceId }, deps.auth, now);
-    case "mismatch":
-      await deps.otp.incrementAttempts(email);
-      await deps.failures?.recordFailure(email);
-      throw ApiError.unauthorized("code_invalid");
-    case "tooManyAttempts":
-      throw ApiError.rateLimited("too_many_attempts");
-    case "expired":
-      throw ApiError.unauthorized("code_expired");
-    case "noRecord":
-      throw ApiError.unauthorized("code_invalid");
+  if (!record) throw ApiError.unauthorized("code_invalid");
+  if (now > record.expiresAt) throw ApiError.unauthorized("code_expired");
+  // Spend the attempt before judging the code, in one conditional write, so a burst
+  // of parallel guesses gets at most MAX_ATTEMPTS evaluations per code.
+  if (!(await deps.otp.claimAttempt(email, record.codeHash, MAX_ATTEMPTS))) throw ApiError.rateLimited("too_many_attempts");
+  if (!codeMatches(record, email, input.code)) {
+    await deps.failures?.recordFailure(email);
+    throw ApiError.unauthorized("code_invalid");
   }
+  // Only the request that actually removes the code may log in with it.
+  if (!(await deps.otp.consume(email, record.codeHash))) throw ApiError.unauthorized("code_invalid");
+  return exchange({ provider: "email", credential: email, deviceId: input.deviceId }, deps.auth, now);
 }

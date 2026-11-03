@@ -37,7 +37,7 @@ describe("rate limits", () => {
 
 describe("wrong codes across resends", () => {
   const base = (failures: EmailDeps["failures"]) => ({
-    otp: { get: vi.fn().mockResolvedValue({ email: "a@b.com", codeHash: "sha256:x", expiresAt: Date.now() + 60000, attempts: 0, lastSentAt: 0 }), upsert: vi.fn(), delete: vi.fn(), incrementAttempts: vi.fn() },
+    otp: { get: vi.fn().mockResolvedValue({ email: "a@b.com", codeHash: "sha256:x", expiresAt: Date.now() + 60000, attempts: 0, lastSentAt: 0 }), upsert: vi.fn(), claimAttempt: vi.fn().mockResolvedValue(true), consume: vi.fn().mockResolvedValue(true) },
     mailer: { sendOtp: vi.fn() },
     auth: {} as EmailDeps["auth"],
     failures,

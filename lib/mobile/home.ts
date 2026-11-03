@@ -3,7 +3,7 @@ import { z } from "zod";
 import { LOT_LIST_SELECT, mapLot, type CoffeeLotRow, type MobileLot } from "./catalog";
 import { mapExperience, type MobileExperience } from "./experiences";
 import { activityLevel, avatarUrl, displayNames } from "./profile";
-import { canSee } from "./social";
+import { activityVisibleTo, canSee } from "./social";
 import { commentCounts, type CommentTarget } from "./comments";
 import { UNCREDITED_ACCOUNTS } from "./submissions";
 
@@ -189,7 +189,7 @@ export async function trendingRoasters(prisma: PrismaClient, scores: LotScore[])
 }
 
 /** Published recipes by this week's likes (1) and brews logged from them in «حضّر» (3). */
-export async function trendingRecipes(prisma: PrismaClient, now = new Date()): Promise<TrendingRecipe[]> {
+export async function trendingRecipes(prisma: PrismaClient, viewerId: string | null, now = new Date()): Promise<TrendingRecipe[]> {
   const since = new Date(now.getTime() - TREND_DAYS * DAY);
   const [likes, brews] = await Promise.all([
     prisma.mobileLike.groupBy({ by: ["targetId"], where: { targetType: "recipe", createdAt: { gte: since } }, _count: { _all: true } }),
@@ -205,10 +205,13 @@ export async function trendingRecipes(prisma: PrismaClient, now = new Date()): P
     score.set(id, { likes: score.get(id)?.likes ?? 0, brews: b._count._all });
   });
   if (score.size === 0) return [];
-  const rows = await prisma.mobileRecipe.findMany({
+  const found = await prisma.mobileRecipe.findMany({
     where: { id: { in: [...score.keys()] }, state: "published" },
     select: { id: true, title: true, methodCode: true, accountId: true, lotId: true },
   });
+  // Private accounts' recipes stay out, as in explore and on their profile.
+  const visible = await activityVisibleTo(prisma, viewerId, found.map((r) => r.accountId));
+  const rows = found.filter((r) => visible.has(r.accountId));
   const [names, lots] = await Promise.all([
     displayNames(prisma, rows.map((r) => r.accountId)),
     prisma.coffeeLot.findMany({ where: { id: { in: rows.flatMap((r) => (r.lotId ? [r.lotId] : [])) } }, select: { id: true, nameAr: true } }),
@@ -348,7 +351,7 @@ export async function lastBrew(prisma: PrismaClient, accountId: string): Promise
 export async function home(prisma: PrismaClient, viewerId: string | null, now = new Date()) {
   const [{ lots, scores }, recipes, feed, last] = await Promise.all([
     trendingLots(prisma, now),
-    trendingRecipes(prisma, now),
+    trendingRecipes(prisma, viewerId, now),
     pulse(prisma, viewerId, now),
     viewerId ? lastBrew(prisma, viewerId) : Promise.resolve(null),
   ]);
