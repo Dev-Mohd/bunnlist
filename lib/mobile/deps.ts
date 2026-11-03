@@ -10,7 +10,7 @@ import { supabaseAvatarStore } from "./avatars";
 import { createAppleRevoker } from "./appleRevoke";
 import { countRecent, LIMITS, record } from "./rateLimit";
 import type { AuthDeps } from "./ports";
-import type { EmailDeps } from "./emailService";
+import { reviewLoginFromEnv, type EmailDeps } from "./emailService";
 import type { AccountDeps } from "./accountService";
 
 // Assembles the real (Prisma- and provider-backed) AuthDeps from environment
@@ -64,6 +64,7 @@ export function buildEmailDeps(): EmailDeps {
     otp: createPrismaOtpStore(prisma),
     mailer: createResendMailer(),
     auth: buildAuthDeps(),
+    review: reviewLoginFromEnv(),
     failures: {
       tooMany: async (email) => (await countRecent(prisma, LIMITS.otpFailEmail, email)) >= LIMITS.otpFailEmail.limit,
       recordFailure: (email) => record(prisma, LIMITS.otpFailEmail, email),

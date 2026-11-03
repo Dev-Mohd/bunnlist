@@ -47,6 +47,16 @@ export interface EmailDeps {
   auth: AuthDeps;
   makeCode?: () => string;
   failures?: OtpFailureLimiter;
+  /** App Review's demo login: this one address gets this fixed code and no email. */
+  review?: { email: string; code: string } | null;
+}
+
+/** Reads the App Review demo login from the environment; ignored unless both are valid. */
+export function reviewLoginFromEnv(env: Record<string, string | undefined> = process.env): { email: string; code: string } | null {
+  const email = env.REVIEW_LOGIN_EMAIL?.trim().toLowerCase();
+  const code = env.REVIEW_LOGIN_CODE?.trim();
+  if (!email || !email.includes("@") || !code || !/^[0-9]{6}$/.test(code)) return null;
+  return { email, code };
 }
 
 function normalize(email: string): string {
@@ -59,7 +69,8 @@ export async function requestOtp(email: string, deps: EmailDeps, now: number): P
   // Silently ignore resends inside the cooldown — no error, no second email.
   if (!canSend(existing, now)) return;
 
-  const code = (deps.makeCode ?? generateCode)();
+  const isReview = !!deps.review && normalized === deps.review.email;
+  const code = isReview ? deps.review!.code : (deps.makeCode ?? generateCode)();
   await deps.otp.upsert({
     email: normalized,
     codeHash: hashCode(normalized, code),
@@ -67,7 +78,8 @@ export async function requestOtp(email: string, deps: EmailDeps, now: number): P
     attempts: 0,
     lastSentAt: now,
   });
-  await deps.mailer.sendOtp(normalized, code);
+  // The reviewer types the fixed code from App Store Connect; nothing to mail.
+  if (!isReview) await deps.mailer.sendOtp(normalized, code);
 }
 
 export async function verifyOtp(
