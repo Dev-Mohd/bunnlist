@@ -5,6 +5,7 @@ import { assertCanPost } from "./adminUsers";
 import { ApiError } from "./errors";
 import { activityLevel, avatarUrl, displayNames } from "./profile";
 import { canSee } from "./social";
+import { blockedWith } from "./blockSet";
 
 // Comments on published brews, recipes, reviews and the team's updates. Anyone who can see the post can read
 // them; signed-in people who can post may comment (a few a minute at most). The
@@ -59,6 +60,8 @@ export async function postOwner(
     if (r) owner = { ownerId: r.userId, title: r.coffeeLot.nameAr };
   }
   if (!owner) return null;
+  // Blocked either way: the post isn't there for the viewer (no reading, no commenting).
+  if (viewerId && owner.ownerId !== viewerId && (await blockedWith(prisma, viewerId)).has(owner.ownerId)) return null;
   if (owner.ownerId !== viewerId) {
     // A post's thread shows only to whom its owner shares activity with — the same
     // rule that hides their brews, recipes and reviews from everyone else.
@@ -76,9 +79,11 @@ export async function postOwner(
 export async function listComments(prisma: PrismaClient, type: CommentTarget, id: string, viewerId: string | null): Promise<{ comments: MobileComment[]; count: number }> {
   const post = await postOwner(prisma, type, id, viewerId);
   if (!post) throw ApiError.unprocessable("post_not_found");
-  const rows = await prisma.mobileComment.findMany({
-    where: { targetType: type, targetId: id, deletedAt: null }, orderBy: { createdAt: "asc" }, take: 200,
-  });
+  const [all, blocked] = await Promise.all([
+    prisma.mobileComment.findMany({ where: { targetType: type, targetId: id, deletedAt: null }, orderBy: { createdAt: "asc" }, take: 200 }),
+    blockedWith(prisma, viewerId),
+  ]);
+  const rows = all.filter((r) => !blocked.has(r.accountId));
   const ids = [...new Set(rows.map((r) => r.accountId))];
   const [names, profiles, staff] = await Promise.all([
     displayNames(prisma, ids),

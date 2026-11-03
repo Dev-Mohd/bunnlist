@@ -12,6 +12,7 @@ function fakePrisma(opts: { activity?: string; follows?: boolean; recent?: numbe
         where.accountId === "owner" ? { activityVisibility: opts.activity ?? "everyone", isPrivate: false } : { username: "me", avatarPath: null }),
       findMany: vi.fn().mockResolvedValue([{ accountId: "me", username: "me", avatarPath: null }]),
     },
+    mobileBlock: { findMany: vi.fn().mockResolvedValue([]) },
     mobileFollow: { findUnique: vi.fn().mockResolvedValue(opts.follows ? { followerId: "me" } : null) },
     mobileSuspension: { findUnique: vi.fn().mockResolvedValue(null) },
     mobileComment: {

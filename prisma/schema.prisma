@@ -901,3 +901,13 @@ model MobileFeedback {
   @@index([accountId, createdAt])
   @@index([createdAt])
 }
+
+/// One user blocking another. Both directions hide each other's activity and comments.
+model MobileBlock {
+  blockerId String
+  blockedId String
+  createdAt DateTime @default(now())
+
+  @@id([blockerId, blockedId])
+  @@index([blockedId])
+}
