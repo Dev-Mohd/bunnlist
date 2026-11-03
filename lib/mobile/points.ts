@@ -1,4 +1,5 @@
 import type { PrismaClient } from "@prisma/client";
+import { staffIds } from "./admin";
 import { avatarUrl } from "./profile";
 import { UNCREDITED_ACCOUNTS } from "./submissions";
 
@@ -137,8 +138,11 @@ export async function leaderboard(
   prisma: PrismaClient, period: "week" | "all", viewerId: string | null, now = new Date(), limit = 50,
   kind: LeaderboardKind = "points",
 ): Promise<{ entries: LeaderboardEntry[]; me: { rank: number; points: number } | null }> {
-  const hidden = await prisma.mobileProfile.findMany({ where: { hideFromLeaderboard: true }, select: { accountId: true } });
-  const hiddenIds = new Set(hidden.map((h) => h.accountId));
+  const [hidden, staff] = await Promise.all([
+    prisma.mobileProfile.findMany({ where: { hideFromLeaderboard: true }, select: { accountId: true } }),
+    staffIds(prisma),
+  ]);
+  const hiddenIds = new Set([...hidden.map((h) => h.accountId), ...staff]);
   const ranked = (await scores(prisma, kind, period, now))
     .filter((s) => s.points > 0 && !hiddenIds.has(s.accountId) && !UNCREDITED_ACCOUNTS.includes(s.accountId))
     .sort((a, b) => b.points - a.points || a.accountId.localeCompare(b.accountId));

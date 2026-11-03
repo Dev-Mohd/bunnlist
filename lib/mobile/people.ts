@@ -1,6 +1,7 @@
 import type { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { listEntries, type CollectionListItem } from "./collection";
+import { staffIds } from "./admin";
 import { ApiError } from "./errors";
 import { pulse, type PulseItem } from "./home";
 import { activityLevel, avatarUrl, normalizeUsername } from "./profile";
@@ -52,10 +53,12 @@ const PROFILE_SELECT = { accountId: true, username: true, displayName: true, ava
 export async function searchPeople(prisma: PrismaClient, viewerId: string | null, q: string): Promise<PersonCard[]> {
   const query = q.trim().replace(/^@+/, "");
   if (query.length < 2) return [];
+  // The team's accounts never show up as people.
+  const hidden = [...(await staffIds(prisma)), ...(viewerId ? [viewerId] : [])];
   const rows = await prisma.mobileProfile.findMany({
     where: {
       username: { not: null },
-      ...(viewerId ? { accountId: { not: viewerId } } : {}),
+      accountId: { notIn: hidden },
       OR: [
         { username: { startsWith: normalizeUsername(query) } },
         { displayName: { contains: query, mode: "insensitive" } },
@@ -92,7 +95,7 @@ export async function suggestedPeople(prisma: PrismaClient, viewerId: string, no
     prisma.mobileFollow.findMany({ where: { followerId: viewerId }, select: { followeeId: true } }),
     prisma.mobileFollowRequest.findMany({ where: { requesterId: viewerId }, select: { targetId: true } }),
   ]);
-  const skip = new Set([viewerId, ...follows.map((f) => f.followeeId), ...requests.map((r) => r.targetId)]);
+  const skip = new Set([viewerId, ...follows.map((f) => f.followeeId), ...requests.map((r) => r.targetId), ...(await staffIds(prisma))]);
   const since = new Date(now.getTime() - 7 * DAY);
   const [shared, brews, recipes] = await Promise.all([
     mine.length

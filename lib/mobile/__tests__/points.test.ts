@@ -82,7 +82,7 @@ describe("leaderboard", () => {
           { accountId: "c", _sum: { points: 10 } }, { accountId: "hidden", _sum: { points: 999 } },
         ]),
       },
-      user: { findMany: vi.fn().mockResolvedValue([{ id: "b", name: "Badr" }]) },
+      user: { findMany: vi.fn().mockImplementation(({ where }: { where?: { role?: string } }) => (where?.role ? [] : [{ id: "b", name: "Badr" }])) },
     };
     const result = await leaderboard(m as unknown as PrismaClient, "all", "c");
     expect(result.entries.map((e) => [e.rank, e.name, e.points])).toEqual([[1, "Mohd", 50], [1, "Badr", 50], [3, "مستخدم", 10]]);
@@ -98,7 +98,7 @@ describe("leaderboard", () => {
           { accountId: "a", _count: { _all: 2 } }, { accountId: "deleted", _count: { _all: 9 } }, { accountId: "b", _count: { _all: 5 } },
         ]),
       },
-      user: { findMany: vi.fn().mockResolvedValue([{ id: "a", name: "A" }, { id: "b", name: "B" }]) },
+      user: { findMany: vi.fn().mockImplementation(({ where }: { where?: { role?: string } }) => (where?.role ? [] : [{ id: "a", name: "A" }, { id: "b", name: "B" }])) },
     };
     const result = await leaderboard(m as unknown as PrismaClient, "week", null, new Date(), 3, "discoverers");
     expect(result.entries.map((e) => [e.name, e.points])).toEqual([["B", 5], ["A", 2]]);
