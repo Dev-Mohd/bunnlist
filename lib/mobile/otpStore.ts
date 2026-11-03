@@ -43,14 +43,17 @@ export function createPrismaOtpStore(prisma: PrismaClient): OtpStore {
         update: data,
       });
     },
-    async incrementAttempts(email: string): Promise<void> {
-      await prisma.mobileEmailOtp.update({
-        where: { email },
+    async claimAttempt(email: string, codeHash: string, max: number): Promise<boolean> {
+      // One conditional UPDATE: Postgres re-checks the WHERE under the row lock.
+      const { count } = await prisma.mobileEmailOtp.updateMany({
+        where: { email, codeHash, attempts: { lt: max } },
         data: { attempts: { increment: 1 } },
       });
+      return count === 1;
     },
-    async delete(email: string): Promise<void> {
-      await prisma.mobileEmailOtp.deleteMany({ where: { email } });
+    async consume(email: string, codeHash: string): Promise<boolean> {
+      const { count } = await prisma.mobileEmailOtp.deleteMany({ where: { email, codeHash } });
+      return count === 1;
     },
   };
 }

@@ -10,12 +10,12 @@ function db(count: number) {
 
 describe("rate limits", () => {
   it("counts a use under the limit and refuses at it", async () => {
-    const under = db(LIMITS.otpRequestIp.limit - 1);
+    // The count includes this request's own event.
+    const under = db(LIMITS.otpRequestIp.limit);
     await hit(under.db, LIMITS.otpRequestIp, "1.2.3.4", "too_many_requests");
     expect(under.m.mobileRateEvent.create).toHaveBeenCalledWith({ data: expect.objectContaining({ bucket: "otp_request_ip", key: hashKey("1.2.3.4") }) });
-    const at = db(LIMITS.otpRequestIp.limit);
+    const at = db(LIMITS.otpRequestIp.limit + 1);
     await expect(hit(at.db, LIMITS.otpRequestIp, "1.2.3.4", "too_many_requests")).rejects.toMatchObject({ code: "rateLimited", reason: "too_many_requests" });
-    expect(at.m.mobileRateEvent.create).not.toHaveBeenCalled();
   });
 
   it("never stores the raw key", () => {
@@ -37,7 +37,7 @@ describe("rate limits", () => {
 
 describe("wrong codes across resends", () => {
   const base = (failures: EmailDeps["failures"]) => ({
-    otp: { get: vi.fn().mockResolvedValue({ email: "a@b.com", codeHash: "sha256:x", expiresAt: Date.now() + 60000, attempts: 0, lastSentAt: 0 }), upsert: vi.fn(), delete: vi.fn(), incrementAttempts: vi.fn() },
+    otp: { get: vi.fn().mockResolvedValue({ email: "a@b.com", codeHash: "sha256:x", expiresAt: Date.now() + 60000, attempts: 0, lastSentAt: 0 }), upsert: vi.fn(), claimAttempt: vi.fn().mockResolvedValue(true), consume: vi.fn().mockResolvedValue(true) },
     mailer: { sendOtp: vi.fn() },
     auth: {} as EmailDeps["auth"],
     failures,

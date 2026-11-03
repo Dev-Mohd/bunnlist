@@ -46,6 +46,7 @@ export async function record(prisma: PrismaClient, l: Limit, key: string, now = 
 /** Throws 429 when the key is at its limit; otherwise counts this use. A missing key passes. */
 export async function hit(prisma: PrismaClient, l: Limit, key: string | null, reason: string, now = new Date()): Promise<void> {
   if (!key) return;
-  if ((await countRecent(prisma, l, key, now)) >= l.limit) throw ApiError.rateLimited(reason);
+  // Record first, then count: parallel requests each see the others' events.
   await record(prisma, l, key, now);
+  if ((await countRecent(prisma, l, key, now)) > l.limit) throw ApiError.rateLimited(reason);
 }

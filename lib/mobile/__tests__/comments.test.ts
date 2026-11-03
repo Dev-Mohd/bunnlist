@@ -48,6 +48,14 @@ describe("comments", () => {
     expect((await listComments(friend, "brew", "b1", "me")).count).toBe(1);
   });
 
+  it("hides a private account's recipe thread from people who don't follow", async () => {
+    const { db, m } = fakePrisma({ activity: "followers" });
+    m.mobileRecipe.findFirst.mockResolvedValue({ accountId: "owner", title: "V60" });
+    await expect(listComments(db, "recipe", "r1", null)).rejects.toMatchObject({ code: "unprocessable" });
+    await expect(addComment(db, "me", "recipe", "r1", "hi")).rejects.toMatchObject({ code: "unprocessable" });
+    expect(m.mobileComment.create).not.toHaveBeenCalled();
+  });
+
   it("lets the author, the post's owner or an admin delete, nobody else", async () => {
     const { db } = fakePrisma();
     await expect(deleteComment(db, "stranger", "c1")).rejects.toMatchObject({ code: "forbidden" });

@@ -1,6 +1,7 @@
 import type { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { ApiError } from "./errors";
+import { assertCanPost } from "./adminUsers";
 import { award, revoke } from "./points";
 
 // Brew experiences logged from the app against a published lot. Mirrors the app's
@@ -146,6 +147,9 @@ export async function saveExperience(
     where: { accountId_clientId: { accountId, clientId: input.clientId } },
   });
 
+  // A suspended account keeps its private log but can't put text in front of others.
+  if (input.publish || existing?.state === "published") await assertCanPost(prisma, accountId);
+
   let row: Row;
   if (!existing) {
     row = await prisma.mobileBrewExperience.create({
@@ -179,6 +183,7 @@ export async function changeExperienceState(
   // Someone else's experience reads as missing, never as forbidden.
   if (!existing || existing.accountId !== accountId) throw ApiError.unprocessable("experience_not_found");
   if (!canTransition(existing.state as ExperienceState, to)) throw ApiError.conflict("invalid_transition");
+  if (to === "published") await assertCanPost(prisma, accountId);
   const row = await prisma.mobileBrewExperience.update({
     where: { id },
     data: { state: to, revision: { increment: 1 } },

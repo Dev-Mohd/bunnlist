@@ -53,8 +53,9 @@ export async function postOwner(
     if (r) owner = { ownerId: r.userId, title: r.coffeeLot.nameAr };
   }
   if (!owner) return null;
-  if ((type === "brew" || type === "review") && owner.ownerId !== viewerId) {
-    // A brew, and who wrote a review, show only to whom its owner shares activity with.
+  if (owner.ownerId !== viewerId) {
+    // A post's thread shows only to whom its owner shares activity with — the same
+    // rule that hides their brews, recipes and reviews from everyone else.
     const [profile, follows] = await Promise.all([
       prisma.mobileProfile.findUnique({ where: { accountId: owner.ownerId }, select: { activityVisibility: true, isPrivate: true } }),
       viewerId

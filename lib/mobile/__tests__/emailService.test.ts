@@ -13,8 +13,14 @@ function fakeOtpStore() {
   const store: OtpStore = {
     async get(e) { return map.get(e); },
     async upsert(r) { map.set(r.email, r); },
-    async incrementAttempts(e) { const r = map.get(e); if (r) map.set(e, { ...r, attempts: r.attempts + 1 }); },
-    async delete(e) { map.delete(e); },
+    // Each check-and-write runs with no await in between, like one conditional SQL write.
+    async claimAttempt(e, h, max) {
+      const r = map.get(e);
+      if (!r || r.codeHash !== h || r.attempts >= max) return false;
+      map.set(e, { ...r, attempts: r.attempts + 1 });
+      return true;
+    },
+    async consume(e, h) { const r = map.get(e); if (!r || r.codeHash !== h) return false; map.delete(e); return true; },
   };
   return { store, map };
 }
@@ -115,5 +121,23 @@ describe("verifyOtp", () => {
       expect((e as ApiError).status).toBe(401);
       expect((e as ApiError).reason).toBe("code_invalid");
     }
+  });
+
+  it("caps a burst of parallel wrong guesses at MAX_ATTEMPTS evaluations", async () => {
+    const { d, map } = deps();
+    await requestOtp(email, d, t0);
+    const guesses = Array.from({ length: 60 }, (_, n) => String(n).padStart(6, "9"));
+    const results = await Promise.allSettled(guesses.map((code) => verifyOtp({ email, code, deviceId: "dev-1" }, d, t0 + 1000)));
+    const reasons = results.map((r) => (r.status === "rejected" ? (r.reason as ApiError).reason : "ok"));
+    expect(reasons.filter((r) => r === "code_invalid")).toHaveLength(MAX_ATTEMPTS);
+    expect(reasons.filter((r) => r === "too_many_attempts")).toHaveLength(60 - MAX_ATTEMPTS);
+    expect(map.get(normalized)!.attempts).toBe(MAX_ATTEMPTS);
+  });
+
+  it("lets one code log in only once, even in parallel", async () => {
+    const { d } = deps();
+    await requestOtp(email, d, t0);
+    const results = await Promise.allSettled([1, 2, 3].map(() => verifyOtp({ email, code: "123456", deviceId: "dev-1" }, d, t0 + 1000)));
+    expect(results.filter((r) => r.status === "fulfilled")).toHaveLength(1);
   });
 });

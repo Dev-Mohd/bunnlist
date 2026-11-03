@@ -72,7 +72,10 @@ function db(over: Record<string, unknown> = {}) {
     mobileRoasterRecipe: { findMany: vi.fn().mockResolvedValue([]) },
     mobileCollectionEntry: { findMany: vi.fn().mockResolvedValue([]) },
     review: { findMany: vi.fn().mockResolvedValue([]) },
-    mobileAdvisorRun: { count: vi.fn().mockResolvedValue(0), create: vi.fn().mockResolvedValue({}) },
+    mobileAdvisorRun: {
+      count: vi.fn().mockResolvedValue(1), create: vi.fn().mockResolvedValue({ id: "run1" }),
+      update: vi.fn().mockResolvedValue({}), deleteMany: vi.fn().mockResolvedValue({ count: 1 }),
+    },
     ...over,
   };
   return { db: m as unknown as PrismaClient, m };
@@ -96,9 +99,14 @@ describe("advise", () => {
     const res = await advise(d, "acc", ask({ text: "أبي شي زهري خفيف" }), reader);
     expect(res.understood?.chips).toEqual(["زهري", "بدون حموضة"]);
     expect(res.picks[0].lot.slug).toBe("d");
+    // The AI run is reserved before Claude is called, then filled with the picks.
     expect(m.mobileAdvisorRun.create.mock.calls[0][0].data.usedAi).toBe(true);
-    m.mobileAdvisorRun.count.mockResolvedValue(20);
+    expect(m.mobileAdvisorRun.update).toHaveBeenCalledWith({ where: { id: "run1" }, data: { picks: expect.any(Array) } });
+    m.mobileAdvisorRun.count.mockResolvedValue(21); // includes this request's reservation
+    (reader.read as ReturnType<typeof vi.fn>).mockClear();
     await expect(advise(d, "acc", ask({ text: "زهري" }), reader)).rejects.toMatchObject({ code: "rateLimited" });
+    expect(reader.read).not.toHaveBeenCalled();
+    expect(m.mobileAdvisorRun.deleteMany).toHaveBeenCalledWith({ where: { id: "run1" } });
     await expect(advise(d, null, ask({ text: "زهري" }), reader)).rejects.toMatchObject({ code: "unauthorized" });
   });
 

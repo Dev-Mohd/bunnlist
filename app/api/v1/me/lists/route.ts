@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { assertCanPost } from "@/lib/mobile/adminUsers";
 import { authenticate } from "@/lib/mobile/authGuard";
 import { requireAccessSecret } from "@/lib/mobile/deps";
 import { handle, readJson } from "@/lib/mobile/respond";
@@ -19,6 +20,7 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   return handle(async () => {
     const accountId = await authenticate(req, requireAccessSecret());
+    await assertCanPost(prisma, accountId);
     return createList(prisma, accountId, parseBody(ListInput, await readJson(req)));
   });
 }

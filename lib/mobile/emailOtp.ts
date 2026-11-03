@@ -45,6 +45,11 @@ export function evaluateOtp(
   return constantTimeEqual(hashCode(email, code), record.codeHash) ? "ok" : "mismatch";
 }
 
+/** Whether `code` is the one stored for `email` (constant-time). */
+export function codeMatches(record: OtpRecord, email: string, code: string): boolean {
+  return constantTimeEqual(hashCode(email, code), record.codeHash);
+}
+
 /** Whether a new code may be sent now, given the last send (resend cooldown). */
 export function canSend(record: OtpRecord | undefined, now: number): boolean {
   if (!record) return true;

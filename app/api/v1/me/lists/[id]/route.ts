@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { assertCanPost } from "@/lib/mobile/adminUsers";
 import { authenticate } from "@/lib/mobile/authGuard";
 import { requireAccessSecret } from "@/lib/mobile/deps";
 import { handle, readJson } from "@/lib/mobile/respond";
@@ -13,6 +14,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const { id } = await params;
   return handle(async () => {
     const accountId = await authenticate(req, requireAccessSecret());
+    await assertCanPost(prisma, accountId);
     return updateList(prisma, accountId, id, parseBody(ListUpdate, await readJson(req)));
   });
 }

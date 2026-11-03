@@ -56,9 +56,11 @@ export function createPrismaIdentityResolver(prisma: PrismaClient): IdentityReso
         }
       }
 
-      // Adopt the email only if it is real and unclaimed; never a private relay.
+      // Adopt the email only if it is real, verified by the provider and unclaimed;
+      // never a private relay. An unverified address would later pull its true
+      // owner's email login into this account.
       let email: string | null = null;
-      if (identity.email && !identity.emailIsPrivateRelay) {
+      if (identity.email && !identity.emailIsPrivateRelay && identity.emailVerified) {
         const taken = await prisma.user.findUnique({ where: { email: identity.email } });
         if (!taken) email = identity.email;
       }

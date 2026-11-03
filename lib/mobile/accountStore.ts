@@ -41,6 +41,13 @@ export function createPrismaAccountDeletionStore(
         await tx.mobilePushDevice.deleteMany({ where: { accountId } });
         await tx.mobileLike.deleteMany({ where: { OR: [{ accountId }, { ownerId: accountId }] } });
         await tx.mobileNotificationSettings.deleteMany({ where: { accountId } });
+        const lists = await tx.mobileList.findMany({ where: { accountId }, select: { id: true } });
+        await tx.mobileListItem.deleteMany({ where: { listId: { in: lists.map((l) => l.id) } } });
+        await tx.mobileList.deleteMany({ where: { accountId } });
+        await tx.mobileComment.deleteMany({ where: { accountId } });
+        await tx.mobileAdvisorRun.deleteMany({ where: { accountId } });
+        await tx.mobileRoasterFollow.deleteMany({ where: { accountId } });
+        await tx.mobileChallengeCompletion.deleteMany({ where: { accountId } });
         // Suggestions describe a product, not the person: keep them (and their product
         // photos) for review, but detach them from the account.
         await tx.mobileCoffeeSubmission.updateMany({ where: { accountId }, data: { accountId: DELETED_ACCOUNT, publicNote: null } });

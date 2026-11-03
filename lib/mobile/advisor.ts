@@ -171,11 +171,21 @@ export async function advise(
   prisma: PrismaClient, accountId: string | null, a: AdvisorRequest, reader: TextReader | null, now = new Date(),
 ): Promise<AdvisorResult> {
   let understood: Understood | null = null;
+  let runId: string | null = null;
   const text = a.text?.trim();
   if (text && text.length >= 3 && reader) {
     if (!accountId) throw ApiError.unauthorized("sign_in_to_describe");
+    // Reserve the AI run before the paid call, then count, so parallel requests see
+    // each other; a failed read still uses up the run.
+    const run = await prisma.mobileAdvisorRun.create({
+      data: { accountId, answers: { ...a, text: text.slice(0, 300) }, usedAi: true, picks: [] }, select: { id: true },
+    });
     const used = await prisma.mobileAdvisorRun.count({ where: { accountId, usedAi: true, createdAt: { gte: new Date(now.getTime() - DAY) } } });
-    if (used >= AI_RUNS_PER_DAY) throw ApiError.rateLimited("advisor_daily_limit");
+    if (used > AI_RUNS_PER_DAY) {
+      await prisma.mobileAdvisorRun.deleteMany({ where: { id: run.id } });
+      throw ApiError.rateLimited("advisor_daily_limit");
+    }
+    runId = run.id;
     understood = await reader.read(text).catch(() => null);
   }
 
@@ -213,9 +223,11 @@ export async function advise(
     tag: i === 0 ? "الأنسب لك" : t.bold && a.adventure > 0.5 ? "مغامرة" : null,
   }));
 
-  if (accountId) {
+  if (runId) {
+    await prisma.mobileAdvisorRun.update({ where: { id: runId }, data: { picks: top.map((t) => t.id) } }).catch(() => undefined);
+  } else if (accountId) {
     await prisma.mobileAdvisorRun.create({
-      data: { accountId, answers: { ...a, text: text ? text.slice(0, 300) : null }, usedAi: !!understood, picks: top.map((t) => t.id) },
+      data: { accountId, answers: { ...a, text: text ? text.slice(0, 300) : null }, usedAi: false, picks: top.map((t) => t.id) },
     }).catch(() => undefined);
   }
   return { understood: understood ? { chips: understood.chips } : null, picks };

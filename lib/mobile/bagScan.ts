@@ -161,20 +161,31 @@ export interface BagScanResult {
   remainingToday: number;
 }
 
+async function reserve(prisma: PrismaClient, accountId: string, since: Date): Promise<{ id: string; count: number }> {
+  const { id } = await prisma.mobileAiScan.create({ data: { accountId }, select: { id: true } });
+  const count = await prisma.mobileAiScan.count({ where: { accountId, createdAt: { gte: since } } });
+  if (count > DAILY_SCAN_LIMIT) {
+    await prisma.mobileAiScan.deleteMany({ where: { id } });
+    throw ApiError.rateLimited("daily_scan_limit");
+  }
+  return { id, count };
+}
+
 export async function scanBag(
   prisma: PrismaClient, reader: BagReader, accountId: string, image: BagScanRequest, now = new Date(),
 ): Promise<BagScanResult> {
   const since = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-  const used = await prisma.mobileAiScan.count({ where: { accountId, createdAt: { gte: since } } });
-  if (used >= DAILY_SCAN_LIMIT) throw ApiError.rateLimited("daily_scan_limit");
+  // Reserve the scan before the paid call, then count: parallel requests all see each
+  // other's reservations, and a failed or refused read still uses up the scan.
+  const used = await reserve(prisma, accountId, since);
 
   const extraction = normalizeExtraction(await reader.read(image));
   const matches = extraction.isCoffeeBag
     ? rankMatches(await Promise.all(matchQueries(extraction).map((q) => searchLots(prisma, q, 10))))
     : [];
 
-  await prisma.mobileAiScan.create({
-    data: { accountId, isCoffeeBag: extraction.isCoffeeBag, matchedCount: matches.length },
+  await prisma.mobileAiScan.update({
+    where: { id: used.id }, data: { isCoffeeBag: extraction.isCoffeeBag, matchedCount: matches.length },
   });
-  return { extraction, matches, remainingToday: Math.max(DAILY_SCAN_LIMIT - used - 1, 0) };
+  return { extraction, matches, remainingToday: Math.max(DAILY_SCAN_LIMIT - used.count, 0) };
 }
