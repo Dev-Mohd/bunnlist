@@ -10,12 +10,12 @@ function db(count: number) {
 
 describe("rate limits", () => {
   it("counts a use under the limit and refuses at it", async () => {
-    const under = db(LIMITS.otpRequestIp.limit - 1);
+    // The count includes this request's own event.
+    const under = db(LIMITS.otpRequestIp.limit);
     await hit(under.db, LIMITS.otpRequestIp, "1.2.3.4", "too_many_requests");
     expect(under.m.mobileRateEvent.create).toHaveBeenCalledWith({ data: expect.objectContaining({ bucket: "otp_request_ip", key: hashKey("1.2.3.4") }) });
-    const at = db(LIMITS.otpRequestIp.limit);
+    const at = db(LIMITS.otpRequestIp.limit + 1);
     await expect(hit(at.db, LIMITS.otpRequestIp, "1.2.3.4", "too_many_requests")).rejects.toMatchObject({ code: "rateLimited", reason: "too_many_requests" });
-    expect(at.m.mobileRateEvent.create).not.toHaveBeenCalled();
   });
 
   it("never stores the raw key", () => {

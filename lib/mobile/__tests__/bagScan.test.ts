@@ -62,23 +62,38 @@ describe("scanBag", () => {
 
   function fakePrisma(used: number) {
     return {
-      mobileAiScan: { count: vi.fn().mockResolvedValue(used), create: vi.fn().mockResolvedValue({}) },
+      // `used` counts this request's own reservation.
+      mobileAiScan: {
+        count: vi.fn().mockResolvedValue(used), create: vi.fn().mockResolvedValue({ id: "s1" }),
+        update: vi.fn().mockResolvedValue({}), deleteMany: vi.fn().mockResolvedValue({ count: 1 }),
+      },
       coffeeLot: { findMany: vi.fn().mockResolvedValue([]) },
-    } as unknown as PrismaClient & { mobileAiScan: { create: ReturnType<typeof vi.fn> } };
+    } as unknown as PrismaClient & { mobileAiScan: Record<"create" | "update" | "deleteMany", ReturnType<typeof vi.fn>> };
   }
 
   it("refuses past the daily limit without calling the model", async () => {
     const reader: BagReader = { read: vi.fn() };
-    await expect(scanBag(fakePrisma(DAILY_SCAN_LIMIT), reader, "acc", image)).rejects.toMatchObject({ code: "rateLimited" });
+    const prisma = fakePrisma(DAILY_SCAN_LIMIT + 1);
+    await expect(scanBag(prisma, reader, "acc", image)).rejects.toMatchObject({ code: "rateLimited" });
     expect(reader.read).not.toHaveBeenCalled();
+    expect(prisma.mobileAiScan.deleteMany).toHaveBeenCalledWith({ where: { id: "s1" } }); // reservation released
   });
 
   it("logs the scan and reports what is left today", async () => {
-    const prisma = fakePrisma(3);
+    const prisma = fakePrisma(4);
     const reader: BagReader = { read: vi.fn().mockResolvedValue({ ...base, isCoffeeBag: false }) };
     const result = await scanBag(prisma, reader, "acc", image);
     expect(result.matches).toEqual([]);
     expect(result.remainingToday).toBe(DAILY_SCAN_LIMIT - 4);
     expect(prisma.mobileAiScan.create).toHaveBeenCalledOnce();
+    expect(prisma.mobileAiScan.update).toHaveBeenCalledWith({ where: { id: "s1" }, data: { isCoffeeBag: false, matchedCount: 0 } });
+  });
+
+  it("counts a scan whose read fails, so failures aren't free", async () => {
+    const prisma = fakePrisma(1);
+    const reader: BagReader = { read: vi.fn().mockRejectedValue(new Error("refused")) };
+    await expect(scanBag(prisma, reader, "acc", image)).rejects.toThrow();
+    expect(prisma.mobileAiScan.create).toHaveBeenCalledOnce();
+    expect(prisma.mobileAiScan.deleteMany).not.toHaveBeenCalled();
   });
 });
