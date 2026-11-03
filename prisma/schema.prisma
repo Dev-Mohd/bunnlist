@@ -860,3 +860,15 @@ model MobileAdvisorRun {
 
   @@index([accountId, createdAt])
 }
+
+/// Sliding-window rate-limit events (lib/mobile/rateLimit.ts). The key is a hash
+/// of an IP, email or account id, never the raw value. Rows older than two days are pruned.
+model MobileRateEvent {
+  id        String   @id @default(cuid())
+  bucket    String
+  key       String
+  createdAt DateTime @default(now())
+
+  @@index([bucket, key, createdAt])
+  @@index([createdAt])
+}
