@@ -1,7 +1,13 @@
 {
+  "regions": [
+    "bom1"
+  ],
   "buildCommand": "npm run build",
   "installCommand": "npm install",
   "crons": [
-    { "path": "/api/v1/cron/weekly-summary", "schedule": "0 14 * * 5" }
+    {
+      "path": "/api/v1/cron/weekly-summary",
+      "schedule": "0 14 * * 5"
+    }
   ]
 }
