@@ -141,3 +141,34 @@ describe("verifyOtp", () => {
     expect(results.filter((r) => r.status === "fulfilled")).toHaveLength(1);
   });
 });
+
+describe("App Review demo login", () => {
+  const review = { email: "review@bunnlist.com", code: "246810" };
+
+  it("gives the review address the fixed code and mails nothing", async () => {
+    const { d, sent, map } = deps();
+    d.review = review;
+    await requestOtp("Review@BunnList.com", d, t0);
+    expect(sent).toHaveLength(0);
+    expect(map.get("review@bunnlist.com")!.codeHash).toBe(hashCode("review@bunnlist.com", "246810"));
+    const tokens = await verifyOtp({ email: "review@bunnlist.com", code: "246810", deviceId: "dev-1" }, d, t0 + 1000);
+    expect(tokens.accessToken).toBeTypeOf("string");
+  });
+
+  it("leaves everyone else on random mailed codes, and still caps attempts", async () => {
+    const { d, sent, map } = deps();
+    d.review = review;
+    await requestOtp(email, d, t0);
+    expect(sent).toHaveLength(1);
+    await requestOtp("review@bunnlist.com", d, t0);
+    map.set("review@bunnlist.com", { ...map.get("review@bunnlist.com")!, attempts: MAX_ATTEMPTS });
+    await expect(verifyOtp({ email: "review@bunnlist.com", code: "246810", deviceId: "d" }, d, t0 + 1000)).rejects.toMatchObject({ status: 429 });
+  });
+
+  it("is off unless both settings are valid", async () => {
+    const { reviewLoginFromEnv } = await import("../emailService");
+    expect(reviewLoginFromEnv({})).toBeNull();
+    expect(reviewLoginFromEnv({ REVIEW_LOGIN_EMAIL: "a@b.com", REVIEW_LOGIN_CODE: "12ab56" })).toBeNull();
+    expect(reviewLoginFromEnv({ REVIEW_LOGIN_EMAIL: " A@B.com ", REVIEW_LOGIN_CODE: "123456" })).toEqual({ email: "a@b.com", code: "123456" });
+  });
+});
