@@ -1,5 +1,6 @@
 import type { PrismaClient } from "@prisma/client";
 import { mapLot, LOT_LIST_SELECT, type CoffeeLotRow, type MobileLot } from "./catalog";
+import { staffIds } from "./admin";
 import { ApiError } from "./errors";
 import { activityLevel, asVisibility, avatarUrl, normalizeUsername, type Visibility } from "./profile";
 
@@ -65,6 +66,8 @@ export interface PublicProfile {
 
 export async function publicProfile(prisma: PrismaClient, username: string, viewerId: string | null): Promise<PublicProfile> {
   const accountId = await accountIdFor(prisma, username);
+  // The team's accounts have no public profile (they speak as «BunnList»).
+  if (accountId !== viewerId && (await staffIds(prisma)).includes(accountId)) throw ApiError.unprocessable("user_not_found");
   const [profile, user, points, followers, following, followRow, approved, recipes, requestRow] = await Promise.all([
     prisma.mobileProfile.findUnique({ where: { accountId } }),
     prisma.user.findUnique({ where: { id: accountId }, select: { name: true } }),

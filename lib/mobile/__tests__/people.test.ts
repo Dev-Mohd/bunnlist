@@ -8,6 +8,7 @@ const person = (accountId: string, over: Record<string, unknown> = {}) => ({
 
 function fake() {
   const m = {
+    user: { findMany: vi.fn().mockResolvedValue([]) },
     mobileProfile: { findMany: vi.fn().mockResolvedValue([]), findUnique: vi.fn() },
     mobileFollow: { findMany: vi.fn().mockResolvedValue([]), findUnique: vi.fn().mockResolvedValue(null) },
     mobileFollowRequest: { findMany: vi.fn().mockResolvedValue([]) },
@@ -26,7 +27,7 @@ describe("searchPeople", () => {
     m.mobileFollowRequest.findMany.mockResolvedValue([{ targetId: "sara" }]);
     const found = await searchPeople(prisma, "me", "@Sa");
     expect(m.mobileProfile.findMany.mock.calls[0][0].where).toMatchObject({
-      accountId: { not: "me" }, OR: [{ username: { startsWith: "sa" } }, { displayName: { contains: "Sa", mode: "insensitive" } }],
+      accountId: { notIn: ["me"] }, OR: [{ username: { startsWith: "sa" } }, { displayName: { contains: "Sa", mode: "insensitive" } }],
     });
     expect(found[0]).toMatchObject({ username: "sara", isPrivate: true, requested: true, isFollowing: false });
     expect(await searchPeople(prisma, "me", "s")).toEqual([]);

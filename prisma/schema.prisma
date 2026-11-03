@@ -872,3 +872,32 @@ model MobileRateEvent {
   @@index([bucket, key, createdAt])
   @@index([createdAt])
 }
+
+/// «تحديثات BunnList»: posts from the team; users comment under them (comment target "update").
+model MobileUpdate {
+  id        String    @id @default(cuid())
+  title     String
+  body      String    @db.Text
+  createdBy String
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
+
+  @@index([createdAt])
+}
+
+/// A suggestion, experience or problem a user sends the team, and the team's reply.
+model MobileFeedback {
+  id        String    @id @default(cuid())
+  accountId String
+  /// suggestion | experience | problem
+  kind      String
+  body      String    @db.Text
+  createdAt DateTime  @default(now())
+  readAt    DateTime?
+  reply     String?   @db.Text
+  repliedAt DateTime?
+  repliedBy String?
+
+  @@index([accountId, createdAt])
+  @@index([createdAt])
+}

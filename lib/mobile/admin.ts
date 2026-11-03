@@ -252,3 +252,11 @@ export async function discovererUsername(prisma: PrismaClient, lotId: string): P
   const profile = await prisma.mobileProfile.findUnique({ where: { accountId: submission.accountId }, select: { username: true } });
   return profile?.username ?? null;
 }
+
+/** The team's accounts. They stay out of people lists and speak as «BunnList». */
+export async function staffIds(prisma: PrismaClient): Promise<string[]> {
+  const rows = await prisma.user.findMany({ where: { role: "ADMIN" }, select: { id: true } });
+  return rows.map((r) => r.id);
+}
+
+export const OFFICIAL_NAME = "BunnList";
