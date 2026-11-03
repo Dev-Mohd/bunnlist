@@ -1,6 +1,7 @@
 import type { PrismaClient } from "@prisma/client";
 import { mapLot, LOT_LIST_SELECT, type CoffeeLotRow, type MobileLot } from "./catalog";
 import { staffIds } from "./admin";
+import { blockedWith } from "./blockSet";
 import { ApiError } from "./errors";
 import { activityLevel, asVisibility, avatarUrl, normalizeUsername, type Visibility } from "./profile";
 
@@ -25,16 +26,17 @@ export function canSee(level: Visibility, isOwner: boolean, viewerFollowsOwner: 
 export async function activityVisibleTo(prisma: PrismaClient, viewerId: string | null, accountIds: string[]): Promise<Set<string>> {
   const ids = [...new Set(accountIds)];
   if (ids.length === 0) return new Set();
-  const [profiles, follows] = await Promise.all([
+  const [profiles, follows, blocked] = await Promise.all([
     prisma.mobileProfile.findMany({ where: { accountId: { in: ids } }, select: { accountId: true, activityVisibility: true, isPrivate: true } }),
     viewerId ? prisma.mobileFollow.findMany({ where: { followerId: viewerId, followeeId: { in: ids } }, select: { followeeId: true } }) : [],
+    blockedWith(prisma, viewerId),
   ]);
   const following = new Set(follows.map((f) => f.followeeId));
   const profile = new Map(profiles.map((p) => [p.accountId, p]));
-  return new Set(ids.filter((id) => canSee(activityLevel(profile.get(id)), id === viewerId, following.has(id))));
+  return new Set(ids.filter((id) => !blocked.has(id) && canSee(activityLevel(profile.get(id)), id === viewerId, following.has(id))));
 }
 
-async function accountIdFor(prisma: PrismaClient, username: string): Promise<string> {
+export async function accountIdFor(prisma: PrismaClient, username: string): Promise<string> {
   const profile = await prisma.mobileProfile.findUnique({
     where: { username: normalizeUsername(username) }, select: { accountId: true },
   });
@@ -60,6 +62,8 @@ export interface PublicProfile {
   /** The viewer has asked to follow and is waiting. */
   requested: boolean;
   isMe: boolean;
+  /** The viewer blocked this person. */
+  isBlocked: boolean;
   discoveries: MobileLot[];
   recipes: PublicRecipe[];
 }
@@ -68,6 +72,13 @@ export async function publicProfile(prisma: PrismaClient, username: string, view
   const accountId = await accountIdFor(prisma, username);
   // The team's accounts have no public profile (they speak as «BunnList»).
   if (accountId !== viewerId && (await staffIds(prisma)).includes(accountId)) throw ApiError.unprocessable("user_not_found");
+  // Someone who blocked the viewer doesn't exist for them; someone the viewer blocked
+  // shows only a header with «إلغاء الحظر».
+  const blockRows = viewerId && viewerId !== accountId
+    ? await prisma.mobileBlock.findMany({ where: { OR: [{ blockerId: viewerId, blockedId: accountId }, { blockerId: accountId, blockedId: viewerId }] } })
+    : [];
+  if (blockRows.some((b) => b.blockerId === accountId)) throw ApiError.unprocessable("user_not_found");
+  const isBlocked = blockRows.length > 0;
   const [profile, user, points, followers, following, followRow, approved, recipes, requestRow] = await Promise.all([
     prisma.mobileProfile.findUnique({ where: { accountId } }),
     prisma.user.findUnique({ where: { id: accountId }, select: { name: true } }),
@@ -90,7 +101,7 @@ export async function publicProfile(prisma: PrismaClient, username: string, view
   const follows = !!followRow;
   const showFollowers = canSee(asVisibility(profile?.followersVisibility), isMe, follows);
   const showFollowing = canSee(asVisibility(profile?.followingVisibility), isMe, follows);
-  const showActivity = canSee(activityLevel(profile), isMe, follows);
+  const showActivity = !isBlocked && canSee(activityLevel(profile), isMe, follows);
   if (!showActivity) { approved.length = 0; recipes.length = 0; }
 
   const lotIds = [...approved.map((a) => a.approvedLotId as string), ...recipes.map((r) => r.lotId).filter((id): id is string => !!id)];
@@ -112,6 +123,7 @@ export async function publicProfile(prisma: PrismaClient, username: string, view
     isPrivate: profile?.isPrivate ?? false,
     requested: !!requestRow,
     isMe,
+    isBlocked,
     discoveries: approved.flatMap((a) => {
       const lot = lotById.get(a.approvedLotId as string);
       return lot ? [mapLot(lot as unknown as CoffeeLotRow)] : [];
@@ -135,6 +147,7 @@ export async function follow(
 ): Promise<FollowResult> {
   const accountId = await accountIdFor(prisma, username);
   if (accountId === viewerId) throw ApiError.unprocessable("cannot_follow_self");
+  if ((await blockedWith(prisma, viewerId)).has(accountId)) throw ApiError.forbidden("blocked");
   const key = { followerId: viewerId, followeeId: accountId };
   const [existing, owner] = await Promise.all([
     prisma.mobileFollow.findUnique({ where: { followerId_followeeId: key } }),

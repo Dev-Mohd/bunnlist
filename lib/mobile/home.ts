@@ -4,6 +4,7 @@ import { LOT_LIST_SELECT, mapLot, type CoffeeLotRow, type MobileLot } from "./ca
 import { mapExperience, type MobileExperience } from "./experiences";
 import { activityLevel, avatarUrl, displayNames } from "./profile";
 import { activityVisibleTo, canSee } from "./social";
+import { blockedWith } from "./blockSet";
 import { commentCounts, type CommentTarget } from "./comments";
 import { UNCREDITED_ACCOUNTS } from "./submissions";
 
@@ -262,7 +263,7 @@ export async function pulse(
 ): Promise<PulseItem[]> {
   const since = new Date(now.getTime() - (from ? 60 : 30) * DAY);
   const who = from ? { accountId: { in: from } } : {};
-  const [brews, recipes, discoveries, follows] = await Promise.all([
+  const [brews, recipes, discoveries, follows, blocked] = await Promise.all([
     prisma.mobileBrewExperience.findMany({
       where: { state: "published", createdAt: { gte: since }, ...who }, orderBy: { createdAt: "desc" }, take: from ? 80 : 40,
       select: { id: true, accountId: true, lotId: true, methodCode: true, stars: true, note: true, createdAt: true, doseGrams: true, waterGrams: true, brewSeconds: true },
@@ -279,6 +280,7 @@ export async function pulse(
       orderBy: { reviewedAt: "desc" }, take: 20, select: { accountId: true, approvedLotId: true, reviewedAt: true },
     }),
     viewerId ? prisma.mobileFollow.findMany({ where: { followerId: viewerId }, select: { followeeId: true } }) : [],
+    blockedWith(prisma, viewerId),
   ]);
   type Raw = Omit<PulseItem, "name" | "username" | "avatarUrl" | "lotSlug" | "lotNameAr" | "imageUrl" | "roasterNameAr" | "originCode"> & { accountId: string; lotId: string | null };
   const raw: Raw[] = [
@@ -299,7 +301,7 @@ export async function pulse(
   const profile = new Map(profiles.map((p) => [p.accountId, p]));
   const visible = raw.filter((r) => {
     const p = profile.get(r.accountId);
-    return !!p && canSee(activityLevel(p), r.accountId === viewerId, following.has(r.accountId));
+    return !!p && !blocked.has(r.accountId) && canSee(activityLevel(p), r.accountId === viewerId, following.has(r.accountId));
   });
   // One line per person and coffee, followed people first, then newest.
   const seen = new Set<string>();

@@ -37,6 +37,7 @@ function fake(over: Record<string, unknown> = {}) {
       findUnique: vi.fn().mockResolvedValue({ accountId: "me", username: "mohd", avatarPath: null, activityVisibility: "everyone", isPrivate: false }),
       findMany: vi.fn().mockResolvedValue([]),
     },
+    mobileBlock: { findMany: vi.fn().mockResolvedValue([]) },
     mobileFollow: { findUnique: vi.fn().mockResolvedValue(null) },
     user: { findMany: vi.fn().mockResolvedValue([{ id: "me", name: "Mohd" }]) },
     $transaction: vi.fn(),
@@ -117,6 +118,7 @@ describe("comments on reviews", () => {
     const db = {
       review: { findFirst: vi.fn().mockResolvedValue({ userId: "u", coffeeLot: { nameAr: "قوجي" } }) },
       mobileProfile: { findUnique: vi.fn().mockResolvedValue({ activityVisibility: "everyone", isPrivate: false }) },
+      mobileBlock: { findMany: vi.fn().mockResolvedValue([]) },
       mobileFollow: { findUnique: vi.fn().mockResolvedValue(null) },
     } as unknown as PrismaClient;
     expect(await postOwner(db, "review", "r1", "v")).toEqual({ ownerId: "u", title: "قوجي" });

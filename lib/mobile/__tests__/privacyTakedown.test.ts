@@ -10,6 +10,7 @@ describe("trending recipes", () => {
       mobileBrewExperience: { groupBy: vi.fn().mockResolvedValue([]) },
       mobileRecipe: { findMany: vi.fn().mockResolvedValue([{ id: "rec1", title: "V60", methodCode: "v60", accountId: "owner", lotId: null }]) },
       mobileProfile: { findMany: vi.fn().mockResolvedValue([{ accountId: "owner", activityVisibility: "everyone", isPrivate: true, username: "owner", displayName: null }]) },
+      mobileBlock: { findMany: vi.fn().mockResolvedValue([]) },
       mobileFollow: { findMany: vi.fn().mockResolvedValue(follows ? [{ followeeId: "owner" }] : []) },
       coffeeLot: { findMany: vi.fn().mockResolvedValue([]) },
       user: { findMany: vi.fn().mockResolvedValue([]) },

@@ -10,6 +10,7 @@ function fake() {
   const m = {
     user: { findMany: vi.fn().mockResolvedValue([]) },
     mobileProfile: { findMany: vi.fn().mockResolvedValue([]), findUnique: vi.fn() },
+    mobileBlock: { findMany: vi.fn().mockResolvedValue([]) },
     mobileFollow: { findMany: vi.fn().mockResolvedValue([]), findUnique: vi.fn().mockResolvedValue(null) },
     mobileFollowRequest: { findMany: vi.fn().mockResolvedValue([]) },
     mobileCollectionEntry: { findMany: vi.fn().mockResolvedValue([]), groupBy: vi.fn().mockResolvedValue([]) },

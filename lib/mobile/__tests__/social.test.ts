@@ -17,6 +17,7 @@ function fakePrisma(profiles: Record<string, string>) {
     },
     user: { findUnique: vi.fn().mockResolvedValue({ name: "Mohd" }), findMany: vi.fn().mockResolvedValue([]) },
     mobilePointEvent: { aggregate: vi.fn().mockResolvedValue({ _sum: { points: 85 } }) },
+    mobileBlock: { findMany: vi.fn().mockResolvedValue([]) },
     mobileFollow: {
       count: vi.fn().mockResolvedValueOnce(3).mockResolvedValueOnce(1),
       findUnique: vi.fn().mockResolvedValue({ followerId: "v" }),
