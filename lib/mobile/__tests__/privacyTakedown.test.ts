@@ -69,7 +69,7 @@ describe("account purge", () => {
       get: (_t, key: string) => (key === "$transaction" ? async (fn: (t: unknown) => Promise<void>) => fn(tx) : (tx as Record<string, unknown>)[key]),
     }) as unknown as PrismaClient;
     await createPrismaAccountDeletionStore(prisma).purge("acc");
-    for (const c of ["mobileListItem.deleteMany", "mobileList.deleteMany", "mobileComment.deleteMany", "mobileAdvisorRun.deleteMany", "mobileRoasterFollow.deleteMany", "mobileChallengeCompletion.deleteMany"]) {
+    for (const c of ["mobileListItem.deleteMany", "mobileList.deleteMany", "mobileComment.deleteMany", "mobileAdvisorRun.deleteMany", "mobileRoasterFollow.deleteMany", "mobileChallengeCompletion.deleteMany", "mobileBlock.deleteMany", "mobileFeedback.deleteMany"]) {
       expect(calls).toContain(c);
     }
   });
