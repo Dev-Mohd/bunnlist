@@ -3,7 +3,7 @@ import { z } from "zod";
 import { ApiError } from "./errors";
 import { avatarUrl } from "./profile";
 import { riyadhDay } from "./points";
-import { notify, type PushSender, apnsSender } from "./push";
+import { notify, type PushSender, pushSender } from "./push";
 
 // The admin console's people: find an account, see what it has done, bar it from
 // posting for a while (or lift that), make it an admin; and broadcast a push
@@ -169,7 +169,7 @@ export async function broadcastAudiences(prisma: PrismaClient, now = new Date())
 
 /** Sends to everyone in the audience who allows announcements; "test" goes to the sender only. */
 export async function broadcast(
-  prisma: PrismaClient, adminId: string, input: BroadcastRequest, sender: PushSender | null = apnsSender(), now = new Date(),
+  prisma: PrismaClient, adminId: string, input: BroadcastRequest, sender: PushSender | null = pushSender(), now = new Date(),
 ): Promise<{ accounts: number; delivered: number }> {
   if (!sender) throw ApiError.forbidden("push_not_configured");
   const ids = input.audience === "test" ? [adminId] : await audienceIds(prisma, input.audience, now);
