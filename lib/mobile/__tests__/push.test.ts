@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { generateKeyPairSync, createVerify, createPublicKey } from "node:crypto";
 import type { PrismaClient } from "@prisma/client";
-import { apnsSender, DeviceRegistration, fcmAssertion, fcmSender, notify, pushSender, registerDevice } from "../push";
+import { apnsSender, DeviceRegistration, fcmAssertion, fcmSender, firstInWindow, notify, notifyOnce, NOTIFY_WINDOWS, pushSender, registerDevice } from "../push";
 
 function fake(settings: Record<string, boolean> | null, tokens: string[]) {
   const m = {
@@ -102,5 +102,52 @@ describe("android (fcm)", () => {
     expect(pushSender({})).toBeNull();
     const sender = pushSender({ FCM_SERVICE_ACCOUNT: JSON.stringify(account) })!;
     expect(await sender({ token: "aa", environment: "production" }, { title: "t", body: "b" })).toEqual({ status: 0, reason: "NotConfigured" });
+  });
+});
+
+describe("not twice", () => {
+  // A tiny in-memory mobileRateEvent with createdAt/id ordering.
+  function events() {
+    const rows: { id: string; bucket: string; key: string; createdAt: Date }[] = [];
+    let n = 0;
+    const db = {
+      mobileRateEvent: {
+        create: vi.fn(async ({ data }: { data: { bucket: string; key: string; createdAt: Date } }) => {
+          const row = { id: `e${String(++n).padStart(4, "0")}`, ...data }; rows.push(row); return { id: row.id };
+        }),
+        findFirst: vi.fn(async ({ where }: { where: { bucket: string; key: string; createdAt: { gte: Date } } }) => {
+          const hits = rows.filter((r) => r.bucket === where.bucket && r.key === where.key && r.createdAt >= where.createdAt.gte)
+            .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime() || a.id.localeCompare(b.id));
+          return hits[0] ? { id: hits[0].id } : null;
+        }),
+        deleteMany: vi.fn(async ({ where }: { where: { id: string } }) => {
+          const i = rows.findIndex((r) => r.id === where.id); if (i >= 0) rows.splice(i, 1); return { count: i >= 0 ? 1 : 0 };
+        }),
+      },
+      mobileNotificationSettings: { findUnique: vi.fn().mockResolvedValue(null) },
+      mobilePushDevice: { findMany: vi.fn().mockResolvedValue([{ token: "aa", environment: "production" }]), deleteMany: vi.fn() },
+    };
+    return db as unknown as PrismaClient;
+  }
+
+  it("lets the first through and holds repeats in the window, per key", async () => {
+    const db = events();
+    const t0 = new Date("2026-11-07T10:00:00Z");
+    expect(await firstInWindow(db, "follow:a:b", NOTIFY_WINDOWS.follow, t0)).toBe(true);
+    expect(await firstInWindow(db, "follow:a:b", NOTIFY_WINDOWS.follow, new Date(t0.getTime() + 60_000))).toBe(false);
+    expect(await firstInWindow(db, "follow:c:b", NOTIFY_WINDOWS.follow, t0)).toBe(true);
+    expect(await firstInWindow(db, "follow:a:b", NOTIFY_WINDOWS.follow, new Date(t0.getTime() + NOTIFY_WINDOWS.follow + 1000))).toBe(true);
+  });
+
+  it("sends one notification for a double tap", async () => {
+    const db = events();
+    const sender = vi.fn().mockResolvedValue({ status: 200 });
+    const once = { key: "follow:x", windowMs: NOTIFY_WINDOWS.follow };
+    const sent = await Promise.all([
+      notifyOnce(db, "owner", "newFollower", { title: "t", body: "b" }, once, sender),
+      notifyOnce(db, "owner", "newFollower", { title: "t", body: "b" }, once, sender),
+    ]);
+    expect(sent.reduce((a, b) => a + b, 0)).toBe(1);
+    expect(sender).toHaveBeenCalledTimes(1);
   });
 });

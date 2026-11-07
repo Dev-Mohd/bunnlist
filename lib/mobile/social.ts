@@ -156,11 +156,9 @@ export async function follow(
   if (existing) return { following: true, requested: false };
   if (owner?.isPrivate) {
     const request = { requesterId: viewerId, targetId: accountId };
-    const asked = await prisma.mobileFollowRequest.findUnique({ where: { requesterId_targetId: request } });
-    if (!asked) {
-      await prisma.mobileFollowRequest.create({ data: request });
-      await onNew?.(accountId, "request");
-    }
+    // skipDuplicates: a double tap sends two requests at once; only the one that created the row notifies.
+    const created = await prisma.mobileFollowRequest.createMany({ data: [request], skipDuplicates: true });
+    if (created.count > 0) await onNew?.(accountId, "request");
     return { following: false, requested: true };
   }
   await prisma.mobileFollow.upsert({ where: { followerId_followeeId: key }, update: {}, create: key });

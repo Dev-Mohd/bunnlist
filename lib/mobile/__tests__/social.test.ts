@@ -30,6 +30,7 @@ function fakePrisma(profiles: Record<string, string>) {
     coffeeLot: { findMany: vi.fn().mockResolvedValue([]) },
     mobileFollowRequest: {
       findUnique: vi.fn().mockResolvedValue(null), create: vi.fn().mockResolvedValue({}),
+      createMany: vi.fn().mockResolvedValue({ count: 1 }),
       deleteMany: vi.fn().mockResolvedValue({ count: 1 }), findMany: vi.fn().mockResolvedValue([]),
     },
     $transaction: vi.fn().mockImplementation(async (ops: unknown[]) => ops),
@@ -126,10 +127,11 @@ describe("private accounts", () => {
     const { db, m } = privateOwner(false);
     const onNew = vi.fn().mockResolvedValue(undefined);
     expect(await follow(db, "v", "mohd", onNew)).toEqual({ following: false, requested: true });
-    expect(m.mobileFollowRequest.create).toHaveBeenCalledWith({ data: { requesterId: "v", targetId: "a" } });
+    expect(m.mobileFollowRequest.createMany).toHaveBeenCalledWith({ data: [{ requesterId: "v", targetId: "a" }], skipDuplicates: true });
     expect(m.mobileFollow.upsert).not.toHaveBeenCalled();
     expect(onNew).toHaveBeenCalledWith("a", "request");
-    m.mobileFollowRequest.findUnique.mockResolvedValue({ requesterId: "v" });
+    // Already asked (or a parallel tap got there first): nothing created, no second notification.
+    m.mobileFollowRequest.createMany.mockResolvedValue({ count: 0 });
     await follow(db, "v", "mohd", onNew);
     expect(onNew).toHaveBeenCalledOnce();
   });

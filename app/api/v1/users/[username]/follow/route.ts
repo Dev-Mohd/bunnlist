@@ -3,7 +3,7 @@ import { authenticate } from "@/lib/mobile/authGuard";
 import { requireAccessSecret } from "@/lib/mobile/deps";
 import { handle } from "@/lib/mobile/respond";
 import { displayNames } from "@/lib/mobile/profile";
-import { notify } from "@/lib/mobile/push";
+import { NOTIFY_WINDOWS, notifyOnce } from "@/lib/mobile/push";
 import { follow, unfollow } from "@/lib/mobile/social";
 
 // POST follows (or, for a private account, asks to), DELETE unfollows or withdraws the
@@ -18,10 +18,12 @@ export async function POST(req: Request, { params }: { params: Promise<{ usernam
     return follow(prisma, viewerId, decodeURIComponent(username), async (followeeId, kind) => {
       const name = (await displayNames(prisma, [viewerId])).get(viewerId) ?? "شخص";
       const handleRow = await prisma.mobileProfile.findUnique({ where: { accountId: viewerId }, select: { username: true } });
-      // A request rides the same «متابع جديد» notification setting.
-      await notify(prisma, followeeId, "newFollower", kind === "request"
+      // A request rides the same «متابع جديد» notification setting. Once a day per person:
+      // asking, withdrawing and asking again (or a double tap) doesn't ping them each time.
+      await notifyOnce(prisma, followeeId, "newFollower", kind === "request"
         ? { title: "طلب متابعة", body: `${name} يبي يتابعك`, data: { followRequests: "1" } }
-        : { title: "متابع جديد", body: `${name} صار يتابعك`, data: handleRow?.username ? { username: handleRow.username } : undefined });
+        : { title: "متابع جديد", body: `${name} صار يتابعك`, data: handleRow?.username ? { username: handleRow.username } : undefined },
+        { key: `follow:${viewerId}`, windowMs: NOTIFY_WINDOWS.follow });
     });
   });
 }
