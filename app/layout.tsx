@@ -11,7 +11,7 @@ const plex = IBM_Plex_Sans_Arabic({
 });
 
 const description =
-  "BunnList تطبيق لعشّاق القهوة المختصة: اكتشف المحاصيل التي تناسب ذوقك، وحضّرها خطوة بخطوة، واحتفظ بسجلّ لكل كوب. قريبًا على App Store.";
+  "BunnList تطبيق لعشّاق القهوة المختصة: اكتشف المحاصيل التي تناسب ذوقك، وحضّرها خطوة بخطوة، واحتفظ بسجلّ لكل كوب. متوفر على App Store.";
 
 export const metadata: Metadata = {
   title: {
@@ -31,6 +31,8 @@ export const metadata: Metadata = {
     images: ["/site/app-icon.png"],
   },
   twitter: { card: "summary", title: "BunnList — قهوتك الجاية، هنا.", description },
+  // Safari on iPhone shows Apple's «افتح / تنزيل» banner for the app.
+  itunes: { appId: "6826369847" },
 };
 
 export const viewport: Viewport = {
