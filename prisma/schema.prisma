@@ -911,3 +911,18 @@ model MobileBlock {
   @@id([blockerId, blockedId])
   @@index([blockedId])
 }
+
+/// «رسائل BunnList»: one-way messages from the team to one account. Shown signed «فريق BunnList»;
+/// `createdBy` (the admin) is kept for the team only.
+model MobileTeamMessage {
+  id        String    @id @default(cuid())
+  accountId String
+  kind      String    @default("general")
+  title     String
+  body      String
+  createdBy String
+  createdAt DateTime  @default(now())
+  readAt    DateTime?
+
+  @@index([accountId, createdAt])
+}
