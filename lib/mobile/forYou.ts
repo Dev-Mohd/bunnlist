@@ -27,7 +27,7 @@ export interface ResumeItem { lot: MobileLot; since: string }
 export interface RoasterNews {
   roasterNameAr: string;
   /** Newest first. */
-  lots: { slug: string; nameAr: string; imageUrl: string | null; publishedAt: string }[];
+  lots: { slug: string; nameAr: string; imageUrl: string | null; publishedAt: string; flavorNotes: string[] }[];
 }
 export interface FriendsDrinking { lot: MobileLot; names: string[]; people: number }
 
@@ -58,11 +58,11 @@ export function pickOfTheDay<T extends { id: string; score: number }>(scored: T[
 }
 
 /** Roasters' new coffees grouped by roaster, roasters with the newest first. */
-export function groupNews(rows: { roasterNameAr: string; slug: string; nameAr: string; imageUrl: string | null; publishedAt: Date }[]): RoasterNews[] {
+export function groupNews(rows: { roasterNameAr: string; slug: string; nameAr: string; imageUrl: string | null; publishedAt: Date; flavorNotes?: string[] }[]): RoasterNews[] {
   const by = new Map<string, RoasterNews["lots"]>();
   for (const r of [...rows].sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())) {
     const list = by.get(r.roasterNameAr) ?? [];
-    if (list.length < 6) list.push({ slug: r.slug, nameAr: r.nameAr, imageUrl: r.imageUrl, publishedAt: r.publishedAt.toISOString() });
+    if (list.length < 6) list.push({ slug: r.slug, nameAr: r.nameAr, imageUrl: r.imageUrl, publishedAt: r.publishedAt.toISOString(), flavorNotes: r.flavorNotes ?? [] });
     by.set(r.roasterNameAr, list);
   }
   return [...by.entries()].map(([roasterNameAr, lots]) => ({ roasterNameAr, lots })).slice(0, 12);
@@ -155,11 +155,12 @@ async function roasterNews(prisma: PrismaClient, accountId: string, now: Date): 
       roasterId: { in: roasterIds }, id: { notIn: mine },
       publishedAt: { gte: new Date(now.getTime() - NEWS_DAYS * DAY) },
     },
-    select: { slug: true, nameAr: true, imageUrl: true, publishedAt: true, roaster: { select: { nameAr: true } } },
+    // The notes colour each card's photo well, like everywhere else.
+    select: { slug: true, nameAr: true, imageUrl: true, publishedAt: true, flavorNotes: true, roaster: { select: { nameAr: true } } },
     orderBy: { publishedAt: "desc" }, take: 80,
   });
   return groupNews(rows.map((r) => ({
-    roasterNameAr: r.roaster.nameAr, slug: r.slug, nameAr: r.nameAr, imageUrl: r.imageUrl, publishedAt: r.publishedAt!,
+    roasterNameAr: r.roaster.nameAr, slug: r.slug, nameAr: r.nameAr, imageUrl: r.imageUrl, publishedAt: r.publishedAt!, flavorNotes: r.flavorNotes,
   })));
 }
 
