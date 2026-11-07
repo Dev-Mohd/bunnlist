@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { BunnListLogo } from "@/components/Logo";
-import { AVAILABILITY, CONTACT_EMAIL } from "@/lib/site";
+import { APP_STORE_URL, AVAILABILITY, CONTACT_EMAIL } from "@/lib/site";
 
 const links = [
   { href: "/#new", label: "الجديد" },
@@ -56,19 +56,22 @@ export function SiteFooter() {
   );
 }
 
-/** "قريبًا على App Store" as a quiet pill (no store badge until the listing exists). */
+/** «حمّل من App Store»: a pill linking to the listing. (Kept the old name so every page picks it up.) */
 export function ComingSoon({ dark = false }: { dark?: boolean }) {
   return (
-    <span
-      className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[15px] font-medium ${
+    <a
+      href={APP_STORE_URL}
+      target="_blank"
+      rel="noopener"
+      className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[15px] font-medium transition-opacity hover:opacity-85 ${
         dark ? "bg-[var(--bg)] text-[var(--ink)]" : "bg-[var(--ink)] text-[var(--bg)]"
       }`}
     >
-      <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
-        <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 10.6V6h-2v7.4l5 3 1-1.7-4-2.1Z" />
+      <svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14" />
       </svg>
-      {AVAILABILITY}
-    </span>
+      حمّل من App Store
+    </a>
   );
 }
 

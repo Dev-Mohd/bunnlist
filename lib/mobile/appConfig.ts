@@ -20,7 +20,7 @@ export function appConfig(env: Record<string, string | undefined> = process.env)
     ios: {
       minBuild: iosMin,
       latestBuild: Math.max(iosMin, int(env.APP_LATEST_IOS_BUILD)),
-      storeUrl: env.APP_IOS_STORE_URL?.trim() || "https://apps.apple.com/sa/search?term=BunnList",
+      storeUrl: env.APP_IOS_STORE_URL?.trim() || "https://apps.apple.com/app/id6826369847",
     },
     android: {
       minBuild: androidMin,
