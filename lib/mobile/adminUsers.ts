@@ -110,6 +110,8 @@ export const UserAction = z.discriminatedUnion("action", [
   z.object({ action: z.literal("suspend"), reason: z.string().trim().min(2).max(300), days: z.number().int().min(1).max(3650).nullable() }),
   z.object({ action: z.literal("unsuspend") }),
   z.object({ action: z.literal("setAdmin"), admin: z.boolean() }),
+  // For someone gaming the points: wipes their ledger (points, streak, level) back to zero.
+  z.object({ action: z.literal("resetPoints"), reason: z.string().trim().min(2).max(300) }),
 ]);
 export type UserAction = z.infer<typeof UserAction>;
 
@@ -136,6 +138,11 @@ export async function applyUserAction(
     case "setAdmin":
       await prisma.user.update({ where: { id: accountId }, data: { role: input.admin ? "ADMIN" : "USER" } });
       break;
+    case "resetPoints": {
+      const { count } = await prisma.mobilePointEvent.deleteMany({ where: { accountId } });
+      console.info(`points reset: ${accountId} by ${adminId} (${count} events): ${input.reason}`);
+      break;
+    }
   }
   return adminUser(prisma, accountId, now);
 }

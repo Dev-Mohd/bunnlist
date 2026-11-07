@@ -4,6 +4,19 @@ import { ApiError } from "./errors";
 import { assertCanPost } from "./adminUsers";
 import { award, revoke } from "./points";
 
+/** Someone brewed with another person's published recipe: its author gets a little, once per brewer. */
+async function creditRecipeAuthor(prisma: PrismaClient, brewerId: string, recipeId: string | null): Promise<void> {
+  if (!recipeId) return;
+  try {
+    const recipe = await prisma.mobileRecipe.findFirst({ where: { id: recipeId, state: "published" }, select: { accountId: true } });
+    if (recipe && recipe.accountId !== brewerId) {
+      await award(prisma, recipe.accountId, "recipeBrewed", `${brewerId}:${recipeId}`, new Date(), undefined, true);
+    }
+  } catch (err) {
+    console.error("recipe author credit failed", err);
+  }
+}
+
 // Brew experiences logged from the app against a published lot. Mirrors the app's
 // BrewExperience + ContentLifecycle: stars rate this attempt only (never the lot
 // average), and the lifecycle is draft -> published <-> unpublished, with deleted
@@ -156,6 +169,7 @@ export async function saveExperience(
       data: { accountId, clientId: input.clientId, lotId, ...fields, state: input.publish ? "published" : "draft" },
     });
     await award(prisma, accountId, "experience", row.id);
+    await creditRecipeAuthor(prisma, accountId, row.recipeId ?? null);
   } else {
     if (existing.lotId !== lotId) throw ApiError.conflict("client_id_reused");
     const from = existing.state as ExperienceState;

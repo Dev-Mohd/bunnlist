@@ -1,5 +1,6 @@
 import type { PrismaClient } from "@prisma/client";
 import { ApiError } from "./errors";
+import { award, revoke } from "./points";
 
 // Likes: "مفيد" on a published review, "أعجبني" on a published recipe. One per
 // person per thing; never on your own. The author is kept on the row so the
@@ -34,13 +35,17 @@ export async function like(
   const existing = await prisma.mobileLike.findUnique({ where: key });
   if (!existing) {
     await prisma.mobileLike.upsert({ where: key, update: {}, create: { accountId, targetType: type, targetId: id, ownerId: found.ownerId } });
+    // A review found «مفيد» earns its author a little (not an active day for their streak).
+    if (type === "review") await award(prisma, found.ownerId, "helpful", `${accountId}:${id}`, new Date(), undefined, true);
     await onNewLike?.(found.ownerId, found.title);
   }
   return { count: await prisma.mobileLike.count({ where: { targetType: type, targetId: id } }), liked: true };
 }
 
 export async function unlike(prisma: PrismaClient, accountId: string, type: LikeTarget, id: string): Promise<LikeState> {
+  const removed = await prisma.mobileLike.findFirst({ where: { accountId, targetType: type, targetId: id }, select: { ownerId: true } });
   await prisma.mobileLike.deleteMany({ where: { accountId, targetType: type, targetId: id } });
+  if (type === "review" && removed) await revoke(prisma, removed.ownerId, "helpful", `${accountId}:${id}`);
   return { count: await prisma.mobileLike.count({ where: { targetType: type, targetId: id } }), liked: false };
 }
 

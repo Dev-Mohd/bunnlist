@@ -2,7 +2,7 @@ import { BrewMethod, ReviewStatus, type PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { commentCounts } from "./comments";
 import { ApiError } from "./errors";
-import { award } from "./points";
+import { award, NOTE_MIN_CHARS, revoke } from "./points";
 import { likeStates } from "./likes";
 import { displayNames } from "./profile";
 import { activityVisibleTo } from "./social";
@@ -103,6 +103,9 @@ export async function submitReview(
     return { ...totals, review: { ...review } };
   });
   await award(prisma, accountId, "rate", ratedLotId);
+  // A written note earns more than stars alone; editing the note away takes the bonus back.
+  if ((data.body ?? "").trim().length >= NOTE_MIN_CHARS) await award(prisma, accountId, "rateNote", ratedLotId);
+  else await revoke(prisma, accountId, "rateNote", ratedLotId);
   return result;
 }
 

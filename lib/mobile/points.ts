@@ -10,7 +10,10 @@ import { UNCREDITED_ACCOUNTS } from "./submissions";
 
 export const POINTS = {
   collect: 5,      // a coffee added to the collection (once per coffee)
-  rate: 10,        // a coffee rated (once per coffee)
+  rate: 5,         // a coffee rated (once per coffee)
+  rateNote: 5,     // …with a written note of NOTE_MIN_CHARS or more (once per coffee)
+  helpful: 2,      // someone marked your review «مفيد» (once per person per review)
+  recipeBrewed: 3, // someone else brewed with your recipe (once per person per recipe)
   experience: 5,   // a brew logged (up to EXPERIENCE_DAILY_CAP per day)
   recipe: 20,      // a recipe published (once per recipe)
   discovery: 50,   // a suggestion approved into the catalog
@@ -21,6 +24,33 @@ export const POINTS = {
 export type PointKind = keyof typeof POINTS;
 
 export const EXPERIENCE_DAILY_CAP = 3;
+
+/** How many of each reward pay per Riyadh day; past it the action still counts, for 0 points. */
+export const DAILY_CAPS: Partial<Record<PointKind, number>> = {
+  collect: 5, rate: 5, rateNote: 5, experience: EXPERIENCE_DAILY_CAP, helpful: 5, recipeBrewed: 5,
+};
+
+/** A note this long earns the rating bonus. */
+export const NOTE_MIN_CHARS = 20;
+
+/** Levels by all-time points, shown on the points card, the profile and the leaderboard. */
+export const LEVELS = [
+  { min: 0, nameAr: "مبتدئ", emoji: "🌱" },
+  { min: 100, nameAr: "متذوّق", emoji: "☕" },
+  { min: 300, nameAr: "ذوّاق", emoji: "🫘" },
+  { min: 700, nameAr: "خبير", emoji: "🏅" },
+  { min: 1500, nameAr: "محمّص فخري", emoji: "👑" },
+] as const;
+
+export interface Level { nameAr: string; emoji: string; min: number; next: number | null; nextNameAr: string | null; progress: number }
+
+export function levelFor(total: number): Level {
+  let i = 0;
+  while (i + 1 < LEVELS.length && total >= LEVELS[i + 1].min) i += 1;
+  const cur = LEVELS[i], nxt = LEVELS[i + 1] ?? null;
+  const progress = nxt ? Math.max(0, Math.min(1, (total - cur.min) / (nxt.min - cur.min))) : 1;
+  return { nameAr: cur.nameAr, emoji: cur.emoji, min: cur.min, next: nxt?.min ?? null, nextNameAr: nxt?.nameAr ?? null, progress };
+}
 
 /** "YYYY-MM-DD" of the date in Riyadh. */
 export function riyadhDay(date: Date): string {
@@ -34,14 +64,29 @@ function previousDay(day: string): string {
   return d.toISOString().slice(0, 10);
 }
 
-/** Consecutive active days ending today, or yesterday when today has no activity yet. */
+/**
+ * Consecutive active days ending today, or yesterday when today has no activity yet.
+ * One missed day per 7 is forgiven («يوم سماح»): the streak carries over it, without counting it.
+ */
 export function currentStreak(activeDays: Iterable<string>, today: string): number {
   const days = new Set(activeDays);
   let cursor = days.has(today) ? today : previousDay(today);
   let count = 0;
-  while (days.has(cursor)) {
-    count += 1;
-    cursor = previousDay(cursor);
+  let sinceGrace = Infinity; // active days counted since the last forgiven gap
+  while (true) {
+    if (days.has(cursor)) {
+      count += 1; sinceGrace += 1;
+      cursor = previousDay(cursor);
+      continue;
+    }
+    // A single missing day, with activity before it, and no other forgiven day in the last 7.
+    const before = previousDay(cursor);
+    if (count > 0 && sinceGrace >= 7 && days.has(before)) {
+      sinceGrace = 0;
+      cursor = before;
+      continue;
+    }
+    break;
   }
   return count;
 }
@@ -59,16 +104,20 @@ async function insert(prisma: PrismaClient, accountId: string, kind: PointKind, 
 export async function award(
   prisma: PrismaClient, accountId: string, kind: Exclude<PointKind, "activity" | "streak7">, refId: string, now = new Date(),
   pointsOverride?: number,
+  /** Earned from someone else's action (a «مفيد», a brew of your recipe): pays, but isn't an active day for the streak. */
+  passive = false,
 ): Promise<void> {
   if (!accountId || accountId === "deleted") return;
   try {
     const day = riyadhDay(now);
     let points: number = pointsOverride ?? POINTS[kind];
-    if (kind === "experience") {
-      const today = await prisma.mobilePointEvent.count({ where: { accountId, kind: "experience", day, points: { gt: 0 } } });
-      if (today >= EXPERIENCE_DAILY_CAP) points = 0;
+    const cap = DAILY_CAPS[kind];
+    if (cap !== undefined) {
+      const today = await prisma.mobilePointEvent.count({ where: { accountId, kind, day, points: { gt: 0 } } });
+      if (today >= cap) points = 0;
     }
     await insert(prisma, accountId, kind, refId, points, day);
+    if (passive) return;
     const firstToday = await insert(prisma, accountId, "activity", day, 0, day);
     if (firstToday) {
       const days = await prisma.mobilePointEvent.findMany({
@@ -95,6 +144,7 @@ export interface PointsSummary {
   total: number;
   week: number;
   streak: number;
+  level: Level;
   recent: { kind: string; points: number; createdAt: string }[];
 }
 
@@ -112,6 +162,7 @@ export async function pointsSummary(prisma: PrismaClient, accountId: string, now
   return {
     total: total._sum.points ?? 0,
     week: week._sum.points ?? 0,
+    level: levelFor(total._sum.points ?? 0),
     streak: currentStreak(days.map((d) => d.day), riyadhDay(now)),
     recent: recent.map((r) => ({ kind: r.kind, points: r.points, createdAt: r.createdAt.toISOString() })),
   };
@@ -124,6 +175,9 @@ export interface LeaderboardEntry {
   avatarUrl: string | null;
   points: number;
   isMe: boolean;
+  /** All-time level, e.g. «ذوّاق». */
+  levelAr: string;
+  levelEmoji: string;
 }
 
 export const LEADERBOARD_KINDS = ["points", "discoverers", "raters", "helpful"] as const;
@@ -153,6 +207,8 @@ export async function leaderboard(
     prisma.mobileProfile.findMany({ where: { accountId: { in: ids } }, select: { accountId: true, username: true, displayName: true, avatarPath: true } }),
     prisma.user.findMany({ where: { id: { in: ids } }, select: { id: true, name: true } }),
   ]);
+  const totals = await prisma.mobilePointEvent.groupBy({ by: ["accountId"], where: { accountId: { in: ids } }, _sum: { points: true } });
+  const totalById = new Map(totals.map((t) => [t.accountId, t._sum.points ?? 0]));
   const profileById = new Map(profiles.map((p) => [p.accountId, p]));
   const userName = new Map(users.map((u) => [u.id, u.name?.trim() || null]));
 
@@ -171,6 +227,8 @@ export async function leaderboard(
       avatarUrl: avatarUrl(p?.avatarPath ?? null),
       points: t.points,
       isMe: t.accountId === viewerId,
+      levelAr: levelFor(totalById.get(t.accountId) ?? 0).nameAr,
+      levelEmoji: levelFor(totalById.get(t.accountId) ?? 0).emoji,
     };
   });
 

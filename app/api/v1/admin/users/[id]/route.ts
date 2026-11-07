@@ -7,7 +7,7 @@ import { requireAdmin } from "@/lib/mobile/admin";
 import { adminUser, applyUserAction, UserAction } from "@/lib/mobile/adminUsers";
 
 // GET /api/v1/admin/users/[id] — admins only: an account's profile, numbers and
-// recent reviews. POST { action: suspend | unsuspend | setAdmin } — never on yourself.
+// recent reviews. POST { action: suspend | unsuspend | setAdmin | resetPoints } — never on yourself.
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 

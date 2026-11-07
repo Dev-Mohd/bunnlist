@@ -8,6 +8,7 @@ function fake(existing: boolean) {
     mobileRecipe: { findFirst: vi.fn().mockResolvedValue(null) },
     mobileLike: {
       findUnique: vi.fn().mockResolvedValue(existing ? { accountId: "v" } : null),
+      findFirst: vi.fn().mockResolvedValue(existing ? { ownerId: "owner" } : null),
       upsert: vi.fn().mockResolvedValue({}),
       deleteMany: vi.fn().mockResolvedValue({}),
       count: vi.fn().mockResolvedValue(4),
