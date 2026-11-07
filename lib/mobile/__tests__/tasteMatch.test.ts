@@ -1,5 +1,6 @@
-import { describe, it, expect } from "vitest";
-import { scoreMatch } from "../tasteMatch";
+import { describe, it, expect, vi } from "vitest";
+import type { PrismaClient } from "@prisma/client";
+import { scoreMatch, tasteMatchScores } from "../tasteMatch";
 
 const coffee = (rating: number, notes: string[], process = "NATURAL", origin = "ET") => ({ rating, notes, process, origin });
 
@@ -28,5 +29,34 @@ describe("scoreMatch", () => {
     expect(r.score!).toBeGreaterThanOrEqual(55);
     expect(r.score!).toBeLessThanOrEqual(70);
     expect(r.reasons[0].text).toContain("جديدة");
+  });
+});
+
+describe("tasteMatchScores", () => {
+  const review = (lotId: string, rating: number, notes: string[]) => ({
+    rating, coffeeLotId: lotId, coffeeLot: { flavorNotes: notes, process: "NATURAL", originCountry: { isoCode: "ET" } },
+  });
+
+  it("scores unrated coffees once there are enough ratings", async () => {
+    const m = {
+      review: { findMany: vi.fn().mockResolvedValue([review("a", 5, ["توت"]), review("b", 5, ["فراولة"]), review("c", 2, ["شوكولاتة"])]) },
+      coffeeLot: {
+        findMany: vi.fn().mockResolvedValue([
+          { id: "a", slug: "rated", flavorNotes: ["توت"], process: "NATURAL", originCountry: { isoCode: "ET" } },
+          { id: "x", slug: "berry", flavorNotes: ["توت أزرق"], process: "NATURAL", originCountry: { isoCode: "ET" } },
+          { id: "y", slug: "choc", flavorNotes: ["شوكولاتة داكنة"], process: "WASHED", originCountry: { isoCode: "BR" } },
+        ]),
+      },
+    };
+    const { scores, needed } = await tasteMatchScores(m as unknown as PrismaClient, "me", ["rated", "berry", "choc"]);
+    expect(needed).toBe(0);
+    expect(scores.rated).toBeUndefined();
+    expect(scores.berry).toBeGreaterThan(scores.choc);
+  });
+
+  it("says how many ratings are still needed", async () => {
+    const m = { review: { findMany: vi.fn().mockResolvedValue([review("a", 5, ["توت"])]) }, coffeeLot: { findMany: vi.fn() } };
+    expect(await tasteMatchScores(m as unknown as PrismaClient, "me", ["x"])).toEqual({ scores: {}, needed: 2 });
+    expect(m.coffeeLot.findMany).not.toHaveBeenCalled();
   });
 });

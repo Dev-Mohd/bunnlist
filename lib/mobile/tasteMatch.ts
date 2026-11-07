@@ -108,3 +108,38 @@ export async function tasteMatch(prisma: PrismaClient, accountId: string, slug: 
   );
   return { ...result, myRating };
 }
+
+/**
+ * Scores for many cards at once ("يناسبك ٨٧٪" on each). Empty until the account
+ * has MIN_RATINGS ratings; coffees they already rated are left out (their own
+ * stars say more than a guess).
+ */
+export async function tasteMatchScores(
+  prisma: PrismaClient, accountId: string, slugs: string[],
+): Promise<{ scores: Record<string, number>; needed: number }> {
+  const reviews = await prisma.review.findMany({
+    where: { userId: accountId, status: "PUBLISHED" },
+    select: {
+      rating: true, coffeeLotId: true,
+      coffeeLot: { select: { flavorNotes: true, process: true, originCountry: { select: { isoCode: true } } } },
+    },
+    take: 500,
+  });
+  const needed = Math.max(0, MIN_RATINGS - reviews.length);
+  if (needed > 0 || slugs.length === 0) return { scores: {}, needed };
+  const rated = reviews.map((r) => ({
+    rating: r.rating, notes: r.coffeeLot.flavorNotes, process: r.coffeeLot.process, origin: r.coffeeLot.originCountry?.isoCode ?? null,
+  }));
+  const ratedIds = new Set(reviews.map((r) => r.coffeeLotId));
+  const lots = await prisma.coffeeLot.findMany({
+    where: { slug: { in: slugs }, publishedAt: { not: null } },
+    select: { id: true, slug: true, flavorNotes: true, process: true, originCountry: { select: { isoCode: true } } },
+  });
+  const scores: Record<string, number> = {};
+  for (const lot of lots) {
+    if (ratedIds.has(lot.id)) continue;
+    const { score } = scoreMatch(rated, { notes: lot.flavorNotes, process: lot.process, origin: lot.originCountry?.isoCode ?? null });
+    if (score !== null) scores[lot.slug] = score;
+  }
+  return { scores, needed: 0 };
+}
