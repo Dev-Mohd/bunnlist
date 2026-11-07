@@ -1,5 +1,5 @@
 import type { PrismaClient } from "@prisma/client";
-import { notify, type PushSender, apnsSender } from "./push";
+import { notify, type PushSender, pushSender } from "./push";
 import { currentStreak, riyadhDay } from "./points";
 
 // "ملخصك الأسبوعي": every Friday afternoon (Vercel cron), people with a phone
@@ -12,7 +12,7 @@ export function weeklyLine(points: number, actions: number, streak: number): str
 }
 
 export async function sendWeeklySummaries(
-  prisma: PrismaClient, now = new Date(), sender: PushSender | null = apnsSender(),
+  prisma: PrismaClient, now = new Date(), sender: PushSender | null = pushSender(),
 ): Promise<{ accounts: number; sent: number }> {
   if (!sender) return { accounts: 0, sent: 0 };
   const since = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);

@@ -3,9 +3,11 @@ import { createSign } from "node:crypto";
 import type { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 
-// Push notifications through Apple (APNs, token auth). Configured by environment:
-// APNS_KEY_ID, APNS_TEAM_ID, APNS_PRIVATE_KEY (the .p8 contents) and
-// APNS_BUNDLE_ID. Without them nothing is sent and nothing fails.
+// Push notifications through Apple (APNs, token auth) for iPhones and Firebase
+// Cloud Messaging (HTTP v1) for Android. Configured by environment:
+// APNS_KEY_ID, APNS_TEAM_ID, APNS_PRIVATE_KEY (the .p8 contents), APNS_BUNDLE_ID,
+// and FCM_SERVICE_ACCOUNT (the service-account JSON). Without them nothing is sent
+// and nothing fails. Android devices are stored with environment "fcm".
 
 export const NOTIFICATION_KINDS = ["newFollower", "submissionApproved", "submissionRejected", "reviewHelpful", "recipeLiked", "weeklySummary", "announcements", "comments"] as const;
 export type NotificationKind = (typeof NOTIFICATION_KINDS)[number];
@@ -44,14 +46,24 @@ export async function updateNotificationSettings(
   return getNotificationSettings(prisma, accountId);
 }
 
+const APNS_TOKEN = /^[0-9a-f]{32,200}$/i;
+const FCM_TOKEN = /^[A-Za-z0-9:_-]{32,4096}$/;
+
 export const DeviceRegistration = z.object({
-  token: z.string().regex(/^[0-9a-f]{32,200}$/i),
-  environment: z.enum(["sandbox", "production"]).default("production"),
-});
+  token: z.string().max(4096),
+  environment: z.enum(["sandbox", "production", "fcm"]).default("production"),
+}).refine((d) => (d.environment === "fcm" ? FCM_TOKEN : APNS_TOKEN).test(d.token), { message: "invalid token", path: ["token"] });
+
+export const DeviceUnregistration = z.object({ token: z.string().max(4096).regex(FCM_TOKEN) });
+
+/** APNs tokens are hex (case-free); FCM tokens are case-sensitive and kept as sent. */
+function normalizeToken(token: string): string {
+  return APNS_TOKEN.test(token) ? token.toLowerCase() : token;
+}
 
 /** Ties the token to this account (a phone that changed accounts moves over). */
 export async function registerDevice(prisma: PrismaClient, accountId: string, input: z.infer<typeof DeviceRegistration>) {
-  const token = input.token.toLowerCase();
+  const token = input.environment === "fcm" ? input.token : input.token.toLowerCase();
   await prisma.mobilePushDevice.upsert({
     where: { token },
     update: { accountId, environment: input.environment },
@@ -61,13 +73,13 @@ export async function registerDevice(prisma: PrismaClient, accountId: string, in
 }
 
 export async function unregisterDevice(prisma: PrismaClient, accountId: string, token: string) {
-  await prisma.mobilePushDevice.deleteMany({ where: { accountId, token: token.toLowerCase() } });
+  await prisma.mobilePushDevice.deleteMany({ where: { accountId, token: { in: [...new Set([token, normalizeToken(token)])] } } });
   return { ok: true as const };
 }
 
 export interface PushMessage { title: string; body: string; data?: Record<string, string> }
 
-/** Sends one notification; resolves to the APNs status (410/400 BadDeviceToken mean the token is dead). */
+/** Sends one notification; resolves to the provider's status (410, BadDeviceToken or Unregistered mean the token is dead). */
 export type PushSender = (device: { token: string; environment: string }, message: PushMessage) => Promise<{ status: number; reason?: string }>;
 
 /**
@@ -75,7 +87,7 @@ export type PushSender = (device: { token: string; environment: string }, messag
  * a failed notification must not fail the action that caused it. Dead tokens are removed.
  */
 export async function notify(
-  prisma: PrismaClient, accountId: string, kind: NotificationKind, message: PushMessage, sender: PushSender | null = apnsSender(),
+  prisma: PrismaClient, accountId: string, kind: NotificationKind, message: PushMessage, sender: PushSender | null = pushSender(),
 ): Promise<number> {
   if (!sender) return 0;
   try {
@@ -144,4 +156,94 @@ export function apnsSender(env: Record<string, string | undefined> = process.env
     req.setTimeout(8000, () => { req.close(); client.close(); reject(new Error("apns timeout")); });
     req.end(JSON.stringify({ aps: { alert: { title: message.title, body: message.body }, sound: "default" }, ...message.data }));
   });
+}
+
+// --- Routing ------------------------------------------------------------------
+
+/** Sends each device through its own provider; null when neither is configured. */
+export function pushSender(env: Record<string, string | undefined> = process.env): PushSender | null {
+  const apns = apnsSender(env);
+  const fcm = fcmSender(env);
+  if (!apns && !fcm) return null;
+  return async (device, message) => {
+    const sender = device.environment === "fcm" ? fcm : apns;
+    return sender ? sender(device, message) : { status: 0, reason: "NotConfigured" };
+  };
+}
+
+// --- FCM (HTTP v1) --------------------------------------------------------------
+
+interface ServiceAccount { project_id: string; client_email: string; private_key: string; token_uri?: string }
+
+function readServiceAccount(raw: string | undefined): ServiceAccount | null {
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw.trim().startsWith("{") ? raw : Buffer.from(raw, "base64").toString("utf8"));
+    if (!parsed.project_id || !parsed.client_email || !parsed.private_key) return null;
+    return { ...parsed, private_key: String(parsed.private_key).replace(/\\n/g, "\n") };
+  } catch {
+    return null;
+  }
+}
+
+let cachedAccess: { token: string; expiresAt: number; email: string } | null = null;
+
+/** A signed service-account assertion for Google's token endpoint. */
+export function fcmAssertion(account: ServiceAccount, now = Date.now()): string {
+  const b64 = (o: object) => Buffer.from(JSON.stringify(o)).toString("base64url");
+  const iat = Math.floor(now / 1000);
+  const unsigned = `${b64({ alg: "RS256", typ: "JWT" })}.${b64({
+    iss: account.client_email,
+    scope: "https://www.googleapis.com/auth/firebase.messaging",
+    aud: account.token_uri ?? "https://oauth2.googleapis.com/token",
+    iat,
+    exp: iat + 3600,
+  })}`;
+  const signature = createSign("RSA-SHA256").update(unsigned).sign(account.private_key).toString("base64url");
+  return `${unsigned}.${signature}`;
+}
+
+async function fcmAccessToken(account: ServiceAccount, fetcher: typeof fetch): Promise<string> {
+  const now = Date.now();
+  if (cachedAccess && cachedAccess.email === account.client_email && cachedAccess.expiresAt - now > 5 * 60 * 1000) return cachedAccess.token;
+  const res = await fetcher(account.token_uri ?? "https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: { "content-type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer", assertion: fcmAssertion(account, now) }),
+  });
+  if (!res.ok) throw new Error(`fcm auth ${res.status}`);
+  const json = (await res.json()) as { access_token: string; expires_in?: number };
+  cachedAccess = { token: json.access_token, expiresAt: now + (json.expires_in ?? 3600) * 1000, email: account.client_email };
+  return json.access_token;
+}
+
+/** The FCM sender, or null when FCM_SERVICE_ACCOUNT isn't set. Data values must be strings. */
+export function fcmSender(env: Record<string, string | undefined> = process.env, fetcher: typeof fetch = fetch): PushSender | null {
+  const account = readServiceAccount(env.FCM_SERVICE_ACCOUNT);
+  if (!account) return null;
+  return async (device, message) => {
+    const access = await fcmAccessToken(account, fetcher);
+    const res = await fetcher(`https://fcm.googleapis.com/v1/projects/${account.project_id}/messages:send`, {
+      method: "POST",
+      headers: { authorization: `Bearer ${access}`, "content-type": "application/json" },
+      body: JSON.stringify({
+        message: {
+          token: device.token,
+          notification: { title: message.title, body: message.body },
+          data: message.data ?? {},
+          android: { priority: "high", notification: { channel_id: "general", sound: "default" } },
+        },
+      }),
+      signal: AbortSignal.timeout(8000),
+    });
+    if (res.ok) return { status: 200 };
+    let code: string | undefined;
+    try {
+      const err = (await res.json()) as { error?: { status?: string; details?: { errorCode?: string }[] } };
+      code = err.error?.details?.find((d) => d.errorCode)?.errorCode ?? err.error?.status;
+    } catch { /* not JSON */ }
+    // A token that's gone (app removed, data cleared) or malformed won't recover.
+    const dead = res.status === 404 || code === "UNREGISTERED" || (res.status === 400 && code === "INVALID_ARGUMENT");
+    return { status: res.status, reason: dead ? "Unregistered" : code };
+  };
 }
