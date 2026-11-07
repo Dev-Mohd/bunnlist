@@ -2,6 +2,7 @@ import { connect } from "node:http2";
 import { createSign } from "node:crypto";
 import type { PrismaClient } from "@prisma/client";
 import { z } from "zod";
+import { hashKey } from "./rateLimit";
 
 // Push notifications through Apple (APNs, token auth) for iPhones and Firebase
 // Cloud Messaging (HTTP v1) for Android. Configured by environment:
@@ -109,6 +110,49 @@ export async function notify(
     console.error("push failed", error);
     return 0;
   }
+}
+
+// --- Not twice -----------------------------------------------------------------
+
+/** How long the same person doing the same thing to the same target stays one notification. */
+export const NOTIFY_WINDOWS = {
+  follow: 24 * 60 * 60 * 1000,   // follow / request, unfollow, follow again…
+  accepted: 24 * 60 * 60 * 1000,
+  like: 24 * 60 * 60 * 1000,     // like, unlike, like again…
+  comment: 10 * 60 * 1000,       // a burst of comments on one post
+} as const;
+
+const ONCE_BUCKET = "notify_once";
+
+/**
+ * True for the first call with this key in the window, false for the rest (a repeat tap, a toggle,
+ * or a parallel request). Records first, then checks it's the earliest event, so two at once can't both win.
+ */
+export async function firstInWindow(prisma: PrismaClient, key: string, windowMs: number, now = new Date()): Promise<boolean> {
+  const hashed = hashKey(`${ONCE_BUCKET}:${key}`);
+  const mine = await prisma.mobileRateEvent.create({ data: { bucket: ONCE_BUCKET, key: hashed, createdAt: now }, select: { id: true } });
+  const first = await prisma.mobileRateEvent.findFirst({
+    where: { bucket: ONCE_BUCKET, key: hashed, createdAt: { gte: new Date(now.getTime() - windowMs) } },
+    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+    select: { id: true },
+  });
+  if (first?.id === mine.id) return true;
+  // Only the one that went out counts, so repeats don't keep pushing the window forward.
+  await prisma.mobileRateEvent.deleteMany({ where: { id: mine.id } });
+  return false;
+}
+
+/** `notify`, but only the first time `key` comes up in the window. Never throws. */
+export async function notifyOnce(
+  prisma: PrismaClient, accountId: string, kind: NotificationKind, message: PushMessage,
+  once: { key: string; windowMs: number }, sender: PushSender | null = pushSender(),
+): Promise<number> {
+  try {
+    if (!(await firstInWindow(prisma, `${accountId}:${kind}:${once.key}`, once.windowMs))) return 0;
+  } catch (error) {
+    console.error("notify dedupe failed", error);
+  }
+  return notify(prisma, accountId, kind, message, sender);
 }
 
 // --- APNs ---------------------------------------------------------------------

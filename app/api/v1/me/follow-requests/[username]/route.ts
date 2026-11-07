@@ -5,7 +5,7 @@ import { requireAccessSecret } from "@/lib/mobile/deps";
 import { handle, readJson } from "@/lib/mobile/respond";
 import { parseBody } from "@/lib/mobile/schemas";
 import { displayNames } from "@/lib/mobile/profile";
-import { notify } from "@/lib/mobile/push";
+import { NOTIFY_WINDOWS, notifyOnce } from "@/lib/mobile/push";
 import { answerFollowRequest } from "@/lib/mobile/social";
 
 // POST /api/v1/me/follow-requests/[username] {accept} — accept or decline a request.
@@ -22,10 +22,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ usernam
     return answerFollowRequest(prisma, ownerId, decodeURIComponent(username), accept, async (requesterId) => {
       const name = (await displayNames(prisma, [ownerId])).get(ownerId) ?? "شخص";
       const handleRow = await prisma.mobileProfile.findUnique({ where: { accountId: ownerId }, select: { username: true } });
-      await notify(prisma, requesterId, "newFollower", {
+      await notifyOnce(prisma, requesterId, "newFollower", {
         title: "انقبل طلبك", body: `صرت تتابع ${name}`,
         data: handleRow?.username ? { username: handleRow.username } : undefined,
-      });
+      }, { key: `accepted:${ownerId}`, windowMs: NOTIFY_WINDOWS.accepted });
     });
   });
 }

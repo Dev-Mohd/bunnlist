@@ -5,7 +5,7 @@ import { ApiError } from "@/lib/mobile/errors";
 import { handle } from "@/lib/mobile/respond";
 import { like, LIKE_TARGETS, unlike, type LikeTarget } from "@/lib/mobile/likes";
 import { displayNames } from "@/lib/mobile/profile";
-import { notify } from "@/lib/mobile/push";
+import { NOTIFY_WINDOWS, notifyOnce } from "@/lib/mobile/push";
 
 // POST likes, DELETE unlikes /api/v1/likes/review|recipe/[id] (signed in).
 // A new like notifies the author. Returns {count, liked}.
@@ -24,9 +24,11 @@ export async function POST(req: Request, { params }: { params: Promise<{ type: s
     const kind = targetType(type);
     return like(prisma, accountId, kind, id, async (ownerId, title) => {
       const name = (await displayNames(prisma, [accountId])).get(accountId) ?? "شخص";
-      await notify(prisma, ownerId, kind === "review" ? "reviewHelpful" : "recipeLiked", kind === "review"
+      // Liking, unliking and liking again notifies once a day.
+      await notifyOnce(prisma, ownerId, kind === "review" ? "reviewHelpful" : "recipeLiked", kind === "review"
         ? { title: "تقييمك مفيد 👍", body: `${name} شاف تقييمك لـ«${title}» مفيد` }
-        : { title: "أحد عجبته وصفتك ❤️", body: `${name} عجبته وصفة «${title}»` });
+        : { title: "أحد عجبته وصفتك ❤️", body: `${name} عجبته وصفة «${title}»` },
+        { key: `like:${accountId}:${kind}:${id}`, windowMs: NOTIFY_WINDOWS.like });
     });
   });
 }
