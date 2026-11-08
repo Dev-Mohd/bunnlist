@@ -21,6 +21,9 @@ const addsWater = (kind: StepKind) => kind === "bloom" || kind === "pour";
 
 export const POUR_STYLES = ["center", "circular", "spiral"] as const;
 export const POUR_SPEEDS = ["slow", "medium", "fast"] as const;
+/** A step that adds ice or dilution water after brewing (kind "serve"); its grams don't count as brew water. */
+export const STEP_ADDITIONS = ["ice", "dilute"] as const;
+export const ADDITION_TEMPS = ["room", "hot", "cold"] as const;
 export const GRIND_LEVELS = [
   "extraFine", "fine", "mediumFine", "medium", "mediumCoarse", "coarse", "extraCoarse",
 ] as const;
@@ -39,6 +42,10 @@ export const RecipeStepInput = z.object({
   note: z.string().max(300).default(""),
   pourStyle: z.enum(POUR_STYLES).nullable().optional(),
   pourSpeed: z.enum(POUR_SPEEDS).nullable().optional(),
+  /** This pour's own water temperature; null uses the recipe's. */
+  tempC: z.number().min(0).max(100).nullable().optional(),
+  addition: z.enum(STEP_ADDITIONS).nullable().optional(),
+  additionTemp: z.enum(ADDITION_TEMPS).nullable().optional(),
 });
 export type RecipeStepInput = z.infer<typeof RecipeStepInput>;
 
@@ -145,6 +152,9 @@ export interface MobileRecipeStep {
   note: string;
   pourStyle: string | null;
   pourSpeed: string | null;
+  tempC: number | null;
+  addition: (typeof STEP_ADDITIONS)[number] | null;
+  additionTemp: (typeof ADDITION_TEMPS)[number] | null;
 }
 
 export interface MobileRecipe {
@@ -207,10 +217,11 @@ export function normalizeSteps(raw: unknown): MobileRecipeStep[] {
   return raw.flatMap((s) => {
     const parsed = RecipeStepInput.safeParse(s);
     if (!parsed.success) return [];
-    const { kind, addedWaterGrams, seconds, note, pourStyle, pourSpeed } = parsed.data;
+    const { kind, addedWaterGrams, seconds, note, pourStyle, pourSpeed, tempC, addition, additionTemp } = parsed.data;
     return [{
       kind, addedWaterGrams: addedWaterGrams ?? null, seconds: seconds ?? null, note,
       pourStyle: pourStyle ?? null, pourSpeed: pourSpeed ?? null,
+      tempC: tempC ?? null, addition: addition ?? null, additionTemp: additionTemp ?? null,
     }];
   });
 }
@@ -321,6 +332,7 @@ export async function saveRecipe(prisma: PrismaClient, accountId: string, input:
   const steps = input.steps.map((s) => ({
     kind: s.kind, addedWaterGrams: s.addedWaterGrams ?? null, seconds: s.seconds ?? null, note: s.note.trim(),
     pourStyle: s.pourStyle ?? null, pourSpeed: s.pourSpeed ?? null,
+    tempC: s.tempC ?? null, addition: s.addition ?? null, additionTemp: s.additionTemp ?? null,
   }));
   const fields = {
     lotId,

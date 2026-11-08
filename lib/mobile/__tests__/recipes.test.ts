@@ -88,9 +88,22 @@ describe("RecipeUpsert", () => {
 describe("normalizeSteps", () => {
   it("drops malformed stored steps and fills nulls", () => {
     expect(normalizeSteps([{ kind: "pour", addedWaterGrams: 50 }, { kind: "nope" }, "x"])).toEqual([
-      { kind: "pour", addedWaterGrams: 50, seconds: null, note: "", pourStyle: null, pourSpeed: null },
+      { kind: "pour", addedWaterGrams: 50, seconds: null, note: "", pourStyle: null, pourSpeed: null,
+        tempC: null, addition: null, additionTemp: null },
     ]);
     expect(normalizeSteps(null)).toEqual([]);
+  });
+
+  it("keeps a pour's own temperature and ice or dilution additions", () => {
+    expect(normalizeSteps([
+      { kind: "pour", addedWaterGrams: 100, tempC: 88 },
+      { kind: "serve", addedWaterGrams: 20, addition: "dilute", additionTemp: "room" },
+    ])).toEqual([
+      { kind: "pour", addedWaterGrams: 100, seconds: null, note: "", pourStyle: null, pourSpeed: null, tempC: 88, addition: null, additionTemp: null },
+      { kind: "serve", addedWaterGrams: 20, seconds: null, note: "", pourStyle: null, pourSpeed: null, tempC: null, addition: "dilute", additionTemp: "room" },
+    ]);
+    expect(RecipeUpsert.safeParse({ clientId: "c", methodCode: "V60", steps: [{ kind: "pour", tempC: 120 }] }).success).toBe(false);
+    expect(RecipeUpsert.safeParse({ clientId: "c", methodCode: "V60", steps: [{ kind: "serve", addition: "milk" }] }).success).toBe(false);
   });
 });
 
