@@ -12,9 +12,11 @@ export const APP_STORE_ID = "6826369847";
 export const APP_STORE_URL = `https://apps.apple.com/app/id${APP_STORE_ID}`;
 
 /** Android, outside Google Play: the page that explains installing, and the APK it downloads.
- *  Put the signed release APK at public/download/BunnList.apk, or set NEXT_PUBLIC_ANDROID_APK_URL to a file hosted elsewhere. */
+ *  The APK is attached as «BunnList.apk» to the latest GitHub release of Dev-Mohd/bunnlist (Vercel doesn't serve
+ *  the copy in public/download). NEXT_PUBLIC_ANDROID_APK_URL can point somewhere else. */
 export const ANDROID_PAGE = "/android";
 export const ANDROID_APK_LOCAL = "/download/BunnList.apk";
-export const ANDROID_APK_URL = process.env.NEXT_PUBLIC_ANDROID_APK_URL || ANDROID_APK_LOCAL;
+export const ANDROID_APK_URL =
+  process.env.NEXT_PUBLIC_ANDROID_APK_URL || "https://github.com/Dev-Mohd/bunnlist/releases/latest/download/BunnList.apk";
 /** The oldest Android the app runs on (minSdk 26). */
 export const ANDROID_MIN = "Android 8";
