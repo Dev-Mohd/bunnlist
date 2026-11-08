@@ -104,6 +104,11 @@ describe("normalizeSteps", () => {
     ]);
     expect(RecipeUpsert.safeParse({ clientId: "c", methodCode: "V60", steps: [{ kind: "pour", tempC: 120 }] }).success).toBe(false);
     expect(RecipeUpsert.safeParse({ clientId: "c", methodCode: "V60", steps: [{ kind: "serve", addition: "milk" }] }).success).toBe(false);
+    const base = { title: "t", methodCode: "V60", doseGrams: 15, hotWaterGrams: 100, grindLevel: "medium" };
+    expect(validateRecipe({ ...base, steps: [{ kind: "pour", addedWaterGrams: 100 }, { kind: "serve", addedWaterGrams: 20, addition: "dilute" }] }))
+      .not.toContain("waterOnNonPourStep");
+    expect(validateRecipe({ ...base, steps: [{ kind: "pour", addedWaterGrams: 100 }, { kind: "serve", addedWaterGrams: 20 }] }))
+      .toContain("waterOnNonPourStep");
   });
 });
 

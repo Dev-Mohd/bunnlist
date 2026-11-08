@@ -104,7 +104,7 @@ export interface RecipeFields {
   yieldGrams?: number | null;
   grindSetting?: string;
   grindLevel?: string | null;
-  steps: { kind: StepKind; addedWaterGrams?: number | null }[];
+  steps: { kind: StepKind; addedWaterGrams?: number | null; addition?: string | null }[];
 }
 
 const MATCH_TOLERANCE_GRAMS = 1;
@@ -113,7 +113,8 @@ const MATCH_TOLERANCE_GRAMS = 1;
 export function validateRecipe(r: RecipeFields): RecipeProblem[] {
   const problems: RecipeProblem[] = [];
   if (!r.title.trim()) problems.push("missingTitle");
-  if (r.steps.some((s) => !addsWater(s.kind) && s.addedWaterGrams != null)) problems.push("waterOnNonPourStep");
+  // Ice and dilution steps carry grams that aren't brew water.
+  if (r.steps.some((s) => !addsWater(s.kind) && s.addedWaterGrams != null && !s.addition)) problems.push("waterOnNonPourStep");
   const pours = r.steps.filter((s) => addsWater(s.kind) && s.addedWaterGrams != null).map((s) => s.addedWaterGrams as number);
   if (pours.some((g) => g <= 0)) problems.push("negativeOrZeroWater");
 
