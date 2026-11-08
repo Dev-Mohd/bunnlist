@@ -1,8 +1,7 @@
 import Image from "next/image";
-import { ComingSoon, PhoneFrame, SiteFooter, SiteNav } from "@/components/site/Chrome";
+import { DownloadButtons, PhoneFrame, SiteFooter, SiteNav } from "@/components/site/Chrome";
 import { NewStory } from "@/components/site/Features";
-import { BagShelf, BrewClip, CountUp, Reveal, Steam, Story, type StoryStep } from "@/components/site/Motion";
-import { CONTACT_EMAIL } from "@/lib/site";
+import { BagShelf, BrewClip, Reveal, Steam, Story, type StoryStep } from "@/components/site/Motion";
 import { SHELF_LOTS } from "@/lib/site-bags";
 
 // The BunnList site: one page that introduces the app, laid out in Apple's
@@ -27,7 +26,7 @@ const story: StoryStep[] = [
   {
     kicker: "حضّر",
     title: "الوصفة تمشي معك.",
-    body: "اختر الطريقة والوصفة، وحدّد درجة الطحن على مطحنتك، ثم اتبع الخطوات بالثانية.",
+    body: "اختر الطريقة، ووصفة المحمصة أو وصفات أبطال العالم أو وصفتك أنت، ويقترح لك درجة الطحن على مطحنتك، ثم اتبع الخطوات بالثانية.",
     image: "/site/brew-v60-poster.jpg",
     alt: "شاشة التحضير",
   },
@@ -42,111 +41,7 @@ const story: StoryStep[] = [
 
 
 
-const features: { title: string; body: string; icon: string; wide?: boolean; dark?: boolean }[] = [
-  {
-    title: "ساعدني أختار",
-    body: "جاوب كم سؤال، أو اكتب اللي في بالك بكلامك، ونطلع لك ثلاث قهاوي تناسبك ونقول لك ليش.",
-    icon: "M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9l4.2-1.4L12 3ZM18 15l.9 2.1L21 18l-2.1.9L18 21l-.9-2.1L15 18l2.1-.9L18 15Z",
-    wide: true,
-    dark: true,
-  },
-  {
-    title: "على ذوقك",
-    body: "تقول لنا وش تحب أول ما تسجّل، ونرتّب لك القهاوي على ذوقك وتتجدد كل يوم.",
-    icon: "M12 3c3 3 6 5.5 6 9.5A6 6 0 0 1 6 12.5C6 8.5 9 6 12 3Z",
-  },
-  {
-    title: "صوّر الكيس",
-    body: "وجّه الكاميرا إلى كيس القهوة، ويتعرّف عليه التطبيق ويضيفه إلى مجموعتك.",
-    icon: "M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M9 12a3 3 0 1 0 6 0 3 3 0 0 0-6 0",
-  },
-  {
-    title: "قوائمي",
-    body: "قوائم بأسمائك مثل «للضيوف» أو «قهاوي الصيف»، بملاحظة على كل قهوة، وتشاركها برابط.",
-    icon: "M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01",
-  },
-  {
-    title: "خريطة المناطق",
-    body: "من وين تجي القهوة؟ كل دولة على الخريطة بقهاويها وطعمها ومناطقها، وتخضرّ لما تجرّب منها.",
-    icon: "M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Zm0 0v14m6-12v14",
-  },
-  {
-    title: "كوبك القادم أفضل",
-    body: "خرجت القهوة حامضة أو مُرّة أو خفيفة؟ أخبر التطبيق بالطعم، فيقترح عليك تعديلًا واحدًا تجرّبه في المرة القادمة.",
-    icon: "M5 19 19 5M15 5h4v4M7 13l-2 2 4 4 2-2",
-    wide: true,
-  },
-  {
-    title: "تحدي الأسبوع",
-    body: "كل أسبوع تحدي جديد، مثل «جرّب ٣ قهاوي إثيوبية»، وتكسب نقاط لما تخلصه.",
-    icon: "M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4ZM7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4",
-  },
-  {
-    title: "مجتمع القهوة",
-    body: "تابع الناس، وعلّق على تجاربهم وتقييماتهم، وتعرّف على «توأم ذوقك».",
-    icon: "M4 17l5-5 4 3 7-7M15 8h5v5",
-  },
-  {
-    title: "دليل المطاحن",
-    body: "١٢٣ مطحنة من مختلف الفئات، منها ٩١ بمواصفات موثّقة من مصادرها. اختر مطحنتك، فيقرّب لك التطبيق درجة الطحن المناسبة.",
-    icon: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 4v5l3 2",
-    dark: true,
-  },
-  {
-    title: "جواز القهوة",
-    body: "مع كل بلد تتذوّق قهوته يُضاف ختم جديد إلى جوازك، وتكتمل شاراتك مع الوقت.",
-    icon: "M6 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6V3Zm4 7a2 2 0 1 0 4 0 2 2 0 0 0-4 0m-1 6h6",
-  },
-  {
-    title: "الوصفات",
-    body: "وصفات المحامص نفسها، حارة وباردة، ووصفتك أنت بخطواتها وأوزانها تشاركها مع غيرك.",
-    icon: "M6 4h9l3 3v13H6V4Zm3 6h6M9 14h6",
-  },
-  {
-    title: "خصوصيتك لك",
-    body: "تجاربك خاصة ما لم تنشرها، وتقدر تخلّي حسابك خاصًا وتوافق على متابعيك، وتحذف حسابك متى شئت.",
-    icon: "M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6l-7-3Zm-3 9 2 2 4-4",
-    wide: true,
-  },
-  {
-    title: "أيقونة لكل مناسبة",
-    body: "تتبدّل أيقونة التطبيق في رمضان والعيدين ويوم التأسيس واليوم الوطني.",
-    icon: "M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9Z",
-    wide: true,
-  },
-];
-
 const methods = ["V60 ساخن", "V60 مثلّج", "إيروبريس", "إسبريسو", "قهوة عربية", "كيمكس", "فرنش برس", "كولد برو"];
-
-const specs: [string, string][] = [
-  ["التوافق", "iPhone بنظام iOS 17 أو أحدث"],
-  ["اللغة", "العربية"],
-  ["الحساب", "الدخول عبر Apple أو Google أو برمز يصل إلى بريدك. ويمكنك التصفّح دون حساب."],
-  ["طرق التحضير", "V60 الساخن والمثلّج، وكيمكس، وإيروبريس، وفرنش برس، وإسبريسو، وكولد برو، والقهوة العربية."],
-  ["التحضير خطوة بخطوة", "رسوم متحركة لـ V60 وإيروبريس والإسبريسو والقهوة العربية، ومؤقّت يتبع خطوات وصفتك، وتنبيه بالاهتزاز قبل كل خطوة، مع إبقاء الشاشة مضاءة."],
-  ["الدليل", "أكثر من ٧٠٠ محصول من محامص سعودية بصور أكياسها الأصلية، مع المنشأ والمعالجة والنكهات ووصفات المحامص الحارة والباردة."],
-  ["ساعدني أختار", "أسئلة سريعة عن جوّك وأداتك وذوقك، وحار أو بارد، وتقدر تكتب بكلامك؛ وتطلع لك ثلاث قهاوي مع نسبة التوافق وسببها."],
-  ["على ذوقك", "تختار نكهاتك وأدواتك عند التسجيل، وتترتّب القهاوي على ذوقك وتتجدد يوميًا، مع «قهوة اليوم» و«قهاوي تشبهها»."],
-  ["البحث والتصفية", "حسب المنشأ والمحمصة والمعالجة وطريقة التحضير ونوع النكهة، والقهوة منزوعة الكافيين، وما في مجموعتك."],
-  ["المحامص والخريطة", "صفحة لكل محمصة بقهاويها وتقييمها وتقدر تتابعها، وخريطة لدول المنشأ بطعم كل دولة ومناطقها."],
-  ["القوائم", "قوائم بأسمائك، عامة أو خاصة، مع ملاحظة على كل قهوة، وتشاركها برابط."],
-  ["المجتمع", "متابعة، وحسابات خاصة بطلبات متابعة، وتعليقات على التجارب والتقييمات، وتحدي أسبوعي بنقاط، وقوائم صدارة."],
-  ["سجلّ التحضير", "الوصفة، والمطحنة ودرجة الطحن، والأوزان، والوقت، والطعم، مع اقتراح للمرة القادمة."],
-  ["دليل المطاحن", "١٢٣ مطحنة، منها ٩١ بمواصفات ومصادر، مع تحويل تقريبي لدرجات الطحن."],
-  ["الإشعارات", "المتابعون الجدد، والإعجابات، والتعليقات، وجديد المحامص اللي تتابعها، وملخّص أسبوعي، وتذكير يومي، وكلها قابلة للإيقاف."],
-  ["المظهر", "فاتح أو داكن أو تلقائي، مع أيقونات خاصة بالمناسبات."],
-  ["إمكانية الوصول", "يدعم VoiceOver والخطوط الكبيرة (Dynamic Type)."],
-  ["الخصوصية", "تتحكّم في من يرى نشاطك ومتابعيك، ويمكنك الاختفاء من قوائم الصدارة وحذف حسابك من داخل التطبيق."],
-  ["التوفّر", "متوفر على App Store لأجهزة iPhone، وقريبًا على Android."],
-];
-
-function Icon({ d }: { d: string }) {
-  return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d={d} />
-    </svg>
-  );
-}
 
 export default function Home() {
   return (
@@ -166,8 +61,8 @@ export default function Home() {
           <p className="hero-in hero-in-3 mx-auto mt-5 max-w-[32ch] px-5 text-[19px] leading-relaxed text-[var(--ink-2)] sm:text-[24px]">
             اكتشف محاصيل تناسب ذوقك، وإذا احترت نختار لك، وحضّرها خطوة بخطوة.
           </p>
-          <div className="hero-in hero-in-4 mt-8">
-            <ComingSoon />
+          <div className="hero-in hero-in-4 mt-8 px-5">
+            <DownloadButtons />
           </div>
           <div className="relative mx-auto mt-14 h-[420px] max-w-[1024px] [perspective:1200px] sm:h-[560px]">
             <PhoneFrame className="phone-rise absolute inset-x-0 top-0">
@@ -208,6 +103,9 @@ export default function Home() {
               ترى الماء ينساب، والبن ينتفخ، والإبريق يمتلئ، في توقيت وصفتك نفسه. وقبل كل خطوة بثلاث ثوانٍ يهتزّ هاتفك
               اهتزازة خفيفة لتنتبه في الوقت المناسب.
             </p>
+            <p className="mx-auto mt-4 max-w-[40ch] text-[17px] leading-relaxed text-[var(--dark-ink-2)]">
+              ومعك وصفات أبطال العالم، مثل 4:6 لتيتسو كاسويا ووصفات بطولة الإيروبريس، وتقدر تكتب وصفتك بخطواتها وحرارة مائها وتحفظها في «وصفاتي».
+            </p>
           </Reveal>
           <div className="mt-14">
             <BrewClip />
@@ -219,78 +117,12 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Features, as a bento grid */}
-        <section id="features" className="scroll-mt-12 bg-[var(--bg-alt)] px-5 py-20 sm:py-28">
-          <div className="mx-auto max-w-[1024px]">
-            <Reveal>
-              <h2 className="text-center text-[34px] font-bold tracking-tight sm:text-[48px]">من الحبّة إلى الفنجال.</h2>
-            </Reveal>
-            <Reveal delay={100} className="mx-auto mt-10 grid max-w-[720px] grid-cols-3 gap-4 text-center">
-              {([[700, "محصول وأكثر"], [41, "محمصة سعودية"], [123, "مطحنة في الدليل"]] as const).map(([n, label]) => (
-                <div key={label}>
-                  <p className="text-[40px] font-bold tracking-tight text-[var(--accent)] sm:text-[56px]"><CountUp to={n} /></p>
-                  <p className="text-[15px] text-[var(--ink-2)]">{label}</p>
-                </div>
-              ))}
-            </Reveal>
-            <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {features.map((f, i) => (
-                <Reveal
-                  as="article"
-                  key={f.title}
-                  delay={(i % 4) * 90}
-                  className={`flex min-h-[220px] flex-col justify-between rounded-[28px] p-7 transition-transform duration-300 hover:-translate-y-1 ${f.wide ? "lg:col-span-2" : ""} ${
-                    f.dark ? "bg-[var(--dark)] text-[var(--bg)]" : "bg-[var(--card)] shadow-[0_1px_0_var(--line)]"
-                  }`}
-                >
-                  <span className={`pop inline-block w-fit ${f.dark ? "text-[var(--gold-light)]" : "text-[var(--accent)]"}`}>
-                    <Icon d={f.icon} />
-                  </span>
-                  <div>
-                    <h3 className="mt-8 text-[24px] font-semibold tracking-tight">{f.title}</h3>
-                    <p className={`mt-2 text-[16px] leading-relaxed ${f.dark ? "text-[var(--dark-ink-2)]" : "text-[var(--ink-2)]"}`}>{f.body}</p>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Specs */}
-        <section id="specs" className="scroll-mt-12 bg-[var(--bg)] px-5 py-20 sm:py-28">
-          <div className="mx-auto max-w-[880px]">
-            <Reveal><h2 className="text-[34px] font-bold tracking-tight sm:text-[48px]">المواصفات</h2></Reveal>
-            <dl className="mt-10 border-t border-[var(--line)]">
-              {specs.map(([k, v]) => (
-                <div key={k} className="grid gap-1 border-b border-[var(--line)] py-5 sm:grid-cols-[200px_1fr] sm:gap-8">
-                  <dt className="text-[17px] font-semibold">{k}</dt>
-                  <dd className="text-[17px] leading-relaxed text-[var(--ink-2)]">{v}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-        </section>
-
-        {/* Roasters */}
-        <section id="roasters" className="scroll-mt-12 bg-[var(--bg-alt)] px-5 py-20 text-center sm:py-28">
-          <Reveal className="mx-auto max-w-[720px]">
-            <p className="text-[17px] font-semibold text-[var(--accent)]">للمحامص</p>
-            <h2 className="mt-2 text-[34px] font-bold leading-[1.15] tracking-tight sm:text-[48px]">محاصيلكم كما قدّمتموها.</h2>
-            <p className="mt-5 text-[19px] leading-relaxed text-[var(--ink-2)]">
-              نعرض صور أكياسكم دون أي تعديل على العبوة أو الشعار، واسم محمصتكم ظاهر عليها. يسعدنا أن تزوّدونا بصور أوضح أو
-              معلومات أدق، ولكم أن تطلبوا تعديل أي محتوى أو حذفه متى شئتم.
-            </p>
-            <a href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("محمصة في BunnList")}`} className="mt-8 inline-block rounded-full bg-[var(--accent)] px-6 py-3 text-[17px] font-medium text-[var(--bg)] transition hover:bg-[var(--accent-ink)]">
-              راسلونا
-            </a>
-          </Reveal>
-        </section>
-
         {/* Closing */}
-        <section className="bg-[var(--bg)] px-5 py-24 text-center sm:py-32">
+        <section id="download" className="scroll-mt-12 bg-[var(--bg)] px-5 py-24 text-center sm:py-32">
           <Image src="/site/app-icon.png" alt="" width={72} height={72} className="mx-auto rounded-[18px] shadow-[0_10px_30px_rgba(74,52,40,0.18)]" />
           <h2 className="mx-auto mt-6 max-w-[16ch] text-[34px] font-bold leading-[1.15] tracking-tight sm:text-[56px]">قهوتك الجاية، هنا.</h2>
-          <div className="mt-8"><ComingSoon /></div>
+          <div className="mt-8"><DownloadButtons /></div>
+          <p className="mt-4 text-[14px] text-[var(--ink-2)]">iPhone بنظام iOS 17 أو أحدث، وAndroid 8 أو أحدث.</p>
         </section>
       </main>
       <SiteFooter />

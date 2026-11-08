@@ -1,14 +1,12 @@
 import Link from "next/link";
 import { BunnListLogo } from "@/components/Logo";
-import { APP_STORE_URL, AVAILABILITY, CONTACT_EMAIL } from "@/lib/site";
+import { ANDROID_PAGE, APP_STORE_URL, AVAILABILITY, CONTACT_EMAIL } from "@/lib/site";
 
 const links = [
   { href: "/#new", label: "الجديد" },
   { href: "/#discover", label: "اكتشف" },
   { href: "/#brew", label: "حضّر" },
-  { href: "/#features", label: "المزايا" },
-  { href: "/#specs", label: "المواصفات" },
-  { href: "/#roasters", label: "للمحامص" },
+  { href: ANDROID_PAGE, label: "Android" },
 ];
 
 /** A thin frosted bar, like Apple's global nav. */
@@ -28,7 +26,6 @@ export function SiteNav() {
             </li>
           ))}
         </ul>
-        <span className="rounded-full bg-[var(--accent)] px-3 py-1 text-[12px] font-medium text-[var(--bg)]">قريبًا</span>
       </nav>
     </header>
   );
@@ -39,7 +36,7 @@ export function SiteFooter() {
     <footer className="bg-[var(--bg-alt)] text-[12px] leading-6 text-[var(--ink-2)]">
       <div className="mx-auto max-w-[1024px] px-4 py-8 sm:px-6">
         <p className="border-b border-[var(--line)] pb-4">
-          BunnList تطبيق لأجهزة iPhone، {AVAILABILITY}. أسماء المحاصيل وصور أكياسها ملك لمحامصها، تُعرض بإذنهم أو
+          BunnList تطبيق لأجهزة iPhone وAndroid، {AVAILABILITY}. أسماء المحاصيل وصور أكياسها ملك لمحامصها، تُعرض بإذنهم أو
           من مصادرهم المنشورة، وتُحذف متى طلبوا ذلك.
         </p>
         <div className="flex flex-col gap-3 pt-4 sm:flex-row sm:items-center sm:justify-between">
@@ -72,6 +69,40 @@ export function ComingSoon({ dark = false }: { dark?: boolean }) {
       </svg>
       حمّل من App Store
     </a>
+  );
+}
+
+/** «حمّل على Android»: opens the page that explains installing outside Google Play. */
+export function AndroidButton({ dark = false }: { dark?: boolean }) {
+  return (
+    <Link
+      href={ANDROID_PAGE}
+      className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-[15px] font-medium transition-opacity hover:opacity-85 ${
+        dark ? "border-[var(--bg)] text-[var(--bg)]" : "border-[var(--ink)] text-[var(--ink)]"
+      }`}
+    >
+      <AndroidGlyph />
+      حمّل على Android
+    </Link>
+  );
+}
+
+/** Both ways to get the app, side by side. */
+export function DownloadButtons({ dark = false }: { dark?: boolean }) {
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-3">
+      <ComingSoon dark={dark} />
+      <AndroidButton dark={dark} />
+    </div>
+  );
+}
+
+/** A plain robot head, drawn here (not the trademarked logo file). */
+export function AndroidGlyph({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+      <path d="M7.2 4.1 6 2.4a.4.4 0 0 1 .7-.4l1.2 1.8A8 8 0 0 1 12 3c1.5 0 2.9.3 4.1.8L17.3 2a.4.4 0 0 1 .7.4l-1.2 1.7A7 7 0 0 1 20 10H4a7 7 0 0 1 3.2-5.9ZM8.5 7.8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm7 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM4 11.5h16V19a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7.5Z" />
+    </svg>
   );
 }
 

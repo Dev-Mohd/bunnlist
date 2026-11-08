@@ -26,6 +26,19 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: approvedImageHosts,
   },
+  // The Android APK downloads as an installable package, not as a zip or text.
+  async headers() {
+    return [
+      {
+        source: "/download/:file*.apk",
+        headers: [
+          { key: "Content-Type", value: "application/vnd.android.package-archive" },
+          { key: "Content-Disposition", value: "attachment; filename=BunnList.apk" },
+          { key: "Cache-Control", value: "public, max-age=0, must-revalidate" },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
