@@ -2,7 +2,9 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import type { Metadata } from "next";
 import Image from "next/image";
+import type { ReactNode } from "react";
 import { AndroidGlyph, SiteFooter, SiteNav } from "@/components/site/Chrome";
+import { ShotAllow, ShotAutoBlocker, ShotBlocked, ShotDone, ShotDownload, ShotInstall, ShotOpen, ShotProtect } from "@/components/site/InstallShots";
 import { ANDROID_APK_LOCAL, ANDROID_APK_URL, ANDROID_MIN, CONTACT_EMAIL } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -14,33 +16,39 @@ export const metadata: Metadata = {
 const apkReady =
   ANDROID_APK_URL !== ANDROID_APK_LOCAL || existsSync(path.join(process.cwd(), "public", ANDROID_APK_LOCAL));
 
-const steps: { title: string; body: string }[] = [
+const steps: { title: string; body: string; shots: ReactNode[] }[] = [
   {
     title: "حمّل الملف",
     body: "اضغط «حمّل ملف التطبيق» تحت. لو سألك المتصفح «قد يضرّ هذا الملف بجهازك»، اختر «تنزيل على أي حال». الملف من موقعنا نفسه.",
+    shots: [<ShotDownload key="d" />],
   },
   {
     title: "افتحه",
     body: "افتح الملف من إشعار التنزيل، أو من تطبيق «ملفاتي» ثم «التنزيلات».",
+    shots: [<ShotOpen key="o" />],
   },
   {
     title: "اسمح بالتثبيت من هذا المصدر",
     body: "أول مرة يطلع لك «لأسباب أمنية، لا يُسمح لهاتفك بتثبيت تطبيقات غير معروفة من هذا المصدر». اضغط «الإعدادات»، وفعّل «السماح من هذا المصدر»، وارجع.",
+    shots: [<ShotBlocked key="b" />, <ShotAllow key="a" />],
   },
   {
     title: "ثبّت",
     body: "اضغط «تثبيت». لو نبّهك Google Play Protect أن التطبيق غير معروف، اضغط «مزيد من التفاصيل» ثم «التثبيت على أي حال».",
+    shots: [<ShotInstall key="i" />, <ShotProtect key="p" />],
   },
   {
     title: "افتح BunnList",
     body: "اضغط «فتح»، وسجّل دخولك بـ Google أو برمز يصلك على بريدك.",
+    shots: [<ShotDone key="f" />],
   },
 ];
 
-const notes: { title: string; body: string }[] = [
+const notes: { title: string; body: string; shot?: ReactNode }[] = [
   {
     title: "جوالات سامسونج",
     body: "لو ما طلع لك زر «تثبيت» أبدًا، فالغالب أن «الحظر التلقائي» شغّال. افتح الإعدادات ← الأمان والخصوصية ← الحظر التلقائي، وأوقفه وقت التثبيت، ثم شغّله من جديد إذا تبي.",
+    shot: <ShotAutoBlocker />,
   },
   {
     title: "التحديثات",
@@ -88,15 +96,28 @@ export default function AndroidPage() {
         <section className="px-5 pb-16">
           <div className="mx-auto max-w-[720px]">
             <h2 className="text-[28px] font-bold tracking-tight sm:text-[36px]">طريقة التثبيت</h2>
+            <p className="mt-2 text-[15px] text-[var(--ink-2)]">
+              اضغط على اللي عليه <span className="inline-block h-3 w-3 translate-y-[1px] rounded-full border-2 border-[var(--gold)]" /> الدائرة الذهبية. الرسوم توضيحية، وشكل الشاشات يختلف شوي من جوال لجوال.
+            </p>
             <ol className="mt-6 space-y-3">
               {steps.map((s, i) => (
-                <li key={s.title} className="flex gap-4 rounded-[24px] bg-[var(--card)] p-5 shadow-[0_1px_0_var(--line)]">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--accent)] text-[16px] font-bold text-[var(--bg)]">
-                    {(i + 1).toLocaleString("ar-SA")}
-                  </span>
-                  <div>
-                    <h3 className="text-[19px] font-semibold">{s.title}</h3>
-                    <p className="mt-1 text-[16px] leading-relaxed text-[var(--ink-2)]">{s.body}</p>
+                <li key={s.title} className="rounded-[28px] bg-[var(--card)] p-5 shadow-[0_1px_0_var(--line)] sm:p-7">
+                  <div className="flex gap-4">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--accent)] text-[16px] font-bold text-[var(--bg)]">
+                      {(i + 1).toLocaleString("ar-SA")}
+                    </span>
+                    <div>
+                      <h3 className="text-[20px] font-semibold">{s.title}</h3>
+                      <p className="mt-1 text-[16px] leading-relaxed text-[var(--ink-2)]">{s.body}</p>
+                    </div>
+                  </div>
+                  <div className="mt-6 flex flex-wrap items-start justify-center gap-4 rounded-[22px] bg-[var(--bg-alt)] px-3 py-6 sm:gap-8">
+                    {s.shots.map((shot, j) => (
+                      <div key={j} className="flex flex-col items-center gap-2">
+                        {shot}
+                        {s.shots.length > 1 ? <span className="text-[13px] text-[var(--ink-2)]">{j === 0 ? "أولًا" : "بعدها"}</span> : null}
+                      </div>
+                    ))}
                   </div>
                 </li>
               ))}
@@ -107,9 +128,12 @@ export default function AndroidPage() {
         <section className="bg-[var(--bg-alt)] px-5 py-16">
           <div className="mx-auto grid max-w-[720px] gap-4">
             {notes.map((n) => (
-              <div key={n.title} className="rounded-[24px] bg-[var(--card)] p-5 shadow-[0_1px_0_var(--line)]">
-                <h3 className="text-[19px] font-semibold">{n.title}</h3>
-                <p className="mt-1 text-[16px] leading-relaxed text-[var(--ink-2)]">{n.body}</p>
+              <div key={n.title} className="flex flex-col gap-5 rounded-[24px] bg-[var(--card)] p-5 shadow-[0_1px_0_var(--line)] sm:flex-row sm:items-center">
+                <div className="flex-1">
+                  <h3 className="text-[19px] font-semibold">{n.title}</h3>
+                  <p className="mt-1 text-[16px] leading-relaxed text-[var(--ink-2)]">{n.body}</p>
+                </div>
+                {n.shot ? <div className="shrink-0">{n.shot}</div> : null}
               </div>
             ))}
             <p className="mt-2 text-center text-[15px] text-[var(--ink-2)]">
