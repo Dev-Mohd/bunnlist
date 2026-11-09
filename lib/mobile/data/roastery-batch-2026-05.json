@@ -13147,14 +13147,13 @@
    "sourceUrl": "https://oro-sa.com/ar/YOppjO",
    "sourceConfidence": 0.85,
    "extras": {
-    "region": "قوجي - اثيوبيا",
+    "region": "قوجي",
     "variety": [
      "ايليريوم"
     ],
     "brewMethods": [
      "ESPRESSO"
     ],
-    "altitudeM": "2200 م",
     "priceSar": 53.91,
     "weightGrams": 250,
     "availability": "Available",
@@ -13164,7 +13163,9 @@
     "isLuxury": false,
     "isInfused": false,
     "isDecaf": false,
-    "photo": "of-2032467868-854413"
+    "photo": "oro-c4a900619b",
+    "photoFromRoaster": true,
+    "altitudeMeters": 2200
    }
   },
   {
@@ -13185,12 +13186,13 @@
    "sourceUrl": "https://oro-sa.com/ar/rmbbXr",
    "sourceConfidence": 0.85,
    "extras": {
-    "variety": [],
+    "variety": [
+     "كاتورا"
+    ],
     "brewMethods": [
      "ESPRESSO",
      "V60"
     ],
-    "altitudeM": "1850م",
     "priceSar": 60,
     "weightGrams": 250,
     "availability": "Available",
@@ -13199,7 +13201,10 @@
     "isLuxury": false,
     "isInfused": false,
     "isDecaf": false,
-    "photo": "of-83722109-854413"
+    "photo": "oro-33d1bec3cc",
+    "photoFromRoaster": true,
+    "region": "سيوداد",
+    "altitudeMeters": 1850
    }
   },
   {
@@ -13221,11 +13226,12 @@
    "sourceUrl": "https://oro-sa.com/ar/GWVVOw",
    "sourceConfidence": 0.85,
    "extras": {
-    "variety": [],
+    "variety": [
+     "ايليريوم"
+    ],
     "brewMethods": [
      "ESPRESSO"
     ],
-    "altitudeM": "2100 م",
     "priceSar": 57.39,
     "weightGrams": 250,
     "availability": "Available",
@@ -13235,7 +13241,10 @@
     "isLuxury": false,
     "isInfused": false,
     "isDecaf": false,
-    "photo": "of-1073885714-854413"
+    "photo": "oro-5460ce2bd4",
+    "photoFromRoaster": true,
+    "region": "يرقاتشيفي",
+    "altitudeMeters": 2200
    }
   },
   {
@@ -13261,7 +13270,6 @@
     "brewMethods": [
      "ESPRESSO"
     ],
-    "altitudeM": "1950 متر",
     "priceSar": 51.3,
     "weightGrams": 250,
     "availability": "Available",
@@ -13271,7 +13279,10 @@
     "isLuxury": false,
     "isInfused": false,
     "isDecaf": false,
-    "photo": "of-1845153826-854413"
+    "photo": "oro-bb0f7f53d9",
+    "photoFromRoaster": true,
+    "region": "كاينزا",
+    "altitudeMeters": 1950
    }
   },
   {
@@ -13305,7 +13316,8 @@
     "isLuxury": false,
     "isInfused": false,
     "isDecaf": false,
-    "photo": "of-1515086672-854413"
+    "photo": "oro-85d34e21f1",
+    "photoFromRoaster": true
    }
   },
   {
@@ -13326,11 +13338,12 @@
    "sourceUrl": "https://oro-sa.com/ar/lGBxxqD",
    "sourceConfidence": 0.85,
    "extras": {
-    "variety": [],
+    "variety": [
+     "ايليريوم"
+    ],
     "brewMethods": [
      "ESPRESSO"
     ],
-    "altitudeM": "2000 م",
     "priceSar": 58.26,
     "weightGrams": 250,
     "availability": "Available",
@@ -13340,7 +13353,10 @@
     "isLuxury": false,
     "isInfused": false,
     "isDecaf": false,
-    "photo": "of-1295262814-854413"
+    "photo": "oro-03e99a5020",
+    "photoFromRoaster": true,
+    "region": "يرقاتشيفي",
+    "altitudeMeters": 2000
    }
   },
   {
@@ -13362,14 +13378,14 @@
    "sourceUrl": "https://oro-sa.com/ar/AyKojZ",
    "sourceConfidence": 0.85,
    "extras": {
-    "region": "انتيوكيا - كولومبيا",
+    "region": "أنتيوكيا",
     "variety": [
-     "كاتورا - كاستيلو"
+     "كاتورا",
+     "كاستيلو"
     ],
     "brewMethods": [
      "ESPRESSO"
     ],
-    "altitudeM": "1700 متر ايحاءات المحصول : كراميل ، شوكولاته ، سكر بني ، مكسرات ، حلاوة وصفة تحضير على جهاز الاكسبلوم",
     "priceSar": 39.13,
     "weightGrams": 250,
     "availability": "Available",
@@ -13379,7 +13395,9 @@
     "isLuxury": false,
     "isInfused": false,
     "isDecaf": false,
-    "photo": "of-2106099805-854413"
+    "photo": "oro-7c0e81b89c",
+    "photoFromRoaster": true,
+    "altitudeMeters": 1700
    }
   },
   {
@@ -24087,7 +24105,6 @@
      "ESPRESSO",
      "V60"
     ],
-    "altitudeM": "1600 متر",
     "priceSar": 73.04,
     "weightGrams": 250,
     "availability": "Available",
@@ -24097,7 +24114,10 @@
     "isDecaf": false,
     "isLuxury": false,
     "luxuryReason": null,
-    "photo": "of-75386936-854413"
+    "photo": "oro-58c30d2e62",
+    "photoFromRoaster": true,
+    "altitudeMeters": 1600,
+    "processDetail": "تحفيز حراري"
    }
   },
   {
@@ -24127,7 +24147,6 @@
      "ESPRESSO",
      "V60"
     ],
-    "altitudeM": "1600 متر",
     "priceSar": 73.04,
     "weightGrams": 250,
     "availability": "Available",
@@ -24137,7 +24156,10 @@
     "isDecaf": false,
     "isLuxury": false,
     "luxuryReason": null,
-    "photo": "of-163467867-854413"
+    "photo": "oro-537eb2c48a",
+    "photoFromRoaster": true,
+    "altitudeMeters": 1600,
+    "processDetail": "تحفيز حراري"
    }
   },
   {
@@ -24168,7 +24190,6 @@
      "ESPRESSO",
      "V60"
     ],
-    "altitudeM": "1600 متر",
     "priceSar": 73.04,
     "weightGrams": 250,
     "availability": "Available",
@@ -24178,7 +24199,10 @@
     "isDecaf": false,
     "isLuxury": false,
     "luxuryReason": null,
-    "photo": "of-1664198601-854413"
+    "photo": "oro-4022335cf9",
+    "photoFromRoaster": true,
+    "altitudeMeters": 1600,
+    "processDetail": "تحفيز حراري"
    }
   },
   {
@@ -24213,7 +24237,14 @@
     "isDecaf": false,
     "isLuxury": false,
     "luxuryReason": null,
-    "photo": "of-1823012586-854413"
+    "photo": "oro-5c2275797b",
+    "photoFromRoaster": true,
+    "region": "حراز",
+    "variety": [
+     "تيبيكا"
+    ],
+    "altitudeMeters": 2200,
+    "processDetail": "مجففة لاهوائية"
    }
   },
   {
@@ -24248,7 +24279,14 @@
     "isDecaf": false,
     "isLuxury": false,
     "luxuryReason": null,
-    "photo": "of-2146755239-854413"
+    "photo": "oro-ea1503967f",
+    "photoFromRoaster": true,
+    "region": "توليما",
+    "variety": [
+     "كانديلاريا"
+    ],
+    "altitudeMeters": 1600,
+    "processDetail": "تحفيز حراري"
    }
   },
   {
@@ -24272,7 +24310,6 @@
      "ESPRESSO",
      "V60"
     ],
-    "altitudeM": "2000 م",
     "priceSar": 58.26,
     "weightGrams": 250,
     "availability": "Available",
@@ -24282,7 +24319,13 @@
     "isDecaf": false,
     "isLuxury": false,
     "luxuryReason": null,
-    "photo": "of-472585492-854413"
+    "photo": "oro-93d03d2633",
+    "photoFromRoaster": true,
+    "region": "أنتيوكيا",
+    "variety": [
+     "كاتورا"
+    ],
+    "altitudeMeters": 2000
    }
   },
   {
@@ -24303,15 +24346,11 @@
    "sourceUrl": "https://oro-sa.com/ar/PDDbRNm",
    "extras": {
     "variety": [
-     "ايرقاتشيفي القوام : عالي ممتلئ الإيحاءات",
-     "الانطباع الذوقي : مانجو",
-     "فواكه استوائية",
-     "حلاوة هذا المحصول مناسب لتحضير الاسبريسو"
+     "ايليريوم"
     ],
     "brewMethods": [
      "ESPRESSO"
     ],
-    "altitudeM": "2100 م",
     "priceSar": 60,
     "weightGrams": 250,
     "availability": "Available",
@@ -24321,7 +24360,11 @@
     "isDecaf": false,
     "isLuxury": false,
     "luxuryReason": null,
-    "photo": "of-341608467-854413"
+    "photo": "oro-08bda1ade0",
+    "photoFromRoaster": true,
+    "region": "يرقاتشيفي",
+    "altitudeMeters": 2100,
+    "processDetail": "تجفيف مطوّل"
    }
   },
   {
@@ -24342,16 +24385,12 @@
    "sourceUrl": "https://oro-sa.com/ar/lGYVXjg",
    "extras": {
     "variety": [
-     "كاتورا الإيحاءات",
-     "الانطباع الذوقي : مانجو",
-     "فواكه استوائية",
-     "حلاوة"
+     "كاتورا"
     ],
     "brewMethods": [
      "ESPRESSO",
      "V60"
     ],
-    "altitudeM": "1700 م",
     "priceSar": 51.3,
     "weightGrams": 250,
     "availability": "Available",
@@ -24361,7 +24400,11 @@
     "isDecaf": false,
     "isLuxury": false,
     "luxuryReason": null,
-    "photo": "of-1378159846-854413"
+    "photo": "oro-0f80f68851",
+    "photoFromRoaster": true,
+    "region": "سان خوسيه",
+    "altitudeMeters": 1700,
+    "processDetail": "تجفيف مطوّل"
    }
   },
   {
@@ -24385,7 +24428,6 @@
      "ESPRESSO",
      "V60"
     ],
-    "altitudeM": "1200 متر",
     "priceSar": 36.52,
     "weightGrams": 250,
     "availability": "Available",
@@ -24395,7 +24437,13 @@
     "isDecaf": false,
     "isLuxury": false,
     "luxuryReason": null,
-    "photo": "of-2127922343-854413"
+    "photo": "oro-51c0cd913d",
+    "photoFromRoaster": true,
+    "region": "سيرادو",
+    "variety": [
+     "بوربون أصفر"
+    ],
+    "altitudeMeters": 1200
    }
   },
   {
@@ -24420,7 +24468,6 @@
      "ESPRESSO",
      "V60"
     ],
-    "altitudeM": "2200 م",
     "priceSar": 91.3,
     "weightGrams": 250,
     "availability": "Available",
@@ -24430,7 +24477,14 @@
     "isDecaf": false,
     "isLuxury": false,
     "luxuryReason": null,
-    "photo": "of-2128344362-854413"
+    "photo": "oro-b989c8fa7e",
+    "photoFromRoaster": true,
+    "region": "حراز",
+    "variety": [
+     "يمنية"
+    ],
+    "altitudeMeters": 2200,
+    "processDetail": "مجففة لاهوائية"
    }
   },
   {
@@ -24452,15 +24506,11 @@
    "sourceUrl": "https://oro-sa.com/ar/ZqjwRwO",
    "extras": {
     "variety": [
-     "كاتورا القوام : غني الإيحاءات",
-     "الانطباع الذوقي : شوكولاتة",
-     "بندق",
-     "سكر بني"
+     "كاتورا"
     ],
     "brewMethods": [
      "ESPRESSO"
     ],
-    "altitudeM": "2100 م",
     "priceSar": 47.83,
     "weightGrams": 250,
     "availability": "Sold Out",
@@ -24470,7 +24520,10 @@
     "isDecaf": true,
     "isLuxury": false,
     "luxuryReason": null,
-    "photo": "of-540016794-854413"
+    "photo": "oro-fc96c1b59f",
+    "photoFromRoaster": true,
+    "altitudeMeters": 2100,
+    "processDetail": "المياه السويسرية"
    }
   },
   {
@@ -24487,14 +24540,11 @@
    "flavorNotes": [],
    "sourceUrl": "https://oro-sa.com/ar/pAqRpOq",
    "extras": {
-    "variety": [
-     "سيداما"
-    ],
+    "variety": [],
     "brewMethods": [
      "ESPRESSO",
      "V60"
     ],
-    "altitudeM": "2225 م الانطباع الذوقي : الشوكولاتة الداكنة ،التوت ، الفواكه المجففة ، الخوخ ، الفراولة",
     "priceSar": 115,
     "weightGrams": 150,
     "availability": "Available",
@@ -24505,7 +24555,10 @@
     "isDecaf": false,
     "isLuxury": false,
     "luxuryReason": null,
-    "photo": "of-1921999329-854413"
+    "photo": "oro-6ffdb4b8a7",
+    "photoFromRoaster": true,
+    "region": "سيداما",
+    "altitudeMeters": 2225
    }
   },
   {
@@ -24523,13 +24576,12 @@
    "sourceUrl": "https://oro-sa.com/ar/Qzdnoxv",
    "extras": {
     "variety": [
-     "يمينة"
+     "يمنية"
     ],
     "brewMethods": [
      "ESPRESSO",
      "V60"
     ],
-    "altitudeM": "2100 م الانطباع الذوقي : ورد ، مربى ، كرز بري ، توت أزرق ، عسل مانوكا ، توابل",
     "priceSar": 150,
     "weightGrams": 50,
     "availability": "Available",
@@ -24540,7 +24592,11 @@
     "isDecaf": false,
     "isLuxury": false,
     "luxuryReason": null,
-    "photo": "of-145697635-854413"
+    "photo": "oro-7b2e28ad49",
+    "photoFromRoaster": true,
+    "region": "صنعاء",
+    "altitudeMeters": 2000,
+    "processDetail": "الكمي"
    }
   },
   {
@@ -24716,7 +24772,8 @@
     "isDecaf": false,
     "isLuxury": false,
     "luxuryReason": null,
-    "photo": "pg-98ea109e6f"
+    "photo": "oro-a17a234f32",
+    "photoFromRoaster": true
    }
   },
   {
