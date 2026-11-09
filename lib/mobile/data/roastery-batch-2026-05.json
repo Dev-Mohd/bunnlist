@@ -33143,6 +33143,45 @@
     "photo": "pr-298081016",
     "processDetail": "منزوعة الكافيين بطريقة قصب السكر"
    }
+  },
+  {
+   "importKey": "kiffa-2026-11:elgon",
+   "roasterName": "كفّة",
+   "roasterNameEn": "Kiffa",
+   "sourceConfidence": 0.9,
+   "name": "إيلغون - أوغندا",
+   "nameEn": "Elgon - Uganda",
+   "originName": "أوغندا",
+   "originCode": "UG",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "مانجو",
+    "مشمش"
+   ],
+   "sourceUrl": "https://kiffa.sa/products/ايلغون",
+   "extras": {
+    "region": "موخوتو",
+    "variety": [
+     "أروشا",
+     "بوربون",
+     "تيبيكا"
+    ],
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 52.0,
+    "weightGrams": 250,
+    "availability": "Sold Out",
+    "descriptionAr": "محصول إيلغون من منطقة موخوتو في أوغندا، بمعالجة مجففة. حلو، بإيحاءات المانجو والمشمش. السلالات: أروشا وبوربون وتيبيكا. يناسب الفلتر والإسبريسو.",
+    "sourceNote": "من موقع المحمصة",
+    "isInfused": false,
+    "isDecaf": false,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "photo": "kf-elgon"
+   }
   }
  ]
 }
