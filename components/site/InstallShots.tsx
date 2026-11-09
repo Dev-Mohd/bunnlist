@@ -1,6 +1,9 @@
 import type { ReactNode } from "react";
 
-// Drawn Android screens for the install guide (/android). They're illustrations made here in code, not
+import Image from "next/image";
+
+// Screens for the install guide (/android): real screenshots from an Android phone where we have them
+// (RealShot), and drawn screens in code for the rest. They're illustrations made here in code, not
 // screenshots: the wording follows Android's own Arabic messages, and the button to press is ringed in gold.
 // Real screens differ a little from phone to phone, which the page says.
 
@@ -72,43 +75,7 @@ function Browser({ children }: { children?: ReactNode }) {
   );
 }
 
-// Step 1: the browser asks whether to keep the file.
-export function ShotDownload() {
-  return (
-    <Phone>
-      <Browser>
-        <div className="absolute inset-x-0 bottom-0 rounded-t-[16px] bg-white p-3 text-[9px] leading-[1.5] shadow-[0_-6px_18px_rgba(0,0,0,0.12)]">
-          <p>قد يضرّ هذا النوع من الملفات بجهازك. هل تريد تنزيل <b dir="ltr">BunnList.apk</b> على أي حال؟</p>
-          <Buttons cancel="إلغاء" ok="تنزيل على أي حال" />
-        </div>
-      </Browser>
-    </Phone>
-  );
-}
 
-// Step 2: open it from the notification.
-export function ShotOpen() {
-  return (
-    <Phone>
-      <div className="absolute inset-0 bg-[#2a2a2c] p-2 text-white">
-        <p className="px-1 pt-1 text-[16px] font-light" dir="ltr">9:41</p>
-        <p className="px-1 text-[8px] opacity-70">الإشعارات</p>
-        <Tap className="mt-2 block w-full rounded-[14px]">
-          <div className="flex w-full items-center gap-2 rounded-[14px] bg-[#3a3a3d] p-2">
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#1a73e8] text-[10px]">↓</span>
-            <div className="text-[8.5px] leading-[1.4]">
-              <p className="font-semibold" dir="ltr">BunnList.apk</p>
-              <p className="opacity-70">اكتمل التنزيل · اضغط للفتح</p>
-            </div>
-          </div>
-        </Tap>
-        <div className="mt-2 rounded-[14px] bg-[#3a3a3d]/60 p-2 text-[8px] opacity-60">
-          <p>أو: ملفاتي ← التنزيلات</p>
-        </div>
-      </div>
-    </Phone>
-  );
-}
 
 // Step 3a: Android blocks the source the first time.
 export function ShotBlocked() {
@@ -149,62 +116,8 @@ export function ShotAllow() {
   );
 }
 
-// Step 4a: install.
-export function ShotInstall() {
-  return (
-    <Phone>
-      <Browser />
-      <Dialog>
-        <div className="flex items-center gap-2">
-          <AppBadge size={24} />
-          <b className="text-[10px]">BunnList</b>
-        </div>
-        <p className="mt-2 text-[#1b1a19]/75">هل تريد تثبيت هذا التطبيق؟</p>
-        <Buttons cancel="إلغاء" ok="تثبيت" />
-      </Dialog>
-    </Phone>
-  );
-}
 
-// Step 4b: Play Protect hasn't seen the app yet.
-export function ShotProtect() {
-  return (
-    <Phone>
-      <Browser />
-      <Dialog>
-        <div className="flex items-center gap-1.5">
-          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#e8f0fe] text-[9px] text-[#1a73e8]">⛨</span>
-          <b className="text-[9.5px]">Play Protect</b>
-        </div>
-        <p className="mt-1.5 text-[#1b1a19]/75">لم يسبق أن رصد Play Protect مطوّر هذا التطبيق.</p>
-        <p className="mt-1 text-[8px] text-[#1b1a19]/55">مزيد من التفاصيل ⌄</p>
-        <div className="mt-2.5 flex justify-start gap-3 text-[9px] font-semibold text-[#1a5fb4]">
-          <Tap><span className="px-1">التثبيت على أي حال</span></Tap>
-          <span className="px-1 text-[#1b1a19]/60">موافق</span>
-        </div>
-      </Dialog>
-    </Phone>
-  );
-}
 
-// Step 5: open it.
-export function ShotDone() {
-  return (
-    <Phone>
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-3 text-center">
-        <AppBadge size={44} />
-        <p className="text-[11px] font-bold">BunnList</p>
-        <p className="text-[9px] text-[#1b1a19]/70">✓ تم تثبيت التطبيق.</p>
-        <div className="mt-4 flex w-full justify-between gap-2 text-[9px] font-semibold">
-          <span className="flex-1 rounded-full border border-[#1b1a19]/15 py-1.5">تم</span>
-          <Tap className="flex-1 rounded-full">
-            <span className="w-full rounded-full bg-[#536344] py-1.5 text-white">فتح</span>
-          </Tap>
-        </div>
-      </div>
-    </Phone>
-  );
-}
 
 // Samsung: Auto Blocker.
 export function ShotAutoBlocker() {
@@ -226,3 +139,31 @@ export function ShotAutoBlocker() {
     </Phone>
   );
 }
+
+/** A real screenshot, cropped to the dialog, with the button to press ringed in gold.
+ *  The ring box is in percent of the image: centre x/y, width/height. */
+export function RealShot({ src, w, h, ring, alt }: { src: string; w: number; h: number; ring: { x: number; y: number; w: number; h: number }; alt: string }) {
+  return (
+    <div className="relative w-full max-w-[300px] overflow-hidden rounded-[22px] shadow-[0_14px_34px_rgba(74,52,40,0.22)]">
+      <Image src={src} alt={alt} width={w} height={h} sizes="300px" className="block h-auto w-full" />
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute animate-pulse rounded-full border-[3px] border-[#e2b75c] shadow-[0_0_0_4px_rgba(226,183,92,0.25)]"
+        style={{ left: `${ring.x - ring.w / 2}%`, top: `${ring.y - ring.h / 2}%`, width: `${ring.w}%`, height: `${ring.h}%` }}
+      />
+    </div>
+  );
+}
+
+export const ShotDownloaded = () => (
+  <RealShot src="/site/android/downloaded.jpg" w={676} h={183} alt="شريط «تم تنزيل ملف واحد» وزر «فتح»" ring={{ x: 13.6, y: 49, w: 20, h: 40 }} />
+);
+export const ShotInstallReal = () => (
+  <RealShot src="/site/android/install.jpg" w={644} h={329} alt="«هل تريد تثبيت هذا التطبيق؟» وزر «تثبيت»" ring={{ x: 26.7, y: 83, w: 28, h: 23 }} />
+);
+export const ShotProtectReal = () => (
+  <RealShot src="/site/android/protect.jpg" w={656} h={928} alt="«تم حظر التطبيق لحماية جهازك» ورابط «التثبيت على أي حال»" ring={{ x: 75, y: 73.8, w: 40, h: 7.5 }} />
+);
+export const ShotInstalledReal = () => (
+  <RealShot src="/site/android/installed.jpg" w={644} h={329} alt="«تم تثبيت التطبيق.» وزر «فتح»" ring={{ x: 26.7, y: 83, w: 24, h: 23 }} />
+);
