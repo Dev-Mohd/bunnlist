@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import type { ReactNode } from "react";
 import { AndroidGlyph, SiteFooter, SiteNav } from "@/components/site/Chrome";
-import { ShotAllow, ShotAutoBlocker, ShotBlocked, ShotDone, ShotDownload, ShotInstall, ShotOpen, ShotProtect } from "@/components/site/InstallShots";
+import { ShotAllow, ShotAutoBlocker, ShotBlocked, ShotDownloaded, ShotInstalledReal, ShotInstallReal, ShotProtectReal } from "@/components/site/InstallShots";
 import { ANDROID_APK_LOCAL, ANDROID_APK_URL, ANDROID_MIN, CONTACT_EMAIL } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -18,29 +18,29 @@ const apkReady =
 
 const steps: { title: string; body: string; shots: ReactNode[] }[] = [
   {
-    title: "حمّل الملف",
-    body: "اضغط «حمّل ملف التطبيق» تحت. لو سألك المتصفح «قد يضرّ هذا الملف بجهازك»، اختر «تنزيل على أي حال». الملف من موقعنا نفسه.",
-    shots: [<ShotDownload key="d" />],
+    title: "حمّل الملف وافتحه",
+    body: "اضغط «حمّل ملف التطبيق» تحت. لما يخلص يطلع لك «تم تنزيل ملف واحد»، اضغط «فتح». لو سألك المتصفح «قد يضرّ هذا الملف بجهازك»، اختر «تنزيل على أي حال». ولو ضاع الشريط، افتح الملف من «ملفاتي» ثم «التنزيلات».",
+    shots: [<ShotDownloaded key="d" />],
   },
   {
-    title: "افتحه",
-    body: "افتح الملف من إشعار التنزيل، أو من تطبيق «ملفاتي» ثم «التنزيلات».",
-    shots: [<ShotOpen key="o" />],
-  },
-  {
-    title: "اسمح بالتثبيت من هذا المصدر",
-    body: "أول مرة يطلع لك «لأسباب أمنية، لا يُسمح لهاتفك بتثبيت تطبيقات غير معروفة من هذا المصدر». اضغط «الإعدادات»، وفعّل «السماح من هذا المصدر»، وارجع.",
+    title: "اسمح بالتثبيت من هذا المصدر (أول مرة بس)",
+    body: "لو طلع لك «لأسباب أمنية، لا يُسمح لهاتفك بتثبيت تطبيقات غير معروفة من هذا المصدر»، اضغط «الإعدادات»، وفعّل «السماح من هذا المصدر»، وارجع.",
     shots: [<ShotBlocked key="b" />, <ShotAllow key="a" />],
   },
   {
     title: "ثبّت",
-    body: "اضغط «تثبيت». لو نبّهك Google Play Protect أن التطبيق غير معروف، اضغط «مزيد من التفاصيل» ثم «التثبيت على أي حال».",
-    shots: [<ShotInstall key="i" />, <ShotProtect key="p" />],
+    body: "اضغط «تثبيت».",
+    shots: [<ShotInstallReal key="i" />],
+  },
+  {
+    title: "اضغط «التثبيت على أي حال»، مو «حسنًا»",
+    body: "Google Play Protect ما يعرف التطبيق لأنه ما نزل في المتجر بعد، فيطلع لك «تم حظر التطبيق لحماية جهازك». الزر الكبير «حسنًا» يلغي التثبيت. اضغط النص الصغير «التثبيت على أي حال» فوقه.",
+    shots: [<ShotProtectReal key="p" />],
   },
   {
     title: "افتح BunnList",
     body: "اضغط «فتح»، وسجّل دخولك بـ Google أو برمز يصلك على بريدك.",
-    shots: [<ShotDone key="f" />],
+    shots: [<ShotInstalledReal key="f" />],
   },
 ];
 
@@ -97,7 +97,7 @@ export default function AndroidPage() {
           <div className="mx-auto max-w-[720px]">
             <h2 className="text-[28px] font-bold tracking-tight sm:text-[36px]">طريقة التثبيت</h2>
             <p className="mt-2 text-[15px] text-[var(--ink-2)]">
-              اضغط على اللي عليه <span className="inline-block h-3 w-3 translate-y-[1px] rounded-full border-2 border-[var(--gold)]" /> الدائرة الذهبية. الرسوم توضيحية، وشكل الشاشات يختلف شوي من جوال لجوال.
+              اضغط على اللي عليه <span className="inline-block h-3 w-3 translate-y-[1px] rounded-full border-2 border-[var(--gold)]" /> الدائرة الذهبية. الصور من جوال أندرويد حقيقي، وشكل الشاشات يختلف شوي من جوال لجوال.
             </p>
             <ol className="mt-6 space-y-3">
               {steps.map((s, i) => (
