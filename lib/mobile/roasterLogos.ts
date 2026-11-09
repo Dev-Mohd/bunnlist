@@ -1,5 +1,5 @@
 // Roaster logos bundled in public/roasters/<slug>.png, each taken from the
-// roaster's own website (source host noted). Trimmed onto a 512px transparent
+// roaster's own website (source host noted; "owner" when the BunnList owner sent it). Trimmed onto a 512px transparent
 // square; one white logo sits on a dark tile. Add a file here to add a logo.
 
 export const ROASTER_LOGOS: Record<string, string> = {
@@ -35,6 +35,7 @@ export const ROASTER_LOGOS: Record<string, string> = {
   "oden": "cdn.salla.sa",
   "oro-roastery": "cdn.salla.sa",
   "out-of-line": "media.zid.store",
+  "process-coffee-roasters": "owner",
   "qaf-roastery": "cdn.salla.sa",
   "roasting-house": "roastinghouse.sa",
   "sawaa-roastery": "cdn.files.salla.network",
