@@ -33,8 +33,8 @@ describe("importBatch", () => {
     const store = { put: vi.fn().mockResolvedValue(undefined), signedUrl: vi.fn(), publish: vi.fn() };
     const bundle = BUNDLED_BATCHES["roasteries-2026-05"];
     const result = await importBatch(m as unknown as PrismaClient, bundle.data, bundle.photos, store);
-    expect(result.created).toBe(926); // 953 in the batch, 27 of them kilo or 500 g bags left out
-    expect(result.photos).toBe(812); // (26 belong to bags over 300 g, left out) 24 bag photos from the product pages + 20 Doha bags (7 coffees new to a photo) + 14 Sulalat official artwork + 24 Black Knight + 16 Arriyadh Roaster + 22 Bunista + 23 ASH + 11 SHOVEL + 20 Roasting House + 13 Camel Step + 132 Yahim Cups + 490 from the roasters' own stores + 42 Sout and Asante
+    expect(result.created).toBe(937); // 964 in the batch, 27 of them kilo or 500 g bags left out
+    expect(result.photos).toBe(823); // (26 belong to bags over 300 g, left out) 24 bag photos from the product pages + 20 Doha bags (7 coffees new to a photo) + 14 Sulalat official artwork + 24 Black Knight + 16 Arriyadh Roaster + 22 Bunista + 23 ASH + 11 SHOVEL + 20 Roasting House + 13 Camel Step + 132 Yahim Cups + 490 from the roasters' own stores + 42 Sout and Asante + 11 Process
     expect(store.put).toHaveBeenCalledWith(expect.stringMatching(/^imports\/bk-milora-[0-9a-f]{8}\.jpg$/), expect.any(Buffer));
     expect(store.put).toHaveBeenCalledWith(expect.stringMatching(/^imports\/ar-shmaisy-street-[0-9a-f]{8}\.jpg$/), expect.any(Buffer));
   });

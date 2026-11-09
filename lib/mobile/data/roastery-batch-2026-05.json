@@ -32652,6 +32652,440 @@
     "luxuryReason": null,
     "photo": "of-1239429252-954518"
    }
+  },
+  {
+   "importKey": "process-2026-11:1980980811",
+   "roasterName": "محمصة بروسيس",
+   "roasterNameEn": "Process Coffee Roasters",
+   "sourceConfidence": 0.9,
+   "name": "أوغندي كابكواي",
+   "nameEn": "Uganda Kapkwai",
+   "originName": "أوغندا",
+   "originCode": "UG",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "فراولة",
+    "توت",
+    "كرز داكن مجفف",
+    "دبس السكر"
+   ],
+   "sourceUrl": "https://process.sa/uganda-kapchorwa-anaerobic-250g/p1980980811",
+   "extras": {
+    "region": "كابكواي",
+    "variety": [
+     "SL28",
+     "SL34"
+    ],
+    "altitudeMeters": 2000,
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 64.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "محصول من أوغندا، بمعالجة لاهوائية. السلالة: SL28 وSL34. الإيحاءات: فراولة، توت، كرز داكن مجفف، دبس السكر.",
+    "sourceNote": "من موقع المحمصة",
+    "isInfused": false,
+    "isDecaf": false,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "photo": "pr-1980980811"
+   }
+  },
+  {
+   "importKey": "process-2026-11:1794595323",
+   "roasterName": "محمصة بروسيس",
+   "roasterNameEn": "Process Coffee Roasters",
+   "sourceConfidence": 0.9,
+   "name": "إثيوبي قيدب",
+   "nameEn": "Ethiopia Gedeb",
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "فراولة"
+   ],
+   "sourceUrl": "https://process.sa/ethiopia-gedeb-natural-250g/p1794595323",
+   "extras": {
+    "region": "قيدب",
+    "variety": [
+     "Heirloom"
+    ],
+    "altitudeMeters": 2050,
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 60.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "محصول من إثيوبيا، بمعالجة مجففة. السلالة: Heirloom. الإيحاءات: فراولة.",
+    "sourceNote": "من موقع المحمصة",
+    "isInfused": false,
+    "isDecaf": false,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "photo": "pr-1794595323"
+   }
+  },
+  {
+   "importKey": "process-2026-11:1258789722",
+   "roasterName": "محمصة بروسيس",
+   "roasterNameEn": "Process Coffee Roasters",
+   "sourceConfidence": 0.9,
+   "name": "كولومبي فراولة",
+   "nameEn": "Colombia Strawberry",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "فراولة"
+   ],
+   "sourceUrl": "https://process.sa/colombia-strawberry-anaerobic-honey-250g/p1258789722",
+   "extras": {
+    "variety": [
+     "Caturra"
+    ],
+    "altitudeMeters": 1850,
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 82.0,
+    "weightGrams": 200,
+    "availability": "Available",
+    "descriptionAr": "محصول من كولومبيا، بمعالجة عسلية لاهوائية. السلالة: Caturra. الإيحاءات: فراولة.",
+    "sourceNote": "من موقع المحمصة",
+    "isInfused": false,
+    "isDecaf": false,
+    "isLuxury": true,
+    "luxuryReason": "تسمّيه المحمصة «محصول فاخر»",
+    "photo": "pr-1258789722",
+    "processDetail": "عسلية لاهوائية (Anaerobic Honey)"
+   }
+  },
+  {
+   "importKey": "process-2026-11:1954115183",
+   "roasterName": "محمصة بروسيس",
+   "roasterNameEn": "Process Coffee Roasters",
+   "sourceConfidence": 0.9,
+   "name": "كولومبي بومبو",
+   "nameEn": "Colombia Bombo",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "WASHED",
+   "roastLevel": null,
+   "flavorNotes": [
+    "حمضيات",
+    "زهور",
+    "شوكولاتة"
+   ],
+   "sourceUrl": "https://process.sa/colombia-pumpo-washed-250g/p1954115183",
+   "extras": {
+    "region": "هويلا",
+    "variety": [
+     "Yellow Catuai"
+    ],
+    "altitudeMeters": 1900,
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 50.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "محصول من كولومبيا، بمعالجة مغسولة. السلالة: Yellow Catuai. الإيحاءات: حمضيات، زهور، شوكولاتة.",
+    "sourceNote": "من موقع المحمصة",
+    "isInfused": false,
+    "isDecaf": false,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "photo": "pr-1954115183"
+   }
+  },
+  {
+   "importKey": "process-2026-11:1207374387",
+   "roasterName": "محمصة بروسيس",
+   "roasterNameEn": "Process Coffee Roasters",
+   "sourceConfidence": 0.9,
+   "name": "برازيلي موجيانا",
+   "nameEn": "Brazil Mogiana",
+   "originName": "البرازيل",
+   "originCode": "BR",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "شوكولاتة",
+    "مكسرات",
+    "توفي"
+   ],
+   "sourceUrl": "https://process.sa/brazil-mogiana-natural-250g/p1207374387",
+   "extras": {
+    "region": "موجيانا",
+    "variety": [
+     "Yellow Catuai"
+    ],
+    "altitudeMeters": 1100,
+    "brewMethods": [
+     "ESPRESSO"
+    ],
+    "priceSar": 45.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "محصول من البرازيل، بمعالجة مجففة. السلالة: Yellow Catuai. الإيحاءات: شوكولاتة، مكسرات، توفي.",
+    "sourceNote": "من موقع المحمصة",
+    "isInfused": false,
+    "isDecaf": false,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "photo": "pr-1207374387"
+   }
+  },
+  {
+   "importKey": "process-2026-11:1593393859",
+   "roasterName": "محمصة بروسيس",
+   "roasterNameEn": "Process Coffee Roasters",
+   "sourceConfidence": 0.9,
+   "name": "يمني بلقيس",
+   "nameEn": "Yemen Balqis",
+   "originName": "اليمن",
+   "originCode": "YE",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "عنب أسود",
+    "مانجو",
+    "أناناس"
+   ],
+   "sourceUrl": "https://process.sa/yemen-belqees-anaerobic-200g/p1593393859",
+   "extras": {
+    "variety": [
+     "Typica",
+     "Caturra"
+    ],
+    "altitudeMeters": 2000,
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 79.0,
+    "weightGrams": 200,
+    "availability": "Available",
+    "descriptionAr": "محصول من اليمن، بمعالجة مجففة لاهوائية. السلالة: Typica وCaturra. الإيحاءات: عنب أسود، مانجو، أناناس.",
+    "sourceNote": "من موقع المحمصة",
+    "isInfused": false,
+    "isDecaf": false,
+    "isLuxury": true,
+    "luxuryReason": "تسمّيه المحمصة «محصول فاخر»",
+    "photo": "pr-1593393859",
+    "processDetail": "مجففة لاهوائية"
+   }
+  },
+  {
+   "importKey": "process-2026-11:1941542502",
+   "roasterName": "محمصة بروسيس",
+   "roasterNameEn": "Process Coffee Roasters",
+   "sourceConfidence": 0.9,
+   "name": "إندونيسي بينر مبرياه",
+   "nameEn": "Indonesia Bener Meriah",
+   "originName": "إندونيسيا",
+   "originCode": "ID",
+   "process": "ANAEROBIC",
+   "roastLevel": null,
+   "flavorNotes": [
+    "فواكه استوائية",
+    "خوخ",
+    "عنب",
+    "شوكولاتة",
+    "كراميل"
+   ],
+   "sourceUrl": "https://process.sa/indonesia-bener-meriah-anaerobic-250g/p1941542502",
+   "extras": {
+    "region": "بينر ميرياه",
+    "variety": [
+     "Gayo",
+     "Timtim"
+    ],
+    "altitudeMeters": 1850,
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 63.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "محصول من إندونيسيا، بمعالجة مجففة لاهوائية. السلالة: Gayo وTimtim. الإيحاءات: فواكه استوائية، خوخ، عنب، شوكولاتة، كراميل.",
+    "sourceNote": "من موقع المحمصة",
+    "isInfused": false,
+    "isDecaf": false,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "photo": "pr-1941542502",
+    "processDetail": "مجففة لاهوائية (Anaerobic Dried)"
+   }
+  },
+  {
+   "importKey": "process-2026-11:2019444251",
+   "roasterName": "محمصة بروسيس",
+   "roasterNameEn": "Process Coffee Roasters",
+   "sourceConfidence": 0.9,
+   "name": "كولومبي فينكا",
+   "nameEn": "Colombia Finca",
+   "originName": "كولومبيا",
+   "originCode": "CO",
+   "process": "OTHER",
+   "roastLevel": null,
+   "flavorNotes": [
+    "فانيلا",
+    "بطيخ",
+    "برتقال"
+   ],
+   "sourceUrl": "https://process.sa/colombia-finca-extended-fermentation-250g/p2019444251",
+   "extras": {
+    "variety": [
+     "Geisha",
+     "Bourbon"
+    ],
+    "altitudeMeters": 1900,
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 63.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "محصول من كولومبيا، بمعالجة تجفيف مطول. السلالة: Geisha وBourbon. الإيحاءات: فانيلا، بطيخ، برتقال.",
+    "sourceNote": "من موقع المحمصة",
+    "isInfused": false,
+    "isDecaf": false,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "photo": "pr-2019444251",
+    "processDetail": "تجفيف مطوّل (Prolonged Drying)"
+   }
+  },
+  {
+   "importKey": "process-2026-11:958134555",
+   "roasterName": "محمصة بروسيس",
+   "roasterNameEn": "Process Coffee Roasters",
+   "sourceConfidence": 0.9,
+   "name": "إثيوبي يرقاتشيف",
+   "nameEn": "Ethiopia Yirgacheffe",
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "NATURAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "توت",
+    "يوسفي",
+    "ياسمين"
+   ],
+   "sourceUrl": "https://process.sa/ethiopia-yirgacheffe-natural-250g/p958134555",
+   "extras": {
+    "region": "يرقاتشيف",
+    "variety": [
+     "Heirloom"
+    ],
+    "altitudeMeters": 1950,
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 60.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "محصول من إثيوبيا، بمعالجة مجففة. السلالة: Heirloom. الإيحاءات: توت، يوسفي، ياسمين.",
+    "sourceNote": "من موقع المحمصة",
+    "isInfused": false,
+    "isDecaf": false,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "photo": "pr-958134555"
+   }
+  },
+  {
+   "importKey": "process-2026-11:143764783",
+   "roasterName": "محمصة بروسيس",
+   "roasterNameEn": "Process Coffee Roasters",
+   "sourceConfidence": 0.9,
+   "name": "إثيوبي شاكيسو",
+   "nameEn": "Ethiopia Shakiso",
+   "originName": "إثيوبيا",
+   "originCode": "ET",
+   "process": "EXPERIMENTAL",
+   "roastLevel": null,
+   "flavorNotes": [
+    "أناناس",
+    "خوخ",
+    "عنب"
+   ],
+   "sourceUrl": "https://process.sa/ethiopia-shakiso-fermentation-250g/p143764783",
+   "extras": {
+    "region": "شاكيسو",
+    "variety": [
+     "Heirloom"
+    ],
+    "altitudeMeters": 2000,
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 75.0,
+    "weightGrams": 250,
+    "availability": "Available",
+    "descriptionAr": "محصول من إثيوبيا، بمعالجة تخمير. السلالة: Heirloom. الإيحاءات: أناناس، خوخ، عنب.",
+    "sourceNote": "من موقع المحمصة",
+    "isInfused": false,
+    "isDecaf": false,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "photo": "pr-143764783",
+    "processDetail": "تخمير (Fermented)"
+   }
+  },
+  {
+   "importKey": "process-2026-11:298081016",
+   "roasterName": "محمصة بروسيس",
+   "roasterNameEn": "Process Coffee Roasters",
+   "sourceConfidence": 0.9,
+   "name": "مكسيكو ديكاف قصب سكر",
+   "nameEn": "Mexico Decaf Sugarcane",
+   "originName": "المكسيك",
+   "originCode": "MX",
+   "process": "WASHED",
+   "roastLevel": null,
+   "flavorNotes": [
+    "كراميل",
+    "شوكولاتة",
+    "زبيب"
+   ],
+   "sourceUrl": "https://process.sa/mexico-decaf-sugarcane-washed-250g/p298081016",
+   "extras": {
+    "variety": [
+     "Typica",
+     "Caturra"
+    ],
+    "altitudeMeters": 1400,
+    "brewMethods": [
+     "ESPRESSO",
+     "V60"
+    ],
+    "priceSar": 59.0,
+    "weightGrams": 250,
+    "availability": "Sold Out",
+    "descriptionAr": "محصول من المكسيك، بمعالجة مغسولة. السلالة: Typica وCaturra. الإيحاءات: كراميل، شوكولاتة، زبيب.",
+    "sourceNote": "من موقع المحمصة",
+    "isInfused": false,
+    "isDecaf": true,
+    "isLuxury": false,
+    "luxuryReason": null,
+    "photo": "pr-298081016",
+    "processDetail": "منزوعة الكافيين بطريقة قصب السكر"
+   }
   }
  ]
 }
