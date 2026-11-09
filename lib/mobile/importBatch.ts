@@ -21,6 +21,7 @@ import dohaPhotos from "./data/doha-photos.json";
 import pagePhotos from "./data/page-photos.json";
 import officialPhotos from "./data/official-photos.json";
 import soutAsantePhotos from "./data/sout-asante-photos.json";
+import kiffaPhotos from "./data/kiffa-photos.json";
 import oroPhotos from "./data/oro-photos.json";
 import processPhotos from "./data/process-photos.json";
 
@@ -68,6 +69,7 @@ export const BUNDLED_BATCHES: Record<string, { data: unknown; photos: Record<str
       ...(pagePhotos as Record<string, string>),
       ...(officialPhotos as Record<string, string>),
       ...(soutAsantePhotos as Record<string, string>),
+      ...(kiffaPhotos as Record<string, string>),
       ...(oroPhotos as Record<string, string>),
       ...(processPhotos as Record<string, string>),
     },
