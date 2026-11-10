@@ -235,6 +235,8 @@ export interface PulseItem {
   name: string;
   username: string | null;
   avatarUrl: string | null;
+  /** «مبدع مؤسس» number of the person, or null. */
+  founderNumber?: number | null;
   lotSlug: string | null;
   lotNameAr: string | null;
   recipeId: string | null;
@@ -282,7 +284,7 @@ export async function pulse(
     viewerId ? prisma.mobileFollow.findMany({ where: { followerId: viewerId }, select: { followeeId: true } }) : [],
     blockedWith(prisma, viewerId),
   ]);
-  type Raw = Omit<PulseItem, "name" | "username" | "avatarUrl" | "lotSlug" | "lotNameAr" | "imageUrl" | "roasterNameAr" | "originCode"> & { accountId: string; lotId: string | null };
+  type Raw = Omit<PulseItem, "name" | "username" | "avatarUrl" | "founderNumber" | "lotSlug" | "lotNameAr" | "imageUrl" | "roasterNameAr" | "originCode"> & { accountId: string; lotId: string | null };
   const raw: Raw[] = [
     ...brews.map((b) => ({ kind: "brew" as const, accountId: b.accountId, lotId: b.lotId, at: b.createdAt.toISOString(),
       recipeId: null, recipeTitle: null, methodCode: b.methodCode, stars: b.stars, note: b.note.slice(0, 160) || null,
@@ -296,7 +298,7 @@ export async function pulse(
   const ids = [...new Set(raw.map((r) => r.accountId))];
   const following = new Set(follows.map((f) => f.followeeId));
   const profiles = await prisma.mobileProfile.findMany({
-    where: { accountId: { in: ids } }, select: { accountId: true, username: true, avatarPath: true, activityVisibility: true, isPrivate: true },
+    where: { accountId: { in: ids } }, select: { accountId: true, username: true, avatarPath: true, activityVisibility: true, isPrivate: true, founderNumber: true },
   });
   const profile = new Map(profiles.map((p) => [p.accountId, p]));
   const visible = raw.filter((r) => {
@@ -324,6 +326,7 @@ export async function pulse(
     name: names.get(accountId) ?? "مستخدم",
     username: profile.get(accountId)?.username ?? null,
     avatarUrl: avatarUrl(profile.get(accountId)?.avatarPath ?? null),
+    founderNumber: profile.get(accountId)?.founderNumber ?? null,
     lotSlug: lotId ? lot.get(lotId)?.slug ?? null : null,
     lotNameAr: lotId ? lot.get(lotId)?.nameAr ?? null : null,
     imageUrl: lotId ? lot.get(lotId)?.imageUrl ?? null : null,

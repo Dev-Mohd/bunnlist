@@ -27,6 +27,7 @@ function fakePrisma(profiles: Record<string, string>) {
     },
     mobileCoffeeSubmission: { findMany: vi.fn().mockResolvedValue([]) },
     mobileRecipe: { findMany: vi.fn().mockResolvedValue([{ id: "r1", title: "صباحية", methodCode: "V60", lotId: null }]) },
+    mobileBrewExperience: { findMany: vi.fn().mockResolvedValue([{ recipeId: "r1", accountId: "fan" }]) },
     coffeeLot: { findMany: vi.fn().mockResolvedValue([]) },
     mobileFollowRequest: {
       findUnique: vi.fn().mockResolvedValue(null), create: vi.fn().mockResolvedValue({}),
@@ -48,6 +49,7 @@ describe("publicProfile", () => {
     expect(p.isFollowing).toBe(true);
     expect(p.isMe).toBe(false);
     expect(p.recipes[0].title).toBe("صباحية");
+    expect(p.recipes[0].brewedCount).toBe(1);
     expect(p).not.toHaveProperty("accountId");
   });
 

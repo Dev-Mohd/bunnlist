@@ -173,6 +173,8 @@ export interface LeaderboardEntry {
   name: string;
   username: string | null;
   avatarUrl: string | null;
+  /** «مبدع مؤسس» number, or null. */
+  founderNumber?: number | null;
   points: number;
   isMe: boolean;
   /** All-time level, e.g. «ذوّاق». */
@@ -204,7 +206,7 @@ export async function leaderboard(
   const top = ranked.slice(0, limit);
   const ids = top.map((t) => t.accountId);
   const [profiles, users] = await Promise.all([
-    prisma.mobileProfile.findMany({ where: { accountId: { in: ids } }, select: { accountId: true, username: true, displayName: true, avatarPath: true } }),
+    prisma.mobileProfile.findMany({ where: { accountId: { in: ids } }, select: { accountId: true, username: true, displayName: true, avatarPath: true, founderNumber: true } }),
     prisma.user.findMany({ where: { id: { in: ids } }, select: { id: true, name: true } }),
   ]);
   const totals = await prisma.mobilePointEvent.groupBy({ by: ["accountId"], where: { accountId: { in: ids } }, _sum: { points: true } });
@@ -225,6 +227,7 @@ export async function leaderboard(
       name: p?.displayName?.trim() || userName.get(t.accountId) || (p?.username ? `@${p.username}` : "مستخدم"),
       username: p?.username ?? null,
       avatarUrl: avatarUrl(p?.avatarPath ?? null),
+      founderNumber: p?.founderNumber ?? null,
       points: t.points,
       isMe: t.accountId === viewerId,
       levelAr: levelFor(totalById.get(t.accountId) ?? 0).nameAr,

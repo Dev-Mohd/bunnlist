@@ -4,6 +4,8 @@ import { staffIds } from "./admin";
 import { blockedWith } from "./blockSet";
 import { ApiError } from "./errors";
 import { activityLevel, asVisibility, avatarUrl, normalizeUsername, type Visibility } from "./profile";
+import { founderBadge, publicSocials, type FounderBadge, type Socials } from "./founders";
+import { recipeBrewCounts } from "./recipeStats";
 
 // Public profiles and following. A profile is reachable only by @username (no raw
 // account ids leave the server) and shows what the person already made public:
@@ -44,7 +46,11 @@ export async function accountIdFor(prisma: PrismaClient, username: string): Prom
   return profile.accountId;
 }
 
-export interface PublicRecipe { id: string; title: string; methodCode: string; lotNameAr: string | null }
+export interface PublicRecipe {
+  id: string; title: string; methodCode: string; lotNameAr: string | null;
+  /** «حضّرها N شخص»: people other than the author who brewed it. */
+  brewedCount: number;
+}
 
 export interface PublicProfile {
   username: string;
@@ -66,6 +72,10 @@ export interface PublicProfile {
   isBlocked: boolean;
   discoveries: MobileLot[];
   recipes: PublicRecipe[];
+  /** «مبدع مؤسس» number, or null. */
+  founder: FounderBadge;
+  /** A founder's accounts elsewhere; null for everyone else. */
+  socials: Socials | null;
 }
 
 export async function publicProfile(prisma: PrismaClient, username: string, viewerId: string | null): Promise<PublicProfile> {
@@ -109,9 +119,12 @@ export async function publicProfile(prisma: PrismaClient, username: string, view
     ? await prisma.coffeeLot.findMany({ where: { id: { in: lotIds }, publishedAt: { not: null } }, select: LOT_LIST_SELECT })
     : [];
   const lotById = new Map(lots.map((l) => [l.id, l]));
+  const brewed = await recipeBrewCounts(prisma, recipes.map((r) => ({ id: r.id, accountId })));
 
   return {
     username: profile?.username ?? normalizeUsername(username),
+    founder: founderBadge(profile),
+    socials: isBlocked ? null : publicSocials(profile),
     displayName: profile?.displayName ?? (user?.name?.trim() || null),
     bio: profile?.bio ?? null,
     avatarUrl: avatarUrl(profile?.avatarPath ?? null),
@@ -130,6 +143,7 @@ export async function publicProfile(prisma: PrismaClient, username: string, view
     }),
     recipes: recipes.map((r) => ({
       id: r.id, title: r.title, methodCode: r.methodCode, lotNameAr: r.lotId ? lotById.get(r.lotId)?.nameAr ?? null : null,
+      brewedCount: brewed.get(r.id) ?? 0,
     })),
   };
 }

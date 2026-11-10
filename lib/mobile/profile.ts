@@ -2,6 +2,7 @@ import type { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { ApiError } from "./errors";
 import { FLAVOR_FAMILIES } from "./flavorFamilies";
+import { founderBadge, mergeSocials, readSocials, SocialsUpdate, type FounderBadge, type Socials } from "./founders";
 
 // Public @usernames for app accounts. Shown wherever the app names a person
 // (discoverer credit, recipe authors, reviews) instead of the raw account id.
@@ -111,6 +112,8 @@ export const ProfileUpdate = z.object({
   isPrivate: z.boolean().optional(),
   tastePrefs: z.array(z.enum(FLAVOR_FAMILIES)).max(12).optional(),
   brewPrefs: z.array(z.enum(BREW_PREFS)).max(6).optional(),
+  /// Founders only: handles or links for their accounts elsewhere; "" or null clears one.
+  socials: SocialsUpdate.optional(),
 });
 export type ProfileUpdate = z.infer<typeof ProfileUpdate>;
 
@@ -131,6 +134,10 @@ export interface MobileProfileView {
   /// What they said they like at signup; empty when skipped.
   tastePrefs: string[];
   brewPrefs: string[];
+  /** «مبدع مؤسس» number, or null. */
+  founder: FounderBadge;
+  /** Their accounts elsewhere (founders can set them; empty for everyone else). */
+  socials: Socials;
 }
 
 /** Public URL of an avatar object, or null without a configured Supabase URL. */
@@ -160,11 +167,20 @@ export async function getProfile(prisma: PrismaClient, accountId: string): Promi
     grinderId: profile?.grinderId ?? null,
     tastePrefs: profile?.tastePrefs ?? [],
     brewPrefs: profile?.brewPrefs ?? [],
+    founder: founderBadge(profile),
+    socials: profile?.founderNumber ? readSocials(profile.socials) : {},
   };
 }
 
 export async function updateProfile(prisma: PrismaClient, accountId: string, patch: ProfileUpdate): Promise<MobileProfileView> {
+  let socials: Socials | undefined;
+  if (patch.socials) {
+    const current = await prisma.mobileProfile.findUnique({ where: { accountId }, select: { founderNumber: true, socials: true } });
+    if (!current?.founderNumber) throw ApiError.forbidden("founders_only");
+    socials = mergeSocials(current.socials, patch.socials);
+  }
   const data = {
+    ...(socials ? { socials } : {}),
     ...(patch.displayName !== undefined ? { displayName: patch.displayName } : {}),
     ...(patch.bio !== undefined ? { bio: patch.bio || null } : {}),
     ...(patch.hideFromLeaderboard !== undefined ? { hideFromLeaderboard: patch.hideFromLeaderboard } : {}),
