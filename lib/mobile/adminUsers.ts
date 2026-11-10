@@ -28,41 +28,70 @@ export interface AdminUserRow {
   suspended: boolean;
   /** «مبدع مؤسس» number, or null. */
   founderNumber: number | null;
+  /** The last Riyadh day they opened the app, or null if never recorded. */
+  lastActiveDay: string | null;
 }
+
+export const USER_FILTERS = ["all", "active", "new", "founders", "suspended", "admins"] as const;
+export type UserFilter = (typeof USER_FILTERS)[number];
 
 function isActive(s: { until: Date | null } | undefined, now: Date): boolean {
   return !!s && (!s.until || s.until > now);
 }
 
-/** Newest accounts, or those whose username, name or email contains `q`. */
-export async function searchUsers(prisma: PrismaClient, q: string, now = new Date()): Promise<AdminUserRow[]> {
+/**
+ * Newest accounts, or those whose username, name or email contains `q`, narrowed by
+ * `filter`: active (opened the app in the last 7 days), new (joined in the last 7),
+ * founders (by number), suspended, or admins.
+ */
+export async function searchUsers(prisma: PrismaClient, q: string, now = new Date(), filter: UserFilter = "all"): Promise<AdminUserRow[]> {
   const text = q.trim().replace(/^@/, "");
   const emailMatches = text.length >= 3
     ? await prisma.user.findMany({ where: { email: { contains: text, mode: "insensitive" } }, select: { id: true }, take: 50 })
     : [];
+  let only: string[] | null = null;
+  if (filter === "active") {
+    const rows = await prisma.mobilePointEvent.findMany({
+      where: { kind: "activity", day: { gte: riyadhDay(new Date(now.getTime() - 6 * DAY_MS)) } }, select: { accountId: true }, distinct: ["accountId"],
+    });
+    only = rows.map((r) => r.accountId);
+  } else if (filter === "suspended") {
+    const rows = await prisma.mobileSuspension.findMany({ where: { OR: [{ until: null }, { until: { gt: now } }] }, select: { accountId: true } });
+    only = rows.map((r) => r.accountId);
+  } else if (filter === "admins") {
+    const rows = await prisma.user.findMany({ where: { role: "ADMIN" }, select: { id: true } });
+    only = rows.map((r) => r.id);
+  }
   const profiles = await prisma.mobileProfile.findMany({
-    where: text ? {
-      OR: [
-        { username: { contains: text.toLowerCase() } },
-        { displayName: { contains: text, mode: "insensitive" } },
-        { accountId: { in: emailMatches.map((u) => u.id) } },
-      ],
-    } : {},
-    orderBy: { createdAt: "desc" },
-    take: 50,
+    where: {
+      ...(text ? {
+        OR: [
+          { username: { contains: text.toLowerCase() } },
+          { displayName: { contains: text, mode: "insensitive" } },
+          { accountId: { in: emailMatches.map((u) => u.id) } },
+        ],
+      } : {}),
+      ...(only ? { AND: [{ accountId: { in: only } }] } : {}),
+      ...(filter === "new" ? { createdAt: { gte: new Date(now.getTime() - 7 * DAY_MS) } } : {}),
+      ...(filter === "founders" ? { founderNumber: { not: null } } : {}),
+    },
+    orderBy: filter === "founders" ? { founderNumber: "asc" } : { createdAt: "desc" },
+    take: filter === "founders" ? 100 : 50,
     select: { accountId: true, username: true, displayName: true, avatarPath: true, createdAt: true, founderNumber: true },
   });
   const ids = profiles.map((p) => p.accountId);
-  const [users, suspensions] = await Promise.all([
+  const [users, suspensions, lastActive] = await Promise.all([
     prisma.user.findMany({ where: { id: { in: ids } }, select: { id: true, role: true } }),
     prisma.mobileSuspension.findMany({ where: { accountId: { in: ids } }, select: { accountId: true, until: true } }),
+    prisma.mobilePointEvent.groupBy({ by: ["accountId"], where: { accountId: { in: ids }, kind: "activity" }, _max: { day: true } }),
   ]);
   const role = new Map(users.map((u) => [u.id, u.role]));
   const suspension = new Map(suspensions.map((s) => [s.accountId, s]));
+  const last = new Map(lastActive.map((a) => [a.accountId, a._max.day]));
   return profiles.map((p) => ({
     accountId: p.accountId, username: p.username, displayName: p.displayName, avatarUrl: avatarUrl(p.avatarPath),
     joinedAt: p.createdAt.toISOString(), isAdmin: role.get(p.accountId) === "ADMIN", suspended: isActive(suspension.get(p.accountId), now),
-    founderNumber: p.founderNumber ?? null,
+    founderNumber: p.founderNumber ?? null, lastActiveDay: last.get(p.accountId) ?? null,
   }));
 }
 
