@@ -525,6 +525,11 @@ model MobileProfile {
   tastePrefs          String[]  @default([])
   /// Brew methods picked at signup (BREW_PREFS in lib/mobile/profile.ts).
   brewPrefs           String[]  @default([])
+  /// «مبدع مؤسس»: 1–100 in the order admins granted it; never reused. Null for everyone else.
+  founderNumber       Int?      @unique
+  founderAt           DateTime?
+  /// Founders' own accounts elsewhere, as handles: { tiktok, instagram, youtube, x }.
+  socials             Json      @default("{}")
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
 }

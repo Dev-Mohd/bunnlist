@@ -1,4 +1,5 @@
 import type { PrismaClient } from "@prisma/client";
+import { grantFounder, revokeFounder } from "./founders";
 import { z } from "zod";
 import { ApiError } from "./errors";
 import { avatarUrl } from "./profile";
@@ -25,6 +26,8 @@ export interface AdminUserRow {
   joinedAt: string;
   isAdmin: boolean;
   suspended: boolean;
+  /** «مبدع مؤسس» number, or null. */
+  founderNumber: number | null;
 }
 
 function isActive(s: { until: Date | null } | undefined, now: Date): boolean {
@@ -47,7 +50,7 @@ export async function searchUsers(prisma: PrismaClient, q: string, now = new Dat
     } : {},
     orderBy: { createdAt: "desc" },
     take: 50,
-    select: { accountId: true, username: true, displayName: true, avatarPath: true, createdAt: true },
+    select: { accountId: true, username: true, displayName: true, avatarPath: true, createdAt: true, founderNumber: true },
   });
   const ids = profiles.map((p) => p.accountId);
   const [users, suspensions] = await Promise.all([
@@ -59,6 +62,7 @@ export async function searchUsers(prisma: PrismaClient, q: string, now = new Dat
   return profiles.map((p) => ({
     accountId: p.accountId, username: p.username, displayName: p.displayName, avatarUrl: avatarUrl(p.avatarPath),
     joinedAt: p.createdAt.toISOString(), isAdmin: role.get(p.accountId) === "ADMIN", suspended: isActive(suspension.get(p.accountId), now),
+    founderNumber: p.founderNumber ?? null,
   }));
 }
 
@@ -95,6 +99,7 @@ export async function adminUser(prisma: PrismaClient, accountId: string, now = n
   return {
     accountId, username: profile.username, displayName: profile.displayName, avatarUrl: avatarUrl(profile.avatarPath),
     joinedAt: profile.createdAt.toISOString(), isAdmin: user?.role === "ADMIN", suspended: isActive(suspension ?? undefined, now),
+    founderNumber: profile.founderNumber ?? null,
     email: user?.email ?? null, bio: profile.bio, points: points._sum.points ?? 0, lastActiveDay: last?.day ?? null,
     counts: { reviews, recipes, brews, discoveries, followers, following, reports },
     suspension: suspension && isActive(suspension, now)
@@ -112,13 +117,15 @@ export const UserAction = z.discriminatedUnion("action", [
   z.object({ action: z.literal("setAdmin"), admin: z.boolean() }),
   // For someone gaming the points: wipes their ledger (points, streak, level) back to zero.
   z.object({ action: z.literal("resetPoints"), reason: z.string().trim().min(2).max(300) }),
+  // «مبدع مؤسس»: give the next number (of 100), or take the badge back.
+  z.object({ action: z.literal("setFounder"), founder: z.boolean() }),
 ]);
 export type UserAction = z.infer<typeof UserAction>;
 
 export async function applyUserAction(
   prisma: PrismaClient, adminId: string, accountId: string, input: UserAction, now = new Date(),
 ): Promise<AdminUser> {
-  if (accountId === adminId) throw ApiError.unprocessable("not_on_yourself");
+  if (accountId === adminId && input.action !== "setFounder") throw ApiError.unprocessable("not_on_yourself");
   const target = await prisma.user.findUnique({ where: { id: accountId }, select: { role: true } });
   if (!target) throw ApiError.unprocessable("user_not_found");
   switch (input.action) {
@@ -137,6 +144,10 @@ export async function applyUserAction(
       break;
     case "setAdmin":
       await prisma.user.update({ where: { id: accountId }, data: { role: input.admin ? "ADMIN" : "USER" } });
+      break;
+    case "setFounder":
+      if (input.founder) await grantFounder(prisma, accountId, now);
+      else await revokeFounder(prisma, accountId);
       break;
     case "resetPoints": {
       const { count } = await prisma.mobilePointEvent.deleteMany({ where: { accountId } });

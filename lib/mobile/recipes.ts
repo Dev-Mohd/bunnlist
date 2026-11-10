@@ -4,6 +4,8 @@ import { z } from "zod";
 import { ApiError } from "./errors";
 import { award, revoke } from "./points";
 import { displayNames } from "./profile";
+import { publicSocials, type Socials } from "./founders";
+import { recipeBrewCounts } from "./recipeStats";
 import { activityVisibleTo } from "./social";
 import { BREW_METHOD_CODES, canTransition, EXPERIENCE_STATES, type ExperienceState } from "./experiences";
 
@@ -193,6 +195,12 @@ export interface MobileRecipe {
   version: number;
   state: RecipeState;
   authorName: string;
+  /** The author's @username (to open their profile), founder number and, for founders, their accounts. */
+  authorUsername?: string | null;
+  authorFounder?: number | null;
+  authorSocials?: Socials | null;
+  /** «حضّرها N شخص»: people other than the author who brewed it (published recipes). */
+  brewedCount?: number;
   isMine: boolean;
   /** "أعجبني" count and whether the viewer gave one (lists only). */
   likeCount?: number;
@@ -286,9 +294,23 @@ async function present(prisma: PrismaClient, rows: RecipeRow[], viewerId: string
     displayNames(prisma, userIds),
   ]);
   const lotById = new Map(lots.map((l) => [l.id, { slug: l.slug, nameAr: l.nameAr, roasterNameAr: l.roaster?.nameAr ?? "" }]));
-  return rows.map((r) =>
-    mapRecipe(r, viewerId, r.lotId ? lotById.get(r.lotId) ?? null : null, users.get(r.accountId) ?? "مستخدم"),
-  );
+  const [profiles, brewed] = await Promise.all([
+    prisma.mobileProfile.findMany({
+      where: { accountId: { in: userIds } }, select: { accountId: true, username: true, founderNumber: true, socials: true },
+    }),
+    recipeBrewCounts(prisma, rows.filter((r) => r.state === "published").map((r) => ({ id: r.id, accountId: r.accountId }))),
+  ]);
+  const profileById = new Map(profiles.map((p) => [p.accountId, p]));
+  return rows.map((r) => {
+    const p = profileById.get(r.accountId);
+    return {
+      ...mapRecipe(r, viewerId, r.lotId ? lotById.get(r.lotId) ?? null : null, users.get(r.accountId) ?? "مستخدم"),
+      authorUsername: p?.username ?? null,
+      authorFounder: p?.founderNumber ?? null,
+      authorSocials: publicSocials(p),
+      brewedCount: brewed.get(r.id) ?? 0,
+    };
+  });
 }
 
 async function lotIdForSlug(prisma: PrismaClient, slug: string): Promise<string> {

@@ -20,6 +20,8 @@ export interface PersonCard {
   displayName: string | null;
   avatarUrl: string | null;
   isPrivate: boolean;
+  /** «مبدع مؤسس» number, or null. */
+  founderNumber?: number | null;
   isFollowing: boolean;
   requested: boolean;
   /** Why they're suggested, in Arabic ("جربتوا ٤ قهاوي نفسها"); null in search. */
@@ -28,7 +30,7 @@ export interface PersonCard {
   sharedPercent?: number | null;
 }
 
-type ProfileRow = { accountId: string; username: string | null; displayName: string | null; avatarPath: string | null; isPrivate: boolean };
+type ProfileRow = { accountId: string; username: string | null; displayName: string | null; avatarPath: string | null; isPrivate: boolean; founderNumber?: number | null };
 
 async function cards(
   prisma: PrismaClient, viewerId: string | null, rows: ProfileRow[], reason: (accountId: string) => string | null = () => null,
@@ -44,11 +46,12 @@ async function cards(
   const asked = new Set(requests.map((r) => r.targetId));
   return rows.flatMap((r) => (r.username ? [{
     username: r.username, displayName: r.displayName, avatarUrl: avatarUrl(r.avatarPath), isPrivate: r.isPrivate,
+    founderNumber: r.founderNumber ?? null,
     isFollowing: following.has(r.accountId), requested: asked.has(r.accountId), reasonAr: reason(r.accountId),
   }] : []));
 }
 
-const PROFILE_SELECT = { accountId: true, username: true, displayName: true, avatarPath: true, isPrivate: true } as const;
+const PROFILE_SELECT = { accountId: true, username: true, displayName: true, avatarPath: true, isPrivate: true, founderNumber: true } as const;
 
 /** People whose @username starts with, or whose name contains, the query. */
 export async function searchPeople(prisma: PrismaClient, viewerId: string | null, q: string): Promise<PersonCard[]> {
