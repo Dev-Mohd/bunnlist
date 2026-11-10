@@ -43,18 +43,33 @@ describe("admin console: lots", () => {
 });
 
 describe("admin console: overview", () => {
-  it("fills 30 days, oldest first", async () => {
+  it("fills 30 days, oldest first, with last week to compare and who brewed", async () => {
     const count = vi.fn().mockResolvedValue(2);
     const m = {
       mobileProfile: { count, findMany: vi.fn().mockResolvedValue([{ createdAt: new Date("2026-11-02T09:00:00Z") }]) },
-      mobilePointEvent: { count, groupBy: vi.fn().mockResolvedValue([{ day: "2026-11-02", _count: { _all: 5 } }]) },
-      review: { count }, mobileRecipe: { count }, mobileBrewExperience: { count }, mobileAiScan: { count },
-      coffeeLot: { count }, mobileCoffeeSubmission: { count }, mobileReport: { count },
+      mobilePointEvent: {
+        count, groupBy: vi.fn().mockResolvedValue([{ day: "2026-11-02", _count: { _all: 5 } }]),
+        findMany: vi.fn().mockResolvedValue([{ accountId: "a" }, { accountId: "b" }, { accountId: "c" }]),
+      },
+      review: { count }, mobileRecipe: { count }, mobileAiScan: { count },
+      mobileBrewExperience: {
+        count,
+        findMany: vi.fn().mockResolvedValue([
+          { accountId: "a", createdAt: new Date("2026-11-02T08:00:00Z") },
+          { accountId: "a", createdAt: new Date("2026-11-01T08:00:00Z") },
+          { accountId: "b", createdAt: new Date("2026-10-10T08:00:00Z") },
+        ]),
+      },
+      coffeeLot: { count }, mobileCoffeeSubmission: { count }, mobileReport: { count }, mobileFeedback: { count },
     };
     const o = await overview(m as unknown as PrismaClient, new Date("2026-11-02T12:00:00Z"));
     expect(o.series).toHaveLength(30);
-    expect(o.series[29]).toEqual({ day: "2026-11-02", active: 5, newUsers: 1 });
+    expect(o.series[29]).toEqual({ day: "2026-11-02", active: 5, newUsers: 1, brews: 1 });
     expect(o.series[0].day).toBe("2026-10-04");
+    expect(o.active7d).toBe(3);
+    expect(o.brewers7d).toBe(1);
+    expect(o.unreadFeedback).toBe(2);
+    expect(o.prev7d).toEqual({ newUsers: 2, reviews: 2, recipes: 2, brews: 2, scans: 2 });
   });
 });
 

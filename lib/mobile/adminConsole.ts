@@ -14,19 +14,28 @@ export interface Overview {
   users: number;
   newUsers7d: number;
   activeToday: number;
+  /** Accounts active on at least one of the last 7 Riyadh days. */
+  active7d: number;
   reviews7d: number;
   recipes7d: number;
   brews7d: number;
+  /** Accounts that saved a brew in the last 7 days. */
+  brewers7d: number;
   scans7d: number;
   lots: number;
   pendingSubmissions: number;
   openReports: number;
-  /** The last 30 Riyadh days, oldest first: active accounts and sign-ups. */
-  series: { day: string; active: number; newUsers: number }[];
+  unreadFeedback: number;
+  /** The 7 days before the last 7, for week-over-week change. */
+  prev7d: { newUsers: number; reviews: number; recipes: number; brews: number; scans: number };
+  /** The last 30 Riyadh days, oldest first: active accounts, sign-ups and saved brews. */
+  series: { day: string; active: number; newUsers: number; brews: number }[];
 }
 
 export async function overview(prisma: PrismaClient, now = new Date()): Promise<Overview> {
   const weekAgo = new Date(now.getTime() - 7 * DAY_MS);
+  const twoWeeksAgo = new Date(now.getTime() - 14 * DAY_MS);
+  const before = { gte: twoWeeksAgo, lt: weekAgo };
   const days = Array.from({ length: 30 }, (_, i) => riyadhDay(new Date(now.getTime() - (29 - i) * DAY_MS)));
   const since = new Date(now.getTime() - 31 * DAY_MS);
   const [users, newUsers7d, activeToday, reviews7d, recipes7d, brews7d, scans7d, lots, pendingSubmissions, openReports, activity, joined] =
@@ -44,12 +53,27 @@ export async function overview(prisma: PrismaClient, now = new Date()): Promise<
       prisma.mobilePointEvent.groupBy({ by: ["day"], where: { kind: "activity", day: { gte: days[0] } }, _count: { _all: true } }),
       prisma.mobileProfile.findMany({ where: { createdAt: { gte: since } }, select: { createdAt: true } }),
     ]);
+  const [prevUsers, prevReviews, prevRecipes, prevBrews, prevScans, unreadFeedback, activeWeek, brewed] = await Promise.all([
+    prisma.mobileProfile.count({ where: { createdAt: before } }),
+    prisma.review.count({ where: { createdAt: before } }),
+    prisma.mobileRecipe.count({ where: { state: "published", publishedAt: before } }),
+    prisma.mobileBrewExperience.count({ where: { createdAt: before, state: { not: "deleted" } } }),
+    prisma.mobileAiScan.count({ where: { createdAt: before } }),
+    prisma.mobileFeedback.count({ where: { readAt: null } }),
+    prisma.mobilePointEvent.findMany({ where: { kind: "activity", day: { gte: days[23] } }, select: { accountId: true }, distinct: ["accountId"] }),
+    prisma.mobileBrewExperience.findMany({ where: { createdAt: { gte: since }, state: { not: "deleted" } }, select: { createdAt: true, accountId: true } }),
+  ]);
   const active = new Map(activity.map((a) => [a.day, a._count._all]));
   const signups = new Map<string, number>();
   joined.forEach((p) => { const d = riyadhDay(p.createdAt); signups.set(d, (signups.get(d) ?? 0) + 1); });
+  const brewsByDay = new Map<string, number>();
+  brewed.forEach((b) => { const d = riyadhDay(b.createdAt); brewsByDay.set(d, (brewsByDay.get(d) ?? 0) + 1); });
+  const brewers7d = new Set(brewed.filter((b) => b.createdAt >= weekAgo).map((b) => b.accountId)).size;
   return {
-    users, newUsers7d, activeToday, reviews7d, recipes7d, brews7d, scans7d, lots, pendingSubmissions, openReports,
-    series: days.map((day) => ({ day, active: active.get(day) ?? 0, newUsers: signups.get(day) ?? 0 })),
+    users, newUsers7d, activeToday, active7d: activeWeek.length, reviews7d, recipes7d, brews7d, brewers7d, scans7d, lots,
+    pendingSubmissions, openReports, unreadFeedback,
+    prev7d: { newUsers: prevUsers, reviews: prevReviews, recipes: prevRecipes, brews: prevBrews, scans: prevScans },
+    series: days.map((day) => ({ day, active: active.get(day) ?? 0, newUsers: signups.get(day) ?? 0, brews: brewsByDay.get(day) ?? 0 })),
   };
 }
 
