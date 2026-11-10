@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import type { PrismaClient } from "@prisma/client";
-import { applyUserAction, assertCanPost, broadcast, UserAction } from "../adminUsers";
+import { applyUserAction, assertCanPost, broadcast, searchUsers, UserAction } from "../adminUsers";
 
 describe("suspensions", () => {
   const now = new Date("2026-11-03T12:00:00Z");
@@ -52,5 +52,36 @@ describe("broadcast", () => {
     const sender = vi.fn().mockResolvedValue({ status: 200 });
     const result = await broadcast(m as unknown as PrismaClient, "admin", { title: "جديد", body: "قهوات جديدة", audience: "all" }, sender);
     expect(result).toEqual({ accounts: 2, delivered: 1 });
+  });
+});
+
+describe("admin users: search filters", () => {
+  const profile = { accountId: "a", username: "mohd", displayName: "محمد", avatarPath: null, createdAt: new Date("2026-11-01T00:00:00Z"), founderNumber: 1 };
+  function db() {
+    return {
+      user: { findMany: vi.fn().mockResolvedValue([{ id: "a", role: "ADMIN" }]) },
+      mobileProfile: { findMany: vi.fn().mockResolvedValue([profile]) },
+      mobileSuspension: { findMany: vi.fn().mockResolvedValue([]) },
+      mobilePointEvent: {
+        findMany: vi.fn().mockResolvedValue([{ accountId: "a" }]),
+        groupBy: vi.fn().mockResolvedValue([{ accountId: "a", _max: { day: "2026-11-09" } }]),
+      },
+    };
+  }
+
+  it("returns the last active day and narrows to accounts active this week", async () => {
+    const m = db();
+    const rows = await searchUsers(m as unknown as PrismaClient, "", new Date("2026-11-10T12:00:00Z"), "active");
+    expect(rows[0]).toMatchObject({ accountId: "a", isAdmin: true, founderNumber: 1, lastActiveDay: "2026-11-09" });
+    expect(m.mobilePointEvent.findMany.mock.calls[0][0].where).toEqual({ kind: "activity", day: { gte: "2026-11-04" } });
+    expect(m.mobileProfile.findMany.mock.calls[0][0].where).toMatchObject({ AND: [{ accountId: { in: ["a"] } }] });
+  });
+
+  it("lists founders by number", async () => {
+    const m = db();
+    await searchUsers(m as unknown as PrismaClient, "", new Date("2026-11-10T12:00:00Z"), "founders");
+    const args = m.mobileProfile.findMany.mock.calls[0][0];
+    expect(args.where).toMatchObject({ founderNumber: { not: null } });
+    expect(args.orderBy).toEqual({ founderNumber: "asc" });
   });
 });
