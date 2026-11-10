@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { generateKeyPairSync, createVerify, createPublicKey } from "node:crypto";
 import type { PrismaClient } from "@prisma/client";
-import { apnsSender, DeviceRegistration, fcmAssertion, fcmSender, firstInWindow, notify, notifyOnce, NOTIFY_WINDOWS, pushSender, registerDevice } from "../push";
+import { apnsSender, DeviceRegistration, fcmAssertion, fcmSender, firstInWindow, notify, notifyOnce, NOTIFY_WINDOWS, pushSender, registerDevice, rtlSafe } from "../push";
 
 function fake(settings: Record<string, boolean> | null, tokens: string[]) {
   const m = {
@@ -137,6 +137,11 @@ describe("not twice", () => {
     expect(await firstInWindow(db, "follow:a:b", NOTIFY_WINDOWS.follow, new Date(t0.getTime() + 60_000))).toBe(false);
     expect(await firstInWindow(db, "follow:c:b", NOTIFY_WINDOWS.follow, t0)).toBe(true);
     expect(await firstInWindow(db, "follow:a:b", NOTIFY_WINDOWS.follow, new Date(t0.getTime() + NOTIFY_WINDOWS.follow + 1000))).toBe(true);
+  });
+
+  it("wraps Arabic text in right-to-left marks for Android and leaves the rest alone", () => {
+    expect(rtlSafe("افتح التحضير.")).toBe("\u200Fافتح التحضير.\u200F");
+    expect(rtlSafe("BunnList 1.0.7")).toBe("BunnList 1.0.7");
   });
 
   it("sends one notification for a double tap", async () => {
