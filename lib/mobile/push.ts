@@ -261,6 +261,15 @@ async function fcmAccessToken(account: ServiceAccount, fetcher: typeof fetch): P
   return json.access_token;
 }
 
+/**
+ * Android lays a notification out left to right unless told otherwise, which throws an
+ * Arabic sentence's final full stop to the wrong end. A right-to-left mark on each side
+ * settles it; text without Arabic is left alone.
+ */
+export function rtlSafe(text: string): string {
+  return /[\u0600-\u06FF]/.test(text) ? `\u200F${text}\u200F` : text;
+}
+
 /** The FCM sender, or null when FCM_SERVICE_ACCOUNT isn't set. Data values must be strings. */
 export function fcmSender(env: Record<string, string | undefined> = process.env, fetcher: typeof fetch = fetch): PushSender | null {
   const account = readServiceAccount(env.FCM_SERVICE_ACCOUNT);
@@ -273,7 +282,7 @@ export function fcmSender(env: Record<string, string | undefined> = process.env,
       body: JSON.stringify({
         message: {
           token: device.token,
-          notification: { title: message.title, body: message.body },
+          notification: { title: rtlSafe(message.title), body: rtlSafe(message.body) },
           data: message.data ?? {},
           android: { priority: "high", notification: { channel_id: "general", sound: "default" } },
         },
