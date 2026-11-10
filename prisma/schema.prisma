@@ -947,3 +947,32 @@ model SiteClick {
   @@unique([day, source, platform])
   @@index([day])
 }
+
+/// The repeating notifications: one row holding the switch and the pace. Every
+/// `everyDays` days the daily cron sends the next enabled message in order.
+model MobileBroadcastRotation {
+  id         String    @id @default("main")
+  enabled    Boolean   @default(false)
+  everyDays  Int       @default(2)
+  /// "all" | "active30"
+  audience   String    @default("all")
+  lastRunAt  DateTime?
+  /// The message sent last, so the next run takes the one after it.
+  lastItemId String?
+  updatedBy  String?
+  updatedAt  DateTime  @updatedAt
+}
+
+/// One message in the rotation, in `position` order.
+model MobileBroadcastRotationItem {
+  id         String    @id @default(cuid())
+  position   Int
+  title      String
+  body       String
+  enabled    Boolean   @default(true)
+  sentCount  Int       @default(0)
+  lastSentAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([position])
+}
