@@ -77,8 +77,7 @@ export default function AndroidPage() {
           <div className="mt-8">
             {apkReady ? (
               <a
-                href={ANDROID_APK_URL}
-                download="BunnList.apk"
+                href="/get?p=apk&from=android-page"
                 className="inline-flex items-center gap-2 rounded-full bg-[var(--ink)] px-6 py-3 text-[17px] font-medium text-[var(--bg)] transition-opacity hover:opacity-85"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

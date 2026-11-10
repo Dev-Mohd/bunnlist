@@ -3,9 +3,9 @@ import { BunnListLogo } from "@/components/Logo";
 import { ANDROID_PAGE, APP_STORE_URL, AVAILABILITY, CONTACT_EMAIL } from "@/lib/site";
 
 const links = [
-  { href: "/#new", label: "الجديد" },
-  { href: "/#discover", label: "اكتشف" },
-  { href: "/#brew", label: "حضّر" },
+  { href: "/#benefits", label: "المزايا" },
+  { href: "/#champions", label: "وصفات الأبطال" },
+  { href: "/#faq", label: "أسئلة" },
   { href: ANDROID_PAGE, label: "Android" },
 ];
 
@@ -26,6 +26,9 @@ export function SiteNav() {
             </li>
           ))}
         </ul>
+        <a href="/get?from=nav" className="rounded-full bg-[var(--accent)] px-4 py-1.5 text-[13px] font-bold text-[var(--bg)] transition-colors hover:bg-[var(--accent-ink)]">
+          حمّل
+        </a>
       </nav>
     </header>
   );
@@ -109,7 +112,7 @@ export function AndroidGlyph({ size = 16 }: { size?: number }) {
 /** A screen shown in a simple iPhone frame. */
 export function PhoneFrame({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`relative mx-auto aspect-[393/852] w-[260px] rounded-[46px] bg-[var(--ink)] p-[9px] shadow-[0_30px_80px_rgba(74,52,40,0.25)] sm:w-[300px] ${className}`}>
+    <div className={`relative mx-auto aspect-[393/852] w-[260px] rounded-[46px] bg-[var(--ink)] p-[9px] shadow-[0_30px_80px_rgba(74,52,40,0.25)] sm:w-[280px] ${className}`}>
       <div className="relative h-full w-full overflow-hidden rounded-[38px] bg-[var(--ink)]">{children}</div>
     </div>
   );
