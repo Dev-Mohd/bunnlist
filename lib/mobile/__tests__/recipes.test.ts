@@ -130,3 +130,47 @@ describe("mapRecipe", () => {
     expect(mapRecipe(row, null, null, "محمد").isMine).toBe(false);
   });
 });
+
+import { newShareCode, normalizeShareCode, shareRecipe, recipeByShareCode, SHARE_CODE_LENGTH } from "../recipes";
+
+describe("share codes", () => {
+  it("draws six unambiguous characters", () => {
+    for (let i = 0; i < 50; i++) expect(newShareCode()).toMatch(/^[A-HJ-NP-Z2-9]{6}$/);
+    expect(newShareCode(() => 0)).toBe("A".repeat(SHARE_CODE_LENGTH));
+  });
+  it("reads a typed code whatever its case or spacing", () => {
+    expect(normalizeShareCode(" ab-cd 23 ")).toBe("ABCD23");
+    expect(normalizeShareCode("ABC")).toBeNull();
+    expect(normalizeShareCode("ABCDE0")).toBeNull(); // no zero in the alphabet
+    expect(normalizeShareCode("ABCDEFG")).toBeNull();
+  });
+  it("gives the owner the same code each time and hides other people's recipes", async () => {
+    const row = { accountId: "me", state: "draft", shareCode: null as string | null };
+    const prisma = {
+      mobileRecipe: {
+        findUnique: async () => row,
+        updateMany: async ({ data }: { data: { shareCode: string } }) => { row.shareCode = data.shareCode; return { count: 1 }; },
+      },
+    } as never;
+    const first = await shareRecipe(prisma, "me", "r1");
+    expect(first.url).toBe(`https://bunnlist.com/r/${first.code}`);
+    expect((await shareRecipe(prisma, "me", "r1")).code).toBe(first.code);
+    await expect(shareRecipe(prisma, "someone-else", "r1")).rejects.toMatchObject({ reason: "recipe_not_found" });
+  });
+  it("draws again when a code is taken", async () => {
+    let calls = 0;
+    const prisma = {
+      mobileRecipe: {
+        findUnique: async () => ({ accountId: "me", state: "published", shareCode: null }),
+        updateMany: async () => { if (calls++ === 0) throw Object.assign(new Error("dup"), { code: "P2002" }); return { count: 1 }; },
+      },
+    } as never;
+    expect((await shareRecipe(prisma, "me", "r1")).code).toHaveLength(6);
+    expect(calls).toBe(2);
+  });
+  it("a bad or deleted code reads as missing", async () => {
+    const prisma = { mobileRecipe: { findUnique: async () => ({ id: "r", state: "deleted" }) } } as never;
+    await expect(recipeByShareCode(prisma, "nope", null)).rejects.toMatchObject({ reason: "recipe_not_found" });
+    await expect(recipeByShareCode(prisma, "ABCD23", null)).rejects.toMatchObject({ reason: "recipe_not_found" });
+  });
+});
