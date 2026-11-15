@@ -465,3 +465,58 @@ export async function changeRecipeState(
   const [mapped] = await present(prisma, [row as RecipeRow], accountId);
   return mapped;
 }
+
+// MARK: Sharing by code
+
+/** Letters and digits that can't be mistaken for one another when read aloud or typed. */
+const SHARE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+export const SHARE_CODE_LENGTH = 6;
+
+export function newShareCode(random: () => number = Math.random): string {
+  let code = "";
+  for (let i = 0; i < SHARE_CODE_LENGTH; i++) code += SHARE_ALPHABET[Math.floor(random() * SHARE_ALPHABET.length)];
+  return code;
+}
+
+/** What someone typed or pasted, as a code: upper-cased, spaces and dashes dropped; null when it can't be one. */
+export function normalizeShareCode(raw: string): string | null {
+  const code = raw.trim().toUpperCase().replace(/[\s-]/g, "");
+  if (code.length !== SHARE_CODE_LENGTH || [...code].some((c) => !SHARE_ALPHABET.includes(c))) return null;
+  return code;
+}
+
+export const shareUrl = (code: string) => `https://bunnlist.com/r/${code}`;
+
+/** The owner's code for one of their recipes, made on first ask and the same ever after. */
+export async function shareRecipe(prisma: PrismaClient, accountId: string, id: string): Promise<{ code: string; url: string }> {
+  const existing = await prisma.mobileRecipe.findUnique({ where: { id }, select: { accountId: true, state: true, shareCode: true } });
+  if (!existing || existing.accountId !== accountId || existing.state === "deleted") throw ApiError.unprocessable("recipe_not_found");
+  if (existing.shareCode) return { code: existing.shareCode, url: shareUrl(existing.shareCode) };
+  for (let attempt = 0; attempt < 6; attempt++) {
+    const code = newShareCode();
+    try {
+      // Only fills an empty code, so two asks at once end with the same one.
+      const done = await prisma.mobileRecipe.updateMany({ where: { id, shareCode: null }, data: { shareCode: code } });
+      if (done.count === 0) {
+        const now = await prisma.mobileRecipe.findUnique({ where: { id }, select: { shareCode: true } });
+        if (now?.shareCode) return { code: now.shareCode, url: shareUrl(now.shareCode) };
+      } else return { code, url: shareUrl(code) };
+    } catch (e) {
+      // Another recipe already has this code: draw again.
+      if ((e as { code?: string }).code !== "P2002") throw e;
+    }
+  }
+  throw ApiError.conflict("share_code_unavailable");
+}
+
+/** The recipe a code opens: any state but deleted or taken down, since its owner chose to share it. */
+export async function recipeByShareCode(prisma: PrismaClient, rawCode: string, viewerId: string | null): Promise<MobileRecipe> {
+  const code = normalizeShareCode(rawCode);
+  if (!code) throw ApiError.unprocessable("recipe_not_found");
+  const row = await prisma.mobileRecipe.findUnique({ where: { shareCode: code } });
+  if (!row || row.state === "deleted") throw ApiError.unprocessable("recipe_not_found");
+  const removed = await prisma.mobileReport.findFirst({ where: { targetType: "recipe", targetId: row.id, status: "removed" }, select: { id: true } });
+  if (removed) throw ApiError.unprocessable("recipe_not_found");
+  const [mapped] = await present(prisma, [row as RecipeRow], viewerId);
+  return mapped;
+}

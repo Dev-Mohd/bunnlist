@@ -481,6 +481,8 @@ model MobileRecipe {
   state         String    @default("draft")
   revision      Int       @default(0)
   publishedAt   DateTime?
+  /// The short code its owner shares it by; null until they share it.
+  shareCode     String?   @unique
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
