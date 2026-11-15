@@ -532,8 +532,13 @@ model MobileProfile {
   founderAt           DateTime?
   /// Founders' own accounts elsewhere, as handles: { tiktok, instagram, youtube, x }.
   socials             Json      @default("{}")
+  /// The founder whose invitation brought this account in, chosen once by the account itself.
+  invitedById         String?
+  invitedAt           DateTime?
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
+
+  @@index([invitedById])
 }
 
 /// The points ledger. One row per rewarded action (unique per account, kind and

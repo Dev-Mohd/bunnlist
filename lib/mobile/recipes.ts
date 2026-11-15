@@ -466,6 +466,20 @@ export async function changeRecipeState(
   return mapped;
 }
 
+/** Published recipes written by founders, most liked first. */
+export async function founderRecipes(prisma: PrismaClient, viewerId: string | null, limit = 30): Promise<MobileRecipe[]> {
+  const founders = await prisma.mobileProfile.findMany({ where: { founderNumber: { not: null } }, select: { accountId: true } });
+  if (founders.length === 0) return [];
+  const rows = await prisma.mobileRecipe.findMany({
+    where: { state: "published", accountId: { in: founders.map((f) => f.accountId) } },
+    orderBy: { publishedAt: "desc" },
+    take: 120,
+  });
+  const visible = await activityVisibleTo(prisma, viewerId, rows.map((r) => r.accountId));
+  const shown = await withLikes(prisma, await present(prisma, rows.filter((r) => visible.has(r.accountId)) as RecipeRow[], viewerId), viewerId);
+  return shown.sort((a, b) => (b.likeCount ?? 0) + (b.brewedCount ?? 0) - ((a.likeCount ?? 0) + (a.brewedCount ?? 0))).slice(0, limit);
+}
+
 // MARK: Sharing by code
 
 /** Letters and digits that can't be mistaken for one another when read aloud or typed. */
