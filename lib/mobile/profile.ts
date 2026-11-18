@@ -138,6 +138,8 @@ export interface MobileProfileView {
   founder: FounderBadge;
   /** Their accounts elsewhere (founders can set them; empty for everyone else). */
   socials: Socials;
+  /** The recipe a founder shows first on their profile. */
+  pinnedRecipeId: string | null;
 }
 
 /** Public URL of an avatar object, or null without a configured Supabase URL. */
@@ -169,6 +171,7 @@ export async function getProfile(prisma: PrismaClient, accountId: string): Promi
     brewPrefs: profile?.brewPrefs ?? [],
     founder: founderBadge(profile),
     socials: profile?.founderNumber ? readSocials(profile.socials) : {},
+    pinnedRecipeId: profile?.founderNumber ? profile.pinnedRecipeId ?? null : null,
   };
 }
 
