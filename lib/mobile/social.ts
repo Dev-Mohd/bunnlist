@@ -50,6 +50,8 @@ export interface PublicRecipe {
   id: string; title: string; methodCode: string; lotNameAr: string | null;
   /** «حضّرها N شخص»: people other than the author who brewed it. */
   brewedCount: number;
+  /** The founder chose to show this one first. */
+  pinned?: boolean;
 }
 
 export interface PublicProfile {
@@ -121,6 +123,9 @@ export async function publicProfile(prisma: PrismaClient, username: string, view
   const lotById = new Map(lots.map((l) => [l.id, l]));
   const brewed = await recipeBrewCounts(prisma, recipes.map((r) => ({ id: r.id, accountId })));
 
+  // Only a founder's pin counts.
+  const pinnedId = profile?.founderNumber ? profile.pinnedRecipeId : null;
+
   return {
     username: profile?.username ?? normalizeUsername(username),
     founder: founderBadge(profile),
@@ -144,7 +149,8 @@ export async function publicProfile(prisma: PrismaClient, username: string, view
     recipes: recipes.map((r) => ({
       id: r.id, title: r.title, methodCode: r.methodCode, lotNameAr: r.lotId ? lotById.get(r.lotId)?.nameAr ?? null : null,
       brewedCount: brewed.get(r.id) ?? 0,
-    })),
+      ...(pinnedId === r.id ? { pinned: true } : {}),
+    })).sort((a, b) => Number(!!b.pinned) - Number(!!a.pinned)),
   };
 }
 

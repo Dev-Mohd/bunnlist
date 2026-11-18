@@ -535,6 +535,8 @@ model MobileProfile {
   /// The founder whose invitation brought this account in, chosen once by the account itself.
   invitedById         String?
   invitedAt           DateTime?
+  /// A founder's recipe shown first on their profile.
+  pinnedRecipeId      String?
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
 
@@ -982,4 +984,37 @@ model MobileBroadcastRotationItem {
   createdAt  DateTime  @default(now())
 
   @@index([position])
+}
+
+/// «يرشّحها»: a founder's recommendation of a coffee, shown on the coffee's page.
+model MobileFounderPick {
+  accountId String
+  lotId     String
+  createdAt DateTime @default(now())
+
+  @@id([accountId, lotId])
+  @@index([lotId])
+}
+
+/// A question the team asks the founders («وش الميزة الجاية؟»). One is open at a time.
+model MobileFounderPoll {
+  id        String    @id @default(cuid())
+  question  String
+  options   String[]
+  open      Boolean   @default(true)
+  createdBy String?
+  createdAt DateTime  @default(now())
+  closedAt  DateTime?
+
+  @@index([open, createdAt])
+}
+
+/// One founder's answer to a poll; changing it replaces the row.
+model MobileFounderVote {
+  pollId    String
+  accountId String
+  option    Int
+  createdAt DateTime @default(now())
+
+  @@id([pollId, accountId])
 }
